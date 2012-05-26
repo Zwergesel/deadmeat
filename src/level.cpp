@@ -30,7 +30,7 @@ void Level::display(int offsetX, int offsetY)
   int startX = (offsetX < 0) ? -offsetX : 0;
   int startY = (offsetY < 0) ? -offsetY : 0;
   int rangeX = std::min(width - offsetX, TCODConsole::root->getWidth());
-  int rangeY = std::min(height - offsetY, TCODConsole::root->getHeight());
+  int rangeY = std::min(height - offsetY, TCODConsole::root->getHeight() - 1);
 	for (int y=startY; y<rangeY; y++) 
   {
 	  for (int x=startX; x<rangeX; x++) 
