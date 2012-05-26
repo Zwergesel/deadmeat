@@ -1,7 +1,7 @@
-#include <string>
-
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
+
+#include <string>
 
 class Player
 {
@@ -12,6 +12,9 @@ class Player
 	
 	public:
 	Player(std::string);	// name
+  int x,y;
+  static int dx[9];
+  static int dy[9];
 
 };
 
