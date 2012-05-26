@@ -1,8 +1,9 @@
 #include <libtcod.hpp>
 #include <algorithm>
 #include "level.hpp"
+#include "player.hpp"
 
-Player player;
+Player player("test");
 
 int main()
 {
@@ -14,9 +15,10 @@ int main()
 
   while(!TCODConsole::isWindowClosed())
   {   
-    TCODConsole::root->clear();
-    TCODConsole::root->setChar(player.x,player.y,'@');
+    TCODConsole::root->clear();    
+    nethack.display(0,0);
     TCODConsole::root->print(0, 50, "Player.x = %d, Player.y = %d", player.x, player.y);
+    TCODConsole::root->setChar(player.x,player.y,'@');
     TCODConsole::root->flush();    
 
     TCOD_key_t key = TCODConsole::root->waitForKeypress(true);
