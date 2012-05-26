@@ -21,7 +21,7 @@ int main()
     TCODConsole::root->clear();    
     l->display(levelScrollX, levelScrollY);
     TCODConsole::root->print(0, 50, "Player.x = %d, Player.y = %d", player.x, player.y);
-    TCODConsole::root->setChar(player.x - levelScrollX, player.y - levelScrollY, '@');
+    TCODConsole::root->setChar(player.x - levelScrollX, player.y - levelScrollY, player.symbol);
     TCODConsole::root->flush();    
 
     TCOD_key_t key = TCODConsole::root->waitForKeypress(true);
