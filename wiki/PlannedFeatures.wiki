@@ -1,0 +1,5 @@
+#planned features
+
+= In den Raum geworfen =
+
+* Mark origin of sounds heard by the player with color. 
