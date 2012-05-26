@@ -1,5 +1,5 @@
-#ifndef LEVELGEN_HPP
-#define LEVELGEN_HPP
+#ifndef _LEVELGEN_HPP
+#define _LEVELGEN_HPP
 
 #include "level.hpp"
 
