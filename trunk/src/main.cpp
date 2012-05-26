@@ -1,6 +1,6 @@
 #include <libtcod.hpp>
 #include <algorithm>
-#include "level.hpp"
+#include "levelgen.hpp"
 #include "player.hpp"
 
 Player player("test");
@@ -9,32 +9,43 @@ int main()
 {
   TCODConsole::initRoot(80,51,"deadmeat",false);
   TCODSystem::setFps(30);
-
-	Level nethack(80,50);
+  
+	LevelGen level_generator;
+  Level* l = level_generator.generateCaveLevel(180,150);
   player.x = 40; player.y = 25;
+  int levelScrollX = 0;
+  int levelScrollY = 0;
 
   while(!TCODConsole::isWindowClosed())
   {   
     TCODConsole::root->clear();    
-    nethack.display(0,0);
+    l->display(levelScrollX, levelScrollY);
     TCODConsole::root->print(0, 50, "Player.x = %d, Player.y = %d", player.x, player.y);
-    TCODConsole::root->setChar(player.x,player.y,'@');
+    TCODConsole::root->setChar(player.x - levelScrollX, player.y - levelScrollY, '@');
     TCODConsole::root->flush();    
 
     TCOD_key_t key = TCODConsole::root->waitForKeypress(true);
     // toogle fullscreen
     if(key.vk == TCODK_ENTER && key.lalt) TCODConsole::root->setFullscreen(!TCODConsole::isFullscreen());
     // numpad player movement
-    else if(key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9)
+    else if(key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.pressed)
     {
       int newx = player.x + Player::dx[key.vk - TCODK_KP1];
       int newy = player.y + Player::dy[key.vk - TCODK_KP1];
-      if(newx >= 0 && newx < 80 && newy >= 0 && newy < 50)
+      if(newx >= 0 && newx < l->getWidth() && newy >= 0 && newy < l->getHeight())
       {
-        player.x = newx;
-        player.y = newy;
+        if(l->getTile(newx, newy).passable)
+        {
+          player.x = newx;
+          player.y = newy;
+          levelScrollX = std::min(l->getWidth() - 80, std::max(0, player.x - 40));
+          levelScrollY = std::min(l->getHeight() - 50, std::max(0, player.y - 25));
+        }
       }
     }
   }
+
+  delete l;
+
   return 0;
 }
