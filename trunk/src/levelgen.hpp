@@ -6,7 +6,7 @@
 class LevelGen
 {
 public:
-  Level* generateCaveLevel(int width, int height); 
+	Level* generateCaveLevel(int width, int height);
 };
 
 #endif
