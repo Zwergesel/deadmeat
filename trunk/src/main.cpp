@@ -1,12 +1,30 @@
 #include <libtcod.hpp>
 #include <algorithm>
+#include <vector>
 #include <string>
+#include <deque>
+#include <iostream>
+#include <cassert>
 #include "levelgen.hpp"
 #include "player.hpp"
 #include "tileset.hpp"
+#include "creature.hpp"
 
 Player player("test");
-TileSet tileSet;
+TileSet globalTileSet;
+
+struct TimelineAction
+{
+	int time;
+	Creature* actor;
+	TimelineAction(int t, Creature* c):time(t),actor(c) {};
+};
+
+bool operator<(TimelineAction a, TimelineAction b)
+{
+	// Max heap, but we want minimum time
+	return a.time > b.time;
+}
 
 int main()
 {
@@ -17,74 +35,118 @@ int main()
 	Level* l = level_generator.generateCaveLevel(180,150);
 	player.x = 40;
 	player.y = 25;
+	player.nextAction = 0;
+	Goblin gobbo;
+	FailWhale twitter;
 	int levelScrollX = 0;
 	int levelScrollY = 0;
-	std::string message;
+	std::deque<std::string> messages;
+	std::vector<TimelineAction> timeline;
+
+	timeline.push_back(TimelineAction(0, &gobbo));
+	timeline.push_back(TimelineAction(0, &twitter));
+	make_heap(timeline.begin(), timeline.end());
+
+	TCODConsole::root->clear();
+	l->display(levelScrollX, levelScrollY);
+	player.draw(levelScrollX, levelScrollY);
+	gobbo.draw(levelScrollX, levelScrollY);
 
 	while (!TCODConsole::isWindowClosed())
 	{
-		/// RENDER
-		TCODConsole::root->clear();
-		int startX = (levelScrollX < 0) ? -levelScrollX : 0;
-		int startY = (levelScrollY < 0) ? -levelScrollY : 0;
-		int rangeX = std::min(l->getWidth() - levelScrollX, TCODConsole::root->getWidth());
-		int rangeY = std::min(l->getHeight() - levelScrollY, TCODConsole::root->getHeight() - 1);
-		for (int y=startY; y<rangeY; y++)
+		while (!timeline.empty() && timeline.front().time < player.nextAction && messages.size() <= 1)
 		{
-			for (int x=startX; x<rangeX; x++)
-			{
-				TileInfo inf = tileSet.info[l->getTile(x + levelScrollX, y + levelScrollY)];
-				TCODConsole::root->putCharEx(x, y, inf.symbol, inf.color, inf.background);
-			}
+			// Take one creature; update it's action
+			pop_heap(timeline.begin(), timeline.end());
+			int time = timeline.back().actor->action(l, player, &messages);
+			// action(...) returns the time the action took; update heap
+			assert(time > 0);
+			timeline.back().time += time;
+			push_heap(timeline.begin(), timeline.end());
 		}
-		TCODConsole::root->print(0, 50, message.c_str());
-		TCODConsole::root->setChar(player.x - levelScrollX, player.y - levelScrollY, player.symbol);
+
+		// Show new game state
+		TCODConsole::root->clear();
+		l->display(levelScrollX, levelScrollY);
+		player.draw(levelScrollX, levelScrollY);
+		// TODO: this stuff belong in level later
+		gobbo.draw(levelScrollX, levelScrollY);
+		twitter.draw(levelScrollX, levelScrollY);
+
+		// Show oldest message, if there any
+		if (!messages.empty())
+		{
+			std::string message = messages.front();
+			messages.pop_front();
+			if (!messages.empty())
+			{
+				message.append(" <More>");
+			}
+			TCODConsole::root->print(0, 50, message.c_str());
+			TCODConsole::root->print(0, 50, message.c_str());
+		}
+
 		TCODConsole::root->flush();
 
-		/// INPUT
-		TCOD_key_t key = TCODConsole::root->waitForKeypress(true);
-		bool move(false);
-		int direction(0);
-
-		if (key.vk == TCODK_ENTER && key.lalt)
+		if (!messages.empty())
 		{
-			// toogle fullscreen
-			TCODConsole::root->setFullscreen(!TCODConsole::isFullscreen());
-		}
-    else if (key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.pressed)
-		{
-			// numpad player movement
-			move = true;
-			direction = key.vk - TCODK_KP1;
-		}
-		else if (key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.pressed)
-		{
-			// number keys player movement
-			move = true;
-			direction = key.vk - TCODK_1;
-		}
-
-		if (move)
-		{
-			// execute movement
-			message="";
-			int newx = player.x + Player::dx[direction];
-			int newy = player.y + Player::dy[direction];
-			if (newx >= 0 && newx < l->getWidth() && newy >= 0 && newy < l->getHeight())
+			// Player has to clear pending messages
+			TCOD_key_t key;
+			do
 			{
-				if (tileSet.info[l->getTile(newx, newy)].passable)
+				key = TCODConsole::root->waitForKeypress(true);
+			}
+			while (!key.pressed || key.vk != TCODK_SPACE);
+		}
+		else
+		{
+			// Player's turn to do something
+			bool actionDone = false;
+			do
+			{
+				TCOD_key_t key = TCODConsole::root->waitForKeypress(true);
+				bool move(false);
+				int direction(0);
+
+				if (key.pressed && (key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9))
 				{
-					player.x = newx;
-					player.y = newy;
-					levelScrollX = std::min(l->getWidth() - 80, std::max(0, player.x - 40));
-					levelScrollY = std::min(l->getHeight() - 50, std::max(0, player.y - 25));
+					// numpad player movement
+					move = true;
+					direction = key.vk - TCODK_KP1;
 				}
-				else
+				else if (key.pressed && (key.vk >= TCODK_1 && key.vk <= TCODK_9))
 				{
-					message = "Bonk!";
+					// number keys player movement
+					move = true;
+					direction = key.vk - TCODK_1;
+				}
+
+				if (move)
+				{
+					// execute movement
+					int newx = player.x + Player::dx[direction];
+					int newy = player.y + Player::dy[direction];
+					if (newx >= 0 && newx < l->getWidth() && newy >= 0 && newy < l->getHeight())
+					{
+						if (globalTileSet.info[l->getTile(newx, newy)].passable)
+						{
+							player.x = newx;
+							player.y = newy;
+							player.nextAction += 12;
+							levelScrollX = std::min(l->getWidth() - 80, std::max(0, player.x - 40));
+							levelScrollY = std::min(l->getHeight() - 50, std::max(0, player.y - 25));
+						}
+						else
+						{
+							messages.push_back("Bonk!");
+						}
+					}
+					actionDone = true;
 				}
 			}
+			while (!actionDone && !TCODConsole::isWindowClosed());
 		}
+
 	}
 
 	delete l;
