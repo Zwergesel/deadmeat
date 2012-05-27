@@ -6,12 +6,12 @@
 class Player
 {
 public:
-  Player(std::string name);
+	Player(std::string name);
 	std::string name;
 	char symbol;
-  int x,y;
-  static int dx[9];
-  static int dy[9];
+	int x,y;
+	static int dx[9];
+	static int dy[9];
 };
 
 #endif

@@ -3,7 +3,7 @@
 TileSet::TileSet()
 {
 	info = new TileInfo[TILESET_LENGTH];
-	
+
 	// TODO: Hard-coded for now, load from file later
 	// Parameters: passable (bool), symbol (int / char), foregroundcolor, backgroundcolor
 	info[TILE_CAVE_FLOOR]	= TileInfo(true, '.', TCODColor::grey, TCODColor::white);
@@ -14,7 +14,8 @@ TileSet::TileSet()
 
 TileSet::~TileSet()
 {
-	if (info != NULL) {
+	if (info != NULL)
+	{
 		delete[] info;
 		info = NULL;
 	}
