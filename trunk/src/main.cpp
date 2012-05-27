@@ -6,7 +6,7 @@
 #include "tileset.hpp"
 
 Player player("test");
-TileSet globalTileSet;
+TileSet tileSet;
 
 int main()
 {
@@ -23,12 +23,25 @@ int main()
 
 	while (!TCODConsole::isWindowClosed())
 	{
+		/// RENDER
 		TCODConsole::root->clear();
-		l->display(levelScrollX, levelScrollY);
+		int startX = (levelScrollX < 0) ? -levelScrollX : 0;
+		int startY = (levelScrollY < 0) ? -levelScrollY : 0;
+		int rangeX = std::min(l->getWidth() - levelScrollX, TCODConsole::root->getWidth());
+		int rangeY = std::min(l->getHeight() - levelScrollY, TCODConsole::root->getHeight() - 1);
+		for (int y=startY; y<rangeY; y++)
+		{
+			for (int x=startX; x<rangeX; x++)
+			{
+				TileInfo inf = tileSet.info[l->getTile(x + levelScrollX, y + levelScrollY)];
+				TCODConsole::root->putCharEx(x, y, inf.symbol, inf.color, inf.background);
+			}
+		}
 		TCODConsole::root->print(0, 50, message.c_str());
 		TCODConsole::root->setChar(player.x - levelScrollX, player.y - levelScrollY, player.symbol);
 		TCODConsole::root->flush();
 
+		/// INPUT
 		TCOD_key_t key = TCODConsole::root->waitForKeypress(true);
 		bool move(false);
 		int direction(0);
@@ -59,7 +72,7 @@ int main()
 			int newy = player.y + Player::dy[direction];
 			if (newx >= 0 && newx < l->getWidth() && newy >= 0 && newy < l->getHeight())
 			{
-				if (globalTileSet.info[l->getTile(newx, newy)].passable)
+				if (tileSet.info[l->getTile(newx, newy)].passable)
 				{
 					player.x = newx;
 					player.y = newy;
