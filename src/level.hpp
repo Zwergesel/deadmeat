@@ -3,8 +3,6 @@
 #ifndef _LEVEL_HPP
 #define _LEVEL_HPP
 
-extern TileSet globalTileSet; // TODO: remove later, see level.cpp too
-
 class Level
 {
 private:
@@ -16,7 +14,6 @@ private:
 public:
 	Level(int width,int height);
 	~Level();
-	void display(int offsetX, int offsetY);
 	void setTile(int x, int y, Tile t);
 	Tile getTile(int x, int y);
 	int getWidth();
