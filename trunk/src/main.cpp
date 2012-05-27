@@ -51,13 +51,13 @@ int main()
 			// toogle fullscreen
 			TCODConsole::root->setFullscreen(!TCODConsole::isFullscreen());
 		}
-		else if (key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9)
+    else if (key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.pressed)
 		{
 			// numpad player movement
 			move = true;
 			direction = key.vk - TCODK_KP1;
 		}
-		else if (key.vk >= TCODK_1 && key.vk <= TCODK_9)
+		else if (key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.pressed)
 		{
 			// number keys player movement
 			move = true;
