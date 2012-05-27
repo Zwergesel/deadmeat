@@ -1,13 +1,9 @@
+#include "tileset.hpp"
+
 #ifndef _LEVEL_HPP
 #define _LEVEL_HPP
 
-struct Tile 
-{
-	unsigned char symbol;
-	bool passable;
-	Tile():symbol('?'),passable(false){};
-	Tile(unsigned char s, bool p):symbol(s),passable(p){};
-};
+extern TileSet globalTileSet; // TODO: remove later, see level.cpp too
 
 class Level 
 {
@@ -21,11 +17,10 @@ public:
 	Level(int width,int height);
 	~Level();
 	void display(int offsetX, int offsetY);	
-  void setTile(int x, int y, Tile t);
-  Tile getTile(int x, int y);
-  void setSize(int width, int height);
-  int getWidth();
-  int getHeight();
+	void setTile(int x, int y, Tile t);
+	Tile getTile(int x, int y);
+	int getWidth();
+	int getHeight();
 };
 
 #endif

@@ -1,4 +1,5 @@
 #include "levelgen.hpp"
+#include "tileset.hpp"
 #include <algorithm>
 #include <libtcod.hpp>
 
@@ -53,8 +54,8 @@ Level* LevelGen::generateCaveLevel(int width, int height)
 
   for(int x=0;x<width;x++) for(int y=0;y<height;y++)
   {
-    if(swap1[x + y * width] == 0) m->setTile(x, y, Tile(TCOD_CHAR_BLOCK1, false));
-    else if(swap1[x + y * width] == 1) m->setTile(x, y, Tile('.', true));
+    if(swap1[x + y * width] == 0) m->setTile(x, y, TILE_CAVE_WALL);
+    else if(swap1[x + y * width] == 1) m->setTile(x, y, TILE_CAVE_FLOOR);
   }
 
   delete[] swap1;

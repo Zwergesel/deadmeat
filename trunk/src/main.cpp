@@ -3,8 +3,10 @@
 #include <string>
 #include "levelgen.hpp"
 #include "player.hpp"
+#include "tileset.hpp"
 
 Player player("test");
+TileSet globalTileSet;
 
 int main()
 {
@@ -44,11 +46,12 @@ int main()
 		}
 	
 		if (move) {
+			// execute movement
 			message="";
 			int newx = player.x + Player::dx[direction];
 			int newy = player.y + Player::dy[direction];
 			if (newx >= 0 && newx < l->getWidth() && newy >= 0 && newy < l->getHeight()) {
-				if (l->getTile(newx, newy).passable) {
+				if (globalTileSet.info[l->getTile(newx, newy)].passable) {
 					player.x = newx;
 					player.y = newy;
 					levelScrollX = std::min(l->getWidth() - 80, std::max(0, player.x - 40));
