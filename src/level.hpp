@@ -1,7 +1,8 @@
-#include "tileset.hpp"
-
 #ifndef _LEVEL_HPP
 #define _LEVEL_HPP
+
+#include "tileset.hpp"
+#include "creature.hpp"
 
 extern TileSet globalTileSet; // TODO: remove later, see level.cpp too
 

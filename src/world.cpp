@@ -75,6 +75,7 @@ int World::drawMessages(std::deque<std::string>* msg, Viewport view)
 	// TODO: implement: draw as many messages as fit in the viewport
 	//       with proper line breaks; modifiy deque and return number
 	//       of messages drawn
+  return 0;
 }
 
 void World::debugDrawWorld(Goblin* g, FailWhale* w)

@@ -1,7 +1,7 @@
-#include <libtcod.hpp>
-
 #ifndef _TILESET_HPP
 #define _TILESET_HPP
+
+#include <libtcod.hpp>
 
 enum Tile
 {
