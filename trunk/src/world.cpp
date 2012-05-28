@@ -99,21 +99,21 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 			);
 		}
 	}
-	std::vector<Creature>* creatures = level->getCreatures();
-	for (std::vector<Creature>::iterator it=creatures->begin(); it<creatures->end(); it++)
+	std::vector<Creature*> creatures = level->getCreatures();
+	for (std::vector<Creature*>::iterator it=creatures.begin(); it<creatures.end(); it++)
 	{
 		drawCreature(*it, offset, view);
 	}
 }
 
-void World::drawCreature(Creature c, Point offset, Viewport view)
+void World::drawCreature(Creature* c, Point offset, Viewport view)
 {
-	Point pos = c.getPos();
+	Point pos = c->getPos();
 	pos += offset;
 	if (pos.x >= 0 && pos.x < view.width && pos.y >= 0 && pos.y < view.height)
 	{
-		TCODConsole::root->putChar(view.x + pos.x, view.y + pos.y, c.getSymbol());
-		TCODConsole::root->setCharForeground(view.x + pos.x, view.y + pos.y, c.getColor());
+		TCODConsole::root->putChar(view.x + pos.x, view.y + pos.y, c->getSymbol());
+		TCODConsole::root->setCharForeground(view.x + pos.x, view.y + pos.y, c->getColor());
 	}
 }
 

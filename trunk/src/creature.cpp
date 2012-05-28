@@ -41,7 +41,7 @@ void Creature::moveTo(Point pos)
 	this->position = pos;
 }
 
-int Creature::action(Level*, Player*, std::deque<std::string>*)
+int Creature::action(Level*, Player*)
 {
-	return 0;
+	return 1;
 }

@@ -31,7 +31,7 @@ public:
 	void move(Point pos);
 	void moveTo(Point pos);
 
-	virtual int action(Level*, Player*, std::deque<std::string>*);
+	virtual int action(Level*, Player*);
 };
 
 class Goblin: public Creature
