@@ -33,17 +33,17 @@ int main()
 	LevelGen level_generator;
 	world.viewLevel = Viewport(1, 1, TCODConsole::root->getWidth() - 10, TCODConsole::root->getHeight() - 4);
 	world.viewMsg = Viewport(1, TCODConsole::root->getHeight() - 2, TCODConsole::root->getWidth(), 2);
-	world.levels[0] = level_generator.generateCaveLevel(180,150);
+	world.levels[0] = level_generator.generateCaveLevel(80, 50, 40.f);
 	world.currentLevel = 0;
 	world.player->moveTo(35, 22);
 	Goblin gobbo;
 	FailWhale twitter;
-	world.levels[0]->addCreature(gobbo);
-	world.levels[0]->addCreature(twitter);
+	world.levels[0]->addCreature(&gobbo);
+	world.levels[0]->addCreature(&twitter);
 	std::vector<TimelineAction> timeline;
 
-	timeline.push_back(TimelineAction(0, &gobbo));
-	timeline.push_back(TimelineAction(0, &twitter));
+	timeline.push_back(TimelineAction(0, world.levels[0]->getCreatures().at(0) ));
+	timeline.push_back(TimelineAction(0, world.levels[0]->getCreatures().at(1) ));
 	make_heap(timeline.begin(), timeline.end());
 
 	while (!TCODConsole::isWindowClosed())

@@ -38,7 +38,7 @@ public:
 	void drawMessage();
 
 	void drawLevel(Level* l, Point offset, Viewport view);
-	void drawCreature(Creature c, Point offset, Viewport view);
+	void drawCreature(Creature* c, Point offset, Viewport view);
 	void drawPlayer(Player* p, Point offset, Viewport view);
 
 	void debugDrawWorld(Goblin* g, FailWhale* w);

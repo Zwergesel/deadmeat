@@ -15,7 +15,7 @@ class Level
 private:
 	int width, height;
 	Tile* map;
-	std::vector<Creature> creatures;
+	std::vector<Creature*> creatures;
 
 	inline int coord(Point pos);
 
@@ -29,8 +29,8 @@ public:
 	// returns creature at given position, NULL otherwise
 	Creature* creatureAt(Point pos);
 	// returns pointer to vector of all creatures on the map
-	std::vector<Creature>* getCreatures();
-	void addCreature(Creature c);
+	std::vector<Creature*> getCreatures();
+	void addCreature(Creature* c);
 };
 
 #endif

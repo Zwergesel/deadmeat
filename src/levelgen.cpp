@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <libtcod.hpp>
 
-Level* LevelGen::generateCaveLevel(int width, int height)
+Level* LevelGen::generateCaveLevel(int width, int height, float density)
 {
 	if (width <= 2 || height <= 2) return NULL;
 	Level* m = new Level(width,height);
@@ -15,7 +15,7 @@ Level* LevelGen::generateCaveLevel(int width, int height)
 	std::fill(swap1,swap1+width*height,0);
 	std::fill(swap2,swap2+width*height,0);
 	for (int x=2; x<width-2; x++) for (int y=2; y<height-2; y++)
-			swap1[x + y * width] = (rng.getInt(0,100) <= 40) ? 0 : 1;
+			swap1[x + y * width] = (rng.getFloat(0.f,100.f) <= density) ? 0 : 1;
 
 	for (int i=0; i<4; i++)
 	{

@@ -19,6 +19,10 @@ Level::~Level()
 		delete[] map;
 		map = NULL;
 	}
+	for (std::vector<Creature*>::iterator it=creatures.begin(); it<creatures.end(); it++)
+	{
+		delete *it;
+	}
 }
 
 inline int Level::coord(Point pos)
@@ -49,19 +53,19 @@ int Level::getHeight()
 
 Creature* Level::creatureAt(Point pos)
 {
-	for (std::vector<Creature>::iterator it=creatures.begin(); it<creatures.end(); it++)
+	for (std::vector<Creature*>::iterator it=creatures.begin(); it<creatures.end(); it++)
 	{
-		if ((*it).getPos() == pos) return &(*it);
+		if ((*it)->getPos() == pos) return (*it);
 	}
 	return NULL;
 }
 
-std::vector<Creature>* Level::getCreatures()
+std::vector<Creature*> Level::getCreatures()
 {
-	return &creatures;
+	return creatures;
 }
 
-void Level::addCreature(Creature c)
+void Level::addCreature(Creature* c)
 {
 	creatures.push_back(c);
 }

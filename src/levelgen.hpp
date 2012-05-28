@@ -6,7 +6,8 @@
 class LevelGen
 {
 public:
-	Level* generateCaveLevel(int width, int height);
+	// level generation functions, returns NULL on invalid parameters
+	Level* generateCaveLevel(int width, int height, float density = 40.f);
 };
 
 #endif
