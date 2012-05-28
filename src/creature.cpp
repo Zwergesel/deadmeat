@@ -10,12 +10,39 @@ Creature::~Creature()
 	// nothing, override
 }
 
-void Creature::draw(int offsetX, int offsetY)
+std::string Creature::getName()
 {
-	if (x - offsetX >= 0 && x - offsetX < TCODConsole::root->getWidth()
-	    && y - offsetY >= 0 && y - offsetY < TCODConsole::root->getHeight())
-	{
-		TCODConsole::root->putChar(x - offsetX, y - offsetY, symbol);
-		TCODConsole::root->setCharForeground(x - offsetX, y - offsetY, color);
-	}
+	return name;
+}
+
+int Creature::getX()
+{
+	return x;
+}
+
+int Creature::getY()
+{
+	return y;
+}
+
+int Creature::getSymbol()
+{
+	return symbol;
+}
+
+TCODColor Creature::getColor()
+{
+	return color;
+}
+
+void Creature::move(int dx, int dy)
+{
+	x += dx;
+	y += dy;
+}
+
+void Creature::moveTo(int x, int y)
+{
+	this->x = x;
+	this->y = y;
 }

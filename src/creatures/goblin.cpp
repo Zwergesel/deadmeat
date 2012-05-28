@@ -2,23 +2,17 @@
 
 Goblin::Goblin() : Creature(20, 20, "goblin", 'g', TCODColor::green) {};
 
-// TODO: temporarily defined sign here, put it somewhere else
-int sign(int x)
+int Goblin::action(Level* level, Player* player, std::deque<std::string> *messages)
 {
-	return (x > 0) - (x < 0);
-}
+	int dx = util::sign(player->getX() - x);
+	int dy = util::sign(player->getY() - y);
 
-int Goblin::action(Level* level, Player player, std::deque<std::string> *messages)
-{
-	int dx = sign(player.x - x);
-	int dy = sign(player.y - y);
-
-	if (x+dx == player.x && y+dy == player.y)
+	if (x+dx == player->getX() && y+dy == player->getY())
 	{
 		messages->push_back("The " + name + " hits!");
 		return 17;
 	}
-	else if (globalTileSet.info[level->getTile(x+dx, y+dy)].passable)
+	else if (world.tileSet->isPassable(level->getTile(x+dx, y+dy)))
 	{
 		x += dx;
 		y += dy;

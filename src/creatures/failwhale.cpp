@@ -2,28 +2,21 @@
 
 FailWhale::FailWhale() : Creature(60, 35, "fail whale", 'w', TCODColor::blue) {};
 
-// TODO: temporarily defined sign here, put it somewhere else
-// TODO: this is extremely dumb!!!!
-int sign2(int x)
+int FailWhale::action(Level* level, Player* player, std::deque<std::string> *messages)
 {
-	return (x > 0) - (x < 0);
-}
+	int dx = util::sign(player->getX() - x);
+	int dy = util::sign(player->getY() - y);
 
-int FailWhale::action(Level* level, Player player, std::deque<std::string> *messages)
-{
-	int dx = sign2(player.x - x);
-	int dy = sign2(player.y - y);
-
-	if (x+dx == player.x && y+dy == player.y)
+	if (x+dx == player->getX() && y+dy == player->getY())
 	{
 		messages->push_back("The " + name + " misses!");
 		return 5;
 	}
-	else if (globalTileSet.info[level->getTile(x+dx, y+dy)].passable)
+	else if (world.tileSet->isPassable(level->getTile(x+dx, y+dy)))
 	{
 		x += dx;
 		y += dy;
-		return 24;
+		return 21;
 	}
 	else
 	{
