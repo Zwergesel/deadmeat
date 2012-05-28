@@ -1,4 +1,5 @@
 #include "world.hpp"
+#include <iostream>
 
 World::World()
 {
@@ -25,6 +26,56 @@ World::~World()
 	{
 		delete[] levels;
 		levels = NULL;
+	}
+}
+
+void World::addMessage(std::string m)
+{
+	if (messageQueue.empty())
+	{
+		messageQueue.push_back(m);
+	}
+	else
+	{
+		std::string combine = messageQueue.back() + " " + m;
+		int expectedHeight = TCODConsole::root->getHeightRect(
+			viewMsg.x, viewMsg.y, viewMsg.width, viewMsg.height,
+			"%s <More>", combine.c_str()
+		);
+		if (expectedHeight <= viewMsg.height)
+		{
+			messageQueue.pop_back();
+			messageQueue.push_back(combine);
+		}
+		else 
+		{
+			messageQueue.back().append(" <More>");
+			messageQueue.push_back(m);
+		}
+	}
+}
+
+int World::getNumMessages()
+{
+	return messageQueue.size();
+}
+
+void World::popMessage()
+{
+	if (!messageQueue.empty())
+	{
+		messageQueue.pop_front();
+	}
+}
+
+void World::drawMessage()
+{
+	// TODO: colors
+	if (!messageQueue.empty())
+	{
+		TCODConsole::root->printRect(
+			viewMsg.x, viewMsg.y, viewMsg.width, viewMsg.height, messageQueue.front().c_str()
+		);
 	}
 }
 
@@ -70,21 +121,12 @@ void World::drawPlayer(Player* p, Point offset, Viewport view)
 	}
 }
 
-int World::drawMessages(std::deque<std::string>* msg, Viewport view)
-{
-	// TODO: implement: draw as many messages as fit in the viewport
-	//       with proper line breaks; modifiy deque and return number
-	//       of messages drawn
-  return 0;
-}
-
 void World::debugDrawWorld(Goblin* g, FailWhale* w)
-{
-	Viewport vpMap(1, 1, TCODConsole::root->getWidth() - 10, TCODConsole::root->getHeight() - 4);
-	
+{		
 	TCODConsole::root->clear();
-	drawLevel(levels[currentLevel], levelOffset, vpMap);
-	drawCreature(g, levelOffset, vpMap);
-	drawCreature(w, levelOffset, vpMap);
-	drawPlayer(player, levelOffset, vpMap); 
+	drawLevel(levels[currentLevel], levelOffset, viewLevel);
+	drawCreature(g, levelOffset, viewLevel);
+	drawCreature(w, levelOffset, viewLevel);
+	drawMessage();
+	drawPlayer(player, levelOffset, viewLevel); 
 }

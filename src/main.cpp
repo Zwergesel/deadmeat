@@ -31,27 +31,26 @@ int main()
 
 	// Init hardcoded world
 	LevelGen level_generator;
+	world.viewLevel = Viewport(1, 1, TCODConsole::root->getWidth() - 10, TCODConsole::root->getHeight() - 4);
+	world.viewMsg = Viewport(1, TCODConsole::root->getHeight() - 2, TCODConsole::root->getWidth(), 2);
 	world.levels[0] = level_generator.generateCaveLevel(180,150);
 	world.currentLevel = 0;
 	world.player->moveTo(35, 22);
 	Goblin gobbo;
 	FailWhale twitter;
-	std::deque<std::string> messages;
 	std::vector<TimelineAction> timeline;
 
 	timeline.push_back(TimelineAction(0, &gobbo));
 	timeline.push_back(TimelineAction(0, &twitter));
 	make_heap(timeline.begin(), timeline.end());
 
-	world.debugDrawWorld(&gobbo, &twitter);
-
 	while (!TCODConsole::isWindowClosed())
 	{
-		while (!timeline.empty() && timeline.front().time < world.player->getActionTime() && messages.size() <= 1)
+		while (!timeline.empty() && timeline.front().time < world.player->getActionTime() && world.getNumMessages() <= 1)
 		{
 			// Take one creature; update it's action
 			pop_heap(timeline.begin(), timeline.end());
-			int time = timeline.back().actor->action(world.levels[world.currentLevel], world.player, &messages);
+			int time = timeline.back().actor->action(world.levels[world.currentLevel], world.player);
 			// action(...) returns the time the action took; update heap
 			assert(time > 0);
 			timeline.back().time += time;
@@ -60,22 +59,11 @@ int main()
 
 		// Show new game state
 		world.debugDrawWorld(&gobbo, &twitter);
-
-		// Show oldest message, if there any
-		if (!messages.empty())
-		{
-			std::string message = messages.front();
-			messages.pop_front();
-			if (!messages.empty())
-			{
-				message.append(" <More>");
-			}
-			TCODConsole::root->print(0, 50, message.c_str());
-		}
+		world.popMessage();
 
 		TCODConsole::root->flush();
 
-		if (!messages.empty())
+		if (world.getNumMessages() > 0)
 		{
 			// Player has to clear pending messages
 			TCOD_key_t key;
@@ -125,7 +113,7 @@ int main()
 						}
 						else
 						{
-							messages.push_back("Bonk!");
+							world.addMessage("Bonk!");
 						}
 					}
 					actionDone = true;
