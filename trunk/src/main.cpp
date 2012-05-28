@@ -38,6 +38,8 @@ int main()
 	world.player->moveTo(35, 22);
 	Goblin gobbo;
 	FailWhale twitter;
+	world.levels[0]->addCreature(gobbo);
+	world.levels[0]->addCreature(twitter);
 	std::vector<TimelineAction> timeline;
 
 	timeline.push_back(TimelineAction(0, &gobbo));
@@ -104,7 +106,7 @@ int main()
 					int newy = world.player->getY() + Player::dy[direction];
 					if (newx >= 0 && newx < level->getWidth() && newy >= 0 && newy < level->getHeight())
 					{
-						if (world.tileSet->isPassable(level->getTile(newx,newy)))
+						if (world.tileSet->isPassable(level->getTile(Point(newx,newy))))
 						{
 							world.player->move(Player::dx[direction], Player::dy[direction]);
 							world.player->addActionTime(12);

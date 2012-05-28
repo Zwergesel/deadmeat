@@ -1,22 +1,22 @@
 #include "../creature.hpp"
 #include "../world.hpp"
 
-Goblin::Goblin() : Creature(20, 20, "goblin", 'g', TCODColor::green) {};
+Goblin::Goblin() : Creature(Point(20, 20), "goblin", 'g', TCODColor::green) {};
 
 int Goblin::action(Level* level, Player* player)
 {
-	int dx = util::sign(player->getX() - x);
-	int dy = util::sign(player->getY() - y);
+	int dx = util::sign(player->getX() - position.x);
+	int dy = util::sign(player->getY() -position. y);
 
-	if (x+dx == player->getX() && y+dy == player->getY())
+	if (position.x+dx == player->getX() && position.y+dy == player->getY())
 	{
 		world.addMessage("The " + name + " hits!");
 		return 17;
 	}
-	else if (world.tileSet->isPassable(level->getTile(x+dx, y+dy)))
+	else if (world.tileSet->isPassable(level->getTile(Point(position.x+dx, position.y+dy))))
 	{
-		x += dx;
-		y += dy;
+		position.x += dx;
+		position.y += dy;
 		return 9;
 	}
 	else

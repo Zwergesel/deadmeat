@@ -1,7 +1,7 @@
 #include "creature.hpp"
 
-Creature::Creature(int x, int y, std::string name, int symbol, TCODColor color)
-	:x(x), y(y), name(name), symbol(symbol), color(color)
+Creature::Creature(Point pos, std::string name, int symbol, TCODColor color)
+	:position(pos), name(name), symbol(symbol), color(color)
 {
 }
 
@@ -15,14 +15,9 @@ std::string Creature::getName()
 	return name;
 }
 
-int Creature::getX()
+Point Creature::getPos()
 {
-	return x;
-}
-
-int Creature::getY()
-{
-	return y;
+	return position;
 }
 
 int Creature::getSymbol()
@@ -35,14 +30,18 @@ TCODColor Creature::getColor()
 	return color;
 }
 
-void Creature::move(int dx, int dy)
+void Creature::move(Point dpos)
 {
-	x += dx;
-	y += dy;
+	position.x += dpos.x;
+	position.y += dpos.y;
 }
 
-void Creature::moveTo(int x, int y)
+void Creature::moveTo(Point pos)
 {
-	this->x = x;
-	this->y = y;
+	this->position = pos;
+}
+
+int Creature::action(Level*, Player*, std::deque<std::string>*)
+{
+	return 0;
 }

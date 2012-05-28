@@ -1,22 +1,22 @@
 #include "../creature.hpp"
 #include "../world.hpp"
 
-FailWhale::FailWhale() : Creature(60, 35, "fail whale", 'w', TCODColor::blue) {};
+FailWhale::FailWhale() : Creature(Point(60, 35), "fail whale", 'w', TCODColor::blue) {};
 
 int FailWhale::action(Level* level, Player* player)
 {
-	int dx = util::sign(player->getX() - x);
-	int dy = util::sign(player->getY() - y);
+	int dx = util::sign(player->getX() - position.x);
+	int dy = util::sign(player->getY() - position.y);
 
-	if (x+dx == player->getX() && y+dy == player->getY())
+	if (position.x+dx == player->getX() && position.y+dy == player->getY())
 	{
 		world.addMessage("The " + name + " misses!");
 		return 5;
 	}
-	else if (world.tileSet->isPassable(level->getTile(x+dx, y+dy)))
+	else if (world.tileSet->isPassable(level->getTile(Point(position.x+dx, position.y+dy))))
 	{
-		x += dx;
-		y += dy;
+		position.x += dx;
+		position.y += dy;
 		return 21;
 	}
 	else

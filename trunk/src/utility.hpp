@@ -6,19 +6,22 @@
 struct Point
 {
 	int x, y;
-	Point():x(0),y(0){};
-	Point(int x, int y):x(x),y(y){};
+	Point():x(0),y(0) {};
+	Point(int x, int y):x(x),y(y) {};
 };
+
+bool operator==(Point a, Point b);
+Point operator+=(Point a, Point b);
 
 namespace util
 {
 
-	int sign(int x);
+int sign(int x);
 
-	template <class T> T clamp(T val, T min, T max)
-	{
-		return std::max(min, std::min(val, max));
-	}
+template <class T> T clamp(T val, T min, T max)
+{
+	return std::max(min, std::min(val, max));
+}
 
 };
 
