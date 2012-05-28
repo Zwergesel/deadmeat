@@ -10,14 +10,36 @@ int sign(int x)
 
 }
 
-bool operator==(Point a, Point b)
+bool Point::operator==(const Point p) const
 {
-	return (a.x == b.x && a.y == b.y);
+	return (this->x == p.x && this->y == p.y);
 }
 
-Point operator+=(Point a, Point b)
+bool Point::operator!=(const Point p) const
 {
-	a.x += b.x;
-	a.y += b.y;
-	return a;
+	return !(*this == p);
+}
+
+Point& Point::operator+=(const Point& p)
+{
+	this->x += p.x;
+	this->y += p.y;
+	return *this;
+}
+
+Point& Point::operator-=(const Point& p)
+{
+	this->x -= p.x;
+	this->y -= p.y;
+	return *this;
+}
+
+const Point Point::operator+(const Point& p) const
+{
+	return (Point(*this) += p);
+}
+
+const Point Point::operator-(const Point& p) const
+{
+	return (Point(*this) -= p);
 }
