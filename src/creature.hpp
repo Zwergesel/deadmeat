@@ -7,9 +7,7 @@
 #include <deque>
 #include "level.hpp"
 #include "player.hpp"
-#include "world.hpp"
 #include "utility.hpp"
-
 
 class Creature
 {
