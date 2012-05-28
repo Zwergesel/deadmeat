@@ -1,4 +1,5 @@
 #include "../creature.hpp"
+#include "../world.hpp"
 
 Goblin::Goblin() : Creature(20, 20, "goblin", 'g', TCODColor::green) {};
 
