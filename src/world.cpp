@@ -39,9 +39,8 @@ void World::addMessage(std::string m)
 	{
 		std::string combine = messageQueue.back() + " " + m;
 		int expectedHeight = TCODConsole::root->getHeightRect(
-		                       viewMsg.x, viewMsg.y, viewMsg.width, viewMsg.height,
-		                       "%s <More>", combine.c_str()
-		                     );
+		                       viewMsg.x, 0, viewMsg.width, 100,
+		                       "%s <More>", combine.c_str());
 		if (expectedHeight <= viewMsg.height)
 		{
 			messageQueue.pop_back();
@@ -128,12 +127,10 @@ void World::drawPlayer(Player* p, Point offset, Viewport view)
 	}
 }
 
-void World::debugDrawWorld(Goblin* g, FailWhale* w)
+void World::debugDrawWorld()
 {
 	TCODConsole::root->clear();
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);
-	//drawCreature(g, levelOffset, viewLevel);
-	//drawCreature(w, levelOffset, viewLevel);
 	drawMessage();
 	drawPlayer(player, levelOffset, viewLevel);
 }

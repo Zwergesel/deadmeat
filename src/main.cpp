@@ -46,7 +46,8 @@ int main()
 	timeline.push_back(TimelineAction(0, world.levels[0]->getCreatures().at(1) ));
 	make_heap(timeline.begin(), timeline.end());
 
-	while (!TCODConsole::isWindowClosed())
+	bool quit=false;
+	while (!TCODConsole::isWindowClosed() && !quit)
 	{
 		while (!timeline.empty() && timeline.front().time < world.player->getActionTime() && world.getNumMessages() <= 1)
 		{
@@ -60,7 +61,7 @@ int main()
 		}
 
 		// Show new game state
-		world.debugDrawWorld(&gobbo, &twitter);
+		world.debugDrawWorld();
 		world.popMessage();
 
 		TCODConsole::root->flush();
@@ -72,8 +73,9 @@ int main()
 			do
 			{
 				key = TCODConsole::root->waitForKeypress(true);
+				if (key.pressed && (key.lalt || key.ralt) && key.vk == TCODK_F4) quit = true;
 			}
-			while (!key.pressed || key.vk != TCODK_SPACE);
+			while (!(key.pressed && key.vk == TCODK_SPACE) && !TCODConsole::isWindowClosed() && !quit);
 		}
 		else
 		{
@@ -82,6 +84,7 @@ int main()
 			do
 			{
 				TCOD_key_t key = TCODConsole::root->waitForKeypress(true);
+				if (key.pressed && (key.lalt || key.ralt) && key.vk == TCODK_F4) quit = true;
 				bool move(false);
 				int direction(0);
 
@@ -121,9 +124,8 @@ int main()
 					actionDone = true;
 				}
 			}
-			while (!actionDone && !TCODConsole::isWindowClosed());
+			while (!actionDone && !TCODConsole::isWindowClosed() && !quit);
 		}
-
 	}
 
 	return 0;
