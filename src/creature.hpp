@@ -1,3 +1,6 @@
+#ifndef _CREATURE_HPP
+#define _CREATURE_HPP
+
 #include <libtcod.hpp>
 #include <string>
 #include <iostream>
@@ -7,8 +10,6 @@
 #include "world.hpp"
 #include "utility.hpp"
 
-#ifndef _CREATURE_HPP
-#define _CREATURE_HPP
 
 class Creature
 {
