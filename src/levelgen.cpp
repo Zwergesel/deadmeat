@@ -54,8 +54,8 @@ Level* LevelGen::generateCaveLevel(int width, int height)
 
 	for (int x=0; x<width; x++) for (int y=0; y<height; y++)
 		{
-			if (swap1[x + y * width] == 0) m->setTile(x, y, TILE_CAVE_WALL);
-			else if (swap1[x + y * width] == 1) m->setTile(x, y, TILE_CAVE_FLOOR);
+			if (swap1[x + y * width] == 0) m->setTile(Point(x, y), TILE_CAVE_WALL);
+			else if (swap1[x + y * width] == 1) m->setTile(Point(x, y), TILE_CAVE_FLOOR);
 		}
 
 	delete[] swap1;

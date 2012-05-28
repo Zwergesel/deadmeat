@@ -12,15 +12,15 @@
 struct Viewport
 {
 	int x,y,width,height;
-	Viewport():x(0),y(0),width(1),height(1){};
-	Viewport(int x, int y, int w, int h):x(x),y(y),width(w),height(h){};
+	Viewport():x(0),y(0),width(1),height(1) {};
+	Viewport(int x, int y, int w, int h):x(x),y(y),width(w),height(h) {};
 };
 
 class World
 {
 private:
 	std::deque<std::string> messageQueue;
-	
+
 public:
 	TileSet* tileSet;
 	Player* player;
@@ -31,16 +31,16 @@ public:
 
 	World();
 	~World();
-	
+
 	void addMessage(std::string m);
 	int getNumMessages();
 	void popMessage();
 	void drawMessage();
-	
+
 	void drawLevel(Level* l, Point offset, Viewport view);
-	void drawCreature(Creature* c, Point offset, Viewport view);
+	void drawCreature(Creature c, Point offset, Viewport view);
 	void drawPlayer(Player* p, Point offset, Viewport view);
-	
+
 	void debugDrawWorld(Goblin* g, FailWhale* w);
 };
 

@@ -9,28 +9,29 @@
 #include "player.hpp"
 #include "utility.hpp"
 
+class Level;
+
 class Creature
 {
 
 protected:
 	std::string name;
-	int x, y;
+	Point position;
 	int symbol;
 	TCODColor color;
 
 public:
 
-	Creature(int x, int y, std::string name, int symbol, TCODColor color);
+	Creature(Point pos, std::string name, int symbol, TCODColor color);
 	~Creature();
 	std::string getName();
-	int getX();
-	int getY();
+	Point getPos();
 	int getSymbol();
 	TCODColor getColor();
-	void move(int dx, int dy);
-	void moveTo(int x, int y);
-	
-	virtual int action(Level*, Player*) = 0;
+	void move(Point pos);
+	void moveTo(Point pos);
+
+	virtual int action(Level*, Player*, std::deque<std::string>*);
 };
 
 class Goblin: public Creature
