@@ -71,7 +71,6 @@ int main()
 				message.append(" <More>");
 			}
 			TCODConsole::root->print(0, 50, message.c_str());
-			TCODConsole::root->print(0, 50, message.c_str());
 		}
 
 		TCODConsole::root->flush();
