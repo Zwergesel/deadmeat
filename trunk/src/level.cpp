@@ -24,21 +24,6 @@ inline int Level::coord(int x, int y)
 	return y*width + x;
 }
 
-void Level::display(int offsetX, int offsetY) 
-{	
-	int startX = (offsetX < 0) ? -offsetX : 0;
-	int startY = (offsetY < 0) ? -offsetY : 0;
-	int rangeX = std::min(width - offsetX, TCODConsole::root->getWidth());
-	int rangeY = std::min(height - offsetY, TCODConsole::root->getHeight() - 1);
-	for (int y=startY; y<rangeY; y++) {
-		for (int x=startX; x<rangeX; x++) {
-			// TODO: put globalTileSet into a World class and only keep World global
-			TileInfo inf = globalTileSet.info[map[coord(x+offsetX,y+offsetY)]];
-			TCODConsole::root->putCharEx(x, y, inf.symbol, inf.color, inf.background);
-		}
-	}
-}
-
 void Level::setTile(int x, int y, Tile t)
 {
 	if (map == NULL || x < 0 || y < 0 || x >= width || y >= height) return;

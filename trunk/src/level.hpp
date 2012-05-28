@@ -16,7 +16,6 @@ private:
 public:
 	Level(int width,int height);
 	~Level();
-	void display(int offsetX, int offsetY);	
 	void setTile(int x, int y, Tile t);
 	Tile getTile(int x, int y);
 	int getWidth();

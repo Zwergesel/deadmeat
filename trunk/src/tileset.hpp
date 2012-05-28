@@ -27,11 +27,15 @@ struct TileInfo
 
 class TileSet
 {
-public:
+private:
 	TileInfo* info;
+
+public:
 	TileSet();
 	~TileSet();
-	void setTile(Tile t, TileInfo inf);
+	void setInfo(Tile t, TileInfo inf);
+	TileInfo getInfo(Tile t);
+	bool isPassable(Tile t);
 };
 
 #endif

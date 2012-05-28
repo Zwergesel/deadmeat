@@ -6,12 +6,10 @@
 #include <iostream>
 #include <cassert>
 #include "levelgen.hpp"
-#include "player.hpp"
-#include "tileset.hpp"
-#include "creature.hpp"
+#include "world.hpp"
+#include "utility.hpp"
 
-Player player("test");
-TileSet globalTileSet;
+World world;
 
 struct TimelineAction
 {
@@ -31,15 +29,13 @@ int main()
 	TCODConsole::initRoot(80,51,"deadmeat",false);
 	TCODSystem::setFps(30);
 
+	// Init hardcoded world
 	LevelGen level_generator;
-	Level* l = level_generator.generateCaveLevel(180,150);
-	player.x = 40;
-	player.y = 25;
-	player.nextAction = 0;
+	world.levels[0] = level_generator.generateCaveLevel(180,150);
+	world.currentLevel = 0;
+	world.player->moveTo(35, 22);
 	Goblin gobbo;
 	FailWhale twitter;
-	int levelScrollX = 0;
-	int levelScrollY = 0;
 	std::deque<std::string> messages;
 	std::vector<TimelineAction> timeline;
 
@@ -47,18 +43,15 @@ int main()
 	timeline.push_back(TimelineAction(0, &twitter));
 	make_heap(timeline.begin(), timeline.end());
 
-	TCODConsole::root->clear();
-	l->display(levelScrollX, levelScrollY);
-	player.draw(levelScrollX, levelScrollY);
-	gobbo.draw(levelScrollX, levelScrollY);
+	world.debugDrawWorld(&gobbo, &twitter);
 
 	while (!TCODConsole::isWindowClosed())
 	{
-		while (!timeline.empty() && timeline.front().time < player.nextAction && messages.size() <= 1)
+		while (!timeline.empty() && timeline.front().time < world.player->getActionTime() && messages.size() <= 1)
 		{
 			// Take one creature; update it's action
 			pop_heap(timeline.begin(), timeline.end());
-			int time = timeline.back().actor->action(l, player, &messages);
+			int time = timeline.back().actor->action(world.levels[world.currentLevel], world.player, &messages);
 			// action(...) returns the time the action took; update heap
 			assert(time > 0);
 			timeline.back().time += time;
@@ -66,12 +59,7 @@ int main()
 		}
 
 		// Show new game state
-		TCODConsole::root->clear();
-		l->display(levelScrollX, levelScrollY);
-		player.draw(levelScrollX, levelScrollY);
-		// TODO: this stuff belong in level later
-		gobbo.draw(levelScrollX, levelScrollY);
-		twitter.draw(levelScrollX, levelScrollY);
+		world.debugDrawWorld(&gobbo, &twitter);
 
 		// Show oldest message, if there any
 		if (!messages.empty())
@@ -124,17 +112,17 @@ int main()
 				if (move)
 				{
 					// execute movement
-					int newx = player.x + Player::dx[direction];
-					int newy = player.y + Player::dy[direction];
-					if (newx >= 0 && newx < l->getWidth() && newy >= 0 && newy < l->getHeight())
+					Level* level = world.levels[world.currentLevel];
+					int newx = world.player->getX() + Player::dx[direction];
+					int newy = world.player->getY() + Player::dy[direction];
+					if (newx >= 0 && newx < level->getWidth() && newy >= 0 && newy < level->getHeight())
 					{
-						if (globalTileSet.info[l->getTile(newx, newy)].passable)
+						if (world.tileSet->isPassable(level->getTile(newx,newy)))
 						{
-							player.x = newx;
-							player.y = newy;
-							player.nextAction += 12;
-							levelScrollX = std::min(l->getWidth() - 80, std::max(0, player.x - 40));
-							levelScrollY = std::min(l->getHeight() - 50, std::max(0, player.y - 25));
+							world.player->move(Player::dx[direction], Player::dy[direction]);
+							world.player->addActionTime(12);
+							world.levelOffset.x = util::clamp(35 - world.player->getX(), 70 - level->getWidth(), 0);
+							world.levelOffset.y = util::clamp(22 - world.player->getY(), 44 - level->getHeight(), 0);
 						}
 						else
 						{
@@ -149,6 +137,5 @@ int main()
 
 	}
 
-	delete l;
 	return 0;
 }

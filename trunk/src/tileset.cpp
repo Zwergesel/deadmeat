@@ -21,7 +21,17 @@ TileSet::~TileSet()
 	}
 }
 
-void TileSet::setTile(Tile t, TileInfo inf)
+void TileSet::setInfo(Tile t, TileInfo inf)
 {
 	info[t] = inf;
+}
+
+TileInfo TileSet::getInfo(Tile t)
+{
+	return info[t];
+}
+
+bool TileSet::isPassable(Tile t)
+{
+	return info[t].passable;
 }
