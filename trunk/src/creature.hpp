@@ -30,21 +30,21 @@ public:
 	void move(int dx, int dy);
 	void moveTo(int x, int y);
 	
-	virtual int action(Level*, Player*, std::deque<std::string>*) = 0;
+	virtual int action(Level*, Player*) = 0;
 };
 
 class Goblin: public Creature
 {
 public:
 	Goblin();
-	int action(Level*,Player*,std::deque<std::string>*);
+	int action(Level*,Player*);
 };
 
 class FailWhale: public Creature
 {
 public:
 	FailWhale();
-	int action(Level*,Player*,std::deque<std::string>*);
+	int action(Level*,Player*);
 };
 
 #endif
