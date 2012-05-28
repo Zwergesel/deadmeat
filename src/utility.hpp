@@ -8,10 +8,13 @@ struct Point
 	int x, y;
 	Point():x(0),y(0) {};
 	Point(int x, int y):x(x),y(y) {};
+	bool operator==(const Point p) const;
+	bool operator!=(const Point p) const;
+	Point& operator+=(const Point& p);
+	Point& operator-=(const Point& p);
+	const Point operator+(const Point& p) const;
+	const Point operator-(const Point& p) const;
 };
-
-bool operator==(Point a, Point b);
-Point operator+=(Point a, Point b);
 
 namespace util
 {
