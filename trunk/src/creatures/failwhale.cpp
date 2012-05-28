@@ -1,4 +1,4 @@
-#include "../creature.hpp";
+#include "../creature.hpp"
 
 FailWhale::FailWhale() : Creature(60, 35, "fail whale", 'w', TCODColor::blue) {};
 
