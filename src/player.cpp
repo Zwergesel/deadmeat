@@ -1,18 +1,13 @@
 #include "player.hpp"
 
 Player::Player(std::string name)
-	: name(name), symbol('@'), color(TCODColor::black), x(0), y(0), actionTime(0)
+	: name(name), symbol('@'), color(TCODColor::black), position(Point(0,0)), actionTime(0)
 {
 }
 
-int Player::getX()
+Point Player::getPos()
 {
-	return x;
-}
-
-int Player::getY()
-{
-	return y;
+	return position;
 }
 
 int Player::getSymbol()
@@ -30,16 +25,15 @@ int Player::getActionTime()
 	return actionTime;
 }
 
-void Player::move(int dx, int dy)
+void Player::move(Point dpos)
 {
-	x += dx;
-	y += dy;
+	position.x += dpos.x;
+	position.y += dpos.y;
 }
 
-void Player::moveTo(int x, int y)
+void Player::moveTo(Point p)
 {
-	this->x = x;
-	this->y = y;
+	position = p;
 }
 
 void Player::addActionTime(int dt)

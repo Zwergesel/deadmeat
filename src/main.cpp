@@ -22,7 +22,7 @@ int main()
 	world.viewMsg = Viewport(1, TCODConsole::root->getHeight() - 3, TCODConsole::root->getWidth(), 2);
 	world.levels[0] = level_generator.generateCaveLevel(80, 50, 40.f);
 	world.currentLevel = 0;
-	world.player->moveTo(35, 22);
+	world.player->moveTo(Point(35, 22));
 	Goblin gobbo;
 	FailWhale twitter, twitter2;
 	world.levels[0]->addCreature(&gobbo);
@@ -80,17 +80,19 @@ int main()
 				if (move)
 				{
 					// execute movement
-					int newx = world.player->getX() + Player::dx[direction];
-					int newy = world.player->getY() + Player::dy[direction];
+					Point ppos = world.player->getPos();
+					int newx = ppos.x + Player::dx[direction];
+					int newy = ppos.y + Player::dy[direction];
 					if (newx >= 0 && newx < level->getWidth() && newy >= 0 && newy < level->getHeight())
 					{
 						if (world.tileSet->isPassable(level->getTile(Point(newx,newy))))
 						{
-							world.player->move(Player::dx[direction], Player::dy[direction]);
+							world.player->move(Point(Player::dx[direction], Player::dy[direction]));
 							world.player->addActionTime(12);
 							// TODO: this is hardcoded width. not good.
-							world.levelOffset.x = util::clamp(35 - world.player->getX(), 70 - level->getWidth(), 0);
-							world.levelOffset.y = util::clamp(22 - world.player->getY(), 44 - level->getHeight(), 0);
+							ppos = world.player->getPos();
+							world.levelOffset.x = util::clamp(35 - ppos.x, 70 - level->getWidth(), 0);
+							world.levelOffset.y = util::clamp(22 - ppos.y, 44 - level->getHeight(), 0);
 						}
 						else
 						{

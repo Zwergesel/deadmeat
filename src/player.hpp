@@ -3,11 +3,12 @@
 
 #include <string>
 #include <libtcod.hpp>
+#include "utility.hpp"
 
 class Player
 {
 private:
-	int x, y;
+	Point position;
 	std::string name;
 	int symbol;
 	TCODColor color;
@@ -19,13 +20,12 @@ public:
 
 	Player(std::string name);
 	std::string getName();
-	int getX();
-	int getY();
+	Point getPos();
 	int getSymbol();
 	TCODColor getColor();
 	int getActionTime();
-	void move(int dx, int dy);
-	void moveTo(int x, int y);
+	void move(Point dpos);
+	void moveTo(Point p);
 	void addActionTime(int dt);
 };
 

@@ -118,12 +118,12 @@ void World::drawCreature(Creature* c, Point offset, Viewport view)
 
 void World::drawPlayer(Player* p, Point offset, Viewport view)
 {
-	int drawX = p->getX() + offset.x;
-	int drawY = p->getY() + offset.y;
-	if (drawX >= 0 && drawX < view.width && drawY >= 0 && drawY < view.height)
+	Point pos = p->getPos();
+	pos += offset;
+	if (pos.x >= 0 && pos.x < view.width && pos.y >= 0 && pos.y < view.height)
 	{
-		TCODConsole::root->putChar(view.x + drawX, view.y + drawY, p->getSymbol());
-		TCODConsole::root->setCharForeground(view.x + drawX, view.y + drawY, p->getColor());
+		TCODConsole::root->putChar(view.x + pos.x, view.y + pos.y, p->getSymbol());
+		TCODConsole::root->setCharForeground(view.x + pos.x, view.y + pos.y, p->getColor());
 	}
 }
 
