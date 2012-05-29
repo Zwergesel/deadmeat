@@ -38,7 +38,6 @@ public:
 	int getHeight();
 	// returns creature at given position, NULL otherwise
 	Creature* creatureAt(Point pos);
-	// returns pointer to vector of all creatures on the map
 	std::vector<Creature*> getCreatures();
 	void addCreature(Creature* c);
 	void removeCreature(Creature* c);

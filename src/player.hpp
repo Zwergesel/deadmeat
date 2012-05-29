@@ -2,8 +2,25 @@
 #define _PLAYER_HPP
 
 #include <string>
+#include <vector>
 #include <libtcod.hpp>
 #include "utility.hpp"
+
+enum ATTRIBUTE
+{
+  ATTR_STR,
+  ATTR_DEX,
+  ATTR_CON
+};
+
+struct Skill
+{
+  Skill(std::string name, int value, ATTRIBUTE att);
+  std::string name;
+  int value;
+  int exp;
+  ATTRIBUTE att;
+};
 
 class Player
 {
@@ -13,6 +30,7 @@ private:
 	int symbol;
 	TCODColor color;
 	int actionTime;
+  std::vector<Skill> skills;
 
 public:
 	static int dx[9];
