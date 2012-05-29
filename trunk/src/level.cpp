@@ -18,8 +18,6 @@ Level::Level(int width, int height)
 
 Level::~Level()
 {
-	creatures.clear();
-	timeline.clear();
 	if (map != NULL)
 	{
 		delete[] map;
@@ -84,6 +82,7 @@ void Level::removeCreature(Creature* c)
 	for (std::vector<Creature*>::iterator it=creatures.begin(); it<creatures.end(); it++)
 	{
 		if (*it == c) {
+			delete *it;
 			creatures.erase(it);
 			break;
 		}
@@ -98,6 +97,8 @@ void Level::removeCreature(Creature* c)
 		}
 	}
 	buildTimeline();
+	
+	delete c;
 }
 
 void Level::buildTimeline()
