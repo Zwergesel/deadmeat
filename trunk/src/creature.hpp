@@ -20,7 +20,7 @@ protected:
 	int symbol;
 	TCODColor color;
 	int health, maxHealth;
-	
+
 	void die(Creature* instigator);
 
 public:
@@ -31,10 +31,11 @@ public:
 	Point getPos();
 	int getSymbol();
 	TCODColor getColor();
+	int attack(Player* player);
 	void move(Point pos);
 	void moveTo(Point pos);
-  int getDefense();
-	
+	int getDefense();
+
 	/* Hurt returns true if the creature was killed */
 	bool hurt(int damage, Creature* instigator); // ,DamageType dt
 

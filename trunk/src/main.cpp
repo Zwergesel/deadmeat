@@ -26,6 +26,8 @@ int main()
 	world.player->moveTo(Point(35, 22));
 	Goblin* gobbo = new Goblin();
 	FailWhale* twitter = new FailWhale();
+	TCODRandom rngGauss;
+	rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
 	world.levels[0]->addCreature(gobbo);
 	world.levels[0]->addCreature(twitter);
 
@@ -85,33 +87,36 @@ int main()
 					Point newPos = Point(ppos.x + Player::dx[direction], ppos.y + Player::dy[direction]);
 					if (newPos.x >= 0 && newPos.y < level->getWidth() && newPos.y >= 0 && newPos.y < level->getHeight())
 					{
-            Creature* c = level->creatureAt(newPos);
-            if (c != NULL)
-            {
-              int attack,damage,speed;
-              world.player->attack(attack, damage, speed);
-              if(attack >= c->getDefense())
-              {                                
-                std::stringstream msg;
-                if(c->hurt(damage, NULL))
-                {
-                  msg << "You kill the " << c->getName() << ".";
-                  level->removeCreature(c);
-                }
-                else
-                {
-                  msg << "You hit the " << c->getName() << " for " << damage << " damage.";
-                }
-                world.addMessage(msg.str());
-              }
-              else
-              {
-                std::stringstream msg;
-                msg << "You miss the " << c->getName() << ".";
-                world.addMessage(msg.str());
-              }
-              world.player->addActionTime(speed);
-            }
+						Creature* c = level->creatureAt(newPos);
+						if (c != NULL)
+						{
+							int attack,damage,speed;
+							world.player->attack(attack, damage, speed);
+							int hit = rngGauss.getInt(-300,300,attack - c->getDefense());
+							if (hit >= -70)
+							{
+								if (hit <= 0) damage /= 2;
+								if (hit > 175) damage *= 2;
+								std::stringstream msg;
+								if (c->hurt(damage, NULL))
+								{
+									msg << "You kill the " << c->getName() << ".";
+									level->removeCreature(c);
+								}
+								else
+								{
+									msg << "You hit the " << c->getName() << " for " << damage << " damage.";
+								}
+								world.addMessage(msg.str());
+							}
+							else
+							{
+								std::stringstream msg;
+								msg << "You miss the " << c->getName() << ".";
+								world.addMessage(msg.str());
+							}
+							world.player->addActionTime(speed);
+						}
 						else if (world.tileSet->isPassable(level->getTile(newPos)))
 						{
 							world.player->move(Point(Player::dx[direction], Player::dy[direction]));

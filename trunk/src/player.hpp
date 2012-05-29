@@ -40,12 +40,12 @@ enum SKILLS
 
 struct Skill
 {
-  Skill();
-  Skill(std::string name, int value, ATTRIBUTE att);
-  std::string name;
-  int value;
-  int exp;
-  ATTRIBUTE att;
+	Skill();
+	Skill(std::string name, int value, ATTRIBUTE att);
+	std::string name;
+	int value;
+	int exp;
+	ATTRIBUTE att;
 };
 
 class Player
@@ -56,7 +56,9 @@ private:
 	int symbol;
 	TCODColor color;
 	int actionTime;
-  Skill skills[NUM_SKILL];
+	Skill skills[NUM_SKILL];
+	int health;
+	int maxHealth;
 
 public:
 	static int dx[9];
@@ -70,8 +72,10 @@ public:
 	int getActionTime();
 	void move(Point dpos);
 	void moveTo(Point p);
-  void attack(int& attack, int& damage, int& speed);
+	void attack(int& attack, int& damage, int& speed);
+	int getDefense();
 	void addActionTime(int dt);
+	bool hurt(int damage);
 };
 
 #endif

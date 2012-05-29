@@ -12,8 +12,7 @@ int Goblin::action(Level* level, Player* player)
 
 	if (target.x == ppos.x && target.y == ppos.y)
 	{
-		world.addMessage("The " + name + " hits!");
-		return 17;
+		return attack(player);
 	}
 	else if (world.tileSet->isPassable(level->getTile(target)) && level->creatureAt(target) == NULL)
 	{
