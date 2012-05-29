@@ -25,6 +25,6 @@ skills start at 1.00 and increase in small steps
 
 *attack value* = accumulated attack skill - accumulated defense 
 
-x = gauss on range (-50, 50) with attack value as mean
+x = gauss on range (-300, 300) with attack value as mean
 
-x < 0 = miss, 0 < x < 15 = half damage, 15 < x < 35 = full damage, 35 < x = critical hit
+x < -70 = miss, -70 < x < 0 = half damage, 0 < x < 175 = full damage, 175 < x = critical hit
