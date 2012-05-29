@@ -9,6 +9,8 @@
 
 *possible hit outcomes* = { miss, half damage, full damage, critical hit }
 
+*speed* = { armor, armor skill, speed skill?, skill of action }
+
 
 = example 1 =
 
