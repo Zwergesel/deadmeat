@@ -19,7 +19,7 @@
 stats are used for the training rate of a skill
 higher Vit makes the health skill easier/faster to train etc.
 
-*max_health* = (level `*` health skill)
+*max_health* = health skill
 
 *attack* = (weapon to hit + weapon enchantment) + ((fighting skill + weapon skill)/2)
 
