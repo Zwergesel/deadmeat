@@ -81,8 +81,8 @@ void Level::removeCreature(Creature* c)
 {
 	for (std::vector<Creature*>::iterator it=creatures.begin(); it<creatures.end(); it++)
 	{
-		if (*it == c) {
-			delete *it;
+		if (*it == c) 
+    {
 			creatures.erase(it);
 			break;
 		}
@@ -91,14 +91,19 @@ void Level::removeCreature(Creature* c)
 	// Remove creature from timeline and rebuild
 	for (std::vector<TimelineAction>::iterator it=timeline.begin(); it<timeline.end(); it++)
 	{
-		if (it->actor == c) {
+		if (it->actor == c) 
+    {
 			timeline.erase(it);
 			break;
 		}
 	}
 	buildTimeline();
 	
-	delete c;
+	if(c != NULL)
+  {
+    delete c;
+    c = NULL;
+  }
 }
 
 void Level::buildTimeline()

@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <vector>
 #include <string>
+#include <sstream>
 #include <deque>
 #include <iostream>
 #include <cassert>
@@ -23,10 +24,10 @@ int main()
 	world.levels[0] = level_generator.generateCaveLevel(80, 50, 40.f);
 	world.currentLevel = 0;
 	world.player->moveTo(Point(35, 22));
-	Goblin gobbo;
-	FailWhale twitter, twitter2;
-	world.levels[0]->addCreature(&gobbo);
-	world.levels[0]->addCreature(&twitter);
+	Goblin* gobbo = new Goblin();
+	FailWhale* twitter = new FailWhale();
+	world.levels[0]->addCreature(gobbo);
+	world.levels[0]->addCreature(twitter);
 
 	bool quit=false;
 	while (!TCODConsole::isWindowClosed() && !quit)
@@ -81,11 +82,37 @@ int main()
 				{
 					// execute movement
 					Point ppos = world.player->getPos();
-					int newx = ppos.x + Player::dx[direction];
-					int newy = ppos.y + Player::dy[direction];
-					if (newx >= 0 && newx < level->getWidth() && newy >= 0 && newy < level->getHeight())
+					Point newPos = Point(ppos.x + Player::dx[direction], ppos.y + Player::dy[direction]);
+					if (newPos.x >= 0 && newPos.y < level->getWidth() && newPos.y >= 0 && newPos.y < level->getHeight())
 					{
-						if (world.tileSet->isPassable(level->getTile(Point(newx,newy))))
+            Creature* c = level->creatureAt(newPos);
+            if (c != NULL)
+            {
+              int attack,damage,speed;
+              world.player->attack(attack, damage, speed);
+              if(attack >= c->getDefense())
+              {                                
+                std::stringstream msg;
+                if(c->hurt(damage, NULL))
+                {
+                  msg << "You kill the " << c->getName() << ".";
+                  level->removeCreature(c);
+                }
+                else
+                {
+                  msg << "You hit the " << c->getName() << " for " << damage << " damage.";
+                }
+                world.addMessage(msg.str());
+              }
+              else
+              {
+                std::stringstream msg;
+                msg << "You miss the " << c->getName() << ".";
+                world.addMessage(msg.str());
+              }
+              world.player->addActionTime(speed);
+            }
+						else if (world.tileSet->isPassable(level->getTile(newPos)))
 						{
 							world.player->move(Point(Player::dx[direction], Player::dy[direction]));
 							world.player->addActionTime(12);

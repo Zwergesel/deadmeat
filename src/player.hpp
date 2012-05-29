@@ -24,6 +24,7 @@ enum SKILLS
   SKILL_RING_ARMOR,
   SKILL_SCALE_ARMOR,
   SKILL_PLATE_ARMOR,
+  SKILL_UNARMED,
   SKILL_AXE,
   SKILL_SWORD,
   SKILL_MACEFLAIL,
@@ -69,6 +70,7 @@ public:
 	int getActionTime();
 	void move(Point dpos);
 	void moveTo(Point p);
+  void attack(int& attack, int& damage, int& speed);
 	void addActionTime(int dt);
 };
 
