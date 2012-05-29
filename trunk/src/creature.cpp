@@ -61,3 +61,10 @@ int Creature::action(Level*, Player*)
 {
 	return 1;
 }
+
+int Creature::getDefense()
+{
+  // armor + (fighting skill + armor skill)/2 + tile defender is on 
+  int defense = 0;
+  return defense;
+}

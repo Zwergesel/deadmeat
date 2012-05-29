@@ -33,6 +33,7 @@ public:
 	TCODColor getColor();
 	void move(Point pos);
 	void moveTo(Point pos);
+  int getDefense();
 	
 	/* Hurt returns true if the creature was killed */
 	bool hurt(int damage, Creature* instigator); // ,DamageType dt

@@ -24,6 +24,7 @@ Player::Player(std::string name)
   skills[SKILL_RING_ARMOR] = Skill("ring armor", 0, ATTR_DEX);
   skills[SKILL_CLOTH_ARMOR] = Skill("cloth armor", 0, ATTR_DEX);
   skills[SKILL_PLATE_ARMOR] = Skill("plate armor", 0, ATTR_DEX);
+  skills[SKILL_UNARMED] = Skill("unarmed", 0, ATTR_STR);
   skills[SKILL_AXE] = Skill("axe", 0, ATTR_STR);
   skills[SKILL_SWORD] = Skill("sword", 0, ATTR_STR);
   skills[SKILL_MACEFLAIL] = Skill("mace & flail", 0, ATTR_STR);
@@ -70,6 +71,16 @@ void Player::moveTo(Point p)
 void Player::addActionTime(int dt)
 {
 	actionTime += dt;
+}
+
+void Player::attack(int& attack, int& damage, int& speed)
+{
+  // weapon damage + enchantment
+  damage = std::max(1, 10 + 0);
+  // base speed - weapon speed + armor hindrance
+  speed = std::max(1, 10 - 2 + 2);
+  // weapon attack + weapon enchantment + (melee combat skill + weapon skill)/2
+  attack = 10 + 0 + (skills[SKILL_MELEE_COMBAT].value + skills[/*weapon.getSkill()*/SKILL_UNARMED].value)/2;
 }
 
 
