@@ -1,34 +1,39 @@
 #include "player.hpp"
 
+Skill::Skill()
+{
+}
+
 Skill::Skill(std::string name, int value, ATTRIBUTE att)
 {
   this->name = name;
   this->value = value;
   this->att = att;
+  this->exp = 0;
 }
 
 Player::Player(std::string name)
 	: name(name), symbol('@'), color(TCODColor::black), position(Point(0,0)), actionTime(0)
 {
-  skills.push_back(Skill("melee combat", 0, ATTR_STR));
-  skills.push_back(Skill("ranged combat", 0, ATTR_DEX));
-  skills.push_back(Skill("health", 0, ATTR_CON));
-  skills.push_back(Skill("unarmored", 0, ATTR_DEX));
-  skills.push_back(Skill("leather armor", 0, ATTR_DEX));
-  skills.push_back(Skill("scale armor", 0, ATTR_DEX));
-  skills.push_back(Skill("ring armor", 0, ATTR_DEX));
-  skills.push_back(Skill("cloth armor", 0, ATTR_DEX));
-  skills.push_back(Skill("plate armor", 0, ATTR_DEX));
-  skills.push_back(Skill("axe", 0, ATTR_STR));
-  skills.push_back(Skill("sword", 0, ATTR_STR));
-  skills.push_back(Skill("mace & flail", 0, ATTR_STR));
-  skills.push_back(Skill("staff", 0, ATTR_STR));
-  skills.push_back(Skill("dagger", 0, ATTR_DEX));
-  skills.push_back(Skill("whip", 0, ATTR_DEX));
-  skills.push_back(Skill("pike", 0, ATTR_STR));
-  skills.push_back(Skill("bow", 0, ATTR_DEX));
-  skills.push_back(Skill("crossbow", 0, ATTR_DEX));
-  skills.push_back(Skill("sling", 0, ATTR_DEX));
+  skills[SKILL_MELEE_COMBAT] = Skill("melee combat", 0, ATTR_STR);
+  skills[SKILL_RANGED_COMBAT] = Skill("ranged combat", 0, ATTR_DEX);
+  skills[SKILL_HEALTH] = Skill("health", 0, ATTR_CON);
+  skills[SKILL_UNARMORED] = Skill("unarmored", 0, ATTR_DEX);
+  skills[SKILL_LEATHER_ARMOR] = Skill("leather armor", 0, ATTR_DEX);
+  skills[SKILL_SCALE_ARMOR] = Skill("scale armor", 0, ATTR_DEX);
+  skills[SKILL_RING_ARMOR] = Skill("ring armor", 0, ATTR_DEX);
+  skills[SKILL_CLOTH_ARMOR] = Skill("cloth armor", 0, ATTR_DEX);
+  skills[SKILL_PLATE_ARMOR] = Skill("plate armor", 0, ATTR_DEX);
+  skills[SKILL_AXE] = Skill("axe", 0, ATTR_STR);
+  skills[SKILL_SWORD] = Skill("sword", 0, ATTR_STR);
+  skills[SKILL_MACEFLAIL] = Skill("mace & flail", 0, ATTR_STR);
+  skills[SKILL_STAFF] = Skill("staff", 0, ATTR_STR);
+  skills[SKILL_DAGGER] = Skill("dagger", 0, ATTR_DEX);
+  skills[SKILL_WHIP] = Skill("whip", 0, ATTR_DEX);
+  skills[SKILL_PIKE] = Skill("pike", 0, ATTR_STR);
+  skills[SKILL_BOW] = Skill("bow", 0, ATTR_DEX);
+  skills[SKILL_CROSSBOW] = Skill("crossbow", 0, ATTR_DEX);
+  skills[SKILL_SLING] = Skill("sling", 0, ATTR_DEX);
 }
 
 Point Player::getPos()
