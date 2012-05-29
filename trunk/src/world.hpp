@@ -41,7 +41,7 @@ public:
 	void drawCreature(Creature* c, Point offset, Viewport view);
 	void drawPlayer(Player* p, Point offset, Viewport view);
 
-	void debugDrawWorld();
+	void drawWorld();
 };
 
 // Global world variable

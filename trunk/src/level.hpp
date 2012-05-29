@@ -10,12 +10,22 @@ extern TileSet globalTileSet; // TODO: remove later, see level.cpp too
 
 class Creature;
 
+struct TimelineAction
+{
+	int time;
+	Creature* actor;
+	TimelineAction(int t, Creature* c):time(t),actor(c) {};
+};
+
+bool operator<(TimelineAction a, TimelineAction b);
+
 class Level
 {
 private:
 	int width, height;
 	Tile* map;
 	std::vector<Creature*> creatures;
+	std::vector<TimelineAction> timeline;
 
 	inline int coord(Point pos);
 
@@ -31,6 +41,11 @@ public:
 	// returns pointer to vector of all creatures on the map
 	std::vector<Creature*> getCreatures();
 	void addCreature(Creature* c);
+	void removeCreature(Creature* c);
+	
+	void buildTimeline();
+	bool isCreatureTurn(int playerTime);
+	void performCreatureTurn();	
 };
 
 #endif

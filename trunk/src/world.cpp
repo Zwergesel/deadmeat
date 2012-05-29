@@ -127,7 +127,7 @@ void World::drawPlayer(Player* p, Point offset, Viewport view)
 	}
 }
 
-void World::debugDrawWorld()
+void World::drawWorld()
 {
 	TCODConsole::root->clear();
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);

@@ -19,12 +19,12 @@ struct Point
 namespace util
 {
 
-int sign(int x);
+	int sign(int x);
 
-template <class T> T clamp(T val, T min, T max)
-{
-	return std::max(min, std::min(val, max));
-}
+	template <class T> T clamp(T val, T min, T max)
+	{
+		return std::max(min, std::min(val, max));
+	}
 
 };
 
