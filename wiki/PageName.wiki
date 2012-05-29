@@ -27,8 +27,9 @@ higher Vit makes the health skill easier/faster to train etc.
 
 *damage* = (weapon damage + weapon enchantment)
 
+*speed* = base attack time - weapon speed + armor hindrance
 
-*attack value* = accumulated attack skill - accumulated defense 
+*attack value* = attack - defense 
 
 x = gauss on range (-300, 300) with attack value as mean
 
