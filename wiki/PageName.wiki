@@ -23,7 +23,7 @@ skills start at 1.00 and increase in small steps
 *damage* = (weapon damage + weapon enchantment)
 
 
-*attack value* = accumulated defense - accumulated attack skill
+*attack value* = accumulated attack skill - accumulated defense 
 
 x = gauss on range (-50, 50) with attack value as mean
 
