@@ -22,7 +22,9 @@ skills start at 1.00 and increase in small steps
 
 *max_health* = (level `*` health skill)
 
-*attack* = (weapon to hit + weapon enchantment) `*` ((fighting skill + weapon skill)/2) > armor `*` armor skill `*` tile defender is on
+*attack* = (weapon to hit + weapon enchantment) `*` ((fighting skill + weapon skill)/2)
+
+*defense* = armor `*` (fighting skill + armor skill)/2 `*` tile defender is on
 
 *damage* = (weapon damage + weapon enchantment)
 
