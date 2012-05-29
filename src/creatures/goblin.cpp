@@ -1,7 +1,7 @@
 #include "../creature.hpp"
 #include "../world.hpp"
 
-Goblin::Goblin() : Creature(Point(20, 20), "goblin", 'g', TCODColor::green) {};
+Goblin::Goblin() : Creature(Point(20, 20), "goblin", 'g', TCODColor::green, 20) {};
 
 int Goblin::action(Level* level, Player* player)
 {

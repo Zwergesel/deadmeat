@@ -1,13 +1,13 @@
 #include "creature.hpp"
 
-Creature::Creature(Point pos, std::string name, int symbol, TCODColor color)
-	:position(pos), name(name), symbol(symbol), color(color)
+Creature::Creature(Point p, std::string n, int s, TCODColor c, int h)
+	:position(p), name(n), symbol(s), color(c), maxHealth(h), health(h)
 {
 }
 
 Creature::~Creature()
 {
-	// nothing, override
+	// nothing
 }
 
 std::string Creature::getName()
@@ -39,6 +39,22 @@ void Creature::move(Point dpos)
 void Creature::moveTo(Point pos)
 {
 	this->position = pos;
+}
+
+bool Creature::hurt(int damage, Creature* instigator)
+{
+	health -= damage;
+	if (health <= 0)
+	{
+		die(instigator);
+		return true;
+	}
+	return false;
+}
+
+void Creature::die(Creature* instigator)
+{
+	// ???
 }
 
 int Creature::action(Level*, Player*)

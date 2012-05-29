@@ -19,10 +19,13 @@ protected:
 	Point position;
 	int symbol;
 	TCODColor color;
+	int health, maxHealth;
+	
+	void die(Creature* instigator);
 
 public:
 
-	Creature(Point pos, std::string name, int symbol, TCODColor color);
+	Creature(Point p, std::string n, int s, TCODColor c, int h);
 	~Creature();
 	std::string getName();
 	Point getPos();
@@ -30,6 +33,9 @@ public:
 	TCODColor getColor();
 	void move(Point pos);
 	void moveTo(Point pos);
+	
+	/* Hurt returns true if the creature was killed */
+	bool hurt(int damage, Creature* instigator); // ,DamageType dt
 
 	virtual int action(Level*, Player*);
 };
