@@ -1,0 +1,21 @@
+#summary Combat Design
+
+*max_health* = { Vit stat, health skill }
+
+*attack* = { Dex stat of attacker, Dex stat of defender, armor, weapon to hit, weapon enchantment, tile defender is on, fighting skill, weapon skill, dodge skill, armor skill }
+
+*damage* = { Str stat of attacker, weapon damage, weapon enchantment, armor, fighting skill, weapon skill, endurance skill, armor skill }
+(same or different skills as in attack?)
+
+
+= example 1 =
+
+stats are used for the training rate of a skill
+higher Vit makes the health skill easier/faster to train etc.
+skills start at 1.00 and increase in small steps
+
+*max_health* = (level `*` health skill)
+
+*attack* = (weapon to hit + weapon enchantment) `*` ((fighting skill + weapon skill)/2) > armor `*` armor skill `*` tile defender is on
+
+*damage* = (weapon damage + weapon enchantment)
