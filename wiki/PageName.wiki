@@ -7,6 +7,8 @@
 *damage* = { Str stat of attacker, weapon damage, weapon enchantment, armor, fighting skill, weapon skill, endurance skill, armor skill }
 (same or different skills as in attack?)
 
+*possible hit outcomes* = { miss, half damage, full damage, critical hit }
+
 
 = example 1 =
 
