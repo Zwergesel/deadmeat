@@ -10,6 +10,7 @@ Skill::Skill(std::string name, int value, ATTRIBUTE att)
 	this->value = value;
 	this->att = att;
 	this->exp = 0;
+  this->used = 0;
 }
 
 Player::Player(std::string name)
@@ -98,7 +99,6 @@ bool Player::hurt(int damage)
 	}
 	return false;
 }
-
 
 int Player::dx[] = {-1,0,1,-1,0,1,-1,0,1};
 int Player::dy[] = {1,1,1,0,0,0,-1,-1,-1};

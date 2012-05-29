@@ -25,7 +25,7 @@ protected:
 
 public:
 
-	Creature(Point p, std::string n, int s, TCODColor c, int h);
+	Creature(Point p, std::string name, int symbol, TCODColor color, int health);
 	~Creature();
 	std::string getName();
 	Point getPos();
