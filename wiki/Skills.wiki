@@ -7,6 +7,17 @@
   * stealth ?
   * perception ?
   * movement speed ?
+  * appraise skill ?
+  * swim ?
+  * trap ?
+  * danger sense ?
+  * non-magic heal ?
+  * endurance ?
+==Crafting Skills==
+  * alchemy ?
+  * cooking ?
+==Magic Skills==
+  * ?
 ==Armor Skills==
   * unarmored
   * leather
