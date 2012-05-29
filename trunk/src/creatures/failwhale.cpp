@@ -1,7 +1,7 @@
 #include "../creature.hpp"
 #include "../world.hpp"
 
-FailWhale::FailWhale() : Creature(Point(60, 35), "fail whale", 'w', TCODColor::blue) {};
+FailWhale::FailWhale() : Creature(Point(60, 35), "fail whale", 'w', TCODColor::blue, 10000) {};
 
 int FailWhale::action(Level* level, Player* player)
 {
