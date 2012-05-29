@@ -2,9 +2,9 @@
 
 *max_health* = { Vit stat, health skill }
 
-*attack* = { (Dex stat of attacker), weapon to hit, weapon enchantment, fighting skill }
+*attack* = { (Dex stat of attacker), weapon to hit, weapon enchantment, fighting skill, weapon skill }
 
-*defense* = { (Dex stat of defender), special tile defender is on, dodge skill, (fighting skill + weapon skill? / armor skill?) }
+*defense* = { (Dex stat of defender), special tile defender is on, fighting skill, armor skill }
 
 *damage* = { Str stat of attacker, weapon damage, weapon enchantment, armor, fighting skill, weapon skill, endurance skill, armor skill }
 (same or different skills as in attack?)
