@@ -28,3 +28,5 @@ skills start at 1.00 and increase in small steps
 x = gauss on range (-300, 300) with attack value as mean
 
 x < -70 = miss, -70 < x < 0 = half damage, 0 < x < 175 = full damage, 175 < x = critical hit
+
+mean 0 => miss 25%, half 25%, hit 46%, crit 4%
