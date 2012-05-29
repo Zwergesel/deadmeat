@@ -46,6 +46,7 @@ struct Skill
 	int value;
 	int exp;
 	ATTRIBUTE att;
+  int used;
 };
 
 class Player

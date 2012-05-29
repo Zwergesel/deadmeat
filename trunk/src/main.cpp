@@ -26,10 +26,12 @@ int main()
 	world.player->moveTo(Point(35, 22));
 	Goblin* gobbo = new Goblin();
 	FailWhale* twitter = new FailWhale();
+  Creature* defaulto = new Creature(Point(10,10), "default", 'd', TCODColor::amber, 20);
 	TCODRandom rngGauss;
 	rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
 	world.levels[0]->addCreature(gobbo);
 	world.levels[0]->addCreature(twitter);
+  world.levels[0]->addCreature(defaulto);
 
 	bool quit=false;
 	while (!TCODConsole::isWindowClosed() && !quit)
