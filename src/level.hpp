@@ -41,10 +41,10 @@ public:
 	std::vector<Creature*> getCreatures();
 	void addCreature(Creature* c);
 	void removeCreature(Creature* c);
-	
+
 	void buildTimeline();
 	bool isCreatureTurn(int playerTime);
-	void performCreatureTurn();	
+	void performCreatureTurn();
 };
 
 #endif
