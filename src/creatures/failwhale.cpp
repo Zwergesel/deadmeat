@@ -6,14 +6,15 @@ FailWhale::FailWhale() : Creature(Point(60, 35), "fail whale", 'w', TCODColor::b
 int FailWhale::action(Level* level, Player* player)
 {
 	int dx = util::sign(player->getX() - position.x);
-	int dy = util::sign(player->getY() - position.y);
+	int dy = util::sign(player->getY() -position. y);
+	Point target(position.x+dx, position.y+dy);
 
-	if (position.x+dx == player->getX() && position.y+dy == player->getY())
+	if (target.x == player->getX() && target.y == player->getY())
 	{
 		world.addMessage("The " + name + " misses!");
 		return 5;
 	}
-	else if (world.tileSet->isPassable(level->getTile(Point(position.x+dx, position.y+dy))))
+	else if (world.tileSet->isPassable(level->getTile(target)) && level->creatureAt(target) == NULL)
 	{
 		position.x += dx;
 		position.y += dy;

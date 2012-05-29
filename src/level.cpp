@@ -1,7 +1,10 @@
 #include "level.hpp"
+#include "utility.hpp"
+#include "world.hpp"
 #include <libtcod.hpp>
 #include <algorithm>
 #include <iostream>
+#include <cassert>
 
 Level::Level(int width, int height)
 {
@@ -9,11 +12,14 @@ Level::Level(int width, int height)
 	this->height = height;
 	this->map = new Tile[width*height];
 	creatures.clear();
+	timeline.clear();
 	std::fill(map, map+width*height, TILE_CAVE_FLOOR);
 }
 
 Level::~Level()
 {
+	creatures.clear();
+	timeline.clear();
 	if (map != NULL)
 	{
 		delete[] map;
@@ -68,4 +74,54 @@ std::vector<Creature*> Level::getCreatures()
 void Level::addCreature(Creature* c)
 {
 	creatures.push_back(c);
+	// Put creature into timeline
+	timeline.push_back(TimelineAction(0,c));	// TODO: should init with current time
+	push_heap(timeline.begin(), timeline.end());
+}
+
+void Level::removeCreature(Creature* c)
+{
+	for (std::vector<Creature*>::iterator it=creatures.begin(); it<creatures.end(); it++)
+	{
+		if (*it == c) {
+			creatures.erase(it);
+			break;
+		}
+	}
+	
+	// Remove creature from timeline and rebuild
+	for (std::vector<TimelineAction>::iterator it=timeline.begin(); it<timeline.end(); it++)
+	{
+		if (it->actor == c) {
+			timeline.erase(it);
+			break;
+		}
+	}
+	buildTimeline();
+}
+
+void Level::buildTimeline()
+{
+	make_heap(timeline.begin(), timeline.end());
+}
+
+bool Level::isCreatureTurn(int playerTime)
+{
+	return (!timeline.empty() && timeline.front().time < playerTime);
+}
+
+void Level::performCreatureTurn()
+{
+	pop_heap(timeline.begin(), timeline.end());
+	int time = timeline.back().actor->action(this, world.player);
+	// action(...) returns the time the action took; update heap
+	assert(time > 0);
+	timeline.back().time += time;
+	push_heap(timeline.begin(), timeline.end());
+}
+
+bool operator<(TimelineAction a, TimelineAction b)
+{
+	// Max heap, but we want minimum time
+	return a.time > b.time;
 }

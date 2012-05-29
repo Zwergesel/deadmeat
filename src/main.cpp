@@ -11,19 +11,6 @@
 
 World world;
 
-struct TimelineAction
-{
-	int time;
-	Creature* actor;
-	TimelineAction(int t, Creature* c):time(t),actor(c) {};
-};
-
-bool operator<(TimelineAction a, TimelineAction b)
-{
-	// Max heap, but we want minimum time
-	return a.time > b.time;
-}
-
 int main()
 {
 	TCODConsole::initRoot(80,51,"deadmeat",false);
@@ -32,38 +19,27 @@ int main()
 	// Init hardcoded world
 	LevelGen level_generator;
 	world.viewLevel = Viewport(1, 1, TCODConsole::root->getWidth() - 10, TCODConsole::root->getHeight() - 4);
-	world.viewMsg = Viewport(1, TCODConsole::root->getHeight() - 2, TCODConsole::root->getWidth(), 2);
+	world.viewMsg = Viewport(1, TCODConsole::root->getHeight() - 3, TCODConsole::root->getWidth(), 2);
 	world.levels[0] = level_generator.generateCaveLevel(80, 50, 40.f);
 	world.currentLevel = 0;
 	world.player->moveTo(35, 22);
 	Goblin gobbo;
-	FailWhale twitter;
+	FailWhale twitter, twitter2;
 	world.levels[0]->addCreature(&gobbo);
 	world.levels[0]->addCreature(&twitter);
-	std::vector<TimelineAction> timeline;
-
-	timeline.push_back(TimelineAction(0, world.levels[0]->getCreatures().at(0) ));
-	timeline.push_back(TimelineAction(0, world.levels[0]->getCreatures().at(1) ));
-	make_heap(timeline.begin(), timeline.end());
 
 	bool quit=false;
 	while (!TCODConsole::isWindowClosed() && !quit)
 	{
-		while (!timeline.empty() && timeline.front().time < world.player->getActionTime() && world.getNumMessages() <= 1)
+		Level* level = world.levels[world.currentLevel];
+		while (level->isCreatureTurn(world.player->getActionTime()) && world.getNumMessages() <= 1)
 		{
-			// Take one creature; update it's action
-			pop_heap(timeline.begin(), timeline.end());
-			int time = timeline.back().actor->action(world.levels[world.currentLevel], world.player);
-			// action(...) returns the time the action took; update heap
-			assert(time > 0);
-			timeline.back().time += time;
-			push_heap(timeline.begin(), timeline.end());
+			level->performCreatureTurn();
 		}
 
 		// Show new game state
-		world.debugDrawWorld();
+		world.drawWorld();
 		world.popMessage();
-
 		TCODConsole::root->flush();
 
 		if (world.getNumMessages() > 0)
@@ -104,7 +80,6 @@ int main()
 				if (move)
 				{
 					// execute movement
-					Level* level = world.levels[world.currentLevel];
 					int newx = world.player->getX() + Player::dx[direction];
 					int newy = world.player->getY() + Player::dy[direction];
 					if (newx >= 0 && newx < level->getWidth() && newy >= 0 && newy < level->getHeight())
@@ -113,6 +88,7 @@ int main()
 						{
 							world.player->move(Player::dx[direction], Player::dy[direction]);
 							world.player->addActionTime(12);
+							// TODO: this is hardcoded width. not good.
 							world.levelOffset.x = util::clamp(35 - world.player->getX(), 70 - level->getWidth(), 0);
 							world.levelOffset.y = util::clamp(22 - world.player->getY(), 44 - level->getHeight(), 0);
 						}
