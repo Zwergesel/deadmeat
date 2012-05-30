@@ -121,7 +121,7 @@ int Player::action(Level* level)
 			std::vector<Item*> items = level->itemsAt(creature->getPos());
 			if (items.size() == 1)
 			{
-				msg << "You see a " << items[0]->getName() << " here.";
+				msg << "You see " << util::indefArticle(items[0]->getName()) << " " << items[0]->getName() << " here.";
 				world.addMessage(msg.str());
 			}
 			else if (items.size() >= 1)

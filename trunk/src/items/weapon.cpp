@@ -1,8 +1,8 @@
 #include <libtcod.hpp>
 #include "weapon.hpp"
 
-Weapon::Weapon(int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands)
-	:speed(spd), hitBonus(hit), baseDamage(dmg), numDice(dice)
+Weapon::Weapon(Point position, std::string name, int symbol, TCODColor color, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands)
+	:Item(position, name, symbol, color), speed(spd), hitBonus(hit), baseDamage(dmg), numDice(dice)
 	,diceMax(dmax), enchantment(ench), skill(skl), hands(hands)
 {
 
