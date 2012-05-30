@@ -56,3 +56,13 @@ std::string util::indefArticle(std::string str)
 	}
 	return ret;
 }
+
+std::string util::plural(std::string str)
+{
+  std::string ret = str;
+  if(str.size() >= 1 && str[str.size()-1] == 's') ret.append("es");
+  else if(str.size() >= 2 && str[str.size()-2] == 's' && str[str.size()-1] == 'h') ret.append("es");
+  else if(str.size() >= 1 && str[str.size()-1] == 'y') ret.replace(str.size()-1, 1, "ies");
+  else ret.append("s");
+  return ret;
+}

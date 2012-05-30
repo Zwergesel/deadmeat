@@ -1,4 +1,5 @@
 #include <libtcod.hpp>
+#include <sstream>
 #include "weapon.hpp"
 
 Weapon::Weapon(Point position, std::string name, int symbol, TCODColor color, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands)
@@ -6,6 +7,7 @@ Weapon::Weapon(Point position, std::string name, int symbol, TCODColor color, in
 	,diceMax(dmax), enchantment(ench), skill(skl), hands(hands)
 {
 	type = ITEM_WEAPON;
+  strType = "Weapon";
 }
 
 int Weapon::rollDamage()
@@ -48,4 +50,13 @@ int Weapon::getEnchantment()
 int Weapon::getHandsUsed()
 {
 	return hands;
+}
+
+std::string Weapon::toString()
+{
+  std::stringstream ss;
+  int e = getEnchantment();
+  ss << (e<0)?('-'):('+') << e;
+  ss << " " << getName();
+  return ss.str();
 }

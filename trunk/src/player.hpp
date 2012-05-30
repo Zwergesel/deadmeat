@@ -3,7 +3,7 @@
 
 #include <libtcod.hpp>
 #include <string>
-#include <map>
+#include <vector>
 #include "utility.hpp"
 
 class Creature;
@@ -60,7 +60,7 @@ private:
 	std::string name;
 	Creature* creature;
 	Skill skills[NUM_SKILL];
-	Item** inventory;
+	std::vector<std::pair<int, Item*> > inventory;
 	// negative if inv is closed, otherwise the page number the inv is open on
 	int inventoryOpen;
 	int actionMove(int direction);
@@ -77,8 +77,8 @@ public:
 	int action();
 	TCOD_key_t waitForKeypress(bool clBuf);
 	bool addItem(Item* i);
-	void removeItem(Item* i);
-	Item** getInventory();
+	void removeItem(Item* i, bool del);
+	std::vector<std::pair<int, Item*> > getInventory();
 	int isInventoryOpen();
 };
 

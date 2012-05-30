@@ -8,7 +8,8 @@
 enum ITEM_TYPE
 {
   ITEM_WEAPON,
-  ITEM_DEFAULT
+  ITEM_DEFAULT,
+  NUM_ITEM_TYPE
 };
 
 class Item
@@ -21,6 +22,7 @@ private:
 
 protected:
 	ITEM_TYPE type;
+  std::string strType;
 
 public:
 	Item(Point position, std::string name, int symbol, TCODColor color);
@@ -29,6 +31,8 @@ public:
 	TCODColor getColor();
 	Point getPos();
 	std::string getName();
+  std::string toString();
+  std::string typeString();
 };
 
 #endif
