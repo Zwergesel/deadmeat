@@ -47,6 +47,8 @@ int main()
 
 		// Show new game state
 		world.drawWorld();
+		// TODO: this somewhat breaks fullscreen, so fix it later
+		world.popMessage();
 		TCODConsole::root->flush();
 
 		if (world.getNumMessages() > 1)
@@ -65,9 +67,6 @@ int main()
 			// We know this because level->isPlayerTurn() must be true here
 			level->performCreatureTurn();
 		}
-		
-		// Pop message only after player action in case of redraws
-		world.popMessage();
 	}
 
 	return 0;
