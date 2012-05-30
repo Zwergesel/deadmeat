@@ -3,10 +3,12 @@
 
 #include <libtcod.hpp>
 #include <string>
+#include <vector>
 #include "utility.hpp"
 
 class Creature;
 class Level;
+class Item;
 
 enum ATTRIBUTE
 {
@@ -58,16 +60,20 @@ private:
 	std::string name;
 	Creature* creature;
 	Skill skills[NUM_SKILL];
+  std::vector<Item*> inventory;
 
 public:
 	static int dx[9];
 	static int dy[9];
 
 	Player(std::string name);
+  ~Player();
 	std::string getName();
 	Creature* getCreature();
 	int action(Level* level);
-	TCOD_key_t waitForKeypress(bool clBuf);
+	TCOD_key_t waitForKeypress(bool clBuf);  
+  void addItem(Item* i);
+  void removeItem(Item* i);
 
 	/* These are no longer needed. Remove in future revisions */
 	int attack(int& attack, int& damage, int& speed);

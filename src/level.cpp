@@ -24,11 +24,11 @@ Level::~Level()
 	}
 	for (std::vector<Creature*>::iterator it=creatures.begin(); it<creatures.end(); it++)
 	{
-		removeCreature(*it);
+		delete *it;
 	}
 	for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
 	{
-		removeItem(*it);
+		delete *it;
 	}
 }
 

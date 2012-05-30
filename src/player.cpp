@@ -4,6 +4,7 @@
 #include "creature.hpp"
 #include "level.hpp"
 #include "world.hpp"
+#include "item.hpp"
 
 Skill::Skill()
 {
@@ -43,6 +44,14 @@ Player::Player(std::string name):
 	skills[SKILL_SLING] = Skill("sling", 0, ATTR_DEX);
 	creature = new Creature(Point(40,22), name, '@', TCODColor::black, 25);
 	creature->setControlled(true);
+}
+
+Player::~Player()
+{
+  for (std::vector<Item*>::iterator it=inventory.begin(); it<inventory.end(); it++)
+	{
+		delete *it;
+	}
 }
 
 int Player::attack(int& attack, int& damage, int& speed)
@@ -90,6 +99,24 @@ TCOD_key_t Player::waitForKeypress(bool clBuf)
 	return TCOD_key_t();
 }
 
+void Player::addItem(Item* i)
+{
+  inventory.push_back(i);
+}
+
+void Player::removeItem(Item* i)
+{
+for (std::vector<Item*>::iterator it=inventory.begin(); it<inventory.end(); it++)
+	{
+		if (*it == i)
+		{
+			inventory.erase(it);
+			break;
+		}
+	}
+  delete i;
+}
+
 int Player::action(Level* level)
 {
 	do
@@ -135,6 +162,15 @@ int Player::action(Level* level)
 					world.addMessage(strlist.str());
 				}
 			}
+			return 10;
+		}
+    else if (key.c == ',')
+		{
+			std::stringstream msg;
+			std::vector<Item*> items = level->itemsAt(creature->getPos());
+      if(items.size() < 1) return 0;
+      addItem(new Item(*(items[0])));
+      level->removeItem(items[0]);
 			return 10;
 		}
 
