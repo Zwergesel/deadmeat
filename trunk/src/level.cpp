@@ -141,11 +141,11 @@ void Level::removeItem(Item* i, bool del)
 			break;
 		}
 	}
-  if (del && i != NULL) 
-  {
-    delete i;
-    i = NULL;
-  }
+	if (del && i != NULL)
+	{
+		delete i;
+		i = NULL;
+	}
 }
 
 void Level::buildTimeline()
@@ -166,7 +166,7 @@ void Level::performCreatureTurn()
 	if (timeline.back().actor->isControlled())
 	{
 		// player action; returns time the action took
-		time = world.player->action(this);
+		time = world.player->action();
 	}
 	else
 	{

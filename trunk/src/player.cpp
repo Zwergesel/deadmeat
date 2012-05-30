@@ -143,105 +143,113 @@ int Player::isInventoryOpen()
 	return inventoryOpen;
 }
 
-int Player::action(Level* level)
+int Player::actionMove(int direction)
+{
+  Level* level = world.levels[world.currentLevel];
+	Point ppos = creature->getPos();
+	Point newPos = Point(ppos.x + Player::dx[direction], ppos.y + Player::dy[direction]);
+  if (newPos.x >= 0 && newPos.y < level->getWidth() && newPos.y >= 0 && newPos.y < level->getHeight())
+	{
+		Creature* c = level->creatureAt(newPos);
+		if (c != NULL)
+		{
+			return creature->attack(c);
+		}
+		else if (world.tileSet->isPassable(level->getTile(newPos)))
+		{
+			creature->moveTo(newPos);
+			world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - level->getWidth(), 0);
+			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
+			return 12;
+		}
+		else
+		{
+			world.addMessage("Bonk!");
+			return 0;
+		}
+	}
+}
+
+int Player::actionLook(Point pos)
+{
+  Level* level = world.levels[world.currentLevel];
+  std::stringstream msg;
+  std::vector<Item*> items = level->itemsAt(pos);
+  if (items.size() == 1)
+  {
+    msg << "You see " << util::indefArticle(items[0]->getName()) << " " << items[0]->getName() << " here.";
+    world.addMessage(msg.str());
+  }
+  else if (items.size() >= 1)
+  {
+    msg << "You see a several items here:";
+    world.addMessage(msg.str());
+    for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
+    {
+      std::stringstream strlist;
+      strlist << util::indefArticle((*it)->getName()) << " " << (*it)->getName();
+      world.addMessage(strlist.str());
+    }
+  }
+  return 0;
+}
+
+int Player::actionPickup()
+{
+  Level* level = world.levels[world.currentLevel];
+  std::stringstream msg;
+  std::vector<Item*> items = level->itemsAt(creature->getPos());
+  if (items.size() >= 1 && addItem(items[0]))
+  {
+    level->removeItem(items[0], false);
+    return 10;
+  }
+  return 0;
+}
+
+int Player::action()
 {
 	do
 	{
 		TCOD_key_t key = waitForKeypress(true);
-		bool move(false);
-		int direction(0);
 
+    // numpad player movement
 		if (inventoryOpen < 0 && key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
 		{
-			// numpad player movement
-			move = true;
-			direction = key.vk - TCODK_KP1;
+			return actionMove(key.vk - TCODK_KP1);
 		}
+    // number keys player movement
 		else if (inventoryOpen < 0 && key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.vk != TCODK_5)
 		{
-			// number keys player movement
-			move = true;
-			direction = key.vk - TCODK_1;
+			return actionMove(key.vk - TCODK_KP1);
 		}
 		else if (inventoryOpen < 0 && (key.vk == TCODK_5 || key.vk == TCODK_KP5))
 		{
 			// wait/search
 			return 10;
 		}
-    // look at current position
+		// look at current position
 		else if (inventoryOpen < 0 && key.c == ':')
 		{
-			std::stringstream msg;
-			std::vector<Item*> items = level->itemsAt(creature->getPos());
-			if (items.size() == 1)
-			{
-				msg << "You see " << util::indefArticle(items[0]->getName()) << " " << items[0]->getName() << " here.";
-				world.addMessage(msg.str());
-			}
-			else if (items.size() >= 1)
-			{
-				msg << "You see a several items here:";
-				world.addMessage(msg.str());
-				for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
-				{
-					std::stringstream strlist;
-					strlist << util::indefArticle((*it)->getName()) << " " << (*it)->getName();
-					world.addMessage(strlist.str());
-				}
-			}
-			return 0;
+      return actionLook(creature->getPos());
 		}
-    // pick up an item
+		// pick up an item
 		else if (inventoryOpen < 0 && key.c == ',')
 		{
-			std::stringstream msg;
-			std::vector<Item*> items = level->itemsAt(creature->getPos());
-			if (items.size() >= 1 && addItem(items[0]))
-			{
-				level->removeItem(items[0], false);
-				return 10;
-			}
-			return 0;
+			actionPickup();
 		}
-    // open inventory screen
+		// open inventory screen
 		else if (key.c == 'i')
 		{
-      if(inventoryOpen < 0) inventoryOpen = 0;
-      else inventoryOpen = -1;
+			if (inventoryOpen < 0) inventoryOpen = 0;
+			else inventoryOpen = -1;
 			return 0;
 		}
-    // next inventory page
-    else if (inventoryOpen >= 0 && key.vk == TCODK_SPACE)
-    {
-      inventoryOpen++; 
-      return 0;
-    }
-
-		if (move)
+		// next inventory page
+		else if (inventoryOpen >= 0 && key.vk == TCODK_SPACE)
 		{
-			// execute movement
-			Point ppos = creature->getPos();
-			Point newPos = Point(ppos.x + Player::dx[direction], ppos.y + Player::dy[direction]);
-			if (newPos.x >= 0 && newPos.y < level->getWidth() && newPos.y >= 0 && newPos.y < level->getHeight())
-			{
-				Creature* c = level->creatureAt(newPos);
-				if (c != NULL)
-				{
-					return creature->attack(c);
-				}
-				else if (world.tileSet->isPassable(level->getTile(newPos)))
-				{
-					creature->moveTo(newPos);
-					world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - level->getWidth(), 0);
-					world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
-					return 12;
-				}
-				else
-				{
-					world.addMessage("Bonk!");
-					return 0;
-				}
-			}
+			inventoryOpen++;
+			return 0;
 		}
 	}
 	while (!TCODConsole::isWindowClosed() && !world.requestQuit);
