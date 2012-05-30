@@ -130,9 +130,8 @@ int Player::action(Level* level)
 				else if (world.tileSet->isPassable(level->getTile(newPos)))
 				{
 					creature->moveTo(newPos);
-					// TODO: this is hardcoded width. not good.
-					world.levelOffset.x = util::clamp(35 - newPos.x, 70 - level->getWidth(), 0);
-					world.levelOffset.y = util::clamp(22 - newPos.y, 46 - level->getHeight(), 0);
+          world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - level->getWidth(), 0);
+          world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
 					return 12;
 				}
 				else
@@ -144,6 +143,8 @@ int Player::action(Level* level)
 		}
 	}
 	while (!TCODConsole::isWindowClosed() && !world.requestQuit);
+  // should not be reached, return time of action
+  return 1;
 }
 
 int Player::dx[] = {-1,0,1,-1,0,1,-1,0,1};
