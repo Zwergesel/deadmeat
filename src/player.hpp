@@ -3,7 +3,7 @@
 
 #include <libtcod.hpp>
 #include <string>
-#include <vector>
+#include <map>
 #include "utility.hpp"
 
 class Creature;
@@ -60,20 +60,21 @@ private:
 	std::string name;
 	Creature* creature;
 	Skill skills[NUM_SKILL];
-  std::vector<Item*> inventory;
+	Item** inventory;
 
 public:
 	static int dx[9];
 	static int dy[9];
 
 	Player(std::string name);
-  ~Player();
+	~Player();
 	std::string getName();
 	Creature* getCreature();
 	int action(Level* level);
-	TCOD_key_t waitForKeypress(bool clBuf);  
-  void addItem(Item* i);
-  void removeItem(Item* i);
+	TCOD_key_t waitForKeypress(bool clBuf);
+	bool addItem(Item* i);
+	void removeItem(Item* i);
+	Item** getInventory();
 
 	/* These are no longer needed. Remove in future revisions */
 	int attack(int& attack, int& damage, int& speed);

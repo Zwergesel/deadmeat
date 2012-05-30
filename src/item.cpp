@@ -4,6 +4,10 @@ Item::Item(Point p, std::string n, int s, TCODColor c) : position(p), name(n), s
 {
 }
 
+Item::~Item()
+{
+}
+
 int Item::getSymbol()
 {
 	return symbol;

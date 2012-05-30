@@ -44,13 +44,24 @@ Player::Player(std::string name):
 	skills[SKILL_SLING] = Skill("sling", 0, ATTR_DEX);
 	creature = new Creature(Point(40,22), name, '@', TCODColor::black, 25);
 	creature->setControlled(true);
+	inventory = new Item*[256];
+	for (int i=0; i<256; i++) inventory[i] = NULL;
 }
 
 Player::~Player()
 {
-  for (std::vector<Item*>::iterator it=inventory.begin(); it<inventory.end(); it++)
+	for (int i=0; i<256; i++)
 	{
-		delete *it;
+		if (inventory[i] != NULL)
+		{
+			delete inventory[i];
+			inventory[i] = NULL;
+		}
+	}
+	if (inventory != NULL)
+	{
+		delete[] inventory;
+		inventory = NULL;
 	}
 }
 
@@ -99,22 +110,49 @@ TCOD_key_t Player::waitForKeypress(bool clBuf)
 	return TCOD_key_t();
 }
 
-void Player::addItem(Item* i)
+bool Player::addItem(Item* item)
 {
-  inventory.push_back(i);
-}
-
-void Player::removeItem(Item* i)
-{
-for (std::vector<Item*>::iterator it=inventory.begin(); it<inventory.end(); it++)
+	for (int i='a'; i<='z'; i++)
 	{
-		if (*it == i)
+		if (inventory[i] == NULL)
 		{
-			inventory.erase(it);
-			break;
+			inventory[i] = item;
+			return true;
 		}
 	}
-  delete i;
+	for (int i='A'; i<='Z'; i++)
+	{
+		if (inventory[i] == NULL)
+		{
+			inventory[i] = item;
+			return true;
+		}
+	}
+	// ran out of letters
+	world.addMessage("Too many items in backpack.");
+	return false;
+}
+
+void Player::removeItem(Item* item)
+{
+	for (int i=0; i<256; i++)
+	{
+		if (inventory[i] == item)
+		{
+			if (inventory[i] != NULL)
+			{
+				delete inventory[i];
+				inventory[i] = NULL;
+				item = NULL;
+				return;
+			}
+		}
+	}
+}
+
+Item** Player::getInventory()
+{
+	return inventory;
 }
 
 int Player::action(Level* level)
@@ -162,16 +200,23 @@ int Player::action(Level* level)
 					world.addMessage(strlist.str());
 				}
 			}
-			return 10;
+			return 0;
 		}
-    else if (key.c == ',')
+		else if (key.c == ',')
 		{
 			std::stringstream msg;
 			std::vector<Item*> items = level->itemsAt(creature->getPos());
-      if(items.size() < 1) return 0;
-      addItem(new Item(*(items[0])));
-      level->removeItem(items[0]);
-			return 10;
+			if (items.size() >= 1 && addItem(new Item(*(items[0]))))
+			{
+				level->removeItem(items[0]);
+				return 10;
+			}
+			return 0;
+		}
+		else if (key.c == 'i')
+		{
+			//world.displayInventory();
+			return 0;
 		}
 
 		if (move)
