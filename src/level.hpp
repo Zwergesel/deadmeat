@@ -38,11 +38,11 @@ public:
 	Creature* creatureAt(Point pos);
 	std::vector<Creature*> getCreatures();
 	void addCreature(Creature* c);
-	void removeCreature(Creature* c);
+	void removeCreature(Creature* c, bool del);
 	std::vector<Item*> itemsAt(Point pos);
 	std::vector<Item*> getItems();
 	void addItem(Item* i);
-	void removeItem(Item* i);
+	void removeItem(Item* i, bool del);
 
 	void buildTimeline();
 	bool isPlayerTurn();

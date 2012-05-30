@@ -77,7 +77,7 @@ void Creature::die(Creature* instigator)
 		instigator->isControlled() ? (msg << "You kill") : (msg << "The " << instigator->getName() << " kills");
 		msg << " the " << name << ".";
 		world.addMessage(msg.str());
-		level->removeCreature(this);
+		level->removeCreature(this, true);
 	}
 }
 

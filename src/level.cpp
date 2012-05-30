@@ -82,7 +82,7 @@ void Level::addCreature(Creature* c)
 	c->setLevel(this);
 }
 
-void Level::removeCreature(Creature* c)
+void Level::removeCreature(Creature* c, bool del)
 {
 	for (std::vector<Creature*>::iterator it=creatures.begin(); it<creatures.end(); it++)
 	{
@@ -104,7 +104,7 @@ void Level::removeCreature(Creature* c)
 	}
 	buildTimeline();
 
-	if (c != NULL)
+	if (del && c != NULL)
 	{
 		delete c;
 		c = NULL;
@@ -131,7 +131,7 @@ void Level::addItem(Item* i)
 	items.push_back(i);
 }
 
-void Level::removeItem(Item* i)
+void Level::removeItem(Item* i, bool del)
 {
 	for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
 	{
@@ -141,7 +141,11 @@ void Level::removeItem(Item* i)
 			break;
 		}
 	}
-	delete i;
+  if (del && i != NULL) 
+  {
+    delete i;
+    i = NULL;
+  }
 }
 
 void Level::buildTimeline()
