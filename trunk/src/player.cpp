@@ -1,5 +1,8 @@
+#include <libtcod.hpp>
 #include "player.hpp"
 #include "creature.hpp"
+#include "level.hpp"
+#include "world.hpp"
 
 Skill::Skill()
 {
@@ -15,13 +18,7 @@ Skill::Skill(std::string name, int value, ATTRIBUTE att)
 }
 
 Player::Player(std::string name):
-	name(name),
-	symbol('@'),
-	color(TCODColor::black),
-	position(Point(0,0)),
-	actionTime(0),
-	health(25),
-	maxHealth(25)
+	name(name)
 {
 	skills[SKILL_MELEE_COMBAT] = Skill("melee combat", 0, ATTR_STR);
 	skills[SKILL_RANGED_COMBAT] = Skill("ranged combat", 0, ATTR_DEX);
@@ -43,42 +40,8 @@ Player::Player(std::string name):
 	skills[SKILL_BOW] = Skill("bow", 0, ATTR_DEX);
 	skills[SKILL_CROSSBOW] = Skill("crossbow", 0, ATTR_DEX);
 	skills[SKILL_SLING] = Skill("sling", 0, ATTR_DEX);
-}
-
-Point Player::getPos()
-{
-	return position;
-}
-
-int Player::getSymbol()
-{
-	return symbol;
-}
-
-TCODColor Player::getColor()
-{
-	return color;
-}
-
-int Player::getActionTime()
-{
-	return actionTime;
-}
-
-void Player::move(Point dpos)
-{
-	position.x += dpos.x;
-	position.y += dpos.y;
-}
-
-void Player::moveTo(Point p)
-{
-	position = p;
-}
-
-void Player::addActionTime(int dt)
-{
-	actionTime += dt;
+	creature = new Creature(Point(40,22), name, '@', TCODColor::black, 25);
+	creature->setControlled(true);
 }
 
 int Player::attack(int& attack, int& damage, int& speed)
@@ -99,23 +62,62 @@ int Player::getDefense()
 	return 0 + (skills[SKILL_MELEE_COMBAT].value + skills[/*armor.getSkill()*/SKILL_UNARMORED].value)/2 + 0;
 }
 
-bool Player::hurt(int damage, Creature* instigator)
+Creature* Player::getCreature()
 {
-	health -= damage;
-	if (health <= 0)
-	{
-		die(instigator);
-		return true;
-	}
-	return false;
+	return creature;
 }
 
-void Player::die(Creature* instigator)
+int Player::action(Level* level)
 {
-	world.addMessage("The " + instigator->getName() + " kills you!");
-	world.addMessage("Suddenly the amulet around your neck begins to glow brightly...");
-	world.addMessage("You feel better!", true);
-	health = maxHealth;
+	do
+	{
+		TCOD_key_t key = TCODConsole::root->waitForKeypress(true);
+		if (key.pressed && (key.lalt || key.ralt) && key.vk == TCODK_F4) world.requestQuit = true;
+		bool move(false);
+		int direction(0);
+
+		if (key.pressed && (key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9))
+		{
+			// numpad player movement
+			move = true;
+			direction = key.vk - TCODK_KP1;
+		}
+		else if (key.pressed && (key.vk >= TCODK_1 && key.vk <= TCODK_9))
+		{
+			// number keys player movement
+			move = true;
+			direction = key.vk - TCODK_1;
+		}
+
+		if (move)
+		{
+			// execute movement
+			Point ppos = creature->getPos();
+			Point newPos = Point(ppos.x + Player::dx[direction], ppos.y + Player::dy[direction]);
+			if (newPos.x >= 0 && newPos.y < level->getWidth() && newPos.y >= 0 && newPos.y < level->getHeight())
+			{
+				Creature* c = level->creatureAt(newPos);
+				if (c != NULL)
+				{
+					return creature->attack(c);
+				}
+				else if (world.tileSet->isPassable(level->getTile(newPos)))
+				{
+					creature->moveTo(newPos);
+					// TODO: this is hardcoded width. not good.
+					world.levelOffset.x = util::clamp(35 - newPos.x, 70 - level->getWidth(), 0);
+					world.levelOffset.y = util::clamp(22 - newPos.y, 46 - level->getHeight(), 0);
+					return 12;
+				}
+				else
+				{
+					world.addMessage("Bonk!");
+					return 0;
+				}
+			}
+		}
+	}
+	while (!TCODConsole::isWindowClosed() && !world.requestQuit);
 }
 
 int Player::dx[] = {-1,0,1,-1,0,1,-1,0,1};

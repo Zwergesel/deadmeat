@@ -1,8 +1,17 @@
+#include <sstream>
 #include "creature.hpp"
 #include "player.hpp"
+#include "level.hpp"
+#include "world.hpp"
 
-Creature::Creature(Point p, std::string n, int s, TCODColor c, int h)
-	:position(p), name(n), symbol(s), color(c), maxHealth(h), health(h)
+Creature::Creature(Point p, std::string n, int s, TCODColor c, int h):
+	position(p),
+	name(n),
+	symbol(s),
+	color(c),
+	maxHealth(h),
+	health(h),
+	controlled(false)
 {
 }
 
@@ -55,10 +64,24 @@ bool Creature::hurt(int damage, Creature* instigator)
 
 void Creature::die(Creature* instigator)
 {
-	// ???
+	if (controlled)
+	{
+		world.addMessage("You die...");
+		world.addMessage("Suddenly the amulet around your neck begins to glow brightly...", true);
+		world.addMessage("You feel better!", true);
+		health = maxHealth;
+	}
+	else
+	{
+		std::stringstream msg;
+		instigator->isControlled() ? (msg << "You kill") : (msg << "The " << instigator->getName() << " kills");
+		msg << " the " << name << ".";
+		world.addMessage(msg.str());
+		level->removeCreature(this);
+	}
 }
 
-int Creature::action(Level*, Player*)
+int Creature::action()
 {
 	return 1;
 }
@@ -70,13 +93,28 @@ int Creature::getDefense()
 	return defense;
 }
 
-int Creature::attack(Player* player)
+bool Creature::isControlled()
+{
+	return controlled;
+}
+
+void Creature::setControlled(bool c)
+{
+	controlled = c;
+}
+
+void Creature::setLevel(Level* l)
+{
+	level = l;
+}
+
+int Creature::attack(Creature* target)
 {
 	// (weapon to hit + weapon enchantment) + ((fighting skill + weapon skill)/2)
 	int attack = 10;
 	// damage = (weapon damage + weapon enchantment)
 	int damage = 10;
-	int defense = player->getDefense();
+	int defense = target->getDefense();
 	TCODRandom rngGauss;
 	rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
 	int hit = rngGauss.getInt(-300,300,attack - defense);
@@ -85,15 +123,18 @@ int Creature::attack(Player* player)
 		if (hit <= 0) damage /= 2;
 		if (hit > 175) damage *= 2;
 		std::stringstream msg;
-		msg << "The " << name << " hits you for " << damage << ".";
+		controlled ? (msg << "You hit ") : (msg << "The " << name << " hits ");
+		target->isControlled() ? (msg << "you for ") : (msg << "the " << target->getName() << " for ");
+		msg << damage << " damage.";
 		world.addMessage(msg.str());
-		player->hurt(damage, this);
+		target->hurt(damage, this);
 
 	}
 	else
 	{
 		std::stringstream msg;
-		msg << "The " << name << " misses you.";
+		controlled ? (msg << "You miss ") : (msg << "The " << name << " misses ");
+		target->isControlled() ? (msg << "you.") : (msg << "the " << target->getName() << ".");
 		world.addMessage(msg.str());
 	}
 	// base attack time - weapon speed + armor hindrance

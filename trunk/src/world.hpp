@@ -1,9 +1,6 @@
 #ifndef _WORLD_HPP
 #define _WORLD_HPP
 
-#include <libtcod.hpp>
-#include <string>
-#include <iostream>
 #include <deque>
 #include "utility.hpp"
 
@@ -31,6 +28,7 @@ public:
 	int currentLevel;
 	Point levelOffset;
 	Viewport viewLevel, viewMsg;
+	bool requestQuit;
 
 	World();
 	~World();
@@ -42,8 +40,6 @@ public:
 
 	void drawLevel(Level* l, Point offset, Viewport view);
 	void drawCreature(Creature* c, Point offset, Viewport view);
-	void drawPlayer(Player* p, Point offset, Viewport view);
-
 	void drawWorld();
 };
 
