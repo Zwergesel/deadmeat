@@ -1,4 +1,5 @@
 #include <libtcod.hpp>
+#include <sstream>
 #include "player.hpp"
 #include "creature.hpp"
 #include "level.hpp"
@@ -112,6 +113,28 @@ int Player::action(Level* level)
     else if (key.vk == TCODK_5 || key.vk == TCODK_KP5)
     {
       // wait/search
+      return 10;
+    }
+    else if (key.c == ':')
+    {
+      std::stringstream msg;
+      std::vector<Item*> items = level->itemsAt(creature->getPos());
+      if(items.size() == 1)
+      {
+        msg << "You see a " << items[0]->getName() << " here.";
+        world.addMessage(msg.str());
+      }      
+      else if(items.size() >= 1)
+      {
+        msg << "You see a several items here:";
+        world.addMessage(msg.str());
+        for(std::vector<Item*>::iterator it=items.begin();it<items.end();it++)
+        {
+          std::stringstream strlist;
+          strlist << util::indefArticle((*it)->getName()) << " " << (*it)->getName();
+          world.addMessage(strlist.str());
+        }
+      }
       return 10;
     }
 

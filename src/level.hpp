@@ -4,6 +4,7 @@
 #include <vector>
 #include "tileset.hpp"
 #include "utility.hpp"
+#include "item.hpp"
 
 class Creature;
 
@@ -23,7 +24,7 @@ private:
 	Tile* map;
 	std::vector<Creature*> creatures;
 	std::vector<TimelineAction> timeline;
-
+  std::vector<Item*> items;
 	inline int coord(Point pos);
 
 public:
@@ -38,6 +39,10 @@ public:
 	std::vector<Creature*> getCreatures();
 	void addCreature(Creature* c);
 	void removeCreature(Creature* c);
+  std::vector<Item*> itemsAt(Point pos);
+  std::vector<Item*> getItems();
+  void addItem(Item* i);
+  void removeItem(Item* i);
 
 	void buildTimeline();
 	bool isPlayerTurn();
