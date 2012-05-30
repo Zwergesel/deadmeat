@@ -5,7 +5,7 @@
 #include "tileset.hpp"
 #include "level.hpp"
 #include "creature.hpp"
-#include "items\weapon.hpp"
+#include "items/weapon.hpp"
 
 World::World()
 {
