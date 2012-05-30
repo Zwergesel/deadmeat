@@ -21,7 +21,7 @@ Skill::Skill(std::string name, int value, ATTRIBUTE att)
 
 Player::Player(std::string name):
 	name(name),
-	inventoryOpen(false)
+	inventoryOpen(-1)
 {
 	skills[SKILL_MELEE_COMBAT] = Skill("melee combat", 0, ATTR_STR);
 	skills[SKILL_RANGED_COMBAT] = Skill("ranged combat", 0, ATTR_DEX);
@@ -64,24 +64,6 @@ Player::~Player()
 		delete[] inventory;
 		inventory = NULL;
 	}
-}
-
-int Player::attack(int& attack, int& damage, int& speed)
-{
-	// weapon damage + enchantment
-	damage = std::max(1, 10 + 0);
-	// base speed - weapon speed + armor hindrance
-	speed = std::max(1, 10 - 2 + 2);
-	// weapon attack + weapon enchantment + (melee combat skill + weapon skill)/2
-	attack = 10 + 0 + (skills[SKILL_MELEE_COMBAT].value + skills[/*weapon.getSkill()*/SKILL_UNARMED].value)/2;
-
-	return speed;
-}
-
-int Player::getDefense()
-{
-	// armor + (fighting skill + armor skill)/2 + tile defender is on
-	return 0 + (skills[SKILL_MELEE_COMBAT].value + skills[/*armor.getSkill()*/SKILL_UNARMORED].value)/2 + 0;
 }
 
 Creature* Player::getCreature()
@@ -156,7 +138,7 @@ Item** Player::getInventory()
 	return inventory;
 }
 
-bool Player::isInventoryOpen()
+int Player::isInventoryOpen()
 {
 	return inventoryOpen;
 }
@@ -169,24 +151,25 @@ int Player::action(Level* level)
 		bool move(false);
 		int direction(0);
 
-		if (!inventoryOpen && key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
+		if (inventoryOpen < 0 && key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
 		{
 			// numpad player movement
 			move = true;
 			direction = key.vk - TCODK_KP1;
 		}
-		else if (!inventoryOpen && key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.vk != TCODK_5)
+		else if (inventoryOpen < 0 && key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.vk != TCODK_5)
 		{
 			// number keys player movement
 			move = true;
 			direction = key.vk - TCODK_1;
 		}
-		else if (!inventoryOpen && (key.vk == TCODK_5 || key.vk == TCODK_KP5))
+		else if (inventoryOpen < 0 && (key.vk == TCODK_5 || key.vk == TCODK_KP5))
 		{
 			// wait/search
 			return 10;
 		}
-		else if (!inventoryOpen && key.c == ':')
+    // look at current position
+		else if (inventoryOpen < 0 && key.c == ':')
 		{
 			std::stringstream msg;
 			std::vector<Item*> items = level->itemsAt(creature->getPos());
@@ -208,7 +191,8 @@ int Player::action(Level* level)
 			}
 			return 0;
 		}
-		else if (!inventoryOpen && key.c == ',')
+    // pick up an item
+		else if (inventoryOpen < 0 && key.c == ',')
 		{
 			std::stringstream msg;
 			std::vector<Item*> items = level->itemsAt(creature->getPos());
@@ -219,11 +203,19 @@ int Player::action(Level* level)
 			}
 			return 0;
 		}
+    // open inventory screen
 		else if (key.c == 'i')
 		{
-			inventoryOpen = !inventoryOpen;
+      if(inventoryOpen < 0) inventoryOpen = 0;
+      else inventoryOpen = -1;
 			return 0;
 		}
+    // next inventory page
+    else if (inventoryOpen >= 0 && key.vk == TCODK_SPACE)
+    {
+      inventoryOpen++; 
+      return 0;
+    }
 
 		if (move)
 		{

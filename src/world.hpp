@@ -45,7 +45,7 @@ public:
 	void drawItem(Item* i, Point offset, Viewport view);
 	void drawCreature(Creature* c, Point offset, Viewport view);
 	void drawWorld();
-	void drawInventory();
+	void drawInventory(int page);
 };
 
 // Global world variable
