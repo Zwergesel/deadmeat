@@ -195,10 +195,9 @@ int Player::actionPickup()
     world.addMessage("Nothing here.");
     return 0;
   }
-  else if(items.size() == 1 && addItem(items[0]))
+  else if(items.size() == 1)
   {
-    level->removeItem(items[0], false);
-    return 10;
+    return actionPickup(0);
   }
   else
   {
