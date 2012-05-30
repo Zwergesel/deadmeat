@@ -37,6 +37,8 @@ public:
 	int getNumMessages();
 	void popMessage();
 	void drawMessage();
+	
+	void toggleFullscreen();
 
 	void drawLevel(Level* l, Point offset, Viewport view);
 	void drawCreature(Creature* c, Point offset, Viewport view);

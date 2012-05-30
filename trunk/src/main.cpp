@@ -37,7 +37,7 @@ int main()
 	world.levels[0]->addCreature(defaulto);
 	world.levels[0]->addCreature(world.player->getCreature());
 
-	while (!TCODConsole::isWindowClosed() && !world.requestQuit)
+	while (!world.requestQuit)
 	{
 		Level* level = world.levels[world.currentLevel];
 		while (!level->isPlayerTurn() && world.getNumMessages() <= 1)
@@ -47,7 +47,6 @@ int main()
 
 		// Show new game state
 		world.drawWorld();
-		world.popMessage();
 		TCODConsole::root->flush();
 
 		if (world.getNumMessages() > 0)
@@ -56,15 +55,19 @@ int main()
 			TCOD_key_t key;
 			do
 			{
-				key = TCODConsole::root->waitForKeypress(true);
-				if (key.pressed && (key.lalt || key.ralt) && key.vk == TCODK_F4) world.requestQuit = true;
+				key = world.player->waitForKeypress(true);
 			}
-			while (!(key.pressed && key.vk == TCODK_SPACE) && !TCODConsole::isWindowClosed() && !world.requestQuit);
+			while (key.vk != TCODK_SPACE && !world.requestQuit);
 		}
 		else
 		{
+			// This is the player turn made by a player controlled creature
+			// We know this because level->isPlayerTurn() must be true here
 			level->performCreatureTurn();
 		}
+		
+		// Pop message only after player action in case of redraws
+		world.popMessage();
 	}
 
 	return 0;
