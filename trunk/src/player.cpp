@@ -97,18 +97,23 @@ int Player::action(Level* level)
 		bool move(false);
 		int direction(0);
 
-		if (key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9)
+		if (key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
 		{
 			// numpad player movement
 			move = true;
 			direction = key.vk - TCODK_KP1;
 		}
-		else if (key.vk >= TCODK_1 && key.vk <= TCODK_9)
+		else if (key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.vk != TCODK_5)
 		{
 			// number keys player movement
 			move = true;
 			direction = key.vk - TCODK_1;
 		}
+    else if (key.vk == TCODK_5 || key.vk == TCODK_KP5)
+    {
+      // wait/search
+      return 10;
+    }
 
 		if (move)
 		{
