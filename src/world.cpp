@@ -132,3 +132,10 @@ void World::drawWorld()
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);
 	drawMessage();
 }
+
+void World::toggleFullscreen()
+{
+	TCODConsole::root->setFullscreen(!TCODConsole::root->isFullscreen());
+	drawWorld();
+	TCODConsole::root->flush();
+}

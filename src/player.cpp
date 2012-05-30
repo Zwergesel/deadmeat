@@ -67,22 +67,43 @@ Creature* Player::getCreature()
 	return creature;
 }
 
+TCOD_key_t Player::waitForKeypress(bool clBuf)
+{
+	while (true)
+	{
+		TCOD_key_t key = TCODConsole::root->waitForKeypress(clBuf);
+		if (TCODConsole::isWindowClosed() || (key.pressed && (key.lalt || key.ralt) && key.vk == TCODK_F4))
+		{
+			world.requestQuit = true;
+			return key;
+		}
+		else if (key.pressed && (key.lalt || key.ralt) && key.vk == TCODK_ENTER)
+		{
+			world.toggleFullscreen();
+		}
+		else if (key.pressed)
+		{
+			return key;
+		}
+	}
+	return TCOD_key_t();
+}
+
 int Player::action(Level* level)
 {
 	do
 	{
-		TCOD_key_t key = TCODConsole::root->waitForKeypress(true);
-		if (key.pressed && (key.lalt || key.ralt) && key.vk == TCODK_F4) world.requestQuit = true;
+		TCOD_key_t key = waitForKeypress(true);
 		bool move(false);
 		int direction(0);
 
-		if (key.pressed && (key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9))
+		if (key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9)
 		{
 			// numpad player movement
 			move = true;
 			direction = key.vk - TCODK_KP1;
 		}
-		else if (key.pressed && (key.vk >= TCODK_1 && key.vk <= TCODK_9))
+		else if (key.vk >= TCODK_1 && key.vk <= TCODK_9)
 		{
 			// number keys player movement
 			move = true;
