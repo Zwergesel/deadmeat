@@ -1,9 +1,10 @@
 #include "item.hpp"
 
-Item::Item(Point p, std::string n, int s, TCODColor c) : position(p), name(n), symbol(s), color(c)
+Item::Item(Point p, std::string n, int s, TCODColor c):
+	symbol(s), color(c), position(p), name(n)
 {
 	type = ITEM_DEFAULT;
-  strType = "Item";
+	strType = "Item";
 }
 
 int Item::getSymbol()

@@ -5,12 +5,12 @@
 #include "world.hpp"
 
 Creature::Creature(Point p, std::string n, int s, TCODColor c, int h):
-	position(p),
 	name(n),
+	position(p),
 	symbol(s),
 	color(c),
-	maxHealth(h),
 	health(h),
+	maxHealth(h),
 	controlled(false)
 {
 }
