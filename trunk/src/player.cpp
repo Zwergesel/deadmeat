@@ -19,9 +19,13 @@ Skill::Skill(std::string name, int value, ATTRIBUTE att)
 	this->used = 0;
 }
 
+int Player::dx[] = {-1,0,1,-1,0,1,-1,0,1};
+int Player::dy[] = {1,1,1,0,0,0,-1,-1,-1};
+
 Player::Player(std::string name):
 	name(name),
-	inventoryOpen(-1)
+	inventoryPage(0),
+  state(STATE_DEFAULT)
 {
 	skills[SKILL_MELEE_COMBAT] = Skill("melee combat", 0, ATTR_STR);
 	skills[SKILL_RANGED_COMBAT] = Skill("ranged combat", 0, ATTR_DEX);
@@ -129,11 +133,6 @@ std::vector<std::pair<int, Item*> > Player::getInventory()
 	return inventory;
 }
 
-int Player::isInventoryOpen()
-{
-	return inventoryOpen;
-}
-
 int Player::actionMove(int direction)
 {
   Level* level = world.levels[world.currentLevel];
@@ -191,11 +190,38 @@ int Player::actionPickup()
   Level* level = world.levels[world.currentLevel];
   std::stringstream msg;
   std::vector<Item*> items = level->itemsAt(creature->getPos());
-  if (items.size() >= 1 && addItem(items[0]))
+  if(items.size() <= 0)
+  {
+    world.addMessage("Nothing here.");
+    return 0;
+  }
+  else if(items.size() == 1 && addItem(items[0]))
   {
     level->removeItem(items[0], false);
     return 10;
   }
+  else
+  {
+    state = STATE_PICKUP;
+  }
+  return 0;
+}
+
+int Player::actionPickup(int item)
+{
+  Level* level = world.levels[world.currentLevel];
+  std::stringstream msg;
+  std::vector<Item*> items = level->itemsAt(creature->getPos());
+  state = STATE_DEFAULT;
+  if((int)items.size() <= item)
+  {
+    return 0;
+  }
+  else if((int)items.size() > item && addItem(items[item]))
+  {
+    level->removeItem(items[item], false);    
+    return 10;
+  }  
   return 0;
 }
 
@@ -206,41 +232,58 @@ int Player::action()
 		TCOD_key_t key = waitForKeypress(true);
 
     // numpad player movement
-		if (inventoryOpen < 0 && key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
+		if (state == STATE_DEFAULT && key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
 		{
 			return actionMove(key.vk - TCODK_KP1);
 		}
     // number keys player movement
-		else if (inventoryOpen < 0 && key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.vk != TCODK_5)
+		else if (state == STATE_DEFAULT && key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.vk != TCODK_5)
 		{
 			return actionMove(key.vk - TCODK_KP1);
 		}
-		else if (inventoryOpen < 0 && (key.vk == TCODK_5 || key.vk == TCODK_KP5))
+		else if (state == STATE_DEFAULT && (key.vk == TCODK_5 || key.vk == TCODK_KP5))
 		{
 			// wait/search
 			return 10;
 		}
 		// look at current position
-		else if (inventoryOpen < 0 && key.c == ':')
+		else if (state == STATE_DEFAULT && key.c == ':')
 		{
       return actionLook(creature->getPos());
 		}
 		// pick up an item
-		else if (inventoryOpen < 0 && key.c == ',')
+		else if (state == STATE_DEFAULT && key.c == ',')
 		{
-			actionPickup();
+      return actionPickup();
 		}
-		// open inventory screen
-		else if (key.c == 'i')
-		{
-			if (inventoryOpen < 0) inventoryOpen = 0;
-			else inventoryOpen = -1;
+    // pick from multiple items
+    else if (state == STATE_PICKUP && isalpha(key.c))
+    {
+      return actionPickup(util::letterToInt(key.c));
+    }
+    // cancel pick item list 
+    else if (state == STATE_PICKUP && key.vk == TCODK_ESCAPE)
+    {
+      state = STATE_DEFAULT;
+      return 0;
+    }
+    // open inventory screen
+		else if (state == STATE_DEFAULT && key.c == 'i')
+		{      
+      inventoryPage = 0;
+      state = STATE_INVENTORY;
+			return 0;
+		}
+		// close inventory screen
+		else if (state == STATE_INVENTORY && (key.c == 'i' || key.vk == TCODK_ESCAPE))
+		{      
+			state = STATE_DEFAULT;
 			return 0;
 		}
 		// next inventory page
-		else if (inventoryOpen >= 0 && key.vk == TCODK_SPACE)
+		else if (state == STATE_INVENTORY && key.vk == TCODK_SPACE)
 		{
-			inventoryOpen++;
+			inventoryPage++;
 			return 0;
 		}
 	}
@@ -249,5 +292,12 @@ int Player::action()
 	return 1;
 }
 
-int Player::dx[] = {-1,0,1,-1,0,1,-1,0,1};
-int Player::dy[] = {1,1,1,0,0,0,-1,-1,-1};
+STATE Player::getState()
+{
+  return state;
+}
+
+int Player::getInventoryPage()
+{
+  return inventoryPage;
+}

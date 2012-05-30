@@ -66,3 +66,10 @@ std::string util::plural(std::string str)
   else ret.append("s");
   return ret;
 }
+
+int util::letterToInt(char c)
+{
+ if(isupper(c)) return (c + 26 - 'A');
+ else if(islower(c)) return (c - 'a');
+ return 0;
+}
