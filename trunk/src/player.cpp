@@ -238,7 +238,7 @@ int Player::action()
     // number keys player movement
 		else if (state == STATE_DEFAULT && key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.vk != TCODK_5)
 		{
-			return actionMove(key.vk - TCODK_KP1);
+			return actionMove(key.vk - TCODK_1);
 		}
 		else if (state == STATE_DEFAULT && (key.vk == TCODK_5 || key.vk == TCODK_KP5))
 		{
