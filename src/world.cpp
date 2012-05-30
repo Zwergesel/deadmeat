@@ -90,7 +90,7 @@ void World::drawMessage()
 
 void World::drawLevel(Level* level, Point offset, Viewport view)
 {
-  // draw level
+	// draw level
 	int startX = (offset.x < 0) ? -offset.x : 0;
 	int startY = (offset.y < 0) ? -offset.y : 0;
 	int rangeX = std::min(level->getWidth(), view.width - offset.x);
@@ -109,13 +109,13 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 			);
 		}
 	}
-  // draw items
-  std::vector<Item*> items = level->getItems();
-  for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
+	// draw items
+	std::vector<Item*> items = level->getItems();
+	for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
 	{
 		drawItem(*it, offset, view);
 	}
-  // draw creatures
+	// draw creatures
 	std::vector<Creature*> creatures = level->getCreatures();
 	for (std::vector<Creature*>::iterator it=creatures.begin(); it<creatures.end(); it++)
 	{
@@ -125,7 +125,7 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 
 void World::drawItem(Item* i, Point offset, Viewport view)
 {
-  Point pos = i->getPos();
+	Point pos = i->getPos();
 	pos += offset;
 	if (pos.x >= 0 && pos.x < view.width && pos.y >= 0 && pos.y < view.height)
 	{

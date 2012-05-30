@@ -46,13 +46,13 @@ const Point Point::operator-(const Point& p) const
 
 std::string util::indefArticle(std::string str)
 {
-  std::string ret="a";
-  if(str.size() <= 0) return ret;
-  char f = str[0];
-  if(f == 'a' || f == 'A' || f == 'e' || f == 'E' || f == 'i' || f == 'I' ||
-    f == 'u' || f == 'U' || f == 'o' || f == 'O') 
-  {
-    ret = "an";
-  } 
-  return ret;
+	std::string ret="a";
+	if (str.size() <= 0) return ret;
+	char f = str[0];
+	if (f == 'a' || f == 'A' || f == 'e' || f == 'E' || f == 'i' || f == 'I' ||
+	    f == 'u' || f == 'U' || f == 'o' || f == 'O')
+	{
+		ret = "an";
+	}
+	return ret;
 }

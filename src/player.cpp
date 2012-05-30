@@ -110,33 +110,33 @@ int Player::action(Level* level)
 			move = true;
 			direction = key.vk - TCODK_1;
 		}
-    else if (key.vk == TCODK_5 || key.vk == TCODK_KP5)
-    {
-      // wait/search
-      return 10;
-    }
-    else if (key.c == ':')
-    {
-      std::stringstream msg;
-      std::vector<Item*> items = level->itemsAt(creature->getPos());
-      if(items.size() == 1)
-      {
-        msg << "You see a " << items[0]->getName() << " here.";
-        world.addMessage(msg.str());
-      }      
-      else if(items.size() >= 1)
-      {
-        msg << "You see a several items here:";
-        world.addMessage(msg.str());
-        for(std::vector<Item*>::iterator it=items.begin();it<items.end();it++)
-        {
-          std::stringstream strlist;
-          strlist << util::indefArticle((*it)->getName()) << " " << (*it)->getName();
-          world.addMessage(strlist.str());
-        }
-      }
-      return 10;
-    }
+		else if (key.vk == TCODK_5 || key.vk == TCODK_KP5)
+		{
+			// wait/search
+			return 10;
+		}
+		else if (key.c == ':')
+		{
+			std::stringstream msg;
+			std::vector<Item*> items = level->itemsAt(creature->getPos());
+			if (items.size() == 1)
+			{
+				msg << "You see a " << items[0]->getName() << " here.";
+				world.addMessage(msg.str());
+			}
+			else if (items.size() >= 1)
+			{
+				msg << "You see a several items here:";
+				world.addMessage(msg.str());
+				for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
+				{
+					std::stringstream strlist;
+					strlist << util::indefArticle((*it)->getName()) << " " << (*it)->getName();
+					world.addMessage(strlist.str());
+				}
+			}
+			return 10;
+		}
 
 		if (move)
 		{
@@ -153,8 +153,8 @@ int Player::action(Level* level)
 				else if (world.tileSet->isPassable(level->getTile(newPos)))
 				{
 					creature->moveTo(newPos);
-          world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - level->getWidth(), 0);
-          world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
+					world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - level->getWidth(), 0);
+					world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
 					return 12;
 				}
 				else
@@ -166,8 +166,8 @@ int Player::action(Level* level)
 		}
 	}
 	while (!TCODConsole::isWindowClosed() && !world.requestQuit);
-  // should not be reached, return time of action
-  return 1;
+	// should not be reached, return time of action
+	return 1;
 }
 
 int Player::dx[] = {-1,0,1,-1,0,1,-1,0,1};

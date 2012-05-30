@@ -30,16 +30,16 @@ int main()
 	Goblin* gobbo = new Goblin();
 	FailWhale* twitter = new FailWhale();
 	Creature* defaulto = new Creature(Point(10,10), "default", 'd', TCODColor::amber, 20);
-  Item* sandwich = new Item(Point(33,33), "sandwich", '%', TCODColor::red);
-  Item* item1 = new Item(Point(40,40), "item1", '1', TCODColor::blue);
-  Item* item2 = new Item(Point(40,40), "item2", '2', TCODColor::green);
+	Item* sandwich = new Item(Point(33,33), "sandwich", '%', TCODColor::red);
+	Item* item1 = new Item(Point(40,40), "item1", '1', TCODColor::blue);
+	Item* item2 = new Item(Point(40,40), "item2", '2', TCODColor::green);
 	world.levels[0]->addCreature(gobbo);
 	world.levels[0]->addCreature(twitter);
 	world.levels[0]->addCreature(defaulto);
 	world.levels[0]->addCreature(world.player->getCreature());
-  world.levels[0]->addItem(sandwich);
-  world.levels[0]->addItem(item1);
-  world.levels[0]->addItem(item2);
+	world.levels[0]->addItem(sandwich);
+	world.levels[0]->addItem(item1);
+	world.levels[0]->addItem(item2);
 
 	while (!world.requestQuit)
 	{

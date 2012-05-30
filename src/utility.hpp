@@ -27,7 +27,7 @@ namespace util
 		return std::max(min, std::min(val, max));
 	}
 
-  std::string indefArticle(std::string str);
+	std::string indefArticle(std::string str);
 
 };
 
