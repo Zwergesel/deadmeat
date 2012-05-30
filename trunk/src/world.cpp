@@ -152,7 +152,7 @@ void World::drawWorld()
 {
 	TCODConsole::root->clear();
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);
-	if (player->isInventoryOpen()) drawInventory();
+	if (player->isInventoryOpen() >= 0) drawInventory(player->isInventoryOpen());
 	drawMessage();
 }
 
@@ -163,28 +163,38 @@ void World::toggleFullscreen()
 	TCODConsole::root->flush();
 }
 
-void World::drawInventory()
+void World::drawInventory(int page)
 {
-	TCODConsole inv(viewLevel.width - viewLevel.width / 4, viewLevel.height - viewLevel.height / 4);
-	inv.printFrame(0, 0, inv.getWidth(), inv.getHeight(), true, TCOD_BKGND_DEFAULT, "inventory");
+  TCODConsole* inv[4];
+  for(int i=0;i<4;i++)
+  {
+    inv[i] = new TCODConsole(viewLevel.width - viewLevel.width / 4, viewLevel.height - viewLevel.height / 4);
+	  inv[i]->printFrame(0, 0, inv[i]->getWidth(), inv[i]->getHeight(), true, TCOD_BKGND_DEFAULT, "inventory");  
+  }
 	Item** inventory = player->getInventory();
 	assert(inventory != NULL);
 	int nline = 3;
+  int p = 0;
 	// list weapons
 	bool firstWeapon = true;
 	for (int i='A'; i<='z'; i++)
 	{
     if(inventory[i] == NULL || inventory[i]->getType() != ITEM_WEAPON) continue;
+    if(nline >= inv[p]->getHeight() - 3) 
+    {
+      nline = 3;
+      p++;
+    }
     Weapon* w = (Weapon*)inventory[i];
 	  if (firstWeapon)
     {
-			inv.printEx(inv.getWidth() / 2, nline, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Weapons");
+			inv[p]->printEx(inv[p]->getWidth() / 2, nline, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Weapons");
 			nline += 2;
 			firstWeapon = false;
 		}
 		std::stringstream ss;
 		ss << "  " << static_cast<unsigned char>(i) << " - " << w->getName() << " " << w->getEnchantment();
-		inv.printEx(4, nline, TCOD_BKGND_DEFAULT, TCOD_LEFT, ss.str().c_str());
+		inv[p]->printEx(4, nline, TCOD_BKGND_DEFAULT, TCOD_LEFT, ss.str().c_str());
 		nline++;		
 	}
 	// list items
@@ -192,17 +202,31 @@ void World::drawInventory()
 	for (int i='A'; i<='z'; i++)
 	{
     if(inventory[i] == NULL || inventory[i]->getType() != ITEM_DEFAULT) continue;
+    if(nline >= inv[p]->getHeight() - 3) 
+    {
+      nline = 3;
+      p++;
+    }
 		Item* item = inventory[i];
 		if (firstItem)
 		{
-			inv.printEx(inv.getWidth() / 2, nline, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Items");
+			inv[p]->printEx(inv[p]->getWidth() / 2, nline, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Items");
 			nline += 2;
 			firstItem = false;
 		}
 		std::stringstream ss;
 		ss << "  " << static_cast<unsigned char>(i) << " - " << item->getName();
-		inv.printEx(4, nline, TCOD_BKGND_DEFAULT, TCOD_LEFT, ss.str().c_str());
+		inv[p]->printEx(4, nline, TCOD_BKGND_DEFAULT, TCOD_LEFT, ss.str().c_str());
 		nline++;		
 	}
-	TCODConsole::blit(&inv, 0, 0, 0, 0, TCODConsole::root, viewLevel.x + viewLevel.width / 8, viewLevel.y + viewLevel.height / 8, 1.f, 0.9f);
+  page = (page % (p+1));  
+	TCODConsole::blit(inv[page], 0, 0, 0, 0, TCODConsole::root, viewLevel.x + viewLevel.width / 8, viewLevel.y + viewLevel.height / 8, 1.f, 0.9f);
+  for(int i=0;i<4;i++)
+  {
+    if(inv[i] != NULL)
+    {
+      delete inv[i];
+      inv[i] = NULL;
+    }
+  }
 }

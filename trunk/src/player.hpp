@@ -61,7 +61,8 @@ private:
 	Creature* creature;
 	Skill skills[NUM_SKILL];
 	Item** inventory;
-	bool inventoryOpen;
+  // negative if inv is closed, otherwise the page number the inv is open on
+	int inventoryOpen;
 
 public:
 	static int dx[9];
@@ -76,11 +77,7 @@ public:
 	bool addItem(Item* i);
 	void removeItem(Item* i);
 	Item** getInventory();
-	bool isInventoryOpen();
-
-	/* These are no longer needed. Remove in future revisions */
-	int attack(int& attack, int& damage, int& speed);
-	int getDefense();
+	int isInventoryOpen();
 };
 
 #endif
