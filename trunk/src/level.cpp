@@ -11,7 +11,7 @@ Level::Level(int width, int height)
 	this->map = new Tile[width*height];
 	creatures.clear();
 	timeline.clear();
-  items.clear();
+	items.clear();
 	std::fill(map, map+width*height, TILE_CAVE_FLOOR);
 }
 
@@ -26,7 +26,7 @@ Level::~Level()
 	{
 		removeCreature(*it);
 	}
-  for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
+	for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
 	{
 		removeItem(*it);
 	}
@@ -113,27 +113,27 @@ void Level::removeCreature(Creature* c)
 
 std::vector<Item*> Level::itemsAt(Point pos)
 {
-  std::vector<Item*> ret;
-  for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
+	std::vector<Item*> ret;
+	for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
 	{
-    if ((*it)->getPos() == pos) ret.push_back(*it);
+		if ((*it)->getPos() == pos) ret.push_back(*it);
 	}
 	return ret;
 }
 
 std::vector<Item*> Level::getItems()
 {
-  return items;
+	return items;
 }
 
 void Level::addItem(Item* i)
 {
-  items.push_back(i);
+	items.push_back(i);
 }
 
 void Level::removeItem(Item* i)
 {
-  for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
+	for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
 	{
 		if (*it == i)
 		{
@@ -141,7 +141,7 @@ void Level::removeItem(Item* i)
 			break;
 		}
 	}
-  delete i;
+	delete i;
 }
 
 void Level::buildTimeline()

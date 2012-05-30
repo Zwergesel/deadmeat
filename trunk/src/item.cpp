@@ -6,20 +6,20 @@ Item::Item(Point p, std::string n, int s, TCODColor c) : position(p), name(n), s
 
 int Item::getSymbol()
 {
-  return symbol;
+	return symbol;
 }
-  
+
 TCODColor Item::getColor()
 {
-  return color;
+	return color;
 }
 
 Point Item::getPos()
 {
-  return position;
+	return position;
 }
 
 std::string Item::getName()
 {
-  return name;
+	return name;
 }

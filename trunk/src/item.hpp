@@ -8,17 +8,17 @@
 class Item
 {
 private:
-  int symbol;
-  TCODColor color;
-  Point position;
-  std::string name;
+	int symbol;
+	TCODColor color;
+	Point position;
+	std::string name;
 
 public:
-  Item(Point position, std::string name, int symbol, TCODColor color);
-  int getSymbol();
-  TCODColor getColor();
-  Point getPos();
-  std::string getName();
+	Item(Point position, std::string name, int symbol, TCODColor color);
+	int getSymbol();
+	TCODColor getColor();
+	Point getPos();
+	std::string getName();
 };
 
 #endif

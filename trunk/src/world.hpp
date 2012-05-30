@@ -42,7 +42,7 @@ public:
 	void toggleFullscreen();
 
 	void drawLevel(Level* l, Point offset, Viewport view);
-  void drawItem(Item* i, Point offset, Viewport view);
+	void drawItem(Item* i, Point offset, Viewport view);
 	void drawCreature(Creature* c, Point offset, Viewport view);
 	void drawWorld();
 };
