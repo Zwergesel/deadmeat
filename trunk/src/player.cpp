@@ -212,9 +212,9 @@ int Player::action(Level* level)
 		{
 			std::stringstream msg;
 			std::vector<Item*> items = level->itemsAt(creature->getPos());
-			if (items.size() >= 1 && addItem(new Item(*(items[0]))))
+			if (items.size() >= 1 && addItem(items[0]))
 			{
-				level->removeItem(items[0]);
+				level->removeItem(items[0], false);
 				return 10;
 			}
 			return 0;
