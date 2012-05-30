@@ -15,6 +15,7 @@ private:
 
 public:
 	Item(Point position, std::string name, int symbol, TCODColor color);
+	virtual ~Item();
 	int getSymbol();
 	TCODColor getColor();
 	Point getPos();
