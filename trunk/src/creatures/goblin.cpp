@@ -3,28 +3,30 @@
 #include "../player.hpp"
 #include "../tileset.hpp"
 #include "../level.hpp"
+#include "../pathfinding.hpp"
 
 Goblin::Goblin() : Creature(Point(20, 20), "goblin", 'g', TCODColor::green, 20) {};
 
 int Goblin::action()
 {
 	Point ppos = world.player->getCreature()->getPos();
-	int dx = util::sign(ppos.x - position.x);
-	int dy = util::sign(ppos.y - position.y);
-	Point target(position.x+dx, position.y+dy);
+	TCODPath path = TCODPath(level->getWidth(), level->getHeight(), new PathFindingCallback(), level);
+	path.compute(position.x, position.y, ppos.x, ppos.y);
 
-	if (target.x == ppos.x && target.y == ppos.y)
+	int tx, ty;
+	if (!path.isEmpty() && path.walk(&tx, &ty, true))
 	{
-		return attack(world.player->getCreature());
+		Point target = Point(tx, ty);
+		Creature* c = level->creatureAt(target);
+		if (c != NULL && c->isControlled())
+		{
+			return attack(c);
+		}
+		else
+		{
+			position = target;
+			return 10;
+		}
 	}
-	else if (world.tileSet->isPassable(level->getTile(target)) && level->creatureAt(target) == NULL)
-	{
-		position.x += dx;
-		position.y += dy;
-		return 9;
-	}
-	else
-	{
-		return 9;
-	}
+	return 10;
 }

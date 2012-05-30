@@ -69,7 +69,7 @@ public:
 	Creature* getCreature();
 	int action(Level* level);
 	TCOD_key_t waitForKeypress(bool clBuf);
-	
+
 	/* These are no longer needed. Remove in future revisions */
 	int attack(int& attack, int& damage, int& speed);
 	int getDefense();
