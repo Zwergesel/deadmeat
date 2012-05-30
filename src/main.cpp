@@ -25,22 +25,22 @@ int main()
 	LevelGen level_generator;
 	world.viewLevel = Viewport(1, 1, TCODConsole::root->getWidth() - 10, TCODConsole::root->getHeight() - 5);
 	world.viewMsg = Viewport(2, TCODConsole::root->getHeight() - 3, TCODConsole::root->getWidth() - 4, 2);
-	world.levels[0] = level_generator.generateCaveLevel(80, 50, 40.f);
+	world.levels[0] = new Level(80,50);//level_generator.generateCaveLevel(80, 50, 40.f);
 	world.currentLevel = 0;
 	world.player->getCreature()->moveTo(Point(35, 22));
 	Goblin* gobbo = new Goblin();
 	FailWhale* twitter = new FailWhale();
 	Creature* defaulto = new Creature(Point(10,10), "default", 'd', TCODColor::amber, 20);
 	Weapon* dagger = new Weapon(Point(33,33), "dagger", '(', TCODColor::red, 10, 10, 10, 10, 20, 0, SKILL_DAGGER, 1);
-	Item* item1 = new Item(Point(40,40), "item1", '1', TCODColor::blue);
-	Item* item2 = new Item(Point(40,40), "item2", '2', TCODColor::green);
+	//Item* item1 = new Item(Point(40,40), "item1", '1', TCODColor::blue);
+	//Item* item2 = new Item(Point(40,40), "item2", '2', TCODColor::green);
 	world.levels[0]->addCreature(gobbo);
 	world.levels[0]->addCreature(twitter);
 	world.levels[0]->addCreature(defaulto);
 	world.levels[0]->addCreature(world.player->getCreature());
 	world.levels[0]->addItem(dagger);
-	world.levels[0]->addItem(item1);
-	world.levels[0]->addItem(item2);
+	//world.levels[0]->addItem(item1);
+	//world.levels[0]->addItem(item2);
 
 	while (!world.requestQuit)
 	{
