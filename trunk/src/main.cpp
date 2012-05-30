@@ -22,7 +22,7 @@ int main()
 	TCODSystem::setFps(30);
 
 	// Init hardcoded world
-	LevelGen level_generator;
+	//LevelGen level_generator;
 	world.viewLevel = Viewport(1, 1, TCODConsole::root->getWidth() - 10, TCODConsole::root->getHeight() - 5);
 	world.viewMsg = Viewport(2, TCODConsole::root->getHeight() - 3, TCODConsole::root->getWidth() - 4, 2);
 	world.levels[0] = new Level(80,50);//level_generator.generateCaveLevel(80, 50, 40.f);
