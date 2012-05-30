@@ -113,7 +113,7 @@ bool Player::hurt(int damage, Creature* instigator)
 void Player::die(Creature* instigator)
 {
 	world.addMessage("The " + instigator->getName() + " kills you!");
-	world.addMessage("Suddenly your amulet begins to glow brightly...");
+	world.addMessage("Suddenly the amulet around your neck begins to glow brightly...");
 	world.addMessage("You feel better!", true);
 	health = maxHealth;
 }
