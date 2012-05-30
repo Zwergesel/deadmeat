@@ -152,6 +152,7 @@ void World::drawWorld()
 {
 	TCODConsole::root->clear();
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);
+	if (player->isInventoryOpen()) drawInventory();
 	drawMessage();
 }
 
@@ -185,7 +186,7 @@ void World::drawInventory()
 				firstWeapon = false;
 			}
 			std::stringstream ss;
-			ss << "  " << unsigned char(i) << " - " << w->getName() << " " << w->getEnchantment();
+			ss << "  " << static_cast<unsigned char>(i) << " - " << w->getName() << " " << w->getEnchantment();
 			inv.printEx(4, nline, TCOD_BKGND_DEFAULT, TCOD_LEFT, ss.str().c_str());
 			nline++;
 		}
@@ -204,7 +205,7 @@ void World::drawInventory()
 				firstItem = false;
 			}
 			std::stringstream ss;
-			ss << "  " << unsigned char(i) << " - " << item->getName();
+			ss << "  " << static_cast<unsigned char>(i) << " - " << item->getName();
 			inv.printEx(4, nline, TCOD_BKGND_DEFAULT, TCOD_LEFT, ss.str().c_str());
 			nline++;
 		}

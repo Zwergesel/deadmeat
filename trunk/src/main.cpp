@@ -52,7 +52,6 @@ int main()
 
 		// Show new game state
 		world.drawWorld();
-		world.drawInventory();
 		// TODO: this somewhat breaks fullscreen, so fix it later
 		world.popMessage();
 		TCODConsole::root->flush();
