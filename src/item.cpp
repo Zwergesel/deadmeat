@@ -3,6 +3,7 @@
 Item::Item(Point p, std::string n, int s, TCODColor c) : position(p), name(n), symbol(s), color(c)
 {
 	type = ITEM_DEFAULT;
+  strType = "Item";
 }
 
 int Item::getSymbol()
@@ -28,4 +29,14 @@ Point Item::getPos()
 std::string Item::getName()
 {
 	return name;
+}
+
+std::string Item::toString()
+{
+  return getName();
+}
+
+std::string Item::typeString()
+{
+  return strType;
 }

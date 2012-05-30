@@ -45,25 +45,18 @@ Player::Player(std::string name):
 	skills[SKILL_SLING] = Skill("sling", 0, ATTR_DEX);
 	creature = new Creature(Point(40,22), name, '@', TCODColor::black, 25);
 	creature->setControlled(true);
-	inventory = new Item*[256];
-	for (int i=0; i<256; i++) inventory[i] = NULL;
 }
 
 Player::~Player()
 {
-	for (int i=0; i<256; i++)
-	{
-		if (inventory[i] != NULL)
-		{
-			delete inventory[i];
-			inventory[i] = NULL;
-		}
-	}
-	if (inventory != NULL)
-	{
-		delete[] inventory;
-		inventory = NULL;
-	}
+  for(std::vector<std::pair<int, Item*> >::iterator it=inventory.begin();it<inventory.end();it++)
+  {
+    if((*it).second != NULL)
+    {
+      delete (*it).second;
+      (*it).second = NULL;
+    }
+  }
 }
 
 Creature* Player::getCreature()
@@ -94,46 +87,44 @@ TCOD_key_t Player::waitForKeypress(bool clBuf)
 }
 
 bool Player::addItem(Item* item)
-{
-	for (int i='a'; i<='z'; i++)
-	{
-		if (inventory[i] == NULL)
-		{
-			inventory[i] = item;
-			return true;
-		}
-	}
-	for (int i='A'; i<='Z'; i++)
-	{
-		if (inventory[i] == NULL)
-		{
-			inventory[i] = item;
-			return true;
-		}
-	}
-	// ran out of letters
+{  
+  bool used[52];
+  for(int i=0;i<52;i++) used[i] = false;
+	for(std::vector<std::pair<int, Item*> >::iterator it=inventory.begin();it<inventory.end();it++)
+  {
+    used[(*it).first] = true;
+  }
+  for(int i=0;i<52;i++)
+  {
+    if(!used[i])
+    {
+      inventory.push_back(std::pair<int, Item*>(i, item));
+      return true;
+    }
+  }
+  // ran out of letters
 	world.addMessage("Too many items in backpack.");
 	return false;
 }
 
-void Player::removeItem(Item* item)
+void Player::removeItem(Item* item, bool del)
 {
-	for (int i=0; i<256; i++)
-	{
-		if (inventory[i] == item)
-		{
-			if (inventory[i] != NULL)
+  for(std::vector<std::pair<int, Item*> >::iterator it=inventory.begin();it<inventory.end();it++)
+  {
+    if((*it).second == item)
+    {
+      if ((*it).second != NULL && del)
 			{
-				delete inventory[i];
-				inventory[i] = NULL;
-				item = NULL;
-				return;
+				delete (*it).second;
+				(*it).second = NULL;							
 			}
-		}
-	}
+      inventory.erase(it);
+      return;
+    }
+  }
 }
 
-Item** Player::getInventory()
+std::vector<std::pair<int, Item*> > Player::getInventory()
 {
 	return inventory;
 }
@@ -168,6 +159,7 @@ int Player::actionMove(int direction)
 			return 0;
 		}
 	}
+  return 0;
 }
 
 int Player::actionLook(Point pos)

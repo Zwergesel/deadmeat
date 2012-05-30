@@ -163,70 +163,71 @@ void World::toggleFullscreen()
 	TCODConsole::root->flush();
 }
 
+void World::drawItemList(int page, std::string title,std::vector<Item*> items)
+{
+  std::vector<std::pair<int, Item*> > mappedItems;
+  int r = 0;
+  for(std::vector<Item*>::iterator it=items.begin();it<items.end();it++)
+  {
+    mappedItems.push_back(std::pair<int, Item*>(r, *it));
+    r++;
+  }
+  drawItemList(page, title, mappedItems);
+}
+
+bool operator<(std::pair<int, Item*> a, std::pair<int, Item*> b)
+{
+  if(a.second->getType() < b.second->getType()) return true;
+  if(a.second->getType() == b.second->getType() && a.first < b.first) return true;
+  return false;
+}
+
+void World::drawItemList(int page, std::string title, std::vector<std::pair<int, Item*> > items)
+{
+  std::sort(items.begin(), items.end());
+  TCODConsole* window[256];
+  for(int i=0;i<256;i++) window[i] = NULL;
+	window[0] = new TCODConsole(viewLevel.width - viewLevel.width / 4, viewLevel.height - viewLevel.height / 4);
+  window[0]->printFrame(0, 0, window[0]->getWidth(), window[0]->getHeight(), true, TCOD_BKGND_DEFAULT, title.c_str());
+  bool first[NUM_ITEM_TYPE];
+  for(int i=0;i<NUM_ITEM_TYPE;i++) first[i] = true;
+  int nline = 3;
+	int p = 0;
+
+  for(std::vector<std::pair<int, Item*> >::iterator it=items.begin();it<items.end();it++)
+  {
+    if (nline >= window[p]->getHeight() - 3)
+		{
+			nline = 3;
+			p++;
+      window[p] = new TCODConsole(viewLevel.width - viewLevel.width / 4, viewLevel.height - viewLevel.height / 4);
+      window[p]->printFrame(0, 0, window[p]->getWidth(), window[p]->getHeight(), true, TCOD_BKGND_DEFAULT, title.c_str());
+		}    
+    if (first[(*it).second->getType()])
+		{
+      window[p]->printEx(window[p]->getWidth() / 2, nline, TCOD_BKGND_DEFAULT, TCOD_CENTER, util::plural((*it).second->typeString()).c_str());
+			nline += 2;
+			first[(*it).second->getType()] = false;
+		}
+		std::stringstream ss;
+    ss << util::letters[(*it).first] << " - " << (*it).second->toString();
+		window[p]->printEx(4, nline, TCOD_BKGND_DEFAULT, TCOD_LEFT, ss.str().c_str());
+		nline++;
+  }
+
+  page = page % (p+1);
+	TCODConsole::blit(window[page], 0, 0, 0, 0, TCODConsole::root, viewLevel.x + viewLevel.width / 8, viewLevel.y + viewLevel.height / 8, 1.f, 0.9f);
+	for (int i=0; i<256; i++)
+	{
+		if (window[i] != NULL)
+		{
+			delete window[i];
+			window[i] = NULL;
+		}
+	}
+}
+
 void World::drawInventory(int page)
 {
-	TCODConsole* inv[4];
-	for (int i=0; i<4; i++)
-	{
-		inv[i] = new TCODConsole(viewLevel.width - viewLevel.width / 4, viewLevel.height - viewLevel.height / 4);
-		inv[i]->printFrame(0, 0, inv[i]->getWidth(), inv[i]->getHeight(), true, TCOD_BKGND_DEFAULT, "inventory");
-	}
-	Item** inventory = player->getInventory();
-	assert(inventory != NULL);
-	int nline = 3;
-	int p = 0;
-	// list weapons
-	bool firstWeapon = true;
-	for (int i='A'; i<='z'; i++)
-	{
-		if (inventory[i] == NULL || inventory[i]->getType() != ITEM_WEAPON) continue;
-		if (nline >= inv[p]->getHeight() - 3)
-		{
-			nline = 3;
-			p++;
-		}
-		Weapon* w = (Weapon*)inventory[i];
-		if (firstWeapon)
-		{
-			inv[p]->printEx(inv[p]->getWidth() / 2, nline, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Weapons");
-			nline += 2;
-			firstWeapon = false;
-		}
-		std::stringstream ss;
-		ss << "  " << static_cast<unsigned char>(i) << " - " << w->getName() << " " << w->getEnchantment();
-		inv[p]->printEx(4, nline, TCOD_BKGND_DEFAULT, TCOD_LEFT, ss.str().c_str());
-		nline++;
-	}
-	// list items
-	bool firstItem = true;
-	for (int i='A'; i<='z'; i++)
-	{
-		if (inventory[i] == NULL || inventory[i]->getType() != ITEM_DEFAULT) continue;
-		if (nline >= inv[p]->getHeight() - 3)
-		{
-			nline = 3;
-			p++;
-		}
-		Item* item = inventory[i];
-		if (firstItem)
-		{
-			inv[p]->printEx(inv[p]->getWidth() / 2, nline, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Items");
-			nline += 2;
-			firstItem = false;
-		}
-		std::stringstream ss;
-		ss << "  " << static_cast<unsigned char>(i) << " - " << item->getName();
-		inv[p]->printEx(4, nline, TCOD_BKGND_DEFAULT, TCOD_LEFT, ss.str().c_str());
-		nline++;
-	}
-	page = (page % (p+1));
-	TCODConsole::blit(inv[page], 0, 0, 0, 0, TCODConsole::root, viewLevel.x + viewLevel.width / 8, viewLevel.y + viewLevel.height / 8, 1.f, 0.9f);
-	for (int i=0; i<4; i++)
-	{
-		if (inv[i] != NULL)
-		{
-			delete inv[i];
-			inv[i] = NULL;
-		}
-	}
+  drawItemList(page, "inventory", player->getInventory());
 }

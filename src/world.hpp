@@ -2,6 +2,7 @@
 #define _WORLD_HPP
 
 #include <deque>
+#include <vector>
 #include "utility.hpp"
 
 class Player;
@@ -20,7 +21,7 @@ struct Viewport
 class World
 {
 private:
-	std::deque<std::string> messageQueue;
+	std::deque<std::string> messageQueue;  
 
 public:
 	TileSet* tileSet;
@@ -45,6 +46,8 @@ public:
 	void drawItem(Item* i, Point offset, Viewport view);
 	void drawCreature(Creature* c, Point offset, Viewport view);
 	void drawWorld();
+  void drawItemList(int page, std::string title, std::vector<Item*> items);
+  void drawItemList(int page, std::string title, std::vector<std::pair<int, Item*> > items);
 	void drawInventory(int page);
 };
 
