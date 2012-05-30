@@ -14,7 +14,7 @@ private:
 	int diceMax; // dice go from 0 to diceMax
 	int enchantment;
 	SKILLS skill;
-	int hands;
+	int hands;  
 
 public:
 	Weapon(Point position, std::string name, int symbol, TCODColor color, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands);

@@ -5,6 +5,12 @@
 #include "utility.hpp"
 #include <string>
 
+enum ITEM_TYPE
+{
+  ITEM_WEAPON,
+  ITEM_DEFAULT
+};
+
 class Item
 {
 private:
@@ -13,9 +19,12 @@ private:
 	Point position;
 	std::string name;
 
+protected:
+  ITEM_TYPE type;
+
 public:
 	Item(Point position, std::string name, int symbol, TCODColor color);
-	virtual ~Item();
+  ITEM_TYPE getType();
 	int getSymbol();
 	TCODColor getColor();
 	Point getPos();

@@ -162,7 +162,7 @@ void World::toggleFullscreen()
 	drawWorld();
 	TCODConsole::root->flush();
 }
-#include <typeinfo>
+
 void World::drawInventory()
 {
 	TCODConsole inv(viewLevel.width - viewLevel.width / 4, viewLevel.height - viewLevel.height / 4);
@@ -174,41 +174,35 @@ void World::drawInventory()
 	bool firstWeapon = true;
 	for (int i='A'; i<='z'; i++)
 	{
-		if (inventory[i] != NULL && typeid(*(inventory[i])).name() == typeid(Weapon).name())
-//   Weapon* w = dynamic_cast<Weapon*>(inventory[i]);
-//   if(w != NULL)
-		{
-			Weapon* w = static_cast<Weapon*>(inventory[i]);
-			if (firstWeapon)
-			{
-				inv.printEx(inv.getWidth() / 2, nline, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Weapons");
-				nline += 2;
-				firstWeapon = false;
-			}
-			std::stringstream ss;
-			ss << "  " << static_cast<unsigned char>(i) << " - " << w->getName() << " " << w->getEnchantment();
-			inv.printEx(4, nline, TCOD_BKGND_DEFAULT, TCOD_LEFT, ss.str().c_str());
-			nline++;
+    if(inventory[i] == NULL || inventory[i]->getType() != ITEM_WEAPON) continue;
+    Weapon* w = (Weapon*)inventory[i];
+	  if (firstWeapon)
+    {
+			inv.printEx(inv.getWidth() / 2, nline, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Weapons");
+			nline += 2;
+			firstWeapon = false;
 		}
+		std::stringstream ss;
+		ss << "  " << unsigned char(i) << " - " << w->getName() << " " << w->getEnchantment();
+		inv.printEx(4, nline, TCOD_BKGND_DEFAULT, TCOD_LEFT, ss.str().c_str());
+		nline++;		
 	}
 	// list items
 	bool firstItem = true;
 	for (int i='A'; i<='z'; i++)
 	{
+    if(inventory[i] == NULL || inventory[i]->getType() != ITEM_DEFAULT) continue;
 		Item* item = inventory[i];
-		if (item != NULL)
+		if (firstItem)
 		{
-			if (firstItem)
-			{
-				inv.printEx(inv.getWidth() / 2, nline, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Items");
-				nline += 2;
-				firstItem = false;
-			}
-			std::stringstream ss;
-			ss << "  " << static_cast<unsigned char>(i) << " - " << item->getName();
-			inv.printEx(4, nline, TCOD_BKGND_DEFAULT, TCOD_LEFT, ss.str().c_str());
-			nline++;
+			inv.printEx(inv.getWidth() / 2, nline, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Items");
+			nline += 2;
+			firstItem = false;
 		}
+		std::stringstream ss;
+		ss << "  " << static_cast<unsigned char>(i) << " - " << item->getName();
+		inv.printEx(4, nline, TCOD_BKGND_DEFAULT, TCOD_LEFT, ss.str().c_str());
+		nline++;		
 	}
 	TCODConsole::blit(&inv, 0, 0, 0, 0, TCODConsole::root, viewLevel.x + viewLevel.width / 8, viewLevel.y + viewLevel.height / 8, 1.f, 0.9f);
 }
