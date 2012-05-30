@@ -1,5 +1,8 @@
 #include "../creature.hpp"
 #include "../world.hpp"
+#include "../player.hpp"
+#include "../tileset.hpp"
+#include "../level.hpp"
 
 Goblin::Goblin() : Creature(Point(20, 20), "goblin", 'g', TCODColor::green, 20) {};
 

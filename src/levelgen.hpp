@@ -1,7 +1,10 @@
 #ifndef _LEVELGEN_HPP
 #define _LEVELGEN_HPP
 
-#include "level.hpp"
+#include <libtcod.hpp>
+#include <algorithm>
+
+class Level;
 
 class LevelGen
 {

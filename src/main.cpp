@@ -9,6 +9,9 @@
 #include "levelgen.hpp"
 #include "world.hpp"
 #include "utility.hpp"
+#include "player.hpp"
+#include "creature.hpp"
+#include "level.hpp"
 
 World world;
 
@@ -19,19 +22,19 @@ int main()
 
 	// Init hardcoded world
 	LevelGen level_generator;
-	world.viewLevel = Viewport(1, 1, TCODConsole::root->getWidth() - 10, TCODConsole::root->getHeight() - 4);
-	world.viewMsg = Viewport(1, TCODConsole::root->getHeight() - 3, TCODConsole::root->getWidth(), 2);
+	world.viewLevel = Viewport(1, 1, TCODConsole::root->getWidth() - 10, TCODConsole::root->getHeight() - 5);
+	world.viewMsg = Viewport(2, TCODConsole::root->getHeight() - 3, TCODConsole::root->getWidth()-4, 2);
 	world.levels[0] = level_generator.generateCaveLevel(80, 50, 40.f);
 	world.currentLevel = 0;
 	world.player->moveTo(Point(35, 22));
 	Goblin* gobbo = new Goblin();
 	FailWhale* twitter = new FailWhale();
-  Creature* defaulto = new Creature(Point(10,10), "default", 'd', TCODColor::amber, 20);
+	Creature* defaulto = new Creature(Point(10,10), "default", 'd', TCODColor::amber, 20);
 	TCODRandom rngGauss;
 	rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
 	world.levels[0]->addCreature(gobbo);
 	world.levels[0]->addCreature(twitter);
-  world.levels[0]->addCreature(defaulto);
+	world.levels[0]->addCreature(defaulto);
 
 	bool quit=false;
 	while (!TCODConsole::isWindowClosed() && !quit)
@@ -126,7 +129,7 @@ int main()
 							// TODO: this is hardcoded width. not good.
 							ppos = world.player->getPos();
 							world.levelOffset.x = util::clamp(35 - ppos.x, 70 - level->getWidth(), 0);
-							world.levelOffset.y = util::clamp(22 - ppos.y, 44 - level->getHeight(), 0);
+							world.levelOffset.y = util::clamp(22 - ppos.y, 46 - level->getHeight(), 0);
 						}
 						else
 						{

@@ -1,6 +1,5 @@
 #include "creature.hpp"
-#include <sstream>
-#include "world.hpp"
+#include "player.hpp"
 
 Creature::Creature(Point p, std::string n, int s, TCODColor c, int h)
 	:position(p), name(n), symbol(s), color(c), maxHealth(h), health(h)
@@ -88,7 +87,7 @@ int Creature::attack(Player* player)
 		std::stringstream msg;
 		msg << "The " << name << " hits you for " << damage << ".";
 		world.addMessage(msg.str());
-		if (player->hurt(damage)) world.addMessage("You die!");
+		player->hurt(damage, this);
 
 	}
 	else

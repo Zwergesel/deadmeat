@@ -1,7 +1,5 @@
 #include "levelgen.hpp"
-#include "tileset.hpp"
-#include <algorithm>
-#include <libtcod.hpp>
+#include "level.hpp"
 
 Level* LevelGen::generateCaveLevel(int width, int height, float density)
 {

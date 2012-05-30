@@ -1,5 +1,8 @@
 #include "../creature.hpp"
 #include "../world.hpp"
+#include "../player.hpp"
+#include "../tileset.hpp"
+#include "../level.hpp"
 
 FailWhale::FailWhale() : Creature(Point(60, 35), "fail whale", 'w', TCODColor::blue, 10000) {};
 
