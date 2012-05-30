@@ -49,7 +49,7 @@ int main()
 		world.drawWorld();
 		TCODConsole::root->flush();
 
-		if (world.getNumMessages() > 0)
+		if (world.getNumMessages() > 1)
 		{
 			// Player has to clear pending messages
 			TCOD_key_t key;
