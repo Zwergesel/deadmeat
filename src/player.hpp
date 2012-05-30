@@ -61,18 +61,20 @@ private:
 	Creature* creature;
 	Skill skills[NUM_SKILL];
 	Item** inventory;
-  // negative if inv is closed, otherwise the page number the inv is open on
+	// negative if inv is closed, otherwise the page number the inv is open on
 	int inventoryOpen;
-
-public:
+	int actionMove(int direction);
+  int actionLook(Point p);
+  int actionPickup();
 	static int dx[9];
 	static int dy[9];
 
+public:
 	Player(std::string name);
 	~Player();
 	std::string getName();
 	Creature* getCreature();
-	int action(Level* level);
+	int action();
 	TCOD_key_t waitForKeypress(bool clBuf);
 	bool addItem(Item* i);
 	void removeItem(Item* i);

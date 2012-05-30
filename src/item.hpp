@@ -20,11 +20,11 @@ private:
 	std::string name;
 
 protected:
-  ITEM_TYPE type;
+	ITEM_TYPE type;
 
 public:
 	Item(Point position, std::string name, int symbol, TCODColor color);
-  ITEM_TYPE getType();
+	ITEM_TYPE getType();
 	int getSymbol();
 	TCODColor getColor();
 	Point getPos();

@@ -2,7 +2,7 @@
 
 Item::Item(Point p, std::string n, int s, TCODColor c) : position(p), name(n), symbol(s), color(c)
 {
-  type = ITEM_DEFAULT;
+	type = ITEM_DEFAULT;
 }
 
 int Item::getSymbol()
@@ -12,7 +12,7 @@ int Item::getSymbol()
 
 ITEM_TYPE Item::getType()
 {
-  return type;
+	return type;
 }
 
 TCODColor Item::getColor()

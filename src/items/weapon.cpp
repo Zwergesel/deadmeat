@@ -5,7 +5,7 @@ Weapon::Weapon(Point position, std::string name, int symbol, TCODColor color, in
 	:Item(position, name, symbol, color), speed(spd), hitBonus(hit), baseDamage(dmg), numDice(dice)
 	,diceMax(dmax), enchantment(ench), skill(skl), hands(hands)
 {
-  type = ITEM_WEAPON;
+	type = ITEM_WEAPON;
 }
 
 int Weapon::rollDamage()
