@@ -20,7 +20,8 @@ Skill::Skill(std::string name, int value, ATTRIBUTE att)
 }
 
 Player::Player(std::string name):
-	name(name)
+	name(name),
+	inventoryOpen(false)
 {
 	skills[SKILL_MELEE_COMBAT] = Skill("melee combat", 0, ATTR_STR);
 	skills[SKILL_RANGED_COMBAT] = Skill("ranged combat", 0, ATTR_DEX);
@@ -155,6 +156,11 @@ Item** Player::getInventory()
 	return inventory;
 }
 
+bool Player::isInventoryOpen()
+{
+	return inventoryOpen;
+}
+
 int Player::action(Level* level)
 {
 	do
@@ -163,24 +169,24 @@ int Player::action(Level* level)
 		bool move(false);
 		int direction(0);
 
-		if (key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
+		if (!inventoryOpen && key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
 		{
 			// numpad player movement
 			move = true;
 			direction = key.vk - TCODK_KP1;
 		}
-		else if (key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.vk != TCODK_5)
+		else if (!inventoryOpen && key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.vk != TCODK_5)
 		{
 			// number keys player movement
 			move = true;
 			direction = key.vk - TCODK_1;
 		}
-		else if (key.vk == TCODK_5 || key.vk == TCODK_KP5)
+		else if (!inventoryOpen && (key.vk == TCODK_5 || key.vk == TCODK_KP5))
 		{
 			// wait/search
 			return 10;
 		}
-		else if (key.c == ':')
+		else if (!inventoryOpen && key.c == ':')
 		{
 			std::stringstream msg;
 			std::vector<Item*> items = level->itemsAt(creature->getPos());
@@ -202,7 +208,7 @@ int Player::action(Level* level)
 			}
 			return 0;
 		}
-		else if (key.c == ',')
+		else if (!inventoryOpen && key.c == ',')
 		{
 			std::stringstream msg;
 			std::vector<Item*> items = level->itemsAt(creature->getPos());
@@ -215,7 +221,7 @@ int Player::action(Level* level)
 		}
 		else if (key.c == 'i')
 		{
-			//world.displayInventory();
+			inventoryOpen = !inventoryOpen;
 			return 0;
 		}
 
