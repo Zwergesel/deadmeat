@@ -3,9 +3,6 @@
 
 #include <libtcod.hpp>
 #include <string>
-#include <iostream>
-#include <deque>
-#include <sstream>
 #include "utility.hpp"
 
 class Level;
@@ -20,6 +17,8 @@ protected:
 	int symbol;
 	TCODColor color;
 	int health, maxHealth;
+	bool controlled;
+	Level* level;
 
 	void die(Creature* instigator);
 
@@ -31,29 +30,32 @@ public:
 	Point getPos();
 	int getSymbol();
 	TCODColor getColor();
-	int attack(Player* player);
+	int attack(Creature* c);
 	void move(Point pos);
 	void moveTo(Point pos);
 	int getDefense();
+	bool isControlled();
+	void setControlled(bool);
+	void setLevel(Level* l);
 
 	/* Hurt returns true if the creature was killed */
 	bool hurt(int damage, Creature* instigator); // ,DamageType dt
 
-	virtual int action(Level*, Player*);
+	virtual int action();
 };
 
 class Goblin: public Creature
 {
 public:
 	Goblin();
-	int action(Level*, Player*);
+	int action();
 };
 
 class FailWhale: public Creature
 {
 public:
 	FailWhale();
-	int action(Level*, Player*);
+	int action();
 };
 
 #endif

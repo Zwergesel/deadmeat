@@ -6,11 +6,12 @@
 
 World::World()
 {
-	player = new Player("Mustermann");
+	player = new Player("PlayerName");
 	tileSet = new TileSet();
 	levels = new Level*[10];
 	currentLevel = 0;
 	levelOffset = Point(0,0);
+	requestQuit = false;
 }
 
 World::~World()
@@ -125,21 +126,9 @@ void World::drawCreature(Creature* c, Point offset, Viewport view)
 	}
 }
 
-void World::drawPlayer(Player* p, Point offset, Viewport view)
-{
-	Point pos = p->getPos();
-	pos += offset;
-	if (pos.x >= 0 && pos.x < view.width && pos.y >= 0 && pos.y < view.height)
-	{
-		TCODConsole::root->putChar(view.x + pos.x, view.y + pos.y, p->getSymbol());
-		TCODConsole::root->setCharForeground(view.x + pos.x, view.y + pos.y, p->getColor());
-	}
-}
-
 void World::drawWorld()
 {
 	TCODConsole::root->clear();
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);
 	drawMessage();
-	drawPlayer(player, levelOffset, viewLevel);
 }

@@ -1,11 +1,7 @@
 #ifndef _LEVEL_HPP
 #define _LEVEL_HPP
 
-#include <libtcod.hpp>
 #include <vector>
-#include <algorithm>
-#include <iostream>
-#include <cassert>
 #include "tileset.hpp"
 #include "utility.hpp"
 
@@ -44,7 +40,7 @@ public:
 	void removeCreature(Creature* c);
 
 	void buildTimeline();
-	bool isCreatureTurn(int playerTime);
+	bool isPlayerTurn();
 	void performCreatureTurn();
 };
 

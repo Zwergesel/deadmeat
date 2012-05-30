@@ -1,5 +1,7 @@
+#include <cassert>
 #include "level.hpp"
 #include "creature.hpp"
+#include "player.hpp"
 #include "world.hpp"
 
 Level::Level(int width, int height)
@@ -71,6 +73,8 @@ void Level::addCreature(Creature* c)
 	// Put creature into timeline
 	timeline.push_back(TimelineAction(0,c));	// TODO: should init with current time
 	push_heap(timeline.begin(), timeline.end());
+	// Set level
+	c->setLevel(this);
 }
 
 void Level::removeCreature(Creature* c)
@@ -107,17 +111,29 @@ void Level::buildTimeline()
 	make_heap(timeline.begin(), timeline.end());
 }
 
-bool Level::isCreatureTurn(int playerTime)
+bool Level::isPlayerTurn()
 {
-	return (!timeline.empty() && timeline.front().time < playerTime);
+	return (!timeline.empty() && timeline.front().actor->isControlled());
 }
 
 void Level::performCreatureTurn()
 {
+	// pop_heap puts currently active creature to the back of the vector
 	pop_heap(timeline.begin(), timeline.end());
-	int time = timeline.back().actor->action(this, world.player);
-	// action(...) returns the time the action took; update heap
-	assert(time > 0);
+	int time;
+	if (timeline.back().actor->isControlled())
+	{
+		// player action; returns time the action took
+		time = world.player->action(this);
+	}
+	else
+	{
+		// creature action; returns time the action took
+		time = timeline.back().actor->action();
+		// creatures should never use zero time
+		assert(time > 0);
+	}
+	// update heap
 	timeline.back().time += time;
 	push_heap(timeline.begin(), timeline.end());
 }

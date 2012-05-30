@@ -1,13 +1,13 @@
+
 #ifndef _PLAYER_HPP
 #define _PLAYER_HPP
 
 #include <libtcod.hpp>
 #include <string>
-#include <vector>
 #include "utility.hpp"
-#include "world.hpp"
 
 class Creature;
+class Level;
 
 enum ATTRIBUTE
 {
@@ -56,16 +56,9 @@ struct Skill
 class Player
 {
 private:
-	Point position;
 	std::string name;
-	int symbol;
-	TCODColor color;
-	int actionTime;
+	Creature* creature;
 	Skill skills[NUM_SKILL];
-	int health;
-	int maxHealth;
-
-	void die(Creature* instigator);
 
 public:
 	static int dx[9];
@@ -73,16 +66,10 @@ public:
 
 	Player(std::string name);
 	std::string getName();
-	Point getPos();
-	int getSymbol();
-	TCODColor getColor();
-	int getActionTime();
-	void move(Point dpos);
-	void moveTo(Point p);
+	Creature* getCreature();
+	int action(Level* level);
 	int attack(int& attack, int& damage, int& speed);
 	int getDefense();
-	void addActionTime(int dt);
-	bool hurt(int damage, Creature* instigator);
 };
 
 #endif

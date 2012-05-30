@@ -6,16 +6,16 @@
 
 Goblin::Goblin() : Creature(Point(20, 20), "goblin", 'g', TCODColor::green, 20) {};
 
-int Goblin::action(Level* level, Player* player)
+int Goblin::action()
 {
-	Point ppos = player->getPos();
+	Point ppos = world.player->getCreature()->getPos();
 	int dx = util::sign(ppos.x - position.x);
 	int dy = util::sign(ppos.y - position.y);
 	Point target(position.x+dx, position.y+dy);
 
 	if (target.x == ppos.x && target.y == ppos.y)
 	{
-		return attack(player);
+		return attack(world.player->getCreature());
 	}
 	else if (world.tileSet->isPassable(level->getTile(target)) && level->creatureAt(target) == NULL)
 	{
