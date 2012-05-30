@@ -15,6 +15,7 @@ World::World()
 	currentLevel = 0;
 	levelOffset = Point(0,0);
 	requestQuit = false;
+  substateCounter = 0;
 }
 
 World::~World()
@@ -152,8 +153,8 @@ void World::drawWorld()
 {
 	TCODConsole::root->clear();
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);
-  if (player->getState() == STATE_INVENTORY) drawInventory(player->getInventoryPage());
-  if (player->getState() == STATE_PICKUP) drawItemList(0, "What do you want to pick up?", levels[currentLevel]->itemsAt(player->getCreature()->getPos()));
+  if (player->getState() == STATE_INVENTORY) drawInventory(substateCounter);
+  if (player->getState() == STATE_PICKUP) drawItemList(substateCounter, "What do you want to pick up?", levels[currentLevel]->itemsAt(player->getCreature()->getPos()));
 	drawMessage();
 }
 

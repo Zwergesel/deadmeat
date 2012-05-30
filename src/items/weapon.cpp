@@ -56,7 +56,6 @@ std::string Weapon::toString()
 {
   std::stringstream ss;
   int e = getEnchantment();
-  ss << (e<0?'-':'+') << e;
-  ss << " " << getName();
+  ss << (e<0?'-':'+') << e << " " << getName();
   return ss.str();
 }

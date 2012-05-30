@@ -31,6 +31,7 @@ public:
 	Point levelOffset;
 	Viewport viewLevel, viewMsg;
 	bool requestQuit;
+  int substateCounter;
 
 	World();
 	~World();
