@@ -1,9 +1,10 @@
 #ifndef _WEAPON_H
 #define _WEAPON_H
 
-#include "player.hpp"
+#include "../player.hpp"
+#include "../item.hpp"
 
-class Weapon
+class Weapon : public Item
 {
 private:
 	int speed;
@@ -16,7 +17,7 @@ private:
 	int hands;
 
 public:
-	Weapon(int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands);
+	Weapon(Point position, std::string name, int symbol, TCODColor color, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands);
 	int rollDamage();
 	int getMinDamage();
 	int getMaxDamage();
