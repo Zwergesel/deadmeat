@@ -5,11 +5,11 @@
 #include <string>
 #include <iostream>
 #include <deque>
-#include "level.hpp"
-#include "player.hpp"
+#include <sstream>
 #include "utility.hpp"
 
 class Level;
+class Player;
 
 class Creature
 {
@@ -46,14 +46,14 @@ class Goblin: public Creature
 {
 public:
 	Goblin();
-	int action(Level*,Player*);
+	int action(Level*, Player*);
 };
 
 class FailWhale: public Creature
 {
 public:
 	FailWhale();
-	int action(Level*,Player*);
+	int action(Level*, Player*);
 };
 
 #endif

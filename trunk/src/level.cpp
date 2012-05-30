@@ -1,10 +1,6 @@
 #include "level.hpp"
-#include "utility.hpp"
+#include "creature.hpp"
 #include "world.hpp"
-#include <libtcod.hpp>
-#include <algorithm>
-#include <iostream>
-#include <cassert>
 
 Level::Level(int width, int height)
 {

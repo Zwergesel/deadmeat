@@ -1,4 +1,5 @@
 #include "player.hpp"
+#include "creature.hpp"
 
 Skill::Skill()
 {
@@ -10,11 +11,17 @@ Skill::Skill(std::string name, int value, ATTRIBUTE att)
 	this->value = value;
 	this->att = att;
 	this->exp = 0;
-  this->used = 0;
+	this->used = 0;
 }
 
-Player::Player(std::string name)
-	: name(name), symbol('@'), color(TCODColor::black), position(Point(0,0)), actionTime(0), health(0), maxHealth(0)
+Player::Player(std::string name):
+	name(name),
+	symbol('@'),
+	color(TCODColor::black),
+	position(Point(0,0)),
+	actionTime(0),
+	health(25),
+	maxHealth(25)
 {
 	skills[SKILL_MELEE_COMBAT] = Skill("melee combat", 0, ATTR_STR);
 	skills[SKILL_RANGED_COMBAT] = Skill("ranged combat", 0, ATTR_DEX);
@@ -74,7 +81,7 @@ void Player::addActionTime(int dt)
 	actionTime += dt;
 }
 
-void Player::attack(int& attack, int& damage, int& speed)
+int Player::attack(int& attack, int& damage, int& speed)
 {
 	// weapon damage + enchantment
 	damage = std::max(1, 10 + 0);
@@ -82,6 +89,8 @@ void Player::attack(int& attack, int& damage, int& speed)
 	speed = std::max(1, 10 - 2 + 2);
 	// weapon attack + weapon enchantment + (melee combat skill + weapon skill)/2
 	attack = 10 + 0 + (skills[SKILL_MELEE_COMBAT].value + skills[/*weapon.getSkill()*/SKILL_UNARMED].value)/2;
+
+	return speed;
 }
 
 int Player::getDefense()
@@ -90,14 +99,23 @@ int Player::getDefense()
 	return 0 + (skills[SKILL_MELEE_COMBAT].value + skills[/*armor.getSkill()*/SKILL_UNARMORED].value)/2 + 0;
 }
 
-bool Player::hurt(int damage)
+bool Player::hurt(int damage, Creature* instigator)
 {
 	health -= damage;
 	if (health <= 0)
 	{
+		die(instigator);
 		return true;
 	}
 	return false;
+}
+
+void Player::die(Creature* instigator)
+{
+	world.addMessage("The " + instigator->getName() + " kills you!");
+	world.addMessage("Suddenly your amulet begins to glow brightly...");
+	world.addMessage("You feel better!", true);
+	health = maxHealth;
 }
 
 int Player::dx[] = {-1,0,1,-1,0,1,-1,0,1};

@@ -1,5 +1,8 @@
 #include "world.hpp"
-#include <iostream>
+#include "player.hpp"
+#include "tileset.hpp"
+#include "level.hpp"
+#include "creature.hpp"
 
 World::World()
 {
@@ -29,10 +32,16 @@ World::~World()
 	}
 }
 
-void World::addMessage(std::string m)
+/* forceBreak is optional (default: false) */
+void World::addMessage(std::string m, bool forceBreak)
 {
 	if (messageQueue.empty())
 	{
+		messageQueue.push_back(m);
+	}
+	else if (forceBreak)
+	{
+		messageQueue.back().append(" <More>");
 		messageQueue.push_back(m);
 	}
 	else

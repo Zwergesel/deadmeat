@@ -1,13 +1,16 @@
 #ifndef _WORLD_HPP
 #define _WORLD_HPP
 
-#include <string>
 #include <libtcod.hpp>
+#include <string>
+#include <iostream>
 #include <deque>
-#include "tileset.hpp"
-#include "level.hpp"
 #include "utility.hpp"
-#include "creature.hpp"
+
+class Player;
+class Creature;
+class Level;
+class TileSet;
 
 struct Viewport
 {
@@ -32,7 +35,7 @@ public:
 	World();
 	~World();
 
-	void addMessage(std::string m);
+	void addMessage(std::string m, bool forceBreak=false);
 	int getNumMessages();
 	void popMessage();
 	void drawMessage();

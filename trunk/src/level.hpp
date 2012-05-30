@@ -1,12 +1,13 @@
 #ifndef _LEVEL_HPP
 #define _LEVEL_HPP
 
-#include "tileset.hpp"
-#include "creature.hpp"
-#include "utility.hpp"
+#include <libtcod.hpp>
 #include <vector>
-
-extern TileSet globalTileSet; // TODO: remove later, see level.cpp too
+#include <algorithm>
+#include <iostream>
+#include <cassert>
+#include "tileset.hpp"
+#include "utility.hpp"
 
 class Creature;
 

@@ -1,16 +1,20 @@
 #ifndef _PLAYER_HPP
 #define _PLAYER_HPP
 
+#include <libtcod.hpp>
 #include <string>
 #include <vector>
-#include <libtcod.hpp>
 #include "utility.hpp"
+#include "world.hpp"
+
+class Creature;
 
 enum ATTRIBUTE
 {
   ATTR_STR,
   ATTR_DEX,
-  ATTR_CON
+  ATTR_CON,
+  ATTR_INT
 };
 
 enum SKILLS
@@ -46,7 +50,7 @@ struct Skill
 	int value;
 	int exp;
 	ATTRIBUTE att;
-  int used;
+	int used;
 };
 
 class Player
@@ -61,6 +65,8 @@ private:
 	int health;
 	int maxHealth;
 
+	void die(Creature* instigator);
+
 public:
 	static int dx[9];
 	static int dy[9];
@@ -73,10 +79,10 @@ public:
 	int getActionTime();
 	void move(Point dpos);
 	void moveTo(Point p);
-	void attack(int& attack, int& damage, int& speed);
+	int attack(int& attack, int& damage, int& speed);
 	int getDefense();
 	void addActionTime(int dt);
-	bool hurt(int damage);
+	bool hurt(int damage, Creature* instigator);
 };
 
 #endif
