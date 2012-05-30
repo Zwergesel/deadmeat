@@ -2,6 +2,7 @@
 #define _UTILITY_HPP
 
 #include <algorithm>
+#include <string>
 
 struct Point
 {
@@ -25,6 +26,8 @@ namespace util
 	{
 		return std::max(min, std::min(val, max));
 	}
+
+  std::string indefArticle(std::string str);
 
 };
 
