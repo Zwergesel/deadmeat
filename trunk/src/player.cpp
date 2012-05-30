@@ -24,7 +24,6 @@ int Player::dy[] = {1,1,1,0,0,0,-1,-1,-1};
 
 Player::Player(std::string name):
 	name(name),
-	inventoryPage(0),
   state(STATE_DEFAULT)
 {
 	skills[SKILL_MELEE_COMBAT] = Skill("melee combat", 0, ATTR_STR);
@@ -138,7 +137,7 @@ int Player::actionMove(int direction)
   Level* level = world.levels[world.currentLevel];
 	Point ppos = creature->getPos();
 	Point newPos = Point(ppos.x + Player::dx[direction], ppos.y + Player::dy[direction]);
-  if (newPos.x >= 0 && newPos.y < level->getWidth() && newPos.y >= 0 && newPos.y < level->getHeight())
+  if (newPos.x >= 0 && newPos.x < level->getWidth() && newPos.y >= 0 && newPos.y < level->getHeight())
 	{
 		Creature* c = level->creatureAt(newPos);
 		if (c != NULL)
@@ -218,6 +217,8 @@ int Player::actionPickup(int item)
   }
   else if((int)items.size() > item && addItem(items[item]))
   {
+    msg << "Picked up " << util::indefArticle(items[item]->getName()) << " " << items[item]->getName() << ".";
+    world.addMessage(msg.str());
     level->removeItem(items[item], false);    
     return 10;
   }  
@@ -265,11 +266,11 @@ int Player::action()
     {
       state = STATE_DEFAULT;
       return 0;
-    }
+    }    
     // open inventory screen
 		else if (state == STATE_DEFAULT && key.c == 'i')
 		{      
-      inventoryPage = 0;
+      world.substateCounter = 0;
       state = STATE_INVENTORY;
 			return 0;
 		}
@@ -279,10 +280,10 @@ int Player::action()
 			state = STATE_DEFAULT;
 			return 0;
 		}
-		// next inventory page
-		else if (state == STATE_INVENTORY && key.vk == TCODK_SPACE)
+		// next page of item lists
+		else if ((state == STATE_INVENTORY || state == STATE_PICKUP) && key.vk == TCODK_SPACE)
 		{
-			inventoryPage++;
+			world.substateCounter++;
 			return 0;
 		}
 	}
@@ -294,9 +295,4 @@ int Player::action()
 STATE Player::getState()
 {
   return state;
-}
-
-int Player::getInventoryPage()
-{
-  return inventoryPage;
 }

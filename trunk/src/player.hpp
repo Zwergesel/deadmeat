@@ -68,7 +68,6 @@ private:
 	Creature* creature;
 	Skill skills[NUM_SKILL];
 	std::vector<std::pair<int, Item*> > inventory;
-	int inventoryPage;
 	int actionMove(int direction);
   int actionLook(Point p);
   int actionPickup();
@@ -88,7 +87,6 @@ public:
 	void removeItem(Item* i, bool del);
 	std::vector<std::pair<int, Item*> > getInventory();
   STATE getState();
-  int getInventoryPage();
 };
 
 #endif
