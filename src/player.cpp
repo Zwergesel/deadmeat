@@ -132,6 +132,17 @@ std::vector<std::pair<int, Item*> > Player::getInventory()
 	return inventory;
 }
 
+Item* Player::getInventoryItem(int item)
+{
+	for (InventoryIterator it = inventory.begin(); it != inventory.end(); it++)
+	{
+		if (it->first == item) {
+			return it->second;
+		}
+	}
+	return NULL;
+}
+
 int Player::actionMove(int direction)
 {
 	Level* level = world.levels[world.currentLevel];
@@ -225,6 +236,30 @@ int Player::actionPickup(int item)
 	return 0;
 }
 
+int Player::actionWield(int item)
+{
+	Item* weapon = getInventoryItem(item);
+	std::stringstream msg;
+	if (weapon == NULL)
+	{
+		world.addMessage("You do not have this item.");
+		return 0;
+	}
+	else if (weapon->getType() != ITEM_WEAPON)
+	{
+		msg << "You cannot wield a " << weapon->getName() << ".";
+		world.addMessage(msg.str());
+		return 0;
+	}
+	else
+	{
+		msg << "You are now wiedling a " << weapon->getName() << " (not really though).";
+		world.addMessage(msg.str());
+		state = STATE_DEFAULT;
+		return 30;
+	}
+}
+
 int Player::action()
 {
 	do
@@ -262,7 +297,7 @@ int Player::action()
 			return actionPickup(util::letterToInt(key.c));
 		}
 		// cancel pick item list
-		else if (state == STATE_PICKUP && key.vk == TCODK_ESCAPE)
+		else if ((state == STATE_PICKUP || state == STATE_WIELD) && key.vk == TCODK_ESCAPE)
 		{
 			state = STATE_DEFAULT;
 			return 0;
@@ -274,6 +309,12 @@ int Player::action()
 			state = STATE_INVENTORY;
 			return 0;
 		}
+		// open wield weapon screen
+		else if (state == STATE_DEFAULT && key.c == 'w')
+		{
+			state = STATE_WIELD;
+			return 0;
+		}
 		// close inventory screen
 		else if (state == STATE_INVENTORY && (key.c == 'i' || key.vk == TCODK_ESCAPE))
 		{
@@ -281,10 +322,14 @@ int Player::action()
 			return 0;
 		}
 		// next page of item lists
-		else if ((state == STATE_INVENTORY || state == STATE_PICKUP) && key.vk == TCODK_SPACE)
+		else if ((state == STATE_INVENTORY || state == STATE_PICKUP || state == STATE_WIELD) && key.vk == TCODK_SPACE)
 		{
 			world.substateCounter++;
 			return 0;
+		}
+		else if (state == STATE_WIELD && isalpha(key.c))
+		{
+			return actionWield(util::letterToInt(key.c));
 		}
 	}
 	while (!TCODConsole::isWindowClosed() && !world.requestQuit);
