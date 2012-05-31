@@ -11,6 +11,7 @@ class Creature;
 class Level;
 class Item;
 class Weapon;
+class Armor;
 
 enum STATE
 {
@@ -18,6 +19,7 @@ enum STATE
   STATE_INVENTORY,
   STATE_PICKUP,
   STATE_WIELD,
+  STATE_WEAR
 };
 
 typedef std::vector<std::pair<int, Item*> >::iterator InventoryIterator;
@@ -33,11 +35,13 @@ private:
 	static int dy[9];
 	STATE state;
 	int computeAttackBonus(Weapon* w);
+  int computeArmorBonus(Armor* w);
 	int actionMove(int direction);
 	int actionLook(Point p);
 	int actionPickup();
 	int actionPickup(Item*);
 	int actionWield(Item*);
+  int actionWear(Item*);
 
 public:
 	Player(std::string name);

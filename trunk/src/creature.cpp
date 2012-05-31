@@ -53,10 +53,21 @@ Weapon* Creature::getMainWeapon()
 	return mainWeapon;
 }
 
-void Creature::wieldMainWeapon(Weapon* wpn, int attack)
+Armor* Creature::getArmor()
+{
+  return armor;
+}
+
+void Creature::wieldMainWeapon(Weapon* wpn, int skill)
 {
 	mainWeapon = wpn;
-	attackSkill = attack;
+	attackSkill = skill;
+}
+
+void Creature::wearArmor(Armor* a, int skill)
+{
+  armor = a;
+  armorSkill = skill;
 }
 
 void Creature::move(Point dpos)

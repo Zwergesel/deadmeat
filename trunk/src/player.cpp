@@ -235,14 +235,37 @@ int Player::actionWield(Item* itemObj)
 	Weapon* weapon = static_cast<Weapon*>(itemObj);
 	if (creature->getMainWeapon() == weapon)
 	{
-		msg << "You were already wielding a " << weapon->toString() << ".";
+    msg << "You were already wielding " << util::indefArticle(weapon->toString()) << " " << weapon->toString() << ".";
 		world.addMessage(msg.str());
 		return 0;
 	}
 	else
 	{
 		creature->wieldMainWeapon(weapon, computeAttackBonus(weapon));
-		msg << "You are now wiedling a " << weapon->toString() << ".";
+		msg << "You are now wiedling " << util::indefArticle(weapon->toString()) << " " << weapon->toString() << ".";
+		world.addMessage(msg.str());
+		return 30;
+	}
+}
+
+int Player::actionWear(Item* itemObj)
+{
+	//Item* itemObj = getInventoryItem(item);
+	std::stringstream msg;
+	if (itemObj == NULL) return 0;
+	assert(itemObj->getType() == ITEM_ARMOR);
+
+	Armor* armor = static_cast<Armor*>(itemObj);
+	if (creature->getArmor() == armor)
+	{
+		msg << "You were already wearing " << util::indefArticle(armor->toString()) << " " << armor->toString() << ".";
+		world.addMessage(msg.str());
+		return 0;
+	}
+	else
+	{
+    creature->wearArmor(armor, computeArmorBonus(armor));
+		msg << "You are now wearing " << util::indefArticle(armor->toString()) << " " << armor->toString() << ".";
 		world.addMessage(msg.str());
 		return 30;
 	}
@@ -319,6 +342,22 @@ int Player::action()
 			}
 			return 0;
 		}
+    // open wield weapon screen
+		else if (state == STATE_DEFAULT && key.c == 'W')
+		{
+			world.itemSelection = ItemSelection(inventory, "What do you want to wear?", false);
+			world.itemSelection.filterType(ITEM_ARMOR)->runFilter();
+			if (world.itemSelection.getNumChoices() > 0)
+			{
+				world.itemSelection.compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);
+				state = STATE_WEAR;
+			}
+			else
+			{
+				world.addMessage("You aren't carrying any armor.");
+			}
+			return 0;
+		}
 		// handle inventory
 		else if (state == STATE_INVENTORY)
 		{
@@ -340,6 +379,16 @@ int Player::action()
 			}
 			return 0;
 		}
+    // handle wear window
+    else if (state == STATE_WEAR)
+		{
+			if (world.itemSelection.keyInput(key))
+			{
+				state = STATE_DEFAULT;
+				return actionWear(world.itemSelection.getItem());
+			}
+			return 0;
+		}
 	}
 	while (!TCODConsole::isWindowClosed() && !world.requestQuit);
 	// should not be reached, return time of action
@@ -354,4 +403,9 @@ STATE Player::getState()
 int Player::computeAttackBonus(Weapon* w)
 {
 	return (skills[w->getSkill()].value + skills[SKILL_MELEE_COMBAT].value) / 2;
+}
+
+int Player::computeArmorBonus(Armor* a)
+{
+	return (skills[a->getSkill()].value + skills[SKILL_MELEE_COMBAT].value) / 2;
 }
