@@ -62,6 +62,8 @@ enum STATE
   STATE_WIELD
 };
 
+typedef std::vector<std::pair<int, Item*> >::iterator InventoryIterator;
+
 class Player
 {
 private:
@@ -73,6 +75,7 @@ private:
 	int actionLook(Point p);
 	int actionPickup();
 	int actionPickup(int item);
+	int actionWield(int item);
 	static int dx[9];
 	static int dy[9];
 	STATE state;
@@ -87,6 +90,7 @@ public:
 	bool addItem(Item* i);
 	void removeItem(Item* i, bool del);
 	std::vector<std::pair<int, Item*> > getInventory();
+	Item* getInventoryItem(int item);
 	STATE getState();
 };
 
