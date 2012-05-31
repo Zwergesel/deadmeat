@@ -5,6 +5,7 @@
 #include <string>
 #include "utility.hpp"
 #include "items/weapon.hpp"
+#include "items/armor.hpp"
 
 class Level;
 class Player;
@@ -21,8 +22,11 @@ protected:
 	bool controlled;
 	Level* level;
 	Weapon* mainWeapon;
+	Armor* armor;
 	int attackSkill;
+	int armorSkill;
 	Weapon baseWeapon;
+	Armor baseArmor;
 	void die(Creature* instigator);
 
 public:
