@@ -3,9 +3,9 @@
 #include "weapon.hpp"
 
 Weapon::Weapon() :Item(Point(0,0), "default", '§', TCODColor::pink), speed(0), hitBonus(0), baseDamage(0), numDice(0)
-  ,diceMax(0), enchantment(0), skill(SKILL_UNARMED), hands(2)
+	,diceMax(0), enchantment(0), skill(SKILL_UNARMED), hands(2)
 {
-  type = ITEM_WEAPON;
+	type = ITEM_WEAPON;
 	strType = "Weapon";
 }
 
@@ -69,5 +69,5 @@ std::string Weapon::toString()
 
 SKILLS Weapon::getSkill()
 {
-  return skill;
+	return skill;
 }

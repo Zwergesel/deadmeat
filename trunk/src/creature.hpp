@@ -20,9 +20,9 @@ protected:
 	int health, maxHealth;
 	bool controlled;
 	Level* level;
-	Weapon* mainWeapon;  
-  int attackSkill;
-  Weapon baseWeapon;
+	Weapon* mainWeapon;
+	int attackSkill;
+	Weapon baseWeapon;
 	void die(Creature* instigator);
 
 public:
@@ -42,8 +42,8 @@ public:
 	void setLevel(Level* l);
 	Weapon* getMainWeapon();
 	void wieldMainWeapon(Weapon* wpn, int attackSkill);
-  void setAttackSkill(int attackSkill);
-  void setBaseWeapon(Weapon base);
+	void setAttackSkill(int attackSkill);
+	void setBaseWeapon(Weapon base);
 
 	/* Hurt returns true if the creature was killed */
 	bool hurt(int damage, Creature* instigator); // ,DamageType dt

@@ -16,8 +16,8 @@ Creature::Creature(Point p, std::string n, int s, TCODColor c, int h):
 	controlled(false),
 	mainWeapon(NULL)
 {
-  baseWeapon = Weapon(Point(0,0), "hands", '§', TCODColor::pink, 10, 10, 10, 0, 0, 0, SKILL_UNARMED, 2);
-  attackSkill = 0;
+	baseWeapon = Weapon(Point(0,0), "hands", '§', TCODColor::pink, 10, 10, 10, 0, 0, 0, SKILL_UNARMED, 2);
+	attackSkill = 0;
 }
 
 Creature::~Creature()
@@ -53,7 +53,7 @@ Weapon* Creature::getMainWeapon()
 void Creature::wieldMainWeapon(Weapon* wpn, int attack)
 {
 	mainWeapon = wpn;
-  attackSkill = attack;
+	attackSkill = attack;
 }
 
 void Creature::move(Point dpos)
@@ -127,11 +127,11 @@ void Creature::setLevel(Level* l)
 int Creature::attack(Creature* target)
 {
 	// base attack (hands, claws, etc.)
-  int attack = baseWeapon.getHitBonus() + baseWeapon.getEnchantment() + attackSkill;
+	int attack = baseWeapon.getHitBonus() + baseWeapon.getEnchantment() + attackSkill;
 	// base attack damage
 	int damage = baseWeapon.rollDamage();
 	// base attack speed
-  int speed = baseWeapon.getSpeed() - 0;
+	int speed = baseWeapon.getSpeed() - 0;
 
 	if (mainWeapon != NULL)
 	{
@@ -139,7 +139,7 @@ int Creature::attack(Creature* target)
 		attack = mainWeapon->getHitBonus() + mainWeapon->getEnchantment() + attackSkill;
 		// damage = (weapon damage + weapon enchantment)
 		damage = mainWeapon->rollDamage();
-    // weapon speed + armor hindrance
+		// weapon speed + armor hindrance
 		speed = mainWeapon->getSpeed() - 0;
 	}
 	int defense = target->getDefense();
@@ -163,17 +163,17 @@ int Creature::attack(Creature* target)
 		controlled ? (msg << "You miss ") : (msg << "The " << name << " misses ");
 		target->isControlled() ? (msg << "you.") : (msg << "the " << target->getName() << ".");
 		world.addMessage(msg.str());
-	}	
+	}
 
 	return speed;
 }
 
 void Creature::setAttackSkill(int attack)
 {
-  attackSkill = attack;
+	attackSkill = attack;
 }
 
 void Creature::setBaseWeapon(Weapon base)
 {
-  baseWeapon = base;
+	baseWeapon = base;
 }
