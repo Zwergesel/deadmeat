@@ -70,6 +70,11 @@ void Creature::moveTo(Point pos)
 	this->position = pos;
 }
 
+std::pair<int,int> Creature::getHealth()
+{
+	return std::make_pair(health, maxHealth);
+}
+
 bool Creature::hurt(int damage, Creature* instigator)
 {
 	health -= damage;

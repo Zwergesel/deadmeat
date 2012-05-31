@@ -48,6 +48,7 @@ public:
 	void wieldMainWeapon(Weapon* wpn, int attackSkill);
 	void setAttackSkill(int attackSkill);
 	void setBaseWeapon(Weapon base);
+	std::pair<int,int> getHealth();
 
 	/* Hurt returns true if the creature was killed */
 	bool hurt(int damage, Creature* instigator); // ,DamageType dt
