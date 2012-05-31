@@ -4,12 +4,12 @@
 #include <deque>
 #include <vector>
 #include "utility.hpp"
+#include "item.hpp"
 
 class Player;
 class Creature;
 class Level;
 class TileSet;
-class Item;
 
 struct Viewport
 {
@@ -49,6 +49,7 @@ public:
 	void drawWorld();
   void drawItemList(int page, std::string title, std::vector<Item*> items);
   void drawItemList(int page, std::string title, std::vector<std::pair<int, Item*> > items);
+  void drawItemList(int page, std::string title, std::vector<std::pair<int, Item*> > items, std::vector<ITEM_TYPE> filter);
 	void drawInventory(int page);
 };
 

@@ -155,6 +155,12 @@ void World::drawWorld()
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);
   if (player->getState() == STATE_INVENTORY) drawInventory(substateCounter);
   if (player->getState() == STATE_PICKUP) drawItemList(substateCounter, "What do you want to pick up?", levels[currentLevel]->itemsAt(player->getCreature()->getPos()));
+  if (player->getState() == STATE_WIELD)
+  {
+    std::vector<ITEM_TYPE> filter;
+    filter.push_back(ITEM_WEAPON);
+    drawItemList(substateCounter, "What do you want to wield?", player->getInventory(), filter);
+  }
 	drawMessage();
 }
 
@@ -175,6 +181,23 @@ void World::drawItemList(int page, std::string title,std::vector<Item*> items)
     r++;
   }
   drawItemList(page, title, mappedItems);
+}
+
+void World::drawItemList(int page, std::string title, std::vector<std::pair<int, Item*> > items, std::vector<ITEM_TYPE> filter)
+{
+  std::vector<std::pair<int, Item*> > filteredItems;
+  for(std::vector<std::pair<int, Item*> >::iterator it=items.begin();it<items.end();it++)
+  {
+    for(std::vector<ITEM_TYPE>::iterator filterIt=filter.begin();filterIt<filter.end();filterIt++)
+    {
+      if((*it).second->getType() == (*filterIt))
+      {
+        filteredItems.push_back(*it);
+        break;
+      }
+    }
+  }
+  drawItemList(page, title, filteredItems);
 }
 
 bool operator<(std::pair<int, Item*> a, std::pair<int, Item*> b)
