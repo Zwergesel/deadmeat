@@ -129,8 +129,9 @@ int Creature::attack(Creature* target)
 	int damage = 10;
 	// base attack speed
 	int speed = 10;
-	
-	if (mainWeapon != NULL) {
+
+	if (mainWeapon != NULL)
+	{
 		// (weapon to hit + weapon enchantment) + ((fighting skill + weapon skill)/2)
 		attack = mainWeapon->getHitBonus() + mainWeapon->getEnchantment() + 0 + 0;
 		// damage = (weapon damage + weapon enchantment)
@@ -160,6 +161,6 @@ int Creature::attack(Creature* target)
 		world.addMessage(msg.str());
 	}
 	// weapon speed + armor hindrance
-	
+
 	return speed;
 }
