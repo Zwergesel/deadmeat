@@ -33,6 +33,7 @@ public:
 	Viewport viewLevel, viewMsg;
 	bool requestQuit;
 	int substateCounter;
+	ItemSelection itemSelection;
 
 	World();
 	~World();

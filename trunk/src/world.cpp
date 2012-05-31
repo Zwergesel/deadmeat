@@ -157,33 +157,8 @@ void World::drawWorld()
 	TCODConsole::root->clear();
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);
 	if (player->getState() == STATE_INVENTORY) drawInventory(substateCounter);
-	if (player->getState() == STATE_PICKUP) drawItemList(substateCounter, "What do you want to pick up?", levels[currentLevel]->itemsAt(player->getCreature()->getPos()));
-	if (player->getState() == STATE_WIELD)
-	{
-		std::vector<ITEM_TYPE> filter;
-		filter.push_back(ITEM_WEAPON);
-		drawItemList(substateCounter, "What do you want to wield?", player->getInventory(), filter);
-	}
-	
-	/* Demo, delete */
-	std::vector<std::pair<int,Item*> > test;
-	Weapon* dagger = new Weapon(Point(33,33), "dagger", '(', TCODColor::red, 10, 30, 1, 10, 20, 30, SKILL_DAGGER, 1);
-	Item* item1 = new Item(Point(40,40), "item1", '1', TCODColor::blue);
-	Item* item2 = new Item(Point(40,40), "item2", '2', TCODColor::green);
-	test.push_back(std::make_pair(0,dagger));
-	test.push_back(std::make_pair(2,dagger));
-	test.push_back(std::make_pair(1,item1));
-	test.push_back(std::make_pair(3,item1));
-	test.push_back(std::make_pair(5,item1));
-	test.push_back(std::make_pair(6,item1));
-	test.push_back(std::make_pair(16,dagger));
-	test.push_back(std::make_pair(37,item2));
-	ItemSelection tsel(test, "Choose your weapon...", false);
-	tsel.filterType(ITEM_WEAPON)->filterType(ITEM_DEFAULT)->runFilter();
-	tsel.setPage(0);
-	drawItemSelection(tsel);
-	/* End demo */
-	
+	if (player->getState() == STATE_PICKUP) drawItemSelection(world.itemSelection);
+	if (player->getState() == STATE_WIELD) drawItemSelection(world.itemSelection);
 	drawMessage();
 }
 
@@ -213,19 +188,21 @@ void World::drawItemSelection(ItemSelection& sel)
 	
 	TCODConsole window(width, height);
 	window.printFrame(0, 0, window.getWidth(), window.getHeight(), true, TCOD_BKGND_DEFAULT, sel.getTitle().c_str());
-	sel.compile(height - 6);
 	
-	std::vector<ItemListInfo> data = sel.getPageList();
-	
-	for (std::vector<ItemListInfo>::iterator it = data.begin(); it != data.end(); it++)
+	sel.resetDraw();
+	bool category;
+	int row;
+	std::string text;
+	while (sel.hasDrawLine())
 	{
-		if (it->centered)
+		text = sel.getNextLine(&row, &category);
+		if (category)
 		{
-			window.printEx(window.getWidth() / 2, 3 + it->row, TCOD_BKGND_DEFAULT, TCOD_CENTER, it->text.c_str());
+			window.printEx(window.getWidth() / 2, 3 + row, TCOD_BKGND_DEFAULT, TCOD_CENTER, text.c_str());
 		}
 		else
 		{
-			window.printEx(4, 3 + it->row, TCOD_BKGND_DEFAULT, TCOD_LEFT, it->text.c_str());
+			window.printEx(4, 3 + row, TCOD_BKGND_DEFAULT, TCOD_LEFT, text.c_str());
 		}
 	}
 	

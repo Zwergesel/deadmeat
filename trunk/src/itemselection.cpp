@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <sstream>
 #include <iostream>
+#include <libtcod.hpp>
 #include "itemselection.hpp"
 #include "utility.hpp"
 
@@ -19,28 +20,42 @@ bool sortAnon(Item* a, Item* b)
 	return false;
 }
 
-ItemSelection::ItemSelection(const std::vector<std::pair<int,Item*> >& choices, std::string title, bool mult, bool sort):
+ItemSelection::ItemSelection(): anonymous(true),multiple(false),page(0),title(""),compiled(false),choice(NULL)
+{
+}
+
+ItemSelection::ItemSelection(const std::vector<std::pair<int,Item*> >& choices, std::string title, bool multiple, bool sort):
 	anonymous(false),
-	multiple(mult),
+	multiple(multiple),
 	page(0),
 	title(title),
-	compiledFor(-1)
+	compiled(false),
+	choice(NULL)
 {
 	namedChoices.assign(choices.begin(), choices.end());
 	filterTypes.clear();
 	if (sort) std::sort(namedChoices.begin(), namedChoices.end(), sortNamed);
+	if (multiple)
+	{
+		selected.assign(anonChoices.size(), false);
+	}
 }
 
-ItemSelection::ItemSelection(const std::vector<Item*>& choices, std::string title, bool mult, bool sort):
+ItemSelection::ItemSelection(const std::vector<Item*>& choices, std::string title, bool multiple, bool sort):
 	anonymous(true),
-	multiple(mult),
+	multiple(multiple),
 	page(0),
 	title(title),
-	compiledFor(-1)
+	compiled(false),
+	choice(NULL)
 {
 	anonChoices.assign(choices.begin(), choices.end());
 	filterTypes.clear();
 	if (sort) std::sort(anonChoices.begin(), anonChoices.end(), sortAnon);
+	if (multiple)
+	{
+		selected.assign(anonChoices.size(), false);
+	}
 }
 
 std::string ItemSelection::getTitle()
@@ -48,26 +63,43 @@ std::string ItemSelection::getTitle()
 	return title;
 }
 
-void ItemSelection::setPage(int p)
-{
-	page = p;
-}
-
-int ItemSelection::getPage()
-{
-	return page;
-}
-
 int ItemSelection::getNumPages()
 {
-	return compiledFor == -1 ? 0 : pageStart.size();
+	return compiled ? pageStart.size() : 0;
 }
 
-void ItemSelection::compile(int height)
+Item* ItemSelection::getItem()
+{
+	if (multiple) return NULL;
+	return choice;
+}
+
+std::vector<Item*> ItemSelection::getSelection()
+{
+	std::vector<Item*> list;
+	if (!multiple) return list;
+	if (anonymous)
+	{
+		for (unsigned int u = 0; u < anonChoices.size(); u++)
+		{
+			if (selected[u]) list.push_back(anonChoices[u]);
+		}
+	}
+	else
+	{
+		for (unsigned int u = 0; u < namedChoices.size(); u++)
+		{
+			if (selected[u]) list.push_back(namedChoices[u].second);
+		}
+	}
+	return list;
+}
+
+ItemSelection* ItemSelection::compile(int height)
 {
 	// Fix bad heights and check if list is already compiled
+	if (compiled) return this;
 	int pageHeight = std::max(3,height);
-	if (compiledFor == pageHeight) return;
 	
 	compiledStrings.clear();
 	pageStart.clear();
@@ -75,6 +107,7 @@ void ItemSelection::compile(int height)
 	
 	int currentPage = 0;
 	int currentRow = 0;
+	int currentItem = 0;
 	ITEM_TYPE prevType = NUM_ITEM_TYPE;
 	
 	if (anonymous)
@@ -92,16 +125,15 @@ void ItemSelection::compile(int height)
 					currentLetter = 'a';
 					pageStart.push_back(compiledStrings.size());
 				}
-				compiledStrings.push_back(ItemListInfo(currentRow, util::plural((*it)->typeString()), true));
+				compiledStrings.push_back(CompiledData(currentRow, '#', util::plural((*it)->typeString()), true, -1));
 				currentRow += 2;
 			}
 			/* Item */
-			std::stringstream print;
-			print << currentLetter << " - " << (*it)->toString();
-			compiledStrings.push_back(ItemListInfo(currentRow, print.str(), false));
+			compiledStrings.push_back(CompiledData(currentRow, currentLetter, (*it)->toString(), false, currentItem));
 			
 			/* Advance */
 			currentRow++;
+			currentItem++;
 			prevType = (*it)->getType();
 			currentLetter = currentLetter == 'z' ? 'A' : currentLetter + 1;
 		}
@@ -119,35 +151,103 @@ void ItemSelection::compile(int height)
 					currentRow = 0;
 					pageStart.push_back(compiledStrings.size());
 				}
-				compiledStrings.push_back(ItemListInfo(currentRow, util::plural(it->second->typeString()), true));
+				compiledStrings.push_back(CompiledData(currentRow, '#', util::plural(it->second->typeString()), true, -1));
 				currentRow += 2;
 			}
 			/* Item */
-			std::stringstream print;
-			print << util::letters[it->first] << " - " << it->second->toString();
-			compiledStrings.push_back(ItemListInfo(currentRow, print.str(), false));
+			compiledStrings.push_back(CompiledData(currentRow, util::letters[it->first],
+									it->second->toString(), false, currentItem));
 			
 			/* Advance */
 			currentRow++;
+			currentItem++;
 			prevType = it->second->getType();
 		}
 	}
 	
-	compiledFor = pageHeight;
+	compiled = true;
+	return this;
 }
 
-std::vector<ItemListInfo> ItemSelection::getPageList()
+void ItemSelection::resetDraw()
 {
-	std::vector<ItemListInfo> list;
-	if (compiledFor == -1) return list;
-	page = page % static_cast<int>(pageStart.size());
-	int start = pageStart[page];
+	if (compiled && page < static_cast<int>(pageStart.size())) drawCounter = pageStart[page];
+}
+
+bool ItemSelection::hasDrawLine()
+{
 	int end = static_cast<unsigned int>(page + 1) < pageStart.size() ? pageStart[page + 1] : compiledStrings.size();
+	return (compiled && drawCounter < end);
+}
+
+std::string ItemSelection::getNextLine(int* row, bool* category)
+{
+	CompiledData dat = compiledStrings[drawCounter++];
+	*category = dat.category;
+	*row = dat.row;
+	if (dat.category) return dat.text;
+	std::stringstream print;
+	print << dat.letter << (multiple && selected[dat.itemIndex] ? " + " : " - ") << dat.text;
+	return print.str();
+}
+
+bool ItemSelection::keyInput(TCOD_key_t key)
+{
+	if (!compiled) return true;
+	if (!key.pressed) return false;
+	if (key.vk == TCODK_SPACE)
+	{
+		// Advance one page, quit if the end was reached
+		if (++page >= static_cast<int>(pageStart.size())) return true;
+	}
+	else if ((key.c >= 'a' && key.c <= 'z') || (key.c >= 'A' && key.c <= 'Z'))
+	{
+		// Select an item
+		return toggleItem(key.c);
+	}
+	else if (key.c == '>')
+	{
+		// Advance one page
+		if (page + 1 < static_cast<int>(pageStart.size())) page++;
+		return false;
+	}
+	else if (key.c == '<')
+	{
+		// Go back one page
+		if (page > 0) page--;
+		return false;
+	}
+	return false;
+}
+
+bool ItemSelection::toggleItem(char c)
+{
+	if (page >= static_cast<int>(pageStart.size())) return false;
+	unsigned int start = pageStart[page];
+	unsigned int end = static_cast<unsigned int>(page + 1) < pageStart.size() ? pageStart[page + 1] : compiledStrings.size();
 	while (start < end)
 	{
-		list.push_back(compiledStrings[start++]);
+		CompiledData info = compiledStrings[start++];
+		if (info.letter == c)
+		{
+			if (multiple)
+			{
+				selected[info.itemIndex] = !selected[info.itemIndex];
+				return false;
+			}
+			else if (anonymous)
+			{
+				choice = anonChoices[info.itemIndex];
+				return true;
+			}
+			else
+			{
+				choice = namedChoices[info.itemIndex].second;
+				return true;
+			}
+		}
 	}
-	return list;
+	return false;
 }
 
 ItemSelection* ItemSelection::filterType(ITEM_TYPE type)
@@ -156,18 +256,19 @@ ItemSelection* ItemSelection::filterType(ITEM_TYPE type)
 	return this;
 }
 
-int ItemSelection::runFilter()
+ItemSelection* ItemSelection::runFilter()
 {
 	if (anonymous)
 	{
 		anonChoices.erase(remove_if(anonChoices.begin(), anonChoices.end(),
 			std::bind1st(std::mem_fun(&ItemSelection::removeAnonItem), this)), anonChoices.end());
-		return anonChoices.size();
+		if (multiple) selected.assign(anonChoices.size(), false);
 	} else {
 		namedChoices.erase(remove_if(namedChoices.begin(), namedChoices.end(),
 			std::bind1st(std::mem_fun(&ItemSelection::removeNamedItem), this)), namedChoices.end());
-		return namedChoices.size();
+		if (multiple) selected.assign(namedChoices.size(), false);
 	}
+	return this;
 }
 
 bool ItemSelection::removeAnonItem(Item* item)
