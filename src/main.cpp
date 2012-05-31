@@ -36,6 +36,8 @@ int main()
 	Item* item1 = new Item(Point(40,40), "item1", '1', TCODColor::blue);
 	Item* item2 = new Item(Point(40,40), "item2", '2', TCODColor::green);
 	Weapon* mace = new Weapon(Point(40,40), "cursed mace", '(', TCODColor::red, 15, -60, 4, 1, 1, -60, SKILL_MACEFLAIL, 1);
+  Armor* uber = new Armor(Point(39,39), "uber armor", ')', TCODColor::black, 1000, 10, SKILL_PLATE_ARMOR);
+  Armor* crap = new Armor(Point(39,39), "crap armor", ')', TCODColor::black, -1000, 0, SKILL_LEATHER_ARMOR);
 	world.levels[0]->addCreature(gobbo);
 	world.levels[0]->addCreature(twitter);
 	world.levels[0]->addCreature(defaulto);
@@ -45,6 +47,8 @@ int main()
 	world.levels[0]->addItem(item2);
 	world.levels[0]->addItem(sword);
 	world.levels[0]->addItem(mace);
+  world.levels[0]->addItem(uber);
+  world.levels[0]->addItem(crap);
 
 	while (!world.requestQuit)
 	{
