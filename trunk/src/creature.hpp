@@ -4,10 +4,10 @@
 #include <libtcod.hpp>
 #include <string>
 #include "utility.hpp"
+#include "items/weapon.hpp"
 
 class Level;
 class Player;
-class Weapon;
 
 class Creature
 {
@@ -20,8 +20,9 @@ protected:
 	int health, maxHealth;
 	bool controlled;
 	Level* level;
-	Weapon* mainWeapon;
-
+	Weapon* mainWeapon;  
+  int attackSkill;
+  Weapon baseWeapon;
 	void die(Creature* instigator);
 
 public:
@@ -40,7 +41,9 @@ public:
 	void setControlled(bool);
 	void setLevel(Level* l);
 	Weapon* getMainWeapon();
-	void wieldMainWeapon(Weapon* wpn);
+	void wieldMainWeapon(Weapon* wpn, int attackSkill);
+  void setAttackSkill(int attackSkill);
+  void setBaseWeapon(Weapon base);
 
 	/* Hurt returns true if the creature was killed */
 	bool hurt(int damage, Creature* instigator); // ,DamageType dt

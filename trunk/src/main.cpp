@@ -31,11 +31,11 @@ int main()
 	Goblin* gobbo = new Goblin();
 	FailWhale* twitter = new FailWhale();
 	Creature* defaulto = new Creature(Point(10,10), "default", 'd', TCODColor::amber, 20);
-	Weapon* sword = new Weapon(Point(40,40), "sword", '(', TCODColor::red, 10, 30, 1, 10, 20, 30, SKILL_DAGGER, 1);
+	Weapon* sword = new Weapon(Point(40,40), "sword", '(', TCODColor::red, 10, 30, 1, 10, 20, 30, SKILL_SWORD, 1);
 	Weapon* dagger = new Weapon(Point(40,40), "dagger", '(', TCODColor::red, 4, 10, 8, 1, 4, 12, SKILL_DAGGER, 1);
 	Item* item1 = new Item(Point(40,40), "item1", '1', TCODColor::blue);
 	Item* item2 = new Item(Point(40,40), "item2", '2', TCODColor::green);
-	Weapon* mace = new Weapon(Point(40,40), "cursed mace", '(', TCODColor::red, 15, -60, 4, 1, 1, -60, SKILL_DAGGER, 1);
+	Weapon* mace = new Weapon(Point(40,40), "cursed mace", '(', TCODColor::red, 15, -60, 4, 1, 1, -60, SKILL_MACEFLAIL, 1);
 	world.levels[0]->addCreature(gobbo);
 	world.levels[0]->addCreature(twitter);
 	world.levels[0]->addCreature(defaulto);

@@ -6,7 +6,7 @@
 #include "level.hpp"
 #include "world.hpp"
 #include "item.hpp"
-#include "items/weapon.hpp";
+#include "items\weapon.hpp"
 
 Skill::Skill()
 {
@@ -47,9 +47,11 @@ Player::Player(std::string name):
 	skills[SKILL_PIKE] = Skill("pike", 0, ATTR_STR);
 	skills[SKILL_BOW] = Skill("bow", 0, ATTR_DEX);
 	skills[SKILL_CROSSBOW] = Skill("crossbow", 0, ATTR_DEX);
-	skills[SKILL_SLING] = Skill("sling", 0, ATTR_DEX);
-	creature = new Creature(Point(40,22), name, '@', TCODColor::black, 25);
+	skills[SKILL_SLING] = Skill("sling", 0, ATTR_DEX);  
+  creature = new Creature(Point(40,22), name, '@', TCODColor::black, 250);
 	creature->setControlled(true);
+  creature->setAttackSkill(skills[SKILL_UNARMED].value);
+  creature->setBaseWeapon(Weapon(Point(0,0), "hands", '§', TCODColor::pink, 10, 10, 10, 0, 0, 0, SKILL_UNARMED, 2));
 }
 
 Player::~Player()
@@ -252,7 +254,7 @@ int Player::actionWield(Item* itemObj)
 	}
 	else
 	{
-		creature->wieldMainWeapon(weapon);
+		creature->wieldMainWeapon(weapon, computeAttackBonus(weapon));
 		msg << "You are now wiedling a " << weapon->toString() << ".";
 		world.addMessage(msg.str());
 		return 30;
@@ -360,4 +362,9 @@ int Player::action()
 STATE Player::getState()
 {
 	return state;
+}
+
+int Player::computeAttackBonus(Weapon* w)
+{
+  return (skills[w->getSkill()].value + skills[SKILL_MELEE_COMBAT].value) / 2;
 }
