@@ -159,6 +159,14 @@ void World::drawWorld()
 	STATE state = player->getState();
 	if (state == STATE_INVENTORY || state == STATE_PICKUP || state == STATE_WIELD) drawItemSelection(world.itemSelection);
 	drawMessage();
+	drawInfo();
+}
+
+void World::drawInfo()
+{
+	std::pair<int,int> health = player->getCreature()->getHealth();
+	TCODConsole::root->setColorControl(TCOD_COLCTRL_1, TCODColor::green, TCODColor::black);
+	TCODConsole::root->printEx(TCODConsole::root->getWidth()-2, 3, TCOD_BKGND_NONE, TCOD_RIGHT, "%c%d/%d%c", TCOD_COLCTRL_1, health.first, health.second, TCOD_COLCTRL_STOP);
 }
 
 void World::toggleFullscreen()
