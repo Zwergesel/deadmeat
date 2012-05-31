@@ -39,6 +39,7 @@ private:
 	bool removeAnonItem(Item* item);
 	bool removeNamedItem(std::pair<int,Item*> item);
 	bool toggleItem(char c);
+	void selectAllOnPage(bool set);
 	
 public:
 	ItemSelection();
@@ -51,6 +52,7 @@ public:
 	
 	std::string getTitle();
 	int getNumPages();
+	int getNumChoices();
 	
 	void resetDraw();
 	bool hasDrawLine();

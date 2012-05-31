@@ -332,8 +332,16 @@ int Player::action()
 		else if (state == STATE_DEFAULT && key.c == 'w')
 		{
 			world.itemSelection = ItemSelection(inventory, "What do you want to wield?", false);
-			world.itemSelection.filterType(ITEM_WEAPON)->runFilter()->compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);
-			state = STATE_WIELD;
+			world.itemSelection.filterType(ITEM_WEAPON)->runFilter();
+			if (world.itemSelection.getNumChoices() > 0)
+			{
+				world.itemSelection.compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);
+				state = STATE_WIELD;
+			}
+			else
+			{
+				world.addMessage("You aren't carrying any weapons.");
+			}
 			return 0;
 		}
 		// close inventory screen
