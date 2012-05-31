@@ -168,7 +168,10 @@ int Creature::attack(Creature* target)
 	int defense = target->getDefense();
 	TCODRandom rngGauss;
 	rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
-	int hit = rngGauss.getInt(-300,300,attack - defense);
+  int mean = attack - defense;
+	int hit = 0;
+  if(mean >= 0) hit = rngGauss.getInt(-300, 300, mean);
+  if(mean < 0) hit = -rngGauss.getInt(-300, 300, -mean);
 	if (hit >= -70)
 	{
 		if (hit <= 0) damage /= 2;
