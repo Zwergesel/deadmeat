@@ -1,5 +1,6 @@
 #include <libtcod.hpp>
 #include <sstream>
+#include <iostream>
 #include "player.hpp"
 #include "creature.hpp"
 #include "level.hpp"
@@ -208,38 +209,35 @@ int Player::actionPickup()
 	}
 	else if (items.size() == 1)
 	{
-		return actionPickup(0);
+		return actionPickup(items[0]);
 	}
 	else
 	{
 		state = STATE_PICKUP;
+		world.itemSelection = ItemSelection(items, "Pick up what?", true);
+		world.itemSelection.compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);
+		return 0;
 	}
 	return 0;
 }
 
-int Player::actionPickup(int item)
+int Player::actionPickup(Item* item)
 {
 	Level* level = world.levels[world.currentLevel];
-	std::stringstream msg;
-	std::vector<Item*> items = level->itemsAt(creature->getPos());
-	state = STATE_DEFAULT;
-	if ((int)items.size() <= item)
+	addItem(item);
 	{
-		return 0;
-	}
-	else if ((int)items.size() > item && addItem(items[item]))
-	{
-		msg << "Picked up " << util::indefArticle(items[item]->getName()) << " " << items[item]->getName() << ".";
+		std::stringstream msg;
+		msg << "Picked up " << util::indefArticle(item->getName()) << " " << item->getName() << ".";
 		world.addMessage(msg.str());
-		level->removeItem(items[item], false);
+		level->removeItem(item, false);
 		return 10;
 	}
 	return 0;
 }
 
-int Player::actionWield(int item)
+int Player::actionWield(Item* itemObj)
 {
-	Item* itemObj = getInventoryItem(item);
+	//Item* itemObj = getInventoryItem(item);
 	std::stringstream msg;
 	if (itemObj == NULL)
 	{
@@ -302,12 +300,23 @@ int Player::action()
 			return actionPickup();
 		}
 		// pick from multiple items
-		else if (state == STATE_PICKUP && isalpha(key.c))
+		else if (state == STATE_PICKUP)
 		{
-			return actionPickup(util::letterToInt(key.c));
+			if (world.itemSelection.keyInput(key))
+			{
+				int time = 0;
+				std::vector<Item*> items = world.itemSelection.getSelection();
+				for (std::vector<Item*>::iterator it = items.begin(); it != items.end(); it++)
+				{
+					time = std::max(time, actionPickup(*it));
+				}
+				state = STATE_DEFAULT;
+				return time;
+			}
+			return 0;
 		}
 		// cancel pick item list
-		else if ((state == STATE_PICKUP || state == STATE_WIELD) && key.vk == TCODK_ESCAPE)
+		else if (state == STATE_WIELD && key.vk == TCODK_ESCAPE)
 		{
 			state = STATE_DEFAULT;
 			return 0;
@@ -322,6 +331,8 @@ int Player::action()
 		// open wield weapon screen
 		else if (state == STATE_DEFAULT && key.c == 'w')
 		{
+			world.itemSelection = ItemSelection(inventory, "What do you want to wield?", false);
+			world.itemSelection.filterType(ITEM_WEAPON)->runFilter()->compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);
 			state = STATE_WIELD;
 			return 0;
 		}
@@ -332,14 +343,18 @@ int Player::action()
 			return 0;
 		}
 		// next page of item lists
-		else if ((state == STATE_INVENTORY || state == STATE_PICKUP || state == STATE_WIELD) && key.vk == TCODK_SPACE)
+		else if (state == STATE_INVENTORY && key.vk == TCODK_SPACE)
 		{
 			world.substateCounter++;
 			return 0;
 		}
-		else if (state == STATE_WIELD && isalpha(key.c))
+		else if (state == STATE_WIELD)
 		{
-			return actionWield(util::letterToInt(key.c));
+			if (world.itemSelection.keyInput(key))
+			{
+				return actionWield(world.itemSelection.getItem());
+			}
+			return 0;
 		}
 	}
 	while (!TCODConsole::isWindowClosed() && !world.requestQuit);

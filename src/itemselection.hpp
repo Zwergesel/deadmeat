@@ -4,15 +4,17 @@
 #include <vector>
 #include <set>
 #include <string>
+#include <libtcod.hpp>
 #include "item.hpp"
 
-struct ItemListInfo
+struct CompiledData
 {
 	int row;
+	char letter;
 	std::string text;
-	bool centered;
-	ItemListInfo():row(0),text(""),centered(false){};
-	ItemListInfo(int r, std::string t, bool c):row(r),text(t),centered(c){};
+	bool category;
+	int itemIndex;
+	CompiledData(int r, char l, std::string t, bool c, int i):row(r),letter(l),text(t),category(c),itemIndex(i){};
 };
 
 class ItemSelection
@@ -27,25 +29,36 @@ private:
 	std::string title;
 	std::set<ITEM_TYPE> filterTypes;
 	
-	int compiledFor;
-	std::vector<ItemListInfo> compiledStrings;
+	bool compiled;
+	std::vector<CompiledData> compiledStrings;
 	std::vector<int> pageStart;
+	std::vector<bool> selected;
+	Item* choice;
+	int drawCounter;
 	
 	bool removeAnonItem(Item* item);
 	bool removeNamedItem(std::pair<int,Item*> item);
+	bool toggleItem(char c);
 	
 public:
+	ItemSelection();
 	ItemSelection(const std::vector<Item*>& choices, std::string title, bool multiple = false, bool sort = true);
 	ItemSelection(const std::vector<std::pair<int,Item*> >& choices, std::string title, bool multiple = false, bool sort = true);
 	
 	ItemSelection* filterType(ITEM_TYPE type);
-	int runFilter();
+	ItemSelection* runFilter();
+	ItemSelection* compile(int height);
+	
 	std::string getTitle();
-	void setPage(int page);
-	int getPage();
 	int getNumPages();
-	void compile(int height);
-	std::vector<ItemListInfo> getPageList();
+	
+	void resetDraw();
+	bool hasDrawLine();
+	std::string getNextLine(int* row, bool* category);
+	
+	bool keyInput(TCOD_key_t key); /* returns true if selection should close and result is ready */
+	Item* getItem();
+	std::vector<Item*> getSelection();
 	
 };
 

@@ -74,8 +74,8 @@ private:
 	int actionMove(int direction);
 	int actionLook(Point p);
 	int actionPickup();
-	int actionPickup(int item);
-	int actionWield(int item);
+	int actionPickup(Item*);
+	int actionWield(Item*);
 	static int dx[9];
 	static int dy[9];
 	STATE state;

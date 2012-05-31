@@ -1,4 +1,5 @@
 #include <sstream>
+#include <iostream>
 #include "creature.hpp"
 #include "player.hpp"
 #include "level.hpp"
@@ -126,12 +127,15 @@ int Creature::attack(Creature* target)
 	int attack = 10;
 	// base attack damage
 	int damage = 10;
+	// base attack speed
+	int speed = 10;
 	
 	if (mainWeapon != NULL) {
 		// (weapon to hit + weapon enchantment) + ((fighting skill + weapon skill)/2)
 		attack = mainWeapon->getHitBonus() + mainWeapon->getEnchantment() + 0 + 0;
 		// damage = (weapon damage + weapon enchantment)
 		damage = mainWeapon->rollDamage();
+		speed = mainWeapon->getSpeed();
 	}
 	int defense = target->getDefense();
 	TCODRandom rngGauss;
@@ -147,7 +151,6 @@ int Creature::attack(Creature* target)
 		msg << damage << " damage.";
 		world.addMessage(msg.str());
 		target->hurt(damage, this);
-
 	}
 	else
 	{
@@ -156,6 +159,7 @@ int Creature::attack(Creature* target)
 		target->isControlled() ? (msg << "you.") : (msg << "the " << target->getName() << ".");
 		world.addMessage(msg.str());
 	}
-	// base attack time - weapon speed + armor hindrance
-	return 10;
+	// weapon speed + armor hindrance
+	
+	return speed;
 }
