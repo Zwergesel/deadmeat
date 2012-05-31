@@ -7,7 +7,7 @@ Weapon::Weapon(Point position, std::string name, int symbol, TCODColor color, in
 	,diceMax(dmax), enchantment(ench), skill(skl), hands(hands)
 {
 	type = ITEM_WEAPON;
-  strType = "Weapon";
+	strType = "Weapon";
 }
 
 int Weapon::rollDamage()
@@ -54,8 +54,8 @@ int Weapon::getHandsUsed()
 
 std::string Weapon::toString()
 {
-  std::stringstream ss;
-  int e = getEnchantment();
-  ss << (e<0?'-':'+') << e << " " << getName();
-  return ss.str();
+	std::stringstream ss;
+	int e = getEnchantment();
+	ss << (e<0?'-':'+') << e << " " << getName();
+	return ss.str();
 }

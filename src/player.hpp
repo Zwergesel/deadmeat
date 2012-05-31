@@ -70,12 +70,12 @@ private:
 	Skill skills[NUM_SKILL];
 	std::vector<std::pair<int, Item*> > inventory;
 	int actionMove(int direction);
-  int actionLook(Point p);
-  int actionPickup();
-  int actionPickup(int item);
+	int actionLook(Point p);
+	int actionPickup();
+	int actionPickup(int item);
 	static int dx[9];
 	static int dy[9];
-  STATE state;
+	STATE state;
 
 public:
 	Player(std::string name);
@@ -87,7 +87,7 @@ public:
 	bool addItem(Item* i);
 	void removeItem(Item* i, bool del);
 	std::vector<std::pair<int, Item*> > getInventory();
-  STATE getState();
+	STATE getState();
 };
 
 #endif

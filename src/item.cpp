@@ -34,10 +34,10 @@ std::string Item::getName()
 
 std::string Item::toString()
 {
-  return getName();
+	return getName();
 }
 
 std::string Item::typeString()
 {
-  return strType;
+	return strType;
 }
