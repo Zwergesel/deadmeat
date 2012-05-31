@@ -30,7 +30,7 @@ public:
 	Level** levels;
 	int currentLevel;
 	Point levelOffset;
-	Viewport viewLevel, viewMsg;
+	Viewport viewLevel, viewMsg, viewItemList;
 	bool requestQuit;
 	int substateCounter;
 	ItemSelection itemSelection;

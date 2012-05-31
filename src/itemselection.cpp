@@ -105,14 +105,14 @@ ItemSelection* ItemSelection::compile(int height)
 {
 	// Fix bad heights and check if list is already compiled
 	if (compiled) return this;
-	int pageHeight = std::max(3,height);
+	int pageHeight = std::max(5,height);
 
 	compiledStrings.clear();
 	pageStart.clear();
 	pageStart.push_back(0);
 
 	int currentPage = 0;
-	int currentRow = 0;
+	int currentRow = 2;
 	int currentItem = 0;
 	ITEM_TYPE prevType = NUM_ITEM_TYPE;
 
@@ -121,17 +121,17 @@ ItemSelection* ItemSelection::compile(int height)
 		char currentLetter = 'a';
 		for (std::vector<Item*>::iterator it = anonChoices.begin(); it != anonChoices.end(); it++)
 		{
-			if (currentRow == 0 || (*it)->getType() != prevType || currentRow >= pageHeight)
+			if (currentRow == 2 || (*it)->getType() != prevType || currentRow >= pageHeight)
 			{
 				/* Category */
-				if (currentRow > 0) currentRow++;
 				if (pageHeight - currentRow <= 2)
 				{
 					currentPage++;
-					currentRow = 0;
+					currentRow = 3;
 					currentLetter = 'a';
 					pageStart.push_back(compiledStrings.size());
 				}
+				currentRow++;
 				compiledStrings.push_back(CompiledData(currentRow, '#', util::plural((*it)->typeString()), true, -1));
 				currentRow += 2;
 			}
@@ -149,16 +149,16 @@ ItemSelection* ItemSelection::compile(int height)
 	{
 		for (std::vector<std::pair<int,Item*> >::iterator it = namedChoices.begin(); it != namedChoices.end(); it++)
 		{
-			if (currentRow == 0 || it->second->getType() != prevType || currentRow >= pageHeight)
+			if (currentRow == 2 || it->second->getType() != prevType || currentRow >= pageHeight)
 			{
 				/* Category */
-				if (currentRow > 0) currentRow++;
 				if (pageHeight - currentRow <= 2)
 				{
 					currentPage++;
-					currentRow = 0;
+					currentRow = 2;
 					pageStart.push_back(compiledStrings.size());
 				}
+				currentRow++;
 				compiledStrings.push_back(CompiledData(currentRow, '#', util::plural(it->second->typeString()), true, -1));
 				currentRow += 2;
 			}
