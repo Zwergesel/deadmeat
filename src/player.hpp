@@ -9,6 +9,7 @@
 class Creature;
 class Level;
 class Item;
+class Weapon;
 
 enum ATTRIBUTE
 {
@@ -71,14 +72,15 @@ private:
 	Creature* creature;
 	Skill skills[NUM_SKILL];
 	std::vector<std::pair<int, Item*> > inventory;
-	int actionMove(int direction);
+  static int dx[9];
+	static int dy[9];
+	STATE state;
+	int computeAttackBonus(Weapon* w);
+  int actionMove(int direction);
 	int actionLook(Point p);
 	int actionPickup();
 	int actionPickup(Item*);
-	int actionWield(Item*);
-	static int dx[9];
-	static int dy[9];
-	STATE state;
+	int actionWield(Item*);	
 
 public:
 	Player(std::string name);
