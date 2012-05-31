@@ -105,22 +105,23 @@ ItemSelection* ItemSelection::compile(int height)
 	// Fix bad heights and check if list is already compiled
 	if (compiled) return this;
 	int pageHeight = std::max(3,height);
-	
+
 	compiledStrings.clear();
 	pageStart.clear();
 	pageStart.push_back(0);
-	
+
 	int currentPage = 0;
 	int currentRow = 0;
 	int currentItem = 0;
 	ITEM_TYPE prevType = NUM_ITEM_TYPE;
-	
+
 	if (anonymous)
 	{
 		char currentLetter = 'a';
 		for (std::vector<Item*>::iterator it = anonChoices.begin(); it != anonChoices.end(); it++)
 		{
-			if (currentRow == 0 || (*it)->getType() != prevType || currentRow >= pageHeight) {
+			if (currentRow == 0 || (*it)->getType() != prevType || currentRow >= pageHeight)
+			{
 				/* Category */
 				if (currentRow > 0) currentRow++;
 				if (pageHeight - currentRow <= 2)
@@ -135,7 +136,7 @@ ItemSelection* ItemSelection::compile(int height)
 			}
 			/* Item */
 			compiledStrings.push_back(CompiledData(currentRow, currentLetter, (*it)->toString(), false, currentItem));
-			
+
 			/* Advance */
 			currentRow++;
 			currentItem++;
@@ -147,7 +148,8 @@ ItemSelection* ItemSelection::compile(int height)
 	{
 		for (std::vector<std::pair<int,Item*> >::iterator it = namedChoices.begin(); it != namedChoices.end(); it++)
 		{
-			if (currentRow == 0 || it->second->getType() != prevType || currentRow >= pageHeight) {
+			if (currentRow == 0 || it->second->getType() != prevType || currentRow >= pageHeight)
+			{
 				/* Category */
 				if (currentRow > 0) currentRow++;
 				if (pageHeight - currentRow <= 2)
@@ -161,15 +163,15 @@ ItemSelection* ItemSelection::compile(int height)
 			}
 			/* Item */
 			compiledStrings.push_back(CompiledData(currentRow, util::letters[it->first],
-									it->second->toString(), false, currentItem));
-			
+			                                       it->second->toString(), false, currentItem));
+
 			/* Advance */
 			currentRow++;
 			currentItem++;
 			prevType = it->second->getType();
 		}
 	}
-	
+
 	compiled = true;
 	return this;
 }
@@ -207,7 +209,9 @@ bool ItemSelection::keyInput(TCOD_key_t key)
 		if (multiple)
 		{
 			selected.assign(anonymous ? anonChoices.size() : namedChoices.size(), false);
-		} else {
+		}
+		else
+		{
 			choice = NULL;
 		}
 		return true;
@@ -302,11 +306,13 @@ ItemSelection* ItemSelection::runFilter()
 	if (anonymous)
 	{
 		anonChoices.erase(remove_if(anonChoices.begin(), anonChoices.end(),
-			std::bind1st(std::mem_fun(&ItemSelection::removeAnonItem), this)), anonChoices.end());
+		                            std::bind1st(std::mem_fun(&ItemSelection::removeAnonItem), this)), anonChoices.end());
 		if (multiple) selected.assign(anonChoices.size(), false);
-	} else {
+	}
+	else
+	{
 		namedChoices.erase(remove_if(namedChoices.begin(), namedChoices.end(),
-			std::bind1st(std::mem_fun(&ItemSelection::removeNamedItem), this)), namedChoices.end());
+		                             std::bind1st(std::mem_fun(&ItemSelection::removeNamedItem), this)), namedChoices.end());
 		if (multiple) selected.assign(namedChoices.size(), false);
 	}
 	return this;

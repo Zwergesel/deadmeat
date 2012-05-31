@@ -156,9 +156,8 @@ void World::drawWorld()
 {
 	TCODConsole::root->clear();
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);
-	if (player->getState() == STATE_INVENTORY) drawInventory(substateCounter);
-	if (player->getState() == STATE_PICKUP) drawItemSelection(world.itemSelection);
-	if (player->getState() == STATE_WIELD) drawItemSelection(world.itemSelection);
+	STATE state = player->getState();
+	if (state == STATE_INVENTORY || state == STATE_PICKUP || state == STATE_WIELD) drawItemSelection(world.itemSelection);
 	drawMessage();
 }
 
@@ -169,26 +168,14 @@ void World::toggleFullscreen()
 	TCODConsole::root->flush();
 }
 
-void World::drawItemList(int page, std::string title,std::vector<Item*> items)
-{
-	std::vector<std::pair<int, Item*> > mappedItems;
-	int r = 0;
-	for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
-	{
-		mappedItems.push_back(std::pair<int, Item*>(r, *it));
-		r++;
-	}
-	drawItemList(page, title, mappedItems);
-}
-
 void World::drawItemSelection(ItemSelection& sel)
 {
 	int width = viewLevel.width - viewLevel.width / 4;
 	int height = viewLevel.height - viewLevel.height / 4;
-	
+
 	TCODConsole window(width, height);
 	window.printFrame(0, 0, window.getWidth(), window.getHeight(), true, TCOD_BKGND_DEFAULT, sel.getTitle().c_str());
-	
+
 	sel.resetDraw();
 	bool category;
 	int row;
@@ -205,80 +192,6 @@ void World::drawItemSelection(ItemSelection& sel)
 			window.printEx(4, 3 + row, TCOD_BKGND_DEFAULT, TCOD_LEFT, text.c_str());
 		}
 	}
-	
+
 	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, viewLevel.x + viewLevel.width / 8, viewLevel.y + viewLevel.height / 8, 1.f, 0.9f);
-}
-
-void World::drawItemList(int page, std::string title, std::vector<std::pair<int, Item*> > items, std::vector<ITEM_TYPE> filter)
-{
-	std::vector<std::pair<int, Item*> > filteredItems;
-	for (std::vector<std::pair<int, Item*> >::iterator it=items.begin(); it<items.end(); it++)
-	{
-		for (std::vector<ITEM_TYPE>::iterator filterIt=filter.begin(); filterIt<filter.end(); filterIt++)
-		{
-			if ((*it).second->getType() == (*filterIt))
-			{
-				filteredItems.push_back(*it);
-				break;
-			}
-		}
-	}
-	drawItemList(page, title, filteredItems);
-}
-
-bool operator<(std::pair<int, Item*> a, std::pair<int, Item*> b)
-{
-	if (a.second->getType() < b.second->getType()) return true;
-	if (a.second->getType() == b.second->getType() && a.first < b.first) return true;
-	return false;
-}
-
-void World::drawItemList(int page, std::string title, std::vector<std::pair<int, Item*> > items)
-{
-	std::sort(items.begin(), items.end());
-	TCODConsole* window[256];
-	for (int i=0; i<256; i++) window[i] = NULL;
-	window[0] = new TCODConsole(viewLevel.width - viewLevel.width / 4, viewLevel.height - viewLevel.height / 4);
-	window[0]->printFrame(0, 0, window[0]->getWidth(), window[0]->getHeight(), true, TCOD_BKGND_DEFAULT, title.c_str());
-	bool first[NUM_ITEM_TYPE];
-	for (int i=0; i<NUM_ITEM_TYPE; i++) first[i] = true;
-	int nline = 3;
-	int p = 0;
-
-	for (std::vector<std::pair<int, Item*> >::iterator it=items.begin(); it<items.end(); it++)
-	{
-		if (nline >= window[p]->getHeight() - 3)
-		{
-			nline = 3;
-			p++;
-			window[p] = new TCODConsole(viewLevel.width - viewLevel.width / 4, viewLevel.height - viewLevel.height / 4);
-			window[p]->printFrame(0, 0, window[p]->getWidth(), window[p]->getHeight(), true, TCOD_BKGND_DEFAULT, title.c_str());
-		}
-		if (first[(*it).second->getType()])
-		{
-			window[p]->printEx(window[p]->getWidth() / 2, nline, TCOD_BKGND_DEFAULT, TCOD_CENTER, util::plural((*it).second->typeString()).c_str());
-			nline += 2;
-			first[(*it).second->getType()] = false;
-		}
-		std::stringstream ss;
-		ss << util::letters[(*it).first] << " - " << (*it).second->toString();
-		window[p]->printEx(4, nline, TCOD_BKGND_DEFAULT, TCOD_LEFT, ss.str().c_str());
-		nline++;
-	}
-
-	page = page % (p+1);
-	TCODConsole::blit(window[page], 0, 0, 0, 0, TCODConsole::root, viewLevel.x + viewLevel.width / 8, viewLevel.y + viewLevel.height / 8, 1.f, 0.9f);
-	for (int i=0; i<256; i++)
-	{
-		if (window[i] != NULL)
-		{
-			delete window[i];
-			window[i] = NULL;
-		}
-	}
-}
-
-void World::drawInventory(int page)
-{
-	drawItemList(page, "inventory", player->getInventory());
 }

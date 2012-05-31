@@ -138,7 +138,8 @@ Item* Player::getInventoryItem(int item)
 {
 	for (InventoryIterator it = inventory.begin(); it != inventory.end(); it++)
 	{
-		if (it->first == item) {
+		if (it->first == item)
+		{
 			return it->second;
 		}
 	}
@@ -324,8 +325,9 @@ int Player::action()
 		// open inventory screen
 		else if (state == STATE_DEFAULT && key.c == 'i')
 		{
-			world.substateCounter = 0;
 			state = STATE_INVENTORY;
+			world.itemSelection = ItemSelection(inventory, "Inventory", false);
+			world.itemSelection.compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);
 			return 0;
 		}
 		// open wield weapon screen
@@ -344,18 +346,18 @@ int Player::action()
 			}
 			return 0;
 		}
-		// close inventory screen
-		else if (state == STATE_INVENTORY && (key.c == 'i' || key.vk == TCODK_ESCAPE))
+		// handle inventory
+		else if (state == STATE_INVENTORY)
 		{
-			state = STATE_DEFAULT;
+			if (world.itemSelection.keyInput(key))
+			{
+				// Do something with the item
+				// Item* item = world.itemSelection.getItem();
+				state = STATE_DEFAULT;
+			}
 			return 0;
 		}
-		// next page of item lists
-		else if (state == STATE_INVENTORY && key.vk == TCODK_SPACE)
-		{
-			world.substateCounter++;
-			return 0;
-		}
+		// handle wield window
 		else if (state == STATE_WIELD)
 		{
 			if (world.itemSelection.keyInput(key))
