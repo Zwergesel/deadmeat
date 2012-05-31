@@ -5,6 +5,7 @@
 #include "level.hpp"
 #include "world.hpp"
 #include "item.hpp"
+#include "items/weapon.hpp";
 
 Skill::Skill()
 {
@@ -238,26 +239,35 @@ int Player::actionPickup(int item)
 
 int Player::actionWield(int item)
 {
-	Item* weapon = getInventoryItem(item);
+	Item* itemObj = getInventoryItem(item);
 	std::stringstream msg;
-	if (weapon == NULL)
+	if (itemObj == NULL)
 	{
 		world.addMessage("You do not have this item.");
-		return 0;
 	}
-	else if (weapon->getType() != ITEM_WEAPON)
+	else if (itemObj->getType() != ITEM_WEAPON)
 	{
-		msg << "You cannot wield a " << weapon->getName() << ".";
+		msg << "You cannot wield a " << itemObj->getName() << ".";
 		world.addMessage(msg.str());
-		return 0;
 	}
 	else
 	{
-		msg << "You are now wiedling a " << weapon->getName() << " (not really though).";
-		world.addMessage(msg.str());
-		state = STATE_DEFAULT;
-		return 30;
+		Weapon* weapon = static_cast<Weapon*>(itemObj);
+		if (creature->getMainWeapon() == weapon)
+		{
+			msg << "You are already wielding a " << weapon->getName() << ".";
+			world.addMessage(msg.str());
+		}
+		else
+		{
+			creature->wieldMainWeapon(weapon);
+			msg << "You are now wiedling a " << weapon->getName() << ".";
+			world.addMessage(msg.str());
+			state = STATE_DEFAULT;
+			return 30;
+		}
 	}
+	return 0;
 }
 
 int Player::action()

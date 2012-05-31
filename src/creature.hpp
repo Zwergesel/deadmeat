@@ -7,6 +7,7 @@
 
 class Level;
 class Player;
+class Weapon;
 
 class Creature
 {
@@ -19,6 +20,7 @@ protected:
 	int health, maxHealth;
 	bool controlled;
 	Level* level;
+	Weapon* mainWeapon;
 
 	void die(Creature* instigator);
 
@@ -37,6 +39,8 @@ public:
 	bool isControlled();
 	void setControlled(bool);
 	void setLevel(Level* l);
+	Weapon* getMainWeapon();
+	void wieldMainWeapon(Weapon* wpn);
 
 	/* Hurt returns true if the creature was killed */
 	bool hurt(int damage, Creature* instigator); // ,DamageType dt

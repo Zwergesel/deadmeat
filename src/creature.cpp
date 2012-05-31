@@ -3,6 +3,7 @@
 #include "player.hpp"
 #include "level.hpp"
 #include "world.hpp"
+#include "items/weapon.hpp"
 
 Creature::Creature(Point p, std::string n, int s, TCODColor c, int h):
 	name(n),
@@ -11,7 +12,8 @@ Creature::Creature(Point p, std::string n, int s, TCODColor c, int h):
 	color(c),
 	health(h),
 	maxHealth(h),
-	controlled(false)
+	controlled(false),
+	mainWeapon(NULL)
 {
 }
 
@@ -38,6 +40,16 @@ int Creature::getSymbol()
 TCODColor Creature::getColor()
 {
 	return color;
+}
+
+Weapon* Creature::getMainWeapon()
+{
+	return mainWeapon;
+}
+
+void Creature::wieldMainWeapon(Weapon* wpn)
+{
+	mainWeapon = wpn;
 }
 
 void Creature::move(Point dpos)
