@@ -25,6 +25,12 @@ int main()
 	//LevelGen level_generator;
 	world.viewLevel = Viewport(1, 1, TCODConsole::root->getWidth() - 10, TCODConsole::root->getHeight() - 5);
 	world.viewMsg = Viewport(2, TCODConsole::root->getHeight() - 3, TCODConsole::root->getWidth() - 4, 2);
+	world.viewItemList = Viewport(
+		world.viewLevel.x + world.viewLevel.width/8,
+		world.viewLevel.y + world.viewLevel.height/8,
+		world.viewLevel.width - world.viewLevel.width/4,
+		world.viewLevel.height - world.viewLevel.height/4
+	);
 	world.levels[0] = new Level(80,50);//level_generator.generateCaveLevel(80, 50, 40.f);
 	world.currentLevel = 0;
 	world.player->getCreature()->moveTo(Point(35, 22));

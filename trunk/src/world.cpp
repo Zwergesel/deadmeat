@@ -178,10 +178,7 @@ void World::toggleFullscreen()
 
 void World::drawItemSelection(ItemSelection& sel)
 {
-	int width = viewLevel.width - viewLevel.width / 4;
-	int height = viewLevel.height - viewLevel.height / 4;
-
-	TCODConsole window(width, height);
+	TCODConsole window(viewItemList.width, viewItemList.height);
 	window.printFrame(0, 0, window.getWidth(), window.getHeight(), true, TCOD_BKGND_DEFAULT, sel.getTitle().c_str());
 
 	sel.resetDraw();
@@ -193,13 +190,13 @@ void World::drawItemSelection(ItemSelection& sel)
 		text = sel.getNextLine(&row, &category);
 		if (category)
 		{
-			window.printEx(window.getWidth() / 2, 3 + row, TCOD_BKGND_DEFAULT, TCOD_CENTER, text.c_str());
+			window.printEx(window.getWidth() / 2, row, TCOD_BKGND_DEFAULT, TCOD_CENTER, text.c_str());
 		}
 		else
 		{
-			window.printEx(4, 3 + row, TCOD_BKGND_DEFAULT, TCOD_LEFT, text.c_str());
+			window.printEx(4, row, TCOD_BKGND_DEFAULT, TCOD_LEFT, text.c_str());
 		}
 	}
 
-	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, viewLevel.x + viewLevel.width / 8, viewLevel.y + viewLevel.height / 8, 1.f, 0.9f);
+	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, viewItemList.x, viewItemList.y, 1.f, 0.9f);
 }
