@@ -38,7 +38,7 @@ ItemSelection::ItemSelection(const std::vector<std::pair<int,Item*> >& choices, 
 	if (sort) std::sort(namedChoices.begin(), namedChoices.end(), sortNamed);
 	if (multiple)
 	{
-		selected.assign(anonChoices.size(), false);
+		selected.assign(namedChoices.size(), false);
 	}
 }
 
@@ -195,7 +195,7 @@ std::string ItemSelection::getNextLine(int* row, bool* category)
 	*row = dat.row;
 	if (dat.category) return dat.text;
 	std::stringstream print;
-	print << dat.letter << (multiple && selected[dat.itemIndex] ? " + " : " - ") << dat.text;
+	print << dat.letter << ((multiple && selected[dat.itemIndex]) ? " + " : " - ") << dat.text;
 	return print.str();
 }
 

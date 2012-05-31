@@ -214,7 +214,7 @@ int Player::actionPickup()
 int Player::actionPickup(Item* item)
 {
 	Level* level = world.levels[world.currentLevel];
-	addItem(item);
+	if(addItem(item))
 	{
 		std::stringstream msg;
 		msg << "Picked up " << util::indefArticle(item->getName()) << " " << item->getName() << ".";
@@ -223,6 +223,30 @@ int Player::actionPickup(Item* item)
 		return 10;
 	}
 	return 0;
+}
+
+int Player::actionDrop()
+{  
+	world.itemSelection = ItemSelection(inventory, "Drop what?", true);
+	world.itemSelection.compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);	
+  if (world.itemSelection.getNumChoices() <= 0)
+	{
+		world.addMessage("Nothing to drop.");
+		return 0;
+	}
+  state = STATE_DROP;
+	return 0;
+}
+
+int Player::actionDrop(Item* item)
+{
+  Level* level = world.levels[world.currentLevel];
+  removeItem(item, false);
+  std::stringstream msg;
+	msg << "Dropped " << util::indefArticle(item->getName()) << " " << item->getName() << ".";
+	world.addMessage(msg.str());
+  level->addItem(item);
+	return 10;
 }
 
 int Player::actionWield(Item* itemObj)
@@ -318,6 +342,26 @@ int Player::action()
 			}
 			return 0;
 		}
+    // drop items
+    else if (state == STATE_DEFAULT && key.c == 'd')
+    {
+      return actionDrop();
+    }
+		else if (state == STATE_DROP)
+		{
+			if (world.itemSelection.keyInput(key))
+			{
+				int time = 0;
+				std::vector<Item*> items = world.itemSelection.getSelection();
+				for (std::vector<Item*>::iterator it = items.begin(); it != items.end(); it++)
+				{
+					time = std::max(time, actionDrop(*it));
+				}
+				state = STATE_DEFAULT;
+				return time;
+			}
+			return 0;
+		}
 		// open inventory screen
 		else if (state == STATE_DEFAULT && key.c == 'i')
 		{
@@ -342,7 +386,7 @@ int Player::action()
 			}
 			return 0;
 		}
-    // open wield weapon screen
+    // open wear armor screen
 		else if (state == STATE_DEFAULT && key.c == 'W')
 		{
 			world.itemSelection = ItemSelection(inventory, "What do you want to wear?", false);
