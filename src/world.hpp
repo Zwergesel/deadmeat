@@ -5,6 +5,7 @@
 #include <vector>
 #include "utility.hpp"
 #include "item.hpp"
+#include "itemselection.hpp"
 
 class Player;
 class Creature;
@@ -50,6 +51,7 @@ public:
 	void drawItemList(int page, std::string title, std::vector<Item*> items);
 	void drawItemList(int page, std::string title, std::vector<std::pair<int, Item*> > items);
 	void drawItemList(int page, std::string title, std::vector<std::pair<int, Item*> > items, std::vector<ITEM_TYPE> filter);
+	void drawItemSelection(ItemSelection& sel);
 	void drawInventory(int page);
 };
 

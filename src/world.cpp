@@ -1,11 +1,14 @@
 #include <cassert>
+#include <iostream>
 #include <sstream>
+#include <algorithm>
 #include "world.hpp"
 #include "player.hpp"
 #include "tileset.hpp"
 #include "level.hpp"
 #include "creature.hpp"
 #include "items/weapon.hpp"
+#include "itemselection.hpp"
 
 World::World()
 {
@@ -161,6 +164,26 @@ void World::drawWorld()
 		filter.push_back(ITEM_WEAPON);
 		drawItemList(substateCounter, "What do you want to wield?", player->getInventory(), filter);
 	}
+	
+	/* Demo, delete */
+	std::vector<std::pair<int,Item*> > test;
+	Weapon* dagger = new Weapon(Point(33,33), "dagger", '(', TCODColor::red, 10, 30, 1, 10, 20, 30, SKILL_DAGGER, 1);
+	Item* item1 = new Item(Point(40,40), "item1", '1', TCODColor::blue);
+	Item* item2 = new Item(Point(40,40), "item2", '2', TCODColor::green);
+	test.push_back(std::make_pair(0,dagger));
+	test.push_back(std::make_pair(2,dagger));
+	test.push_back(std::make_pair(1,item1));
+	test.push_back(std::make_pair(3,item1));
+	test.push_back(std::make_pair(5,item1));
+	test.push_back(std::make_pair(6,item1));
+	test.push_back(std::make_pair(16,dagger));
+	test.push_back(std::make_pair(37,item2));
+	ItemSelection tsel(test, "Choose your weapon...", false);
+	tsel.filterType(ITEM_WEAPON)->filterType(ITEM_DEFAULT)->runFilter();
+	tsel.setPage(0);
+	drawItemSelection(tsel);
+	/* End demo */
+	
 	drawMessage();
 }
 
@@ -181,6 +204,32 @@ void World::drawItemList(int page, std::string title,std::vector<Item*> items)
 		r++;
 	}
 	drawItemList(page, title, mappedItems);
+}
+
+void World::drawItemSelection(ItemSelection& sel)
+{
+	int width = viewLevel.width - viewLevel.width / 4;
+	int height = viewLevel.height - viewLevel.height / 4;
+	
+	TCODConsole window(width, height);
+	window.printFrame(0, 0, window.getWidth(), window.getHeight(), true, TCOD_BKGND_DEFAULT, sel.getTitle().c_str());
+	sel.compile(height - 6);
+	
+	std::vector<ItemListInfo> data = sel.getPageList();
+	
+	for (std::vector<ItemListInfo>::iterator it = data.begin(); it != data.end(); it++)
+	{
+		if (it->centered)
+		{
+			window.printEx(window.getWidth() / 2, 3 + it->row, TCOD_BKGND_DEFAULT, TCOD_CENTER, it->text.c_str());
+		}
+		else
+		{
+			window.printEx(4, 3 + it->row, TCOD_BKGND_DEFAULT, TCOD_LEFT, it->text.c_str());
+		}
+	}
+	
+	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, viewLevel.x + viewLevel.width / 8, viewLevel.y + viewLevel.height / 8, 1.f, 0.9f);
 }
 
 void World::drawItemList(int page, std::string title, std::vector<std::pair<int, Item*> > items, std::vector<ITEM_TYPE> filter)
