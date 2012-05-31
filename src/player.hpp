@@ -19,7 +19,8 @@ enum STATE
   STATE_INVENTORY,
   STATE_PICKUP,
   STATE_WIELD,
-  STATE_WEAR
+  STATE_WEAR,
+  STATE_DROP
 };
 
 typedef std::vector<std::pair<int, Item*> >::iterator InventoryIterator;
@@ -42,6 +43,8 @@ private:
 	int actionPickup(Item*);
 	int actionWield(Item*);
   int actionWear(Item*);
+  int actionDrop();
+  int actionDrop(Item*);
 
 public:
 	Player(std::string name);
