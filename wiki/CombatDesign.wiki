@@ -1,20 +1,5 @@
 #summary Combat Design
 
-*max_health* = { Vit stat, health skill }
-
-*attack* = { (Dex stat of attacker), weapon to hit, weapon enchantment, fighting skill, weapon skill }
-
-*defense* = { (Dex stat of defender), special tile defender is on, fighting skill, armor skill }
-
-*damage* = { Str stat of attacker, weapon damage, weapon enchantment, armor, fighting skill, weapon skill, endurance skill, armor skill }
-(same or different skills as in attack?)
-
-*possible hit outcomes* = { miss, half damage, full damage, critical hit }
-
-*speed* = { armor, armor skill, speed skill?, skill of action }
-
-
-= example 1 =
 
 stats are used for the training rate of a skill
 higher Vit makes the health skill easier/faster to train etc.
@@ -30,29 +15,6 @@ higher Vit makes the health skill easier/faster to train etc.
 *speed* = base attack time - weapon speed + armor hindrance
 
 *attack value* = attack - defense 
-
-x = gauss on range (-300, 300) with attack value as mean
-
-x < -70 = miss, -70 < x < 0 = half damage, 0 < x < 175 = full damage, 175 < x = critical hit
-
-mean 0 => miss 25%, half 25%, hit 46%, crit 4%
-
-= example 2 =
-
-stats are used for the training rate of a skill
-higher Vit makes the health skill easier/faster to train etc.
-skills start at 1.00 and increase in small steps
-
-*max_health* = (level `*` health skill)
-
-*attack* = (weapon to hit + weapon enchantment) `*` ((fighting skill + weapon skill)/2)
-
-*defense* = armor `*` (fighting skill + armor skill)/2 `*` tile defender is on
-
-*damage* = (weapon damage + weapon enchantment)
-
-
-*attack value* = accumulated attack skill - accumulated defense 
 
 x = gauss on range (-300, 300) with attack value as mean
 
