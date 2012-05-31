@@ -1,5 +1,5 @@
-#ifndef _WEAPON_H
-#define _WEAPON_H
+#ifndef _WEAPON_HPP
+#define _WEAPON_HPP
 
 #include "../player.hpp"
 #include "../item.hpp"

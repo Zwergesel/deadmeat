@@ -6,7 +6,7 @@ Weapon::Weapon() :Item(Point(0,0), "default", '§', TCODColor::pink), speed(0), h
 	,diceMax(0), enchantment(0), skill(SKILL_UNARMED), hands(2)
 {
 	type = ITEM_WEAPON;
-	strType = "Weapon";
+	strType = "weapon";
 }
 
 Weapon::Weapon(Point position, std::string name, int symbol, TCODColor color, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands)
@@ -14,7 +14,7 @@ Weapon::Weapon(Point position, std::string name, int symbol, TCODColor color, in
 	,diceMax(dmax), enchantment(ench), skill(skl), hands(hands)
 {
 	type = ITEM_WEAPON;
-	strType = "Weapon";
+	strType = "weapon";
 }
 
 int Weapon::rollDamage()

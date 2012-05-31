@@ -14,10 +14,13 @@ Creature::Creature(Point p, std::string n, int s, TCODColor c, int h):
 	health(h),
 	maxHealth(h),
 	controlled(false),
-	mainWeapon(NULL)
+	mainWeapon(NULL),
+	armor(NULL)
 {
 	baseWeapon = Weapon(Point(0,0), "hands", '§', TCODColor::pink, 10, 10, 10, 0, 0, 0, SKILL_UNARMED, 2);
+	baseArmor = Armor(Point(0,0), "skin", '§', TCODColor::pink, 0, 0, SKILL_UNARMORED);
 	attackSkill = 0;
+	armorSkill = 0;
 }
 
 Creature::~Creature()
@@ -104,8 +107,12 @@ int Creature::action()
 
 int Creature::getDefense()
 {
-	// armor + (fighting skill + armor skill)/2 + tile defender is on
-	int defense = 0;
+	// armor + (fighting skill + armor skill)/2
+	int defense = baseArmor.getAC() + armorSkill;
+	if (armor != NULL)
+	{
+		defense = armor->getAC() + armorSkill;
+	}
 	return defense;
 }
 
