@@ -4,6 +4,7 @@
 #include <libtcod.hpp>
 #include "itemselection.hpp"
 #include "utility.hpp"
+#include "player.hpp"
 
 // TODO: these are not in the header file and in global namespace
 bool sortNamed(std::pair<int, Item*> a, std::pair<int, Item*> b)

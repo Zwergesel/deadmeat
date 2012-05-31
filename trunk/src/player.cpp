@@ -1,6 +1,6 @@
 #include <libtcod.hpp>
 #include <sstream>
-#include <iostream>
+#include <cassert>
 #include "player.hpp"
 #include "creature.hpp"
 #include "level.hpp"
@@ -240,33 +240,23 @@ int Player::actionWield(Item* itemObj)
 {
 	//Item* itemObj = getInventoryItem(item);
 	std::stringstream msg;
-	if (itemObj == NULL)
+	if (itemObj == NULL) return 0;
+	assert(itemObj->getType() == ITEM_WEAPON);
+
+	Weapon* weapon = static_cast<Weapon*>(itemObj);
+	if (creature->getMainWeapon() == weapon)
 	{
-		world.addMessage("You do not have this item.");
-	}
-	else if (itemObj->getType() != ITEM_WEAPON)
-	{
-		msg << "You cannot wield a " << itemObj->getName() << ".";
+		msg << "You were already wielding a " << weapon->toString() << ".";
 		world.addMessage(msg.str());
+		return 0;
 	}
 	else
 	{
-		Weapon* weapon = static_cast<Weapon*>(itemObj);
-		if (creature->getMainWeapon() == weapon)
-		{
-			msg << "You are already wielding a " << weapon->getName() << ".";
-			world.addMessage(msg.str());
-		}
-		else
-		{
-			creature->wieldMainWeapon(weapon);
-			msg << "You are now wiedling a " << weapon->getName() << ".";
-			world.addMessage(msg.str());
-			state = STATE_DEFAULT;
-			return 30;
-		}
+		creature->wieldMainWeapon(weapon);
+		msg << "You are now wiedling a " << weapon->toString() << ".";
+		world.addMessage(msg.str());
+		return 30;
 	}
-	return 0;
 }
 
 int Player::action()
@@ -316,12 +306,6 @@ int Player::action()
 			}
 			return 0;
 		}
-		// cancel pick item list
-		else if (state == STATE_WIELD && key.vk == TCODK_ESCAPE)
-		{
-			state = STATE_DEFAULT;
-			return 0;
-		}
 		// open inventory screen
 		else if (state == STATE_DEFAULT && key.c == 'i')
 		{
@@ -362,6 +346,7 @@ int Player::action()
 		{
 			if (world.itemSelection.keyInput(key))
 			{
+				state = STATE_DEFAULT;
 				return actionWield(world.itemSelection.getItem());
 			}
 			return 0;

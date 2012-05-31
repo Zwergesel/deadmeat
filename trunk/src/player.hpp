@@ -59,7 +59,7 @@ enum STATE
   STATE_DEFAULT,
   STATE_INVENTORY,
   STATE_PICKUP,
-  STATE_WIELD
+  STATE_WIELD,
 };
 
 typedef std::vector<std::pair<int, Item*> >::iterator InventoryIterator;
