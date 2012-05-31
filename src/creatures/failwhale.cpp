@@ -6,8 +6,8 @@
 
 FailWhale::FailWhale() : Creature(Point(60, 35), "fail whale", 'w', TCODColor::blue, 10000)
 {
-  baseWeapon = Weapon(Point(0,0), "teeth maybe?", '§', TCODColor::pink, 5, 10, 1, 5, 10, 2, SKILL_UNARMED, 2);
-  attackSkill = 1;
+	baseWeapon = Weapon(Point(0,0), "teeth maybe?", '§', TCODColor::pink, 5, 10, 1, 5, 10, 2, SKILL_UNARMED, 2);
+	attackSkill = 1;
 }
 
 int FailWhale::action()

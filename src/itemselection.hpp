@@ -42,7 +42,7 @@ private:
 	bool removeNamedItem(std::pair<int,Item*> item);
 	bool toggleItem(char c);
 	void selectAllOnPage(bool set);
-	
+
 public:
 	ItemSelection();
 	ItemSelection(const std::vector<Item*>& choices, std::string title, bool multiple = false, bool sort = true);

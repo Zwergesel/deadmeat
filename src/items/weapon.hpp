@@ -17,7 +17,7 @@ private:
 	int hands;
 
 public:
-  Weapon();
+	Weapon();
 	Weapon(Point position, std::string name, int symbol, TCODColor color, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands);
 	int rollDamage();
 	int getMinDamage();
@@ -26,7 +26,7 @@ public:
 	int getHitBonus();
 	int getEnchantment();
 	int getHandsUsed();
-  SKILLS getSkill();
+	SKILLS getSkill();
 	std::string toString();
 };
 
