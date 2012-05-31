@@ -122,10 +122,17 @@ void Creature::setLevel(Level* l)
 
 int Creature::attack(Creature* target)
 {
-	// (weapon to hit + weapon enchantment) + ((fighting skill + weapon skill)/2)
+	// base attack (hands, claws, etc.)
 	int attack = 10;
-	// damage = (weapon damage + weapon enchantment)
+	// base attack damage
 	int damage = 10;
+	
+	if (mainWeapon != NULL) {
+		// (weapon to hit + weapon enchantment) + ((fighting skill + weapon skill)/2)
+		attack = mainWeapon->getHitBonus() + mainWeapon->getEnchantment() + 0 + 0;
+		// damage = (weapon damage + weapon enchantment)
+		damage = mainWeapon->rollDamage();
+	}
 	int defense = target->getDefense();
 	TCODRandom rngGauss;
 	rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
