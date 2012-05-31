@@ -68,6 +68,11 @@ int ItemSelection::getNumPages()
 	return compiled ? pageStart.size() : 0;
 }
 
+int ItemSelection::getNumChoices()
+{
+	return anonymous ? anonChoices.size() : namedChoices.size();
+}
+
 Item* ItemSelection::getItem()
 {
 	if (multiple) return NULL;
@@ -191,14 +196,38 @@ std::string ItemSelection::getNextLine(int* row, bool* category)
 	return print.str();
 }
 
+/* Return true means the selection has been made */
 bool ItemSelection::keyInput(TCOD_key_t key)
 {
 	if (!compiled) return true;
 	if (!key.pressed) return false;
-	if (key.vk == TCODK_SPACE)
+	if (key.vk == TCODK_ESCAPE)
+	{
+		// Deselect all and end
+		if (multiple)
+		{
+			selected.assign(anonymous ? anonChoices.size() : namedChoices.size(), false);
+		} else {
+			choice = NULL;
+		}
+		return true;
+	}
+	else if (key.vk == TCODK_SPACE)
 	{
 		// Advance one page, quit if the end was reached
 		if (++page >= static_cast<int>(pageStart.size())) return true;
+	}
+	else if (multiple && (key.c == ',' || key.c == '+'))
+	{
+		// Select all on current page
+		selectAllOnPage(true);
+		return false;
+	}
+	else if (multiple && key.c == '-')
+	{
+		// Deselect all on current page
+		selectAllOnPage(false);
+		return false;
 	}
 	else if ((key.c >= 'a' && key.c <= 'z') || (key.c >= 'A' && key.c <= 'Z'))
 	{
@@ -227,7 +256,7 @@ bool ItemSelection::toggleItem(char c)
 	unsigned int end = static_cast<unsigned int>(page + 1) < pageStart.size() ? pageStart[page + 1] : compiledStrings.size();
 	while (start < end)
 	{
-		CompiledData info = compiledStrings[start++];
+		CompiledData& info = compiledStrings[start++];
 		if (info.letter == c)
 		{
 			if (multiple)
@@ -248,6 +277,18 @@ bool ItemSelection::toggleItem(char c)
 		}
 	}
 	return false;
+}
+
+void ItemSelection::selectAllOnPage(bool set)
+{
+	if (!multiple || page >= static_cast<int>(pageStart.size())) return;
+	unsigned int start = pageStart[page];
+	unsigned int end = static_cast<unsigned int>(page + 1) < pageStart.size() ? pageStart[page + 1] : compiledStrings.size();
+	while (start < end)
+	{
+		CompiledData info = compiledStrings[start++];
+		if (!info.category) selected[info.itemIndex] = set;
+	}
 }
 
 ItemSelection* ItemSelection::filterType(ITEM_TYPE type)
