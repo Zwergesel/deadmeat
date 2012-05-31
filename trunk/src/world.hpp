@@ -21,7 +21,7 @@ struct Viewport
 class World
 {
 private:
-	std::deque<std::string> messageQueue;  
+	std::deque<std::string> messageQueue;
 
 public:
 	TileSet* tileSet;
@@ -31,7 +31,7 @@ public:
 	Point levelOffset;
 	Viewport viewLevel, viewMsg;
 	bool requestQuit;
-  int substateCounter;
+	int substateCounter;
 
 	World();
 	~World();
@@ -47,9 +47,9 @@ public:
 	void drawItem(Item* i, Point offset, Viewport view);
 	void drawCreature(Creature* c, Point offset, Viewport view);
 	void drawWorld();
-  void drawItemList(int page, std::string title, std::vector<Item*> items);
-  void drawItemList(int page, std::string title, std::vector<std::pair<int, Item*> > items);
-  void drawItemList(int page, std::string title, std::vector<std::pair<int, Item*> > items, std::vector<ITEM_TYPE> filter);
+	void drawItemList(int page, std::string title, std::vector<Item*> items);
+	void drawItemList(int page, std::string title, std::vector<std::pair<int, Item*> > items);
+	void drawItemList(int page, std::string title, std::vector<std::pair<int, Item*> > items, std::vector<ITEM_TYPE> filter);
 	void drawInventory(int page);
 };
 

@@ -59,17 +59,17 @@ std::string util::indefArticle(std::string str)
 
 std::string util::plural(std::string str)
 {
-  std::string ret = str;
-  if(str.size() >= 1 && str[str.size()-1] == 's') ret.append("es");
-  else if(str.size() >= 2 && str[str.size()-2] == 's' && str[str.size()-1] == 'h') ret.append("es");
-  else if(str.size() >= 1 && str[str.size()-1] == 'y') ret.replace(str.size()-1, 1, "ies");
-  else ret.append("s");
-  return ret;
+	std::string ret = str;
+	if (str.size() >= 1 && str[str.size()-1] == 's') ret.append("es");
+	else if (str.size() >= 2 && str[str.size()-2] == 's' && str[str.size()-1] == 'h') ret.append("es");
+	else if (str.size() >= 1 && str[str.size()-1] == 'y') ret.replace(str.size()-1, 1, "ies");
+	else ret.append("s");
+	return ret;
 }
 
 int util::letterToInt(char c)
 {
- if(isupper(c)) return (c + 26 - 'A');
- else if(islower(c)) return (c - 'a');
- return 0;
+	if (isupper(c)) return (c + 26 - 'A');
+	else if (islower(c)) return (c - 'a');
+	return 0;
 }

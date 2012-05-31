@@ -25,7 +25,7 @@ public:
 	int getHitBonus();
 	int getEnchantment();
 	int getHandsUsed();
-  std::string toString();
+	std::string toString();
 };
 
 #endif

@@ -24,7 +24,7 @@ int Player::dy[] = {1,1,1,0,0,0,-1,-1,-1};
 
 Player::Player(std::string name):
 	name(name),
-  state(STATE_DEFAULT)
+	state(STATE_DEFAULT)
 {
 	skills[SKILL_MELEE_COMBAT] = Skill("melee combat", 0, ATTR_STR);
 	skills[SKILL_RANGED_COMBAT] = Skill("ranged combat", 0, ATTR_DEX);
@@ -52,14 +52,14 @@ Player::Player(std::string name):
 
 Player::~Player()
 {
-  for(std::vector<std::pair<int, Item*> >::iterator it=inventory.begin();it<inventory.end();it++)
-  {
-    if((*it).second != NULL)
-    {
-      delete (*it).second;
-      (*it).second = NULL;
-    }
-  }
+	for (std::vector<std::pair<int, Item*> >::iterator it=inventory.begin(); it<inventory.end(); it++)
+	{
+		if ((*it).second != NULL)
+		{
+			delete (*it).second;
+			(*it).second = NULL;
+		}
+	}
 }
 
 Creature* Player::getCreature()
@@ -90,41 +90,41 @@ TCOD_key_t Player::waitForKeypress(bool clBuf)
 }
 
 bool Player::addItem(Item* item)
-{  
-  bool used[52];
-  for(int i=0;i<52;i++) used[i] = false;
-	for(std::vector<std::pair<int, Item*> >::iterator it=inventory.begin();it<inventory.end();it++)
-  {
-    used[(*it).first] = true;
-  }
-  for(int i=0;i<52;i++)
-  {
-    if(!used[i])
-    {
-      inventory.push_back(std::pair<int, Item*>(i, item));
-      return true;
-    }
-  }
-  // ran out of letters
+{
+	bool used[52];
+	for (int i=0; i<52; i++) used[i] = false;
+	for (std::vector<std::pair<int, Item*> >::iterator it=inventory.begin(); it<inventory.end(); it++)
+	{
+		used[(*it).first] = true;
+	}
+	for (int i=0; i<52; i++)
+	{
+		if (!used[i])
+		{
+			inventory.push_back(std::pair<int, Item*>(i, item));
+			return true;
+		}
+	}
+	// ran out of letters
 	world.addMessage("Too many items in backpack.");
 	return false;
 }
 
 void Player::removeItem(Item* item, bool del)
 {
-  for(std::vector<std::pair<int, Item*> >::iterator it=inventory.begin();it<inventory.end();it++)
-  {
-    if((*it).second == item)
-    {
-      if ((*it).second != NULL && del)
+	for (std::vector<std::pair<int, Item*> >::iterator it=inventory.begin(); it<inventory.end(); it++)
+	{
+		if ((*it).second == item)
+		{
+			if ((*it).second != NULL && del)
 			{
 				delete (*it).second;
-				(*it).second = NULL;							
+				(*it).second = NULL;
 			}
-      inventory.erase(it);
-      return;
-    }
-  }
+			inventory.erase(it);
+			return;
+		}
+	}
 }
 
 std::vector<std::pair<int, Item*> > Player::getInventory()
@@ -134,10 +134,10 @@ std::vector<std::pair<int, Item*> > Player::getInventory()
 
 int Player::actionMove(int direction)
 {
-  Level* level = world.levels[world.currentLevel];
+	Level* level = world.levels[world.currentLevel];
 	Point ppos = creature->getPos();
 	Point newPos = Point(ppos.x + Player::dx[direction], ppos.y + Player::dy[direction]);
-  if (newPos.x >= 0 && newPos.x < level->getWidth() && newPos.y >= 0 && newPos.y < level->getHeight())
+	if (newPos.x >= 0 && newPos.x < level->getWidth() && newPos.y >= 0 && newPos.y < level->getHeight())
 	{
 		Creature* c = level->creatureAt(newPos);
 		if (c != NULL)
@@ -157,72 +157,72 @@ int Player::actionMove(int direction)
 			return 0;
 		}
 	}
-  return 0;
+	return 0;
 }
 
 int Player::actionLook(Point pos)
 {
-  Level* level = world.levels[world.currentLevel];
-  std::stringstream msg;
-  std::vector<Item*> items = level->itemsAt(pos);
-  if (items.size() == 1)
-  {
-    msg << "You see " << util::indefArticle(items[0]->getName()) << " " << items[0]->getName() << " here.";
-    world.addMessage(msg.str());
-  }
-  else if (items.size() >= 1)
-  {
-    msg << "You see a several items here:";
-    world.addMessage(msg.str());
-    for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
-    {
-      std::stringstream strlist;
-      strlist << util::indefArticle((*it)->getName()) << " " << (*it)->getName();
-      world.addMessage(strlist.str());
-    }
-  }
-  return 0;
+	Level* level = world.levels[world.currentLevel];
+	std::stringstream msg;
+	std::vector<Item*> items = level->itemsAt(pos);
+	if (items.size() == 1)
+	{
+		msg << "You see " << util::indefArticle(items[0]->getName()) << " " << items[0]->getName() << " here.";
+		world.addMessage(msg.str());
+	}
+	else if (items.size() >= 1)
+	{
+		msg << "You see a several items here:";
+		world.addMessage(msg.str());
+		for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
+		{
+			std::stringstream strlist;
+			strlist << util::indefArticle((*it)->getName()) << " " << (*it)->getName();
+			world.addMessage(strlist.str());
+		}
+	}
+	return 0;
 }
 
 int Player::actionPickup()
 {
-  Level* level = world.levels[world.currentLevel];
-  std::stringstream msg;
-  std::vector<Item*> items = level->itemsAt(creature->getPos());
-  if(items.size() <= 0)
-  {
-    world.addMessage("Nothing here.");
-    return 0;
-  }
-  else if(items.size() == 1)
-  {
-    return actionPickup(0);
-  }
-  else
-  {
-    state = STATE_PICKUP;
-  }
-  return 0;
+	Level* level = world.levels[world.currentLevel];
+	std::stringstream msg;
+	std::vector<Item*> items = level->itemsAt(creature->getPos());
+	if (items.size() <= 0)
+	{
+		world.addMessage("Nothing here.");
+		return 0;
+	}
+	else if (items.size() == 1)
+	{
+		return actionPickup(0);
+	}
+	else
+	{
+		state = STATE_PICKUP;
+	}
+	return 0;
 }
 
 int Player::actionPickup(int item)
 {
-  Level* level = world.levels[world.currentLevel];
-  std::stringstream msg;
-  std::vector<Item*> items = level->itemsAt(creature->getPos());
-  state = STATE_DEFAULT;
-  if((int)items.size() <= item)
-  {
-    return 0;
-  }
-  else if((int)items.size() > item && addItem(items[item]))
-  {
-    msg << "Picked up " << util::indefArticle(items[item]->getName()) << " " << items[item]->getName() << ".";
-    world.addMessage(msg.str());
-    level->removeItem(items[item], false);    
-    return 10;
-  }  
-  return 0;
+	Level* level = world.levels[world.currentLevel];
+	std::stringstream msg;
+	std::vector<Item*> items = level->itemsAt(creature->getPos());
+	state = STATE_DEFAULT;
+	if ((int)items.size() <= item)
+	{
+		return 0;
+	}
+	else if ((int)items.size() > item && addItem(items[item]))
+	{
+		msg << "Picked up " << util::indefArticle(items[item]->getName()) << " " << items[item]->getName() << ".";
+		world.addMessage(msg.str());
+		level->removeItem(items[item], false);
+		return 10;
+	}
+	return 0;
 }
 
 int Player::action()
@@ -231,12 +231,12 @@ int Player::action()
 	{
 		TCOD_key_t key = waitForKeypress(true);
 
-    // numpad player movement
+		// numpad player movement
 		if (state == STATE_DEFAULT && key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
 		{
 			return actionMove(key.vk - TCODK_KP1);
 		}
-    // number keys player movement
+		// number keys player movement
 		else if (state == STATE_DEFAULT && key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.vk != TCODK_5)
 		{
 			return actionMove(key.vk - TCODK_1);
@@ -249,34 +249,34 @@ int Player::action()
 		// look at current position
 		else if (state == STATE_DEFAULT && key.c == ':')
 		{
-      return actionLook(creature->getPos());
+			return actionLook(creature->getPos());
 		}
 		// pick up an item
 		else if (state == STATE_DEFAULT && key.c == ',')
 		{
-      return actionPickup();
+			return actionPickup();
 		}
-    // pick from multiple items
-    else if (state == STATE_PICKUP && isalpha(key.c))
-    {
-      return actionPickup(util::letterToInt(key.c));
-    }
-    // cancel pick item list 
-    else if (state == STATE_PICKUP && key.vk == TCODK_ESCAPE)
-    {
-      state = STATE_DEFAULT;
-      return 0;
-    }    
-    // open inventory screen
+		// pick from multiple items
+		else if (state == STATE_PICKUP && isalpha(key.c))
+		{
+			return actionPickup(util::letterToInt(key.c));
+		}
+		// cancel pick item list
+		else if (state == STATE_PICKUP && key.vk == TCODK_ESCAPE)
+		{
+			state = STATE_DEFAULT;
+			return 0;
+		}
+		// open inventory screen
 		else if (state == STATE_DEFAULT && key.c == 'i')
-		{      
-      world.substateCounter = 0;
-      state = STATE_INVENTORY;
+		{
+			world.substateCounter = 0;
+			state = STATE_INVENTORY;
 			return 0;
 		}
 		// close inventory screen
 		else if (state == STATE_INVENTORY && (key.c == 'i' || key.vk == TCODK_ESCAPE))
-		{      
+		{
 			state = STATE_DEFAULT;
 			return 0;
 		}
@@ -294,5 +294,5 @@ int Player::action()
 
 STATE Player::getState()
 {
-  return state;
+	return state;
 }
