@@ -38,7 +38,7 @@ Player::Player(std::string name):
 	creature = new Creature(Point(40,22), name, '@', TCODColor::black, 250);
 	creature->setControlled(true);
 	creature->setAttackSkill(skills[SKILL_UNARMED].value);
-	creature->setBaseWeapon(Weapon(Point(0,0), "hands", '§', TCODColor::pink, 10, 10, 10, 0, 0, 0, SKILL_UNARMED, 2));
+	creature->setBaseWeapon(Weapon("hands", '§', TCODColor::pink, 10, 10, 10, 0, 0, 0, SKILL_UNARMED, 2));
 }
 
 Player::~Player()
@@ -241,11 +241,17 @@ int Player::actionDrop()
 int Player::actionDrop(Item* item)
 {
   Level* level = world.levels[world.currentLevel];
-  removeItem(item, false);
   std::stringstream msg;
+  if(creature->getArmor() == item || creature->getMainWeapon() == item)
+  {
+    msg << "You are currently using this!";
+	  world.addMessage(msg.str());
+    return 0;
+  }
+  removeItem(item, false);  
 	msg << "Dropped " << util::indefArticle(item->getName()) << " " << item->getName() << ".";
 	world.addMessage(msg.str());
-  level->addItem(item);
+  level->addItem(item, creature->getPos());
 	return 10;
 }
 

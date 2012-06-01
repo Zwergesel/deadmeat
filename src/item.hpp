@@ -26,11 +26,10 @@ protected:
 	std::string strType;
 
 public:
-	Item(Point position, std::string name, int symbol, TCODColor color);
+	Item(std::string name, int symbol, TCODColor color);
 	ITEM_TYPE getType();
 	int getSymbol();
 	TCODColor getColor();
-	Point getPos();
 	std::string getName();
 	std::string toString();
 	std::string typeString();

@@ -18,7 +18,7 @@ private:
 
 public:
 	Weapon();
-	Weapon(Point position, std::string name, int symbol, TCODColor color, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands);
+	Weapon(std::string name, int symbol, TCODColor color, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands);
 	int rollDamage();
 	int getMinDamage();
 	int getMaxDamage();

@@ -24,11 +24,19 @@ Level::~Level()
 	}
 	for (std::vector<Creature*>::iterator it=creatures.begin(); it<creatures.end(); it++)
 	{
-		delete *it;
+    if((*it) != NULL)
+    {
+		  delete *it;
+      (*it) = NULL;
+    }
 	}
-	for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
+	for (std::vector<std::pair<Point, Item*> >::iterator it=items.begin(); it<items.end(); it++)
 	{
-		delete *it;
+    if((*it).second != NULL)
+    {
+      delete (*it).second;
+      (*it).second = NULL;
+    }
 	}
 }
 
@@ -114,28 +122,28 @@ void Level::removeCreature(Creature* c, bool del)
 std::vector<Item*> Level::itemsAt(Point pos)
 {
 	std::vector<Item*> ret;
-	for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
+	for (std::vector<std::pair<Point, Item*> >::iterator it=items.begin(); it<items.end(); it++)
 	{
-		if ((*it)->getPos() == pos) ret.push_back(*it);
+		if ((*it).first == pos) ret.push_back((*it).second);
 	}
 	return ret;
 }
 
-std::vector<Item*> Level::getItems()
+std::vector<std::pair<Point, Item*> > Level::getItems()
 {
 	return items;
 }
 
-void Level::addItem(Item* i)
+void Level::addItem(Item* i, Point pos)
 {
-	items.push_back(i);
+	items.push_back(std::pair<Point, Item*>(pos, i));
 }
 
 void Level::removeItem(Item* i, bool del)
 {
-	for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
+	for (std::vector<std::pair<Point, Item*> >::iterator it=items.begin(); it<items.end(); it++)
 	{
-		if (*it == i)
+    if ((*it).second == i)
 		{
 			items.erase(it);
 			break;

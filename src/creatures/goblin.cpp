@@ -7,7 +7,7 @@
 
 Goblin::Goblin() : Creature(Point(20, 20), "goblin", 'g', TCODColor::green, 20)
 {
-	baseWeapon = Weapon(Point(0,0), "hands", '§', TCODColor::pink, 15, 10, 10, 0, 0, 2, SKILL_UNARMED, 2);
+	baseWeapon = Weapon("hands", '§', TCODColor::pink, 15, 10, 10, 0, 0, 2, SKILL_UNARMED, 2);
 	attackSkill = 10;
 }
 
