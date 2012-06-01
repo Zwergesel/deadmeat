@@ -1,0 +1,171 @@
+[[Weapon: 4]]
+name: hands
+symbol: 164
+color: 255, 0, 127
+speed: 10
+hitBonus: 10
+baseDamage: 10
+numDice: 0
+diceMax: 0
+enchantment: 0
+skill: 9
+hands: 2
+
+[[Armor: 5]]
+name: skin
+symbol: 164
+color: 255, 0, 127
+ac: 0
+hindrance: 0
+skill: 3
+
+[[Creature: 3]]
+name: PlayerName
+symbol: 64
+position: 35, 22
+color: 0, 0, 0
+health: 250
+maxHealth: 250
+controlled: true
+mainWeapon: 0
+armor: 0
+attackSkill: 0
+armorSkill: 0
+baseWeapon: 4
+baseArmor: 5
+
+[[Player: 2]]
+name: PlayerName
+creature: 3
+#inventory: 0
+state: 0
+
+[[Weapon: 8]]
+name: hands
+symbol: 164
+color: 255, 0, 127
+speed: 10
+hitBonus: 10
+baseDamage: 10
+numDice: 0
+diceMax: 0
+enchantment: 0
+skill: 9
+hands: 2
+
+[[Armor: 9]]
+name: skin
+symbol: 164
+color: 255, 0, 127
+ac: 0
+hindrance: 0
+skill: 3
+
+[[Creature: 7]]
+name: default
+symbol: 100
+position: 10, 10
+color: 255, 191, 0
+health: 20
+maxHealth: 20
+controlled: false
+mainWeapon: 0
+armor: 0
+attackSkill: 0
+armorSkill: 0
+baseWeapon: 8
+baseArmor: 9
+
+[[Weapon: 10]]
+name: dagger
+symbol: 40
+color: 255, 0, 0
+speed: 4
+hitBonus: 10
+baseDamage: 8
+numDice: 1
+diceMax: 4
+enchantment: 12
+skill: 14
+hands: 1
+
+[[Item: 11]]
+name: item1
+symbol: 49
+color: 0, 0, 255
+
+[[Item: 12]]
+name: item2
+symbol: 50
+color: 0, 255, 0
+
+[[Weapon: 13]]
+name: sword
+symbol: 40
+color: 255, 0, 0
+speed: 10
+hitBonus: 30
+baseDamage: 1
+numDice: 10
+diceMax: 20
+enchantment: 30
+skill: 11
+hands: 1
+
+[[Weapon: 14]]
+name: cursed mace
+symbol: 40
+color: 255, 0, 0
+speed: 15
+hitBonus: -60
+baseDamage: 4
+numDice: 1
+diceMax: 1
+enchantment: -60
+skill: 12
+hands: 1
+
+[[Armor: 15]]
+name: uber armor
+symbol: 41
+color: 0, 0, 0
+ac: 1000
+hindrance: 10
+skill: 8
+
+[[Armor: 16]]
+name: crap armor
+symbol: 41
+color: 0, 0, 0
+ac: -1000
+hindrance: 0
+skill: 5
+
+[[Level: 6]]
+width: 80
+height: 50
+#creatures: 2
+_creature: 7
+_creature: 3
+#items: 7
+_position: 30, 30
+_item: 10
+_position: 30, 30
+_item: 11
+_position: 30, 30
+_item: 12
+_position: 30, 30
+_item: 13
+_position: 30, 30
+_item: 14
+_position: 30, 30
+_item: 15
+_position: 30, 30
+_item: 16
+
+[[World: 1]]
+currentLevel: 0
+levelOffset: 0, 0
+player: 2
+#levels: 1
+_level: 6
