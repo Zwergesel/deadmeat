@@ -4,6 +4,7 @@
 #include <libtcod.hpp>
 #include <string>
 #include <vector>
+#include <sstream>
 #include "utility.hpp"
 #include "skill.hpp"
 
@@ -12,6 +13,7 @@ class Level;
 class Item;
 class Weapon;
 class Armor;
+class Savegame;
 
 enum STATE
 {
@@ -47,6 +49,7 @@ private:
 	int actionDrop(Item*);
 
 public:
+	Player();
 	Player(std::string name);
 	~Player();
 	std::string getName();
@@ -58,6 +61,9 @@ public:
 	std::vector<std::pair<int, Item*> > getInventory();
 	Item* getInventoryItem(int item);
 	STATE getState();
+	
+	unsigned int save(Savegame* sg);
+	void load(Savegame* sg, std::stringstream& ss);
 };
 
 #endif

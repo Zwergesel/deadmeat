@@ -3,6 +3,7 @@
 
 #include <deque>
 #include <vector>
+#include <sstream>
 #include "utility.hpp"
 #include "item.hpp"
 #include "itemselection.hpp"
@@ -11,6 +12,7 @@ class Player;
 class Creature;
 class Level;
 class TileSet;
+class Savegame;
 
 struct Viewport
 {
@@ -32,7 +34,6 @@ public:
 	Point levelOffset;
 	Viewport viewLevel, viewMsg, viewItemList;
 	bool requestQuit;
-	int substateCounter;
 	ItemSelection itemSelection;
 
 	World();
@@ -51,6 +52,9 @@ public:
 	void drawWorld();
 	void drawInfo();
 	void drawItemSelection(ItemSelection& sel);
+	
+	unsigned int save(Savegame* sg);
+	void load(Savegame* sg, std::stringstream& ss);
 };
 
 // Global world variable

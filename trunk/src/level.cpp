@@ -1,8 +1,16 @@
 #include <cassert>
+#include <iostream>
 #include "level.hpp"
 #include "creature.hpp"
 #include "player.hpp"
 #include "world.hpp"
+#include "savegame.hpp"
+#include "items/weapon.hpp"
+
+Level::Level()
+{
+	// for savegames only
+}
 
 Level::Level(int width, int height)
 {
@@ -192,4 +200,52 @@ bool operator<(TimelineAction a, TimelineAction b)
 {
 	// Max heap, but we want minimum time
 	return a.time > b.time;
+}
+
+/*--------------------- SAVING AND LOADING ---------------------*/
+
+unsigned int Level::save(Savegame* sg)
+{
+	void* index = static_cast<void*>(this);
+	if (sg->objExists(index)) return sg->objId(index);
+	std::stringstream ss;
+	sg->saveObj(index, "Level", ss);
+	sg->saveInt(width, "width", ss);
+	sg->saveInt(height, "height", ss);
+	// TODO : map
+	sg->saveInt(creatures.size(), "#creatures", ss);
+	for (unsigned int d=0; d<creatures.size(); d++)
+	{
+		// TODO : time from timeline
+		sg->savePointer(creatures[d]->save(sg), "_creature", ss);
+	}
+	sg->saveInt(items.size(), "#items", ss);
+	for (unsigned int d=0; d<items.size(); d++)
+	{
+		sg->savePoint(items[d].first, "_position", ss);
+		sg->savePointer(items[d].second->save(sg), "_item", ss);
+	}
+	sg->flushStringstream(ss);
+	return sg->objId(index);
+}
+
+void Level::load(Savegame* sg, std::stringstream& ss)
+{
+	width = sg->loadInt("width", ss);
+	height = sg->loadInt("height", ss);
+	map = new Tile[width*height];
+	std::fill(map, map+width*height, TILE_CAVE_FLOOR);
+	int n = sg->loadInt("#creatures", ss);
+	while (n-->0)
+	{
+		Creature* c = static_cast<Creature*>(sg->loadPointer("_creature", ss));
+		addCreature(c);
+	}
+	n = sg->loadInt("#items", ss);
+	while (n-->0)
+	{
+		Point pos = sg->loadPoint("_position", ss);
+		Item* item = static_cast<Item*>(sg->loadPointer("_item", ss));
+		items.push_back(std::make_pair(pos,item));
+	}
 }

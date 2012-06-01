@@ -1,4 +1,12 @@
 #include "item.hpp"
+#include "savegame.hpp"
+
+Item::Item()
+{
+	// for savegames
+	type = ITEM_DEFAULT;
+	strType = "Item";
+}
 
 Item::Item(std::string n, int s, TCODColor c):
 	symbol(s), color(c), name(n)
@@ -35,4 +43,27 @@ std::string Item::toString()
 std::string Item::typeString()
 {
 	return strType;
+}
+
+/*--------------------- SAVING AND LOADING ---------------------*/
+
+unsigned int Item::save(Savegame* sg)
+{
+	void* index = static_cast<void*>(this);
+	if (sg->objExists(index)) return sg->objId(index);
+	std::stringstream ss;
+	sg->saveObj(index, "Item", ss);
+	sg->saveString(name, "name", ss);
+	sg->saveInt(symbol, "symbol", ss);
+	sg->saveColor(color, "color", ss);
+	// Note: auto-load type and strType
+	sg->flushStringstream(ss);
+	return sg->objId(index);
+}
+
+void Item::load(Savegame* sg, std::stringstream& ss)
+{
+	name = sg->loadString("name", ss);
+	symbol = sg->loadInt("symbol", ss);
+	color = sg->loadColor("color", ss);
 }

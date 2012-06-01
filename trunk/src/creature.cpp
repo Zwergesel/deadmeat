@@ -5,6 +5,12 @@
 #include "level.hpp"
 #include "world.hpp"
 #include "items/weapon.hpp"
+#include "savegame.hpp"
+
+Creature::Creature()
+{
+	// for savegames
+}
 
 Creature::Creature(Point p, std::string n, int s, TCODColor c, int h):
 	name(n),
@@ -17,8 +23,8 @@ Creature::Creature(Point p, std::string n, int s, TCODColor c, int h):
 	mainWeapon(NULL),
 	armor(NULL)
 {
-	baseWeapon = Weapon("hands", '§', TCODColor::pink, 10, 10, 10, 0, 0, 0, SKILL_UNARMED, 2);
-	baseArmor = Armor("skin", '§', TCODColor::pink, 0, 0, SKILL_UNARMORED);
+	baseWeapon = Weapon("hands", (unsigned char)'¤', TCODColor::pink, 10, 10, 10, 0, 0, 0, SKILL_UNARMED, 2);
+	baseArmor = Armor("skin", (unsigned char)'¤', TCODColor::pink, 0, 0, SKILL_UNARMORED);
 	attackSkill = 0;
 	armorSkill = 0;
 }
@@ -202,4 +208,47 @@ void Creature::setAttackSkill(int attack)
 void Creature::setBaseWeapon(Weapon base)
 {
 	baseWeapon = base;
+}
+
+/*--------------------- SAVING AND LOADING ---------------------*/
+
+unsigned int Creature::save(Savegame* sg)
+{
+	void* index = static_cast<void*>(this);
+	if (sg->objExists(index)) return sg->objId(index);
+	std::stringstream ss;
+	sg->saveObj(index, "Creature", ss);
+	sg->saveString(name, "name", ss);
+	sg->saveInt(symbol, "symbol", ss);
+	sg->savePoint(position, "position", ss);
+	sg->saveColor(color, "color", ss);
+	sg->saveInt(health, "health", ss);
+	sg->saveInt(maxHealth, "maxHealth", ss);
+	sg->saveBool(controlled, "controlled", ss);
+	// Note: Level* level will auto-load when inserting into level.creatures
+	sg->savePointer(mainWeapon == NULL ? 0 : mainWeapon->save(sg), "mainWeapon", ss);
+	sg->savePointer(armor == NULL ? 0 : armor->save(sg), "armor", ss);
+	sg->saveInt(attackSkill, "attackSkill", ss);
+	sg->saveInt(armorSkill, "armorSkill", ss);
+	sg->savePointer(baseWeapon.save(sg), "baseWeapon", ss);
+	sg->savePointer(baseArmor.save(sg), "baseArmor", ss);
+	sg->flushStringstream(ss);
+	return sg->objId(index);
+}
+
+void Creature::load(Savegame* sg, std::stringstream& ss)
+{
+	name = sg->loadString("name", ss);
+	symbol = sg->loadInt("symbol", ss);
+	position = sg->loadPoint("position", ss);
+	color = sg->loadColor("color", ss);
+	health = sg->loadInt("health", ss);
+	maxHealth = sg->loadInt("maxHealth", ss);
+	controlled = sg->loadBool("controlled", ss);
+	mainWeapon = static_cast<Weapon*>(sg->loadPointer("mainWeapon", ss));
+	armor = static_cast<Armor*>(sg->loadPointer("armor", ss));
+	attackSkill = sg->loadInt("attackSkill", ss);
+	armorSkill = sg->loadInt("armorSkill", ss);
+	baseWeapon = *static_cast<Weapon*>(sg->loadPointer("baseWeapon", ss));
+	baseArmor = *static_cast<Armor*>(sg->loadPointer("baseArmor", ss));
 }

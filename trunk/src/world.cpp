@@ -9,6 +9,7 @@
 #include "creature.hpp"
 #include "items/weapon.hpp"
 #include "itemselection.hpp"
+#include "savegame.hpp"
 
 World::World()
 {
@@ -18,7 +19,6 @@ World::World()
 	currentLevel = 0;
 	levelOffset = Point(0,0);
 	requestQuit = false;
-	substateCounter = 0;
 }
 
 World::~World()
@@ -198,4 +198,33 @@ void World::drawItemSelection(ItemSelection& sel)
 	}
 
 	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, viewItemList.x, viewItemList.y, 1.f, 0.9f);
+}
+
+/*--------------------- SAVING AND LOADING ---------------------*/
+
+unsigned int World::save(Savegame* sg)
+{
+	void* index = static_cast<void*>(this);
+	if (sg->objExists(index)) return sg->objId(index);
+	std::stringstream ss;
+	sg->saveObj(index, "World", ss);
+	sg->saveInt(currentLevel, "currentLevel", ss);
+	sg->savePoint(levelOffset, "levelOffset", ss);
+	sg->savePointer(player->save(sg), "player", ss);
+	sg->saveInt(1, "#levels", ss);
+	sg->savePointer(levels[0]->save(sg), "_level", ss);
+	sg->flushStringstream(ss);
+	return sg->objId(index);
+}
+
+void World::load(Savegame* sg, std::stringstream& ss)
+{
+	currentLevel = sg->loadInt("currentLevel", ss);
+	levelOffset = sg->loadPoint("levelOffset", ss);
+	player = static_cast<Player*>(sg->loadPointer("player", ss));
+	int n = sg->loadInt("#levels", ss);
+	for (int i=0; i<n; i++)
+	{
+		levels[i] = static_cast<Level*>(sg->loadPointer("_level", ss));
+	}
 }
