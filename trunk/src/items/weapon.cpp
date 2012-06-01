@@ -89,18 +89,13 @@ unsigned int Weapon::save(Savegame& sg)
 	return id;
 }
 
-void Weapon::load(Savegame* sg, std::stringstream& ss)
+void Weapon::load(LoadBlock& load)
 {
-	name = sg->loadString("name", ss);
-	symbol = sg->loadInt("symbol", ss);
-	color = sg->loadColor("color", ss);
-	speed = sg->loadInt("speed", ss);
-	hitBonus = sg->loadInt("hitBonus", ss);
-	baseDamage = sg->loadInt("baseDamage", ss);
-	numDice = sg->loadInt("numDice", ss);
-	diceMax = sg->loadInt("diceMax", ss);
-	enchantment = sg->loadInt("enchantment", ss);
+	int s;
+	load ("name", name) ("symbol", symbol) ("color", color) ("speed", speed);
+	load ("hitBonus", hitBonus) ("baseDamage", baseDamage) ("numDice", numDice);
+	load ("diceMax", diceMax) ("enchantment", enchantment) ("skill", s);
 	// TODO : check range 0 - SKILL_MAX(?)
-	skill = static_cast<SKILLS>(sg->loadInt("skill", ss));
-	hands = sg->loadInt("hands", ss);
+	skill = static_cast<SKILLS>(s);
+	load ("hands", hands);
 }

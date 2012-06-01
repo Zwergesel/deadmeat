@@ -7,6 +7,7 @@
 #include <sstream>
 
 class Savegame;
+class LoadBlock;
 
 enum ITEM_TYPE
 {
@@ -34,9 +35,9 @@ public:
 	std::string getName();
 	std::string toString();
 	std::string typeString();
-	
+
 	virtual unsigned int save(Savegame& sg);
-	virtual void load(Savegame* sg, std::stringstream& ss);
+	virtual void load(LoadBlock& load);
 };
 
 #endif

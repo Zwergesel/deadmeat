@@ -1,5 +1,4 @@
 #include <cassert>
-#include <iostream>
 #include "level.hpp"
 #include "creature.hpp"
 #include "player.hpp"
@@ -225,23 +224,24 @@ unsigned int Level::save(Savegame& sg)
 	return id;
 }
 
-void Level::load(Savegame* sg, std::stringstream& ss)
+void Level::load(LoadBlock& load)
 {
-	width = sg->loadInt("width", ss);
-	height = sg->loadInt("height", ss);
+	load ("width", width) ("height", height);
 	map = new Tile[width*height];
 	std::fill(map, map+width*height, TILE_CAVE_FLOOR);
-	int n = sg->loadInt("#creatures", ss);
+	int n;
+	load ("#creatures", n);
 	while (n-->0)
 	{
-		Creature* c = static_cast<Creature*>(sg->loadPointer("_creature", ss));
+		Creature* c = static_cast<Creature*>(load.ptr("_creature"));
 		addCreature(c);
 	}
-	n = sg->loadInt("#items", ss);
+	load ("#items", n);
 	while (n-->0)
 	{
-		Point pos = sg->loadPoint("_position", ss);
-		Item* item = static_cast<Item*>(sg->loadPointer("_item", ss));
+		Point pos;
+		load("_position", pos);
+		Item* item = static_cast<Item*>(load.ptr("_item"));
 		items.push_back(std::make_pair(pos,item));
 	}
 }

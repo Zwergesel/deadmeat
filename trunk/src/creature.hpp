@@ -11,6 +11,7 @@
 class Level;
 class Player;
 class Savegame;
+class LoadBlock;
 
 class Creature
 {
@@ -59,9 +60,9 @@ public:
 	bool hurt(int damage, Creature* instigator); // ,DamageType dt
 
 	virtual int action();
-	
+
 	unsigned int save(Savegame& sg);
-	void load(Savegame* sg, std::stringstream& ss);
+	void load(LoadBlock& load);
 };
 
 class Goblin: public Creature

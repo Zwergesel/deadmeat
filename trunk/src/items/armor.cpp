@@ -41,13 +41,11 @@ unsigned int Armor::save(Savegame& sg)
 	return id;
 }
 
-void Armor::load(Savegame* sg, std::stringstream& ss)
+void Armor::load(LoadBlock& load)
 {
-	name = sg->loadString("name", ss);
-	symbol = sg->loadInt("symbol", ss);
-	color = sg->loadColor("color", ss);
-	ac = sg->loadInt("ac", ss);
-	hindrance = sg->loadInt("hindrance", ss);
+	int s;
+	load ("name", name) ("symbol", symbol) ("color", color) ("ac", ac);
+	load ("hindrance", hindrance) ("skill", s);
 	// TODO : check range 0 - SKILL_MAX(?)
-	skill = static_cast<SKILLS>(sg->loadInt("skill", ss));
+	skill = static_cast<SKILLS>(s);
 }

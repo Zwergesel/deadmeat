@@ -14,6 +14,7 @@ class Item;
 class Weapon;
 class Armor;
 class Savegame;
+class LoadBlock;
 
 enum STATE
 {
@@ -61,9 +62,9 @@ public:
 	std::vector<std::pair<int, Item*> > getInventory();
 	Item* getInventoryItem(int item);
 	STATE getState();
-	
+
 	unsigned int save(Savegame& sg);
-	void load(Savegame* sg, std::stringstream& ss);
+	void load(LoadBlock& load);
 };
 
 #endif
