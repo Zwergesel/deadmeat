@@ -3,6 +3,9 @@
 
 #include "../player.hpp"
 #include "../item.hpp"
+#include <sstream>
+
+class Savegame;
 
 class Weapon : public Item
 {
@@ -28,6 +31,9 @@ public:
 	int getHandsUsed();
 	SKILLS getSkill();
 	std::string toString();
+	
+	unsigned int save(Savegame* sg);
+	void load(Savegame* sg, std::stringstream& ss);
 };
 
 #endif

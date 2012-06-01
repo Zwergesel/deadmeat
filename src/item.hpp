@@ -4,6 +4,9 @@
 #include <libtcod.hpp>
 #include "utility.hpp"
 #include <string>
+#include <sstream>
+
+class Savegame;
 
 enum ITEM_TYPE
 {
@@ -15,17 +18,15 @@ enum ITEM_TYPE
 
 class Item
 {
-private:
+protected:
 	int symbol;
 	TCODColor color;
-	Point position;
 	std::string name;
-
-protected:
 	ITEM_TYPE type;
 	std::string strType;
 
 public:
+	Item(); // for savegames
 	Item(std::string name, int symbol, TCODColor color);
 	ITEM_TYPE getType();
 	int getSymbol();
@@ -33,6 +34,9 @@ public:
 	std::string getName();
 	std::string toString();
 	std::string typeString();
+	
+	virtual unsigned int save(Savegame* sg);
+	virtual void load(Savegame* sg, std::stringstream& ss);
 };
 
 #endif

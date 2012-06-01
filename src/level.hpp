@@ -2,9 +2,11 @@
 #define _LEVEL_HPP
 
 #include <vector>
+#include <sstream>
 #include "tileset.hpp"
 #include "utility.hpp"
 #include "item.hpp"
+#include "savegame.hpp"
 
 class Creature;
 
@@ -26,6 +28,9 @@ private:
 	std::vector<TimelineAction> timeline;
 	std::vector<std::pair<Point, Item*> > items;
 	inline int coord(Point pos);
+	
+	Level(); // for savegames only
+	friend class Savegame;
 
 public:
 	Level(int width,int height);
@@ -47,6 +52,9 @@ public:
 	void buildTimeline();
 	bool isPlayerTurn();
 	void performCreatureTurn();
+	
+	unsigned int save(Savegame* sg);
+	void load(Savegame* sg, std::stringstream& ss);
 };
 
 #endif

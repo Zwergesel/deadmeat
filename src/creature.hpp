@@ -3,12 +3,14 @@
 
 #include <libtcod.hpp>
 #include <string>
+#include <sstream>
 #include "utility.hpp"
 #include "items/weapon.hpp"
 #include "items/armor.hpp"
 
 class Level;
 class Player;
+class Savegame;
 
 class Creature
 {
@@ -31,6 +33,7 @@ protected:
 
 public:
 
+	Creature(); // for savegames
 	Creature(Point p, std::string name, int symbol, TCODColor color, int health);
 	~Creature();
 	std::string getName();
@@ -56,6 +59,9 @@ public:
 	bool hurt(int damage, Creature* instigator); // ,DamageType dt
 
 	virtual int action();
+	
+	unsigned int save(Savegame* sg);
+	void load(Savegame* sg, std::stringstream& ss);
 };
 
 class Goblin: public Creature

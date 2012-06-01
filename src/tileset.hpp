@@ -2,6 +2,9 @@
 #define _TILESET_HPP
 
 #include <libtcod.hpp>
+#include <sstream>
+
+class Savegame;
 
 enum Tile
 {

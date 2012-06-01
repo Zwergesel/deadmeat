@@ -7,9 +7,35 @@
 #include "world.hpp"
 #include "item.hpp"
 #include "items/weapon.hpp"
+#include "savegame.hpp"
 
 int Player::dx[] = {-1,0,1,-1,0,1,-1,0,1};
 int Player::dy[] = {1,1,1,0,0,0,-1,-1,-1};
+
+Player::Player()
+{
+	// TODO: remove and load in load(..);
+	skills[SKILL_MELEE_COMBAT] = Skill("melee combat", 0, ATTR_STR);
+	skills[SKILL_RANGED_COMBAT] = Skill("ranged combat", 0, ATTR_DEX);
+	skills[SKILL_HEALTH] = Skill("health", 0, ATTR_CON);
+	skills[SKILL_UNARMORED] = Skill("unarmored", 0, ATTR_DEX);
+	skills[SKILL_LEATHER_ARMOR] = Skill("leather armor", 0, ATTR_DEX);
+	skills[SKILL_SCALE_ARMOR] = Skill("scale armor", 0, ATTR_DEX);
+	skills[SKILL_RING_ARMOR] = Skill("ring armor", 0, ATTR_DEX);
+	skills[SKILL_CLOTH_ARMOR] = Skill("cloth armor", 0, ATTR_DEX);
+	skills[SKILL_PLATE_ARMOR] = Skill("plate armor", 0, ATTR_DEX);
+	skills[SKILL_UNARMED] = Skill("unarmed", 0, ATTR_STR);
+	skills[SKILL_AXE] = Skill("axe", 0, ATTR_STR);
+	skills[SKILL_SWORD] = Skill("sword", 0, ATTR_STR);
+	skills[SKILL_MACEFLAIL] = Skill("mace & flail", 0, ATTR_STR);
+	skills[SKILL_STAFF] = Skill("staff", 0, ATTR_STR);
+	skills[SKILL_DAGGER] = Skill("dagger", 0, ATTR_DEX);
+	skills[SKILL_WHIP] = Skill("whip", 0, ATTR_DEX);
+	skills[SKILL_PIKE] = Skill("pike", 0, ATTR_STR);
+	skills[SKILL_BOW] = Skill("bow", 0, ATTR_DEX);
+	skills[SKILL_CROSSBOW] = Skill("crossbow", 0, ATTR_DEX);
+	skills[SKILL_SLING] = Skill("sling", 0, ATTR_DEX);
+}
 
 Player::Player(std::string name):
 	name(name),
@@ -35,10 +61,10 @@ Player::Player(std::string name):
 	skills[SKILL_BOW] = Skill("bow", 0, ATTR_DEX);
 	skills[SKILL_CROSSBOW] = Skill("crossbow", 0, ATTR_DEX);
 	skills[SKILL_SLING] = Skill("sling", 0, ATTR_DEX);
-	creature = new Creature(Point(40,22), name, '@', TCODColor::black, 250);
+	creature = new Creature(Point(40,22), name, (unsigned char)'@', TCODColor::black, 250);
 	creature->setControlled(true);
 	creature->setAttackSkill(skills[SKILL_UNARMED].value);
-	creature->setBaseWeapon(Weapon("hands", '§', TCODColor::pink, 10, 10, 10, 0, 0, 0, SKILL_UNARMED, 2));
+	creature->setBaseWeapon(Weapon("hands", (unsigned char)'¤', TCODColor::pink, 10, 10, 10, 0, 0, 0, SKILL_UNARMED, 2));
 }
 
 Player::~Player()
@@ -458,4 +484,41 @@ int Player::computeAttackBonus(Weapon* w)
 int Player::computeArmorBonus(Armor* a)
 {
 	return (skills[a->getSkill()].value + skills[SKILL_MELEE_COMBAT].value) / 2;
+}
+
+/*--------------------- SAVING AND LOADING ---------------------*/
+
+unsigned int Player::save(Savegame* sg)
+{
+	void* index = static_cast<void*>(this);
+	if (sg->objExists(index)) return sg->objId(index);
+	std::stringstream ss;
+	sg->saveObj(index, "Player", ss);
+	sg->saveString(name, "name", ss);
+	sg->savePointer(creature->save(sg), "creature", ss);
+	// TODO : skills
+	sg->saveInt(inventory.size(), "#inventory", ss);
+	for (unsigned int d=0; d<inventory.size(); d++)
+	{
+		sg->saveInt(inventory[d].first, "_invKey", ss);
+		sg->savePointer(inventory[d].second->save(sg), "_invItem", ss);
+	}
+	sg->saveInt(state, "state", ss);
+	sg->flushStringstream(ss);
+	return sg->objId(index);
+}
+
+void Player::load(Savegame* sg, std::stringstream& ss)
+{
+	name = sg->loadString("name", ss);
+	creature = static_cast<Creature*>(sg->loadPointer("creature", ss));
+	int n = sg->loadInt("#inventory", ss);
+	while (n-->0)
+	{
+		int key = sg->loadInt("_invKey", ss);
+		Item* item = static_cast<Item*>(sg->loadPointer("_invItem", ss));
+		inventory.push_back(std::make_pair(key,item));
+	}
+	// TODO : check range 0 - STATE_MAX(?)
+	state = static_cast<STATE>(sg->loadInt("state", ss));
 }
