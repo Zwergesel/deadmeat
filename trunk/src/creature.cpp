@@ -55,7 +55,7 @@ Weapon* Creature::getMainWeapon()
 
 Armor* Creature::getArmor()
 {
-  return armor;
+	return armor;
 }
 
 void Creature::wieldMainWeapon(Weapon* wpn, int skill)
@@ -66,8 +66,8 @@ void Creature::wieldMainWeapon(Weapon* wpn, int skill)
 
 void Creature::wearArmor(Armor* a, int skill)
 {
-  armor = a;
-  armorSkill = skill;
+	armor = a;
+	armorSkill = skill;
 }
 
 void Creature::move(Point dpos)
@@ -168,10 +168,10 @@ int Creature::attack(Creature* target)
 	int defense = target->getDefense();
 	TCODRandom rngGauss;
 	rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
-  int mean = attack - defense;
+	int mean = attack - defense;
 	int hit = 0;
-  if(mean >= 0) hit = rngGauss.getInt(-300, 300, mean);
-  if(mean < 0) hit = -rngGauss.getInt(-300, 300, -mean);
+	if (mean >= 0) hit = rngGauss.getInt(-300, 300, mean);
+	if (mean < 0) hit = -rngGauss.getInt(-300, 300, -mean);
 	if (hit >= -70)
 	{
 		if (hit <= 0) damage /= 2;

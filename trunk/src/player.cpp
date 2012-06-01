@@ -214,7 +214,7 @@ int Player::actionPickup()
 int Player::actionPickup(Item* item)
 {
 	Level* level = world.levels[world.currentLevel];
-	if(addItem(item))
+	if (addItem(item))
 	{
 		std::stringstream msg;
 		msg << "Picked up " << util::indefArticle(item->getName()) << " " << item->getName() << ".";
@@ -226,32 +226,32 @@ int Player::actionPickup(Item* item)
 }
 
 int Player::actionDrop()
-{  
+{
 	world.itemSelection = ItemSelection(inventory, "Drop what?", true);
-	world.itemSelection.compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);	
-  if (world.itemSelection.getNumChoices() <= 0)
+	world.itemSelection.compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);
+	if (world.itemSelection.getNumChoices() <= 0)
 	{
 		world.addMessage("Nothing to drop.");
 		return 0;
 	}
-  state = STATE_DROP;
+	state = STATE_DROP;
 	return 0;
 }
 
 int Player::actionDrop(Item* item)
 {
-  Level* level = world.levels[world.currentLevel];
-  std::stringstream msg;
-  if(creature->getArmor() == item || creature->getMainWeapon() == item)
-  {
-    msg << "You are currently using this!";
-	  world.addMessage(msg.str());
-    return 0;
-  }
-  removeItem(item, false);  
+	Level* level = world.levels[world.currentLevel];
+	std::stringstream msg;
+	if (creature->getArmor() == item || creature->getMainWeapon() == item)
+	{
+		msg << "You are currently using this!";
+		world.addMessage(msg.str());
+		return 0;
+	}
+	removeItem(item, false);
 	msg << "Dropped " << util::indefArticle(item->getName()) << " " << item->getName() << ".";
 	world.addMessage(msg.str());
-  level->addItem(item, creature->getPos());
+	level->addItem(item, creature->getPos());
 	return 10;
 }
 
@@ -265,7 +265,7 @@ int Player::actionWield(Item* itemObj)
 	Weapon* weapon = static_cast<Weapon*>(itemObj);
 	if (creature->getMainWeapon() == weapon)
 	{
-    msg << "You were already wielding " << util::indefArticle(weapon->toString()) << " " << weapon->toString() << ".";
+		msg << "You were already wielding " << util::indefArticle(weapon->toString()) << " " << weapon->toString() << ".";
 		world.addMessage(msg.str());
 		return 0;
 	}
@@ -294,7 +294,7 @@ int Player::actionWear(Item* itemObj)
 	}
 	else
 	{
-    creature->wearArmor(armor, computeArmorBonus(armor));
+		creature->wearArmor(armor, computeArmorBonus(armor));
 		msg << "You are now wearing " << util::indefArticle(armor->toString()) << " " << armor->toString() << ".";
 		world.addMessage(msg.str());
 		return 30;
@@ -348,11 +348,11 @@ int Player::action()
 			}
 			return 0;
 		}
-    // drop items
-    else if (state == STATE_DEFAULT && key.c == 'd')
-    {
-      return actionDrop();
-    }
+		// drop items
+		else if (state == STATE_DEFAULT && key.c == 'd')
+		{
+			return actionDrop();
+		}
 		else if (state == STATE_DROP)
 		{
 			if (world.itemSelection.keyInput(key))
@@ -392,7 +392,7 @@ int Player::action()
 			}
 			return 0;
 		}
-    // open wear armor screen
+		// open wear armor screen
 		else if (state == STATE_DEFAULT && key.c == 'W')
 		{
 			world.itemSelection = ItemSelection(inventory, "What do you want to wear?", false);
@@ -429,8 +429,8 @@ int Player::action()
 			}
 			return 0;
 		}
-    // handle wear window
-    else if (state == STATE_WEAR)
+		// handle wear window
+		else if (state == STATE_WEAR)
 		{
 			if (world.itemSelection.keyInput(key))
 			{

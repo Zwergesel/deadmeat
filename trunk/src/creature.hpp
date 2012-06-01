@@ -45,9 +45,9 @@ public:
 	void setControlled(bool);
 	void setLevel(Level* l);
 	Weapon* getMainWeapon();
-  Armor* getArmor();
+	Armor* getArmor();
 	void wieldMainWeapon(Weapon* wpn, int attackSkill);
-  void wearArmor(Armor* armor, int armorSkill);
+	void wearArmor(Armor* armor, int armorSkill);
 	void setAttackSkill(int attackSkill);
 	void setBaseWeapon(Weapon base);
 	std::pair<int,int> getHealth();

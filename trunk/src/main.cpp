@@ -26,11 +26,11 @@ int main()
 	world.viewLevel = Viewport(1, 1, TCODConsole::root->getWidth() - 10, TCODConsole::root->getHeight() - 5);
 	world.viewMsg = Viewport(2, TCODConsole::root->getHeight() - 3, TCODConsole::root->getWidth() - 4, 2);
 	world.viewItemList = Viewport(
-		world.viewLevel.x + world.viewLevel.width/8,
-		world.viewLevel.y + world.viewLevel.height/8,
-		world.viewLevel.width - world.viewLevel.width/4,
-		world.viewLevel.height - world.viewLevel.height/4
-	);
+	                       world.viewLevel.x + world.viewLevel.width/8,
+	                       world.viewLevel.y + world.viewLevel.height/8,
+	                       world.viewLevel.width - world.viewLevel.width/4,
+	                       world.viewLevel.height - world.viewLevel.height/4
+	                     );
 	world.levels[0] = new Level(80,50);//level_generator.generateCaveLevel(80, 50, 40.f);
 	world.currentLevel = 0;
 	world.player->getCreature()->moveTo(Point(35, 22));
@@ -42,8 +42,8 @@ int main()
 	Item* item1 = new Item("item1", '1', TCODColor::blue);
 	Item* item2 = new Item("item2", '2', TCODColor::green);
 	Weapon* mace = new Weapon("cursed mace", '(', TCODColor::red, 15, -60, 4, 1, 1, -60, SKILL_MACEFLAIL, 1);
-  Armor* uber = new Armor("uber armor", ')', TCODColor::black, 1000, 10, SKILL_PLATE_ARMOR);
-  Armor* crap = new Armor("crap armor", ')', TCODColor::black, -1000, 0, SKILL_LEATHER_ARMOR);
+	Armor* uber = new Armor("uber armor", ')', TCODColor::black, 1000, 10, SKILL_PLATE_ARMOR);
+	Armor* crap = new Armor("crap armor", ')', TCODColor::black, -1000, 0, SKILL_LEATHER_ARMOR);
 	world.levels[0]->addCreature(gobbo);
 	world.levels[0]->addCreature(twitter);
 	world.levels[0]->addCreature(defaulto);
@@ -53,8 +53,8 @@ int main()
 	world.levels[0]->addItem(item2, Point(30,30));
 	world.levels[0]->addItem(sword, Point(30,30));
 	world.levels[0]->addItem(mace, Point(30,30));
-  world.levels[0]->addItem(uber, Point(30,30));
-  world.levels[0]->addItem(crap, Point(30,30));
+	world.levels[0]->addItem(uber, Point(30,30));
+	world.levels[0]->addItem(crap, Point(30,30));
 
 	while (!world.requestQuit)
 	{
