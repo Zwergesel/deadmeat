@@ -13,6 +13,7 @@ class Creature;
 class Level;
 class TileSet;
 class Savegame;
+class LoadBlock;
 
 struct Viewport
 {
@@ -52,9 +53,9 @@ public:
 	void drawWorld();
 	void drawInfo();
 	void drawItemSelection(ItemSelection& sel);
-	
+
 	unsigned int save(Savegame& sg);
-	void load(Savegame* sg, std::stringstream& ss);
+	void load(LoadBlock& load);
 };
 
 // Global world variable

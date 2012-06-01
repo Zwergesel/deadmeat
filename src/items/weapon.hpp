@@ -6,6 +6,7 @@
 #include <sstream>
 
 class Savegame;
+class LoadBlock;
 
 class Weapon : public Item
 {
@@ -31,9 +32,9 @@ public:
 	int getHandsUsed();
 	SKILLS getSkill();
 	std::string toString();
-	
+
 	unsigned int save(Savegame& sg);
-	void load(Savegame* sg, std::stringstream& ss);
+	void load(LoadBlock& load);
 };
 
 #endif

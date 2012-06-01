@@ -28,7 +28,7 @@ private:
 	std::vector<TimelineAction> timeline;
 	std::vector<std::pair<Point, Item*> > items;
 	inline int coord(Point pos);
-	
+
 	Level(); // for savegames only
 	friend class Savegame;
 
@@ -52,9 +52,9 @@ public:
 	void buildTimeline();
 	bool isPlayerTurn();
 	void performCreatureTurn();
-	
+
 	unsigned int save(Savegame& sg);
-	void load(Savegame* sg, std::stringstream& ss);
+	void load(LoadBlock& load);
 };
 
 #endif

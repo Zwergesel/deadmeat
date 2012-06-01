@@ -1,5 +1,4 @@
 #include <sstream>
-#include <iostream>
 #include "creature.hpp"
 #include "player.hpp"
 #include "level.hpp"
@@ -228,19 +227,14 @@ unsigned int Creature::save(Savegame& sg)
 	return id;
 }
 
-void Creature::load(Savegame* sg, std::stringstream& ss)
+void Creature::load(LoadBlock& load)
 {
-	name = sg->loadString("name", ss);
-	symbol = sg->loadInt("symbol", ss);
-	position = sg->loadPoint("position", ss);
-	color = sg->loadColor("color", ss);
-	health = sg->loadInt("health", ss);
-	maxHealth = sg->loadInt("maxHealth", ss);
-	controlled = sg->loadBool("controlled", ss);
-	mainWeapon = static_cast<Weapon*>(sg->loadPointer("mainWeapon", ss));
-	armor = static_cast<Armor*>(sg->loadPointer("armor", ss));
-	attackSkill = sg->loadInt("attackSkill", ss);
-	armorSkill = sg->loadInt("armorSkill", ss);
-	baseWeapon = *static_cast<Weapon*>(sg->loadPointer("baseWeapon", ss));
-	baseArmor = *static_cast<Armor*>(sg->loadPointer("baseArmor", ss));
+	load ("name", name) ("symbol", symbol) ("position", position);
+	load ("color", color) ("health", health) ("maxHealth", maxHealth);
+	load ("controlled", controlled);
+	mainWeapon = static_cast<Weapon*>(load.ptr("mainWeapon"));
+	armor = static_cast<Armor*>(load.ptr("armor"));
+	load ("attackSkill", attackSkill) ("armorSkill", armorSkill);
+	baseWeapon = *static_cast<Weapon*>(load.ptr("baseWeapon"));
+	baseArmor = *static_cast<Armor*>(load.ptr("baseArmor"));
 }

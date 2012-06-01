@@ -504,17 +504,21 @@ unsigned int Player::save(Savegame& sg)
 	return id;
 }
 
-void Player::load(Savegame* sg, std::stringstream& ss)
+void Player::load(LoadBlock& load)
 {
-	name = sg->loadString("name", ss);
-	creature = static_cast<Creature*>(sg->loadPointer("creature", ss));
-	int n = sg->loadInt("#inventory", ss);
+	load ("name", name);
+	creature = static_cast<Creature*>(load.ptr("creature"));
+	int n;
+	load ("#inventory", n);
 	while (n-->0)
 	{
-		int key = sg->loadInt("_invKey", ss);
-		Item* item = static_cast<Item*>(sg->loadPointer("_invItem", ss));
+		int key;
+		load ("_invKey", key);
+		Item* item = static_cast<Item*>(load.ptr("_invItem"));
 		inventory.push_back(std::make_pair(key,item));
 	}
 	// TODO : check range 0 - STATE_MAX(?)
-	state = static_cast<STATE>(sg->loadInt("state", ss));
+	int s;
+	load ("state", s);
+	state = static_cast<STATE>(s);
 }

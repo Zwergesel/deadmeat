@@ -27,8 +27,7 @@ class SavegameFormatException: public std::exception
 private:
 	std::string detail;
 public:
-	SavegameFormatException():detail("???"){};
-	SavegameFormatException(std::string s):detail(s){};
+	SavegameFormatException(std::string s):detail(s) {};
 	~SavegameFormatException() throw() {};
 	virtual const char* what() const throw()
 	{
@@ -39,8 +38,8 @@ public:
 class SaveBlock
 {
 private:
-public:
 	std::stringstream data;
+public:
 	SaveBlock(const std::string& header, unsigned int voidPtrId);
 	SaveBlock& operator()(const std::string& name, const std::string& input);
 	SaveBlock& operator()(const std::string& name, int input);
@@ -52,6 +51,24 @@ public:
 	friend Savegame& operator<<(Savegame& sg, const SaveBlock& sb);
 };
 
+class LoadBlock
+{
+private:
+	std::stringstream data;
+	Savegame* savegame;
+	std::string parseLine(const std::string& name);
+	friend LoadBlock& operator<<(LoadBlock& lb, const std::string& input);
+public:
+	LoadBlock(Savegame*);
+	LoadBlock& operator()(const std::string& name, std::string& output);
+	LoadBlock& operator()(const std::string& name, int& output);
+	LoadBlock& operator()(const std::string& name, double& output);
+	LoadBlock& operator()(const std::string& name, bool& output);
+	LoadBlock& operator()(const std::string& name, Point& output);
+	LoadBlock& operator()(const std::string& name, TCODColor& output);
+	void* ptr(const std::string& name);
+};
+
 class Savegame
 {
 private:
@@ -61,27 +78,17 @@ private:
 	std::ofstream saveStream;
 	std::ifstream loadStream;
 	bool firstBlock;
+	void loadObject();
 	friend Savegame& operator<<(Savegame& sg, const SaveBlock& sb);
+	friend void* LoadBlock::ptr(const std::string& name);
 
 public:
 	Savegame();
 	~Savegame();
-	
+
 	bool saved(void* voidPtr, unsigned int* voidPtrId);
 	void saveWorld(World& world, std::string fileName);
-	
-	World* loadWorld(std::string fileName);
-	void loadBlock();
-	void loadObj(std::stringstream& ss);
-	std::string parseLine(const std::string& name, std::stringstream& ss);
-	std::string loadString(std::string name, std::stringstream& ss);
-	int loadInt(std::string name, std::stringstream& ss);
-	double loadDouble(std::string name, std::stringstream& ss);
-	bool loadBool(std::string name, std::stringstream& ss);
-	Point loadPoint(std::string name, std::stringstream& ss);
-	TCODColor loadColor(std::string name, std::stringstream& ss);
-	Viewport loadViewport(std::string name, std::stringstream& ss);
-	void* loadPointer(std::string name, std::stringstream& ss);
+	void loadWorld(std::string fileName);
 };
 
 #endif

@@ -214,14 +214,15 @@ unsigned int World::save(Savegame& sg)
 	return id;
 }
 
-void World::load(Savegame* sg, std::stringstream& ss)
+void World::load(LoadBlock& load)
 {
-	currentLevel = sg->loadInt("currentLevel", ss);
-	levelOffset = sg->loadPoint("levelOffset", ss);
-	player = static_cast<Player*>(sg->loadPointer("player", ss));
-	int n = sg->loadInt("#levels", ss);
+	load ("currentLevel", currentLevel) ("levelOffset", levelOffset);
+	// TODO: delete player and levels [MEMORY LEAK]
+	player = static_cast<Player*>(load.ptr("player"));
+	int n;
+	load ("#levels", n);
 	for (int i=0; i<n; i++)
 	{
-		levels[i] = static_cast<Level*>(sg->loadPointer("_level", ss));
+		levels[i] = static_cast<Level*>(load.ptr("_level"));
 	}
 }

@@ -25,7 +25,7 @@ void Savegame::saveWorld(World& world, std::string fileName)
 {
 	uniqueId = 0;
 	firstBlock = true;
-	
+
 	// TODO: catch I/O exceptions
 	saveStream.open(fileName.c_str());
 	world.save(*this);
@@ -48,7 +48,9 @@ bool Savegame::saved(void* voidPtr, unsigned int* voidPtrId)
 		obj2id[voidPtr] = ++uniqueId;
 		*voidPtrId = uniqueId;
 		return false;
-	} else {
+	}
+	else
+	{
 		*voidPtrId = it->second;
 		return true;
 	}
@@ -107,96 +109,96 @@ SaveBlock& SaveBlock::ptr(const std::string& name, unsigned int voidPtrId)
 ///////******************** LOADING ***********************///////
 /*--------------------------------------------------------------*/
 
-World* Savegame::loadWorld(std::string fileName)
+void Savegame::loadWorld(std::string fileName)
 {
 	for (int i=0; i<100; i++) objects[i] = NULL;
 
 	// TODO: catch I/O exceptions
 	loadStream.open(fileName.c_str());
-	
+
 	try
 	{
 		std::string line;
 		while (!loadStream.eof())
 		{
-			loadBlock();
+			loadObject();
 		}
 	}
-	catch(SavegameFormatException& e)
+	catch (SavegameFormatException& e)
 	{
 		std::cout << "Savegame is corrupt: " << e.what() << std::endl;
 	}
-	
+
+	std::cerr << "Savegame loading complete!" << std::endl;
+
 	loadStream.close();
-	return NULL;
 }
 
-void Savegame::loadBlock()
+void Savegame::loadObject()
 {
-	std::stringstream ss;
+	// Parse header first, format: "[[ClassName: 42]]"
 	std::string line;
-	while (!getline(loadStream, line).eof() && line.length() > 0)
-	{
-		ss << line << std::endl;
-	}
-	loadObj(ss);
-}
-
-void Savegame::loadObj(std::stringstream& is)
-{
-	std::string line;
-	getline(is,line);
+	if (getline(loadStream,line).eof()) throw SavegameFormatException("loadObject _ unexpected end-of-file");
 	if (line.substr(0,2) != "[[" || line.substr(line.length()-2) != "]]")
 	{
-		throw SavegameFormatException("loadWorld _ wrong obj definition [[ ... ]]");
+		throw SavegameFormatException("loadObject _ wrong obj definition [[ ... ]]");
 	}
 	size_t pos = line.find(": ");
-	if (pos == std::string::npos) throw SavegameFormatException("loadObj _ no colon: " + line);
+	if (pos == std::string::npos) throw SavegameFormatException("loadObject _ no colon: " + line);
 	std::string objClass = line.substr(2,pos-2);
 	std::stringstream ss(line.substr(pos+2,line.length()-pos-4));
 	unsigned int id;
-	if ((ss >> id).fail()) throw SavegameFormatException("loadObj _ integer conversion: " + line);
+	if ((ss >> id).fail()) throw SavegameFormatException("loadObject _ integer conversion: " + line);
+
+	// Header ok, load remaining data into a LoadBlock
+	LoadBlock load(this);
+	while (!getline(loadStream, line).eof() && line.length() > 0)
+	{
+		load << line;
+	}
+
+	// Create object and ask it to load it's data from the LoadBlock
 	if (objClass == "World")
 	{
-		world = *(new World());
+		// No new world object. Global world loads this
 		objects[id] = static_cast<void*>(&world);
-		world.load(this, is);
+		world.load(load);
 	}
 	else if (objClass == "Creature")
 	{
 		Creature* obj = new Creature();
 		objects[id] = static_cast<void*>(obj);
-		obj->load(this, is);
+		obj->load(load);
 	}
 	else if (objClass == "Level")
 	{
 		Level* obj = new Level();
 		objects[id] = static_cast<void*>(obj);
-		obj->load(this, is);
+		obj->load(load);
 	}
 	else if (objClass == "Player")
 	{
 		Player* obj = new Player();
 		objects[id] = static_cast<void*>(obj);
-		obj->load(this, is);
+		obj->load(load);
 	}
 	else if (objClass == "Item")
 	{
 		Item* obj = new Item();
 		objects[id] = static_cast<void*>(obj);
-		obj->load(this, is);
+		obj->load(load);
 	}
 	else if (objClass == "Weapon")
 	{
 		Weapon* obj = new Weapon();
 		objects[id] = static_cast<void*>(obj);
-		obj->load(this, is);
+		obj->load(load);
 	}
 	else if (objClass == "Armor")
 	{
 		Armor* obj = new Armor();
 		objects[id] = static_cast<void*>(obj);
-		obj->load(this, is);
+		obj->load(load);
 	}
 	else
 	{
@@ -205,103 +207,118 @@ void Savegame::loadObj(std::stringstream& is)
 	std::cerr << objClass << " [" << id << "] @ " << objects[id] << std::endl;
 }
 
-std::string Savegame::parseLine(const std::string& name, std::stringstream& is)
+LoadBlock::LoadBlock(Savegame* sg)
+{
+	savegame = sg;
+}
+
+LoadBlock& operator<<(LoadBlock& lb, const std::string& input)
+{
+	lb.data << input << std::endl;
+	return lb;
+}
+
+std::string LoadBlock::parseLine(const std::string& name)
 {
 	std::string line;
-	getline(is, line);
+	getline(data, line);
 	size_t pos = line.find(": ");
 	if (pos == std::string::npos) throw SavegameFormatException("parseLine _ no colon: " + line);
 	if (line.substr(0,pos) != name) throw SavegameFormatException("parseLine: " + name + " != " + line.substr(0,pos));
 	return line.substr(pos+2);
 }
 
-std::string Savegame::loadString(std::string name, std::stringstream& is)
+LoadBlock& LoadBlock::operator()(const std::string& name, std::string& output)
 {
-	return parseLine(name, is);
+	output = parseLine(name);
+	return *this;
 }
 
-int Savegame::loadInt(std::string name, std::stringstream& is)
+LoadBlock& LoadBlock::operator()(const std::string& name, int& output)
 {
-	std::stringstream ss(parseLine(name, is));
+	std::stringstream ss(parseLine(name));
 	int result;
 	if ((ss >> result).fail())
 	{
 		throw SavegameFormatException("loadInt _ conversion: " + ss.str());
 	}
-	return result;
+	output = result;
+	return *this;
 }
 
-double Savegame::loadDouble(std::string name, std::stringstream& is)
+LoadBlock& LoadBlock::operator()(const std::string& name, double& output)
 {
-	std::stringstream ss(parseLine(name, is));
+	std::stringstream ss(parseLine(name));
 	double result;
 	if ((ss >> result).fail())
 	{
 		throw SavegameFormatException("loadDouble _ conversion: " + ss.str());
 	}
-	return result;
+	output = result;
+	return *this;
 }
 
-bool Savegame::loadBool(std::string name, std::stringstream& is)
+LoadBlock& LoadBlock::operator()(const std::string& name, bool& output)
 {
-	std::string result = parseLine(name, is);
+	std::string result = parseLine(name);
 	if (result == "true")
 	{
-		return true;
+		output = true;
 	}
-	else if (result != "false")
+	else if (result == "false")
+	{
+		output = false;
+	}
+	else
 	{
 		throw SavegameFormatException("loadBool _ conversion: " + result);
 	}
-	return false;
+	return *this;
 }
 
-Point Savegame::loadPoint(std::string name, std::stringstream& is)
+LoadBlock& LoadBlock::operator()(const std::string& name, Point& output)
 {
-	std::stringstream ss(parseLine(name, is));
-	Point p;
+	std::stringstream ss(parseLine(name));
 	char comma;
-	if ((ss >> p.x >> comma >> p.y).fail() || comma != ',')
+	if ((ss >> output.x >> comma >> output.y).fail() || comma != ',')
 	{
 		throw SavegameFormatException("loadPoint _ conversion: " + ss.str());
 	}
-	return p;
+	return *this;
 }
 
-TCODColor Savegame::loadColor(std::string name, std::stringstream& is)
+LoadBlock& LoadBlock::operator()(const std::string& name, TCODColor& output)
 {
-	std::stringstream ss(parseLine(name, is));
+	std::stringstream ss(parseLine(name));
 	int r,g,b;
 	char c1,c2;
 	if ((ss >> r >> c1 >> g >> c2 >> b).fail()
-		|| c1 != ',' || c2 != ',')
+	    || c1 != ',' || c2 != ',')
 	{
 		throw SavegameFormatException("loadColor _ conversion: " + ss.str());
 	}
-	return TCODColor(r,g,b);
+	output = TCODColor(r,g,b);
+	return *this;
 }
 
-Viewport Savegame::loadViewport(std::string name, std::stringstream& is)
+void* LoadBlock::ptr(const std::string& name)
 {
-	std::stringstream ss(parseLine(name, is));
-	Viewport v;
-	char c1,c2,c3;
-	if ((ss >> v.x >> c1 >> v.y >> c2 >> v.width >> c3 >> v.height).fail()
-		|| c1 != ',' || c2 != ',' || c3 != ',')
+	int id;
 	{
-		throw SavegameFormatException("loadPoint _ conversion: " + ss.str());
+		// Forget stringstream when no longer needed
+		std::stringstream ss(parseLine(name));
+		char at;
+		if ((ss >> at >> id).fail() || at != '@')
+		{
+			throw SavegameFormatException("loadPointer _ conversion: " + ss.str());
+		}
 	}
-	return v;
-}
-
-void* Savegame::loadPointer(std::string name, std::stringstream& is)
-{
-	int id = loadInt(name, is);
 	if (id == 0) return NULL;
-	while (objects[id] == NULL) {
-		if (loadStream.eof()) throw SavegameFormatException("loadPointer _ unexpected end-of-file: " + id);
-		loadBlock();
+	while (savegame->objects[id] == NULL)
+	{
+		if (savegame->loadStream.eof()) throw SavegameFormatException("loadPointer _ unexpected end-of-file: " + id);
+		savegame->loadObject();
 	}
-	//std::cerr << "loadPointer @ " << id << ": " << objects[id] << std::endl;
-	return objects[id];
+	//std::cerr << "loadPointer @ " << id << ": " << savegame->objects[id] << std::endl;
+	return savegame->objects[id];
 }

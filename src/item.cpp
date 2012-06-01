@@ -57,9 +57,7 @@ unsigned int Item::save(Savegame& sg)
 	return id;
 }
 
-void Item::load(Savegame* sg, std::stringstream& ss)
+void Item::load(LoadBlock& load)
 {
-	name = sg->loadString("name", ss);
-	symbol = sg->loadInt("symbol", ss);
-	color = sg->loadColor("color", ss);
+	load ("name", name) ("symbol", symbol) ("color", color);
 }
