@@ -488,24 +488,20 @@ int Player::computeArmorBonus(Armor* a)
 
 /*--------------------- SAVING AND LOADING ---------------------*/
 
-unsigned int Player::save(Savegame* sg)
+unsigned int Player::save(Savegame& sg)
 {
-	void* index = static_cast<void*>(this);
-	if (sg->objExists(index)) return sg->objId(index);
-	std::stringstream ss;
-	sg->saveObj(index, "Player", ss);
-	sg->saveString(name, "name", ss);
-	sg->savePointer(creature->save(sg), "creature", ss);
+	unsigned int id;
+	if (sg.saved(this,&id)) return id;
+	SaveBlock store("Player", id);
 	// TODO : skills
-	sg->saveInt(inventory.size(), "#inventory", ss);
+	store ("name", name) .ptr("creature", creature->save(sg)) ("#inventory", (int) inventory.size());
 	for (unsigned int d=0; d<inventory.size(); d++)
 	{
-		sg->saveInt(inventory[d].first, "_invKey", ss);
-		sg->savePointer(inventory[d].second->save(sg), "_invItem", ss);
+		store ("_invKey", inventory[d].first) .ptr("_invItem", inventory[d].second->save(sg));
 	}
-	sg->saveInt(state, "state", ss);
-	sg->flushStringstream(ss);
-	return sg->objId(index);
+	store ("state", (int) state);
+	sg << store;
+	return id;
 }
 
 void Player::load(Savegame* sg, std::stringstream& ss)

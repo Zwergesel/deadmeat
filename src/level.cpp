@@ -204,29 +204,25 @@ bool operator<(TimelineAction a, TimelineAction b)
 
 /*--------------------- SAVING AND LOADING ---------------------*/
 
-unsigned int Level::save(Savegame* sg)
+unsigned int Level::save(Savegame& sg)
 {
-	void* index = static_cast<void*>(this);
-	if (sg->objExists(index)) return sg->objId(index);
-	std::stringstream ss;
-	sg->saveObj(index, "Level", ss);
-	sg->saveInt(width, "width", ss);
-	sg->saveInt(height, "height", ss);
-	// TODO : map
-	sg->saveInt(creatures.size(), "#creatures", ss);
+	unsigned int id;
+	if (sg.saved(this,&id)) return id;
+	SaveBlock store("Level", id);
+	// TODO: map
+	store ("width", width) ("height", height) ("#creatures", (int) creatures.size());
 	for (unsigned int d=0; d<creatures.size(); d++)
 	{
 		// TODO : time from timeline
-		sg->savePointer(creatures[d]->save(sg), "_creature", ss);
+		store.ptr("_creature", creatures[d]->save(sg));
 	}
-	sg->saveInt(items.size(), "#items", ss);
+	store ("#items", (int) items.size());
 	for (unsigned int d=0; d<items.size(); d++)
 	{
-		sg->savePoint(items[d].first, "_position", ss);
-		sg->savePointer(items[d].second->save(sg), "_item", ss);
+		store ("_position", items[d].first).ptr("_item", items[d].second->save(sg));
 	}
-	sg->flushStringstream(ss);
-	return sg->objId(index);
+	sg << store;
+	return id;
 }
 
 void Level::load(Savegame* sg, std::stringstream& ss)

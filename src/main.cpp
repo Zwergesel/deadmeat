@@ -21,7 +21,7 @@ int main()
 	TCODConsole::initRoot(80,51,"deadmeat",false);
 	TCODSystem::setFps(30);
 
-	/*/ Init hardcoded world
+	// Init hardcoded world
 	LevelGen level_generator;
 	world.viewLevel = Viewport(1, 1, TCODConsole::root->getWidth() - 10, TCODConsole::root->getHeight() - 5);
 	world.viewMsg = Viewport(2, TCODConsole::root->getHeight() - 3, TCODConsole::root->getWidth() - 4, 2);
@@ -58,8 +58,8 @@ int main()
 	/***/
 	
 	Savegame sg;
-	//sg.saveWorld(&world, "savegame.txt");
-	sg.loadWorld("savegame.txt");
+	sg.saveWorld(world, "savegame.txt");
+	/*sg.loadWorld("savegame.txt");
 	world.viewLevel = Viewport(1, 1, TCODConsole::root->getWidth() - 10, TCODConsole::root->getHeight() - 5);
 	world.viewMsg = Viewport(2, TCODConsole::root->getHeight() - 3, TCODConsole::root->getWidth() - 4, 2);
 	world.viewItemList = Viewport(
@@ -67,7 +67,7 @@ int main()
 	                       world.viewLevel.y + world.viewLevel.height/8,
 	                       world.viewLevel.width - world.viewLevel.width/4,
 	                       world.viewLevel.height - world.viewLevel.height/4
-	                     );
+	                     );*/
 
 	while (!world.requestQuit)
 	{

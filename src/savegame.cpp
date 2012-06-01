@@ -21,78 +21,86 @@ Savegame::~Savegame()
 	std::cerr << "~Savegame() @ " << this << std::endl;
 }
 
-void Savegame::saveWorld(World* world, std::string fileName)
+void Savegame::saveWorld(World& world, std::string fileName)
 {
 	uniqueId = 0;
-	for (int i=0; i<100; i++) objects[i] = NULL;
-
+	firstBlock = true;
+	
 	// TODO: catch I/O exceptions
 	saveStream.open(fileName.c_str());
-	world->save(this);
+	world.save(*this);
 	saveStream.close();
 }
 
-void Savegame::flushStringstream(std::stringstream& ss)
+Savegame& operator<<(Savegame& sg, const SaveBlock& sb)
 {
-	saveStream << ss.str() << std::endl;
+	if (!sg.firstBlock) sg.saveStream << std::endl;
+	sg.saveStream << sb.data.str();
+	sg.firstBlock = false;
+	return sg;
 }
 
-bool Savegame::objExists(void* obj) {
-	return obj2id.find(obj) != obj2id.end();
-}
-
-unsigned int Savegame::objId(void* obj) {
-	return obj2id[obj];
-}
-
-void Savegame::saveObj(void* obj, std::string name, std::stringstream& ss)
+bool Savegame::saved(void* voidPtr, unsigned int* voidPtrId)
 {
-	std::cerr << name << " @ " << obj << std::endl;
-	obj2id[obj] = ++uniqueId;
-	ss << "[[" << name << ": " << uniqueId << "]]" << std::endl;
+	std::map<void*,unsigned int>::iterator it = obj2id.find(voidPtr);
+	if (it == obj2id.end())
+	{
+		obj2id[voidPtr] = ++uniqueId;
+		*voidPtrId = uniqueId;
+		return false;
+	} else {
+		*voidPtrId = it->second;
+		return true;
+	}
 }
 
-void Savegame::saveString(std::string s, std::string name, std::stringstream& ss)
+SaveBlock::SaveBlock(const std::string& header, unsigned int voidPtrId)
 {
-	// TODO: replace endlines in string
-	ss << name << ": " << s << std::endl; 
+	data << "[[" << header << ": " << voidPtrId << "]]" << std::endl;
 }
 
-void Savegame::saveInt(int i, std::string name, std::stringstream& ss)
+SaveBlock& SaveBlock::operator()(const std::string& name, const std::string& input)
 {
-	ss << name << ": " << i << std::endl;
+	data << name << ": " << input << std::endl;
+	return *this;
 }
 
-void Savegame::saveDouble(double d, std::string name, std::stringstream& ss)
+SaveBlock& SaveBlock::operator()(const std::string& name, int input)
 {
-	ss.precision(32);
-	ss << name << ": " << std::scientific << d << std::endl;
+	data << name << ": " << input << std::endl;
+	return *this;
 }
 
-void Savegame::saveBool(bool b, std::string name, std::stringstream& ss)
+SaveBlock& SaveBlock::operator()(const std::string& name, double input)
 {
-	ss << name << ": " << (b ? "true" : "false") << std::endl;
+	data.precision(32);
+	data << name << ": " << input << std::endl;
+	return *this;
 }
 
-void Savegame::savePoint(Point p, std::string name, std::stringstream& ss)
+SaveBlock& SaveBlock::operator()(const std::string& name, bool input)
 {
-	ss << name << ": " << p.x << ", " << p.y << std::endl;
+	data << name << ": " << (input ? "true" : "false") << std::endl;
+	return *this;
 }
 
-void Savegame::saveColor(TCODColor& c, std::string name, std::stringstream& ss)
+SaveBlock& SaveBlock::operator()(const std::string& name, const Point& input)
 {
-	ss << name << ": " << static_cast<int>(c.r) << ", ";
-	ss << static_cast<int>(c.g) << ", " << static_cast<int>(c.b) << std::endl;
+	data << name << ": " << input.x << ", " << input.y << std::endl;
+	return *this;
 }
 
-void Savegame::saveViewport(Viewport v, std::string name, std::stringstream& ss)
+SaveBlock& SaveBlock::operator()(const std::string& name, const TCODColor& input)
 {
-	ss << name << ": " << v.x << ", " << v.y << ", " << v.width << ", " << v.height << std::endl;
+	data << name << ": " << static_cast<int>(input.r) << ", ";
+	data << static_cast<int>(input.g) << ", " << static_cast<int>(input.b) << std::endl;
+	return *this;
 }
 
-void Savegame::savePointer(unsigned int id, std::string name, std::stringstream& ss)
+SaveBlock& SaveBlock::ptr(const std::string& name, unsigned int voidPtrId)
 {
-	ss << name << ": " << id << std::endl;
+	data << name << ": @" << voidPtrId << std::endl;
+	return *this;
 }
 
 /*--------------------------------------------------------------*/
@@ -101,6 +109,8 @@ void Savegame::savePointer(unsigned int id, std::string name, std::stringstream&
 
 World* Savegame::loadWorld(std::string fileName)
 {
+	for (int i=0; i<100; i++) objects[i] = NULL;
+
 	// TODO: catch I/O exceptions
 	loadStream.open(fileName.c_str());
 	

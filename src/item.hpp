@@ -35,7 +35,7 @@ public:
 	std::string toString();
 	std::string typeString();
 	
-	virtual unsigned int save(Savegame* sg);
+	virtual unsigned int save(Savegame& sg);
 	virtual void load(Savegame* sg, std::stringstream& ss);
 };
 

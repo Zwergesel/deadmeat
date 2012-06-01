@@ -19,6 +19,7 @@ struct Viewport;
 class Item;
 class Weapon;
 class Armor;
+class Savegame;
 
 /* Actual classes */
 class SavegameFormatException: public std::exception
@@ -35,6 +36,22 @@ public:
 	}
 };
 
+class SaveBlock
+{
+private:
+public:
+	std::stringstream data;
+	SaveBlock(const std::string& header, unsigned int voidPtrId);
+	SaveBlock& operator()(const std::string& name, const std::string& input);
+	SaveBlock& operator()(const std::string& name, int input);
+	SaveBlock& operator()(const std::string& name, double input);
+	SaveBlock& operator()(const std::string& name, bool input);
+	SaveBlock& operator()(const std::string& name, const Point& input);
+	SaveBlock& operator()(const std::string& name, const TCODColor& input);
+	SaveBlock& ptr(const std::string& name, unsigned int voidPtrId);
+	friend Savegame& operator<<(Savegame& sg, const SaveBlock& sb);
+};
+
 class Savegame
 {
 private:
@@ -43,25 +60,15 @@ private:
 	void* objects[100];
 	std::ofstream saveStream;
 	std::ifstream loadStream;
+	bool firstBlock;
+	friend Savegame& operator<<(Savegame& sg, const SaveBlock& sb);
 
 public:
 	Savegame();
 	~Savegame();
 	
-	void flushStringstream(std::stringstream& ss);
-	bool objExists(void* obj);
-	unsigned int objId(void* obj);
-	
-	void saveWorld(World* world, std::string fileName);
-	void saveObj(void* obj, std::string name, std::stringstream& ss);
-	void saveString(std::string s, std::string name, std::stringstream& ss);
-	void saveInt(int i, std::string name, std::stringstream& ss);
-	void saveDouble(double d, std::string name, std::stringstream& ss);
-	void saveBool(bool b, std::string name, std::stringstream& ss);
-	void savePoint(Point p, std::string name, std::stringstream& ss);
-	void saveColor(TCODColor& c, std::string name, std::stringstream& ss);
-	void saveViewport(Viewport v, std::string name, std::stringstream& ss);
-	void savePointer(unsigned int id, std::string name, std::stringstream& ss);
+	bool saved(void* voidPtr, unsigned int* voidPtrId);
+	void saveWorld(World& world, std::string fileName);
 	
 	World* loadWorld(std::string fileName);
 	void loadBlock();

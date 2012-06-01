@@ -30,21 +30,15 @@ SKILLS Armor::getSkill()
 
 /*--------------------- SAVING AND LOADING ---------------------*/
 
-unsigned int Armor::save(Savegame* sg)
+unsigned int Armor::save(Savegame& sg)
 {
-	void* index = static_cast<void*>(this);
-	if (sg->objExists(index)) return sg->objId(index);
-	std::stringstream ss;
-	sg->saveObj(index, "Armor", ss);
-	sg->saveString(name, "name", ss);
-	sg->saveInt(symbol, "symbol", ss);
-	sg->saveColor(color, "color", ss);
-	sg->saveInt(ac, "ac", ss);
-	sg->saveInt(hindrance, "hindrance", ss);
-	sg->saveInt(skill, "skill", ss);
-	// Note: auto-load type and strType
-	sg->flushStringstream(ss);
-	return sg->objId(index);
+	unsigned int id;
+	if (sg.saved(this,&id)) return id;
+	SaveBlock store("Armor", id);
+	store ("name", name) ("symbol", symbol) ("color", color) ("ac", ac);
+	store ("hindrance", hindrance) ("skill", (int)skill);
+	sg << store;
+	return id;
 }
 
 void Armor::load(Savegame* sg, std::stringstream& ss)

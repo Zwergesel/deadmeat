@@ -212,28 +212,20 @@ void Creature::setBaseWeapon(Weapon base)
 
 /*--------------------- SAVING AND LOADING ---------------------*/
 
-unsigned int Creature::save(Savegame* sg)
+unsigned int Creature::save(Savegame& sg)
 {
-	void* index = static_cast<void*>(this);
-	if (sg->objExists(index)) return sg->objId(index);
-	std::stringstream ss;
-	sg->saveObj(index, "Creature", ss);
-	sg->saveString(name, "name", ss);
-	sg->saveInt(symbol, "symbol", ss);
-	sg->savePoint(position, "position", ss);
-	sg->saveColor(color, "color", ss);
-	sg->saveInt(health, "health", ss);
-	sg->saveInt(maxHealth, "maxHealth", ss);
-	sg->saveBool(controlled, "controlled", ss);
-	// Note: Level* level will auto-load when inserting into level.creatures
-	sg->savePointer(mainWeapon == NULL ? 0 : mainWeapon->save(sg), "mainWeapon", ss);
-	sg->savePointer(armor == NULL ? 0 : armor->save(sg), "armor", ss);
-	sg->saveInt(attackSkill, "attackSkill", ss);
-	sg->saveInt(armorSkill, "armorSkill", ss);
-	sg->savePointer(baseWeapon.save(sg), "baseWeapon", ss);
-	sg->savePointer(baseArmor.save(sg), "baseArmor", ss);
-	sg->flushStringstream(ss);
-	return sg->objId(index);
+	unsigned int id;
+	if (sg.saved(this, &id)) return id;
+	SaveBlock store("Creature", id);
+	store ("name", name) ("symbol", symbol) ("position", position);
+	store ("color", color) ("health", health) ("maxHealth", maxHealth);
+	store ("controlled", controlled);
+	store.ptr("mainWeapon", mainWeapon == NULL ? 0 : mainWeapon->save(sg));
+	store.ptr("armor", armor == NULL ? 0 : armor->save(sg));
+	store ("attackSkill", attackSkill) ("armorSkill", armorSkill);
+	store.ptr("baseWeapon", baseWeapon.save(sg)).ptr("baseArmor", baseArmor.save(sg));
+	sg << store;
+	return id;
 }
 
 void Creature::load(Savegame* sg, std::stringstream& ss)
