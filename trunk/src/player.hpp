@@ -62,7 +62,7 @@ public:
 	Item* getInventoryItem(int item);
 	STATE getState();
 	
-	unsigned int save(Savegame* sg);
+	unsigned int save(Savegame& sg);
 	void load(Savegame* sg, std::stringstream& ss);
 };
 

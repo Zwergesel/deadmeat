@@ -76,26 +76,17 @@ SKILLS Weapon::getSkill()
 
 /*--------------------- SAVING AND LOADING ---------------------*/
 
-unsigned int Weapon::save(Savegame* sg)
+unsigned int Weapon::save(Savegame& sg)
 {
-	void* index = static_cast<void*>(this);
-	if (sg->objExists(index)) return sg->objId(index);
-	std::stringstream ss;
-	sg->saveObj(index, "Weapon", ss);
-	sg->saveString(name, "name", ss);
-	sg->saveInt(symbol, "symbol", ss);
-	sg->saveColor(color, "color", ss);
-	sg->saveInt(speed, "speed", ss);
-	sg->saveInt(hitBonus, "hitBonus", ss);
-	sg->saveInt(baseDamage, "baseDamage", ss);
-	sg->saveInt(numDice, "numDice", ss);
-	sg->saveInt(diceMax, "diceMax", ss);
-	sg->saveInt(enchantment, "enchantment", ss);
-	sg->saveInt(skill, "skill", ss);
-	sg->saveInt(hands, "hands", ss);
-	// Note: auto-load type and strType
-	sg->flushStringstream(ss);
-	return sg->objId(index);
+	unsigned int id;
+	if (sg.saved(this,&id)) return id;
+	SaveBlock store("Weapon", id);
+	store ("name", name) ("symbol", symbol) ("color", color) ("speed", speed);
+	store ("hitBonus", hitBonus) ("baseDamage", baseDamage) ("numDice", numDice);
+	store ("diceMax", diceMax) ("enchantment", enchantment) ("skill", (int)skill);
+	store ("hands", hands);
+	sg << store;
+	return id;
 }
 
 void Weapon::load(Savegame* sg, std::stringstream& ss)

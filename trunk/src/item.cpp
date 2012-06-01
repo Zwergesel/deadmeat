@@ -47,18 +47,14 @@ std::string Item::typeString()
 
 /*--------------------- SAVING AND LOADING ---------------------*/
 
-unsigned int Item::save(Savegame* sg)
+unsigned int Item::save(Savegame& sg)
 {
-	void* index = static_cast<void*>(this);
-	if (sg->objExists(index)) return sg->objId(index);
-	std::stringstream ss;
-	sg->saveObj(index, "Item", ss);
-	sg->saveString(name, "name", ss);
-	sg->saveInt(symbol, "symbol", ss);
-	sg->saveColor(color, "color", ss);
-	// Note: auto-load type and strType
-	sg->flushStringstream(ss);
-	return sg->objId(index);
+	unsigned int id;
+	if (sg.saved(this,&id)) return id;
+	SaveBlock store("Item", id);
+	store ("name", name) ("symbol", symbol) ("color", color);
+	sg << store;
+	return id;
 }
 
 void Item::load(Savegame* sg, std::stringstream& ss)

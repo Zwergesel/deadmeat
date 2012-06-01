@@ -202,19 +202,16 @@ void World::drawItemSelection(ItemSelection& sel)
 
 /*--------------------- SAVING AND LOADING ---------------------*/
 
-unsigned int World::save(Savegame* sg)
+unsigned int World::save(Savegame& sg)
 {
-	void* index = static_cast<void*>(this);
-	if (sg->objExists(index)) return sg->objId(index);
-	std::stringstream ss;
-	sg->saveObj(index, "World", ss);
-	sg->saveInt(currentLevel, "currentLevel", ss);
-	sg->savePoint(levelOffset, "levelOffset", ss);
-	sg->savePointer(player->save(sg), "player", ss);
-	sg->saveInt(1, "#levels", ss);
-	sg->savePointer(levels[0]->save(sg), "_level", ss);
-	sg->flushStringstream(ss);
-	return sg->objId(index);
+	unsigned int id;
+	if (sg.saved(this,&id)) return id;
+	SaveBlock store("World", id);
+	store ("currentLevel", currentLevel) ("levelOffset", levelOffset);
+	// TODO : all levels
+	store.ptr("player", player->save(sg)) ("#levels", 1) .ptr("_level", levels[0]->save(sg));
+	sg << store;
+	return id;
 }
 
 void World::load(Savegame* sg, std::stringstream& ss)
