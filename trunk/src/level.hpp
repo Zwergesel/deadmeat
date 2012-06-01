@@ -24,7 +24,7 @@ private:
 	Tile* map;
 	std::vector<Creature*> creatures;
 	std::vector<TimelineAction> timeline;
-	std::vector<Item*> items;
+	std::vector<std::pair<Point, Item*> > items;
 	inline int coord(Point pos);
 
 public:
@@ -40,8 +40,8 @@ public:
 	void addCreature(Creature* c);
 	void removeCreature(Creature* c, bool del);
 	std::vector<Item*> itemsAt(Point pos);
-	std::vector<Item*> getItems();
-	void addItem(Item* i);
+	std::vector<std::pair<Point, Item*> > getItems();
+	void addItem(Item* i, Point pos);
 	void removeItem(Item* i, bool del);
 
 	void buildTimeline();

@@ -17,8 +17,8 @@ Creature::Creature(Point p, std::string n, int s, TCODColor c, int h):
 	mainWeapon(NULL),
 	armor(NULL)
 {
-	baseWeapon = Weapon(Point(0,0), "hands", '§', TCODColor::pink, 10, 10, 10, 0, 0, 0, SKILL_UNARMED, 2);
-	baseArmor = Armor(Point(0,0), "skin", '§', TCODColor::pink, 0, 0, SKILL_UNARMORED);
+	baseWeapon = Weapon("hands", '§', TCODColor::pink, 10, 10, 10, 0, 0, 0, SKILL_UNARMED, 2);
+	baseArmor = Armor("skin", '§', TCODColor::pink, 0, 0, SKILL_UNARMORED);
 	attackSkill = 0;
 	armorSkill = 0;
 }

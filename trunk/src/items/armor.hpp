@@ -12,7 +12,7 @@ private:
 	SKILLS skill;
 public:
 	Armor();
-	Armor(Point position, std::string name, int symbol, TCODColor color, int ac, int hindrance, SKILLS skill);
+	Armor(std::string name, int symbol, TCODColor color, int ac, int hindrance, SKILLS skill);
 	int getAC();
 	int getHindrance();
 	SKILLS getSkill();

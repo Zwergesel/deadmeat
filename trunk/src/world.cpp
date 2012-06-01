@@ -117,10 +117,10 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 		}
 	}
 	// draw items
-	std::vector<Item*> items = level->getItems();
-	for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
+	std::vector<std::pair<Point, Item*> > items = level->getItems();
+	for (std::vector<std::pair<Point, Item*> >::iterator it=items.begin(); it<items.end(); it++)
 	{
-		drawItem(*it, offset, view);
+    drawItem((*it).second, (*it).first, offset, view);
 	}
 	// draw creatures
 	std::vector<Creature*> creatures = level->getCreatures();
@@ -130,9 +130,8 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 	}
 }
 
-void World::drawItem(Item* i, Point offset, Viewport view)
+void World::drawItem(Item* i, Point pos, Point offset, Viewport view)
 {
-	Point pos = i->getPos();
 	pos += offset;
 	if (pos.x >= 0 && pos.x < view.width && pos.y >= 0 && pos.y < view.height)
 	{

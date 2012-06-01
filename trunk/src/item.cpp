@@ -1,7 +1,7 @@
 #include "item.hpp"
 
-Item::Item(Point p, std::string n, int s, TCODColor c):
-	symbol(s), color(c), position(p), name(n)
+Item::Item(std::string n, int s, TCODColor c):
+	symbol(s), color(c), name(n)
 {
 	type = ITEM_DEFAULT;
 	strType = "Item";
@@ -20,11 +20,6 @@ ITEM_TYPE Item::getType()
 TCODColor Item::getColor()
 {
 	return color;
-}
-
-Point Item::getPos()
-{
-	return position;
 }
 
 std::string Item::getName()
