@@ -24,19 +24,19 @@ Level::~Level()
 	}
 	for (std::vector<Creature*>::iterator it=creatures.begin(); it<creatures.end(); it++)
 	{
-    if((*it) != NULL)
-    {
-		  delete *it;
-      (*it) = NULL;
-    }
+		if ((*it) != NULL)
+		{
+			delete *it;
+			(*it) = NULL;
+		}
 	}
 	for (std::vector<std::pair<Point, Item*> >::iterator it=items.begin(); it<items.end(); it++)
 	{
-    if((*it).second != NULL)
-    {
-      delete (*it).second;
-      (*it).second = NULL;
-    }
+		if ((*it).second != NULL)
+		{
+			delete (*it).second;
+			(*it).second = NULL;
+		}
 	}
 }
 
@@ -143,7 +143,7 @@ void Level::removeItem(Item* i, bool del)
 {
 	for (std::vector<std::pair<Point, Item*> >::iterator it=items.begin(); it<items.end(); it++)
 	{
-    if ((*it).second == i)
+		if ((*it).second == i)
 		{
 			items.erase(it);
 			break;

@@ -36,15 +36,15 @@ private:
 	static int dy[9];
 	STATE state;
 	int computeAttackBonus(Weapon* w);
-  int computeArmorBonus(Armor* w);
+	int computeArmorBonus(Armor* w);
 	int actionMove(int direction);
 	int actionLook(Point p);
 	int actionPickup();
 	int actionPickup(Item*);
 	int actionWield(Item*);
-  int actionWear(Item*);
-  int actionDrop();
-  int actionDrop(Item*);
+	int actionWear(Item*);
+	int actionDrop();
+	int actionDrop(Item*);
 
 public:
 	Player(std::string name);

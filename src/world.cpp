@@ -120,7 +120,7 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 	std::vector<std::pair<Point, Item*> > items = level->getItems();
 	for (std::vector<std::pair<Point, Item*> >::iterator it=items.begin(); it<items.end(); it++)
 	{
-    drawItem((*it).second, (*it).first, offset, view);
+		drawItem((*it).second, (*it).first, offset, view);
 	}
 	// draw creatures
 	std::vector<Creature*> creatures = level->getCreatures();
@@ -156,7 +156,7 @@ void World::drawWorld()
 	TCODConsole::root->clear();
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);
 	STATE state = player->getState();
-  if (state == STATE_INVENTORY || state == STATE_PICKUP || state == STATE_WIELD || state == STATE_WEAR || state == STATE_DROP) drawItemSelection(world.itemSelection);
+	if (state == STATE_INVENTORY || state == STATE_PICKUP || state == STATE_WIELD || state == STATE_WEAR || state == STATE_DROP) drawItemSelection(world.itemSelection);
 	drawMessage();
 	drawInfo();
 }
