@@ -1,0 +1,28 @@
+#summary Everything that needs to be done.
+
+= TODO-List =
+
+== Bug fixes ==
+  * (Alex) Save class should save timeline
+  * Wearing armor should not have an effect before the time it takes to put it on has passed (You begin your dressing maneuver...)
+
+== Small improvement ==
+  * (Alex) World should contain a global time variable
+  * Display player information (health, mana, time, status, points, ...)
+  * Choosing an item from the inventory should bring up a list of options
+
+== Major improvements ==
+  * Fully implement attributes
+  * Implement weapon and fighting skill training
+  * Implement ranged attacking (targetting system to allow more than 8 directions?)
+  * Line of sight for player
+  * Line of sight for monsters
+  * Changing levels
+  * Display unseen items where the player has last seen them even if a monster picked them up
+  * Looking at things that are not at the player's location
+  * Load monsters and levels from files (not savegame loading, just general monster information)
+
+== Milestones for later / No priority ==
+  * Magic system
+  * Character creation
+  * Random level generation
