@@ -1,3 +1,6 @@
+Version: 0.10
+SavedObjects: 19
+
 [[Armor: 4]]
 name: skin
 symbol: 164
