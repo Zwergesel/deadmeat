@@ -1,8 +1,0 @@
-= Code Suggestions =
-
-== Implemented ==
-
-== To be considered ==
-
-  * Class world, that holds everything once a game has started
-  * Class world implements method save that calls the method serialize on all objects and writes a save file
