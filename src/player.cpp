@@ -335,7 +335,8 @@ int Player::action()
 {
   if(creature->getHealth().first < 0)
   {
-    world.drawBlockingWindow("DEATH", "You died!");
+    world.drawBlockingWindow("DEATH", "You died!", TCODColor::red);
+    world.gameover = true;
     world.requestQuit = true;
     return 0;
   }
@@ -343,10 +344,20 @@ int Player::action()
 	{
 		TCOD_key_t key = waitForKeypress(true);
 
+    // quit/abandon game
+    if (state == STATE_DEFAULT && key.c == 'Q')
+    {
+      if (world.drawBlockingWindow("Save & Quit", "Quit game without saving?\n\n[y]es / [n]o", TCODColor::red, "yn") == 'y')
+			{       
+        world.gameover = true;
+				world.requestQuit = true;
+			}
+			return 0;
+    }
 		// save&quit
 		if (state == STATE_DEFAULT && key.c == 'S')
 		{			
-			if (world.drawBlockingWindow("Save & Quit", "Save game and quit?\n\n[y]es / [n]o", "yn") == 'y')
+			if (world.drawBlockingWindow("Save & Quit", "Save game and quit?\n\n[y]es / [n]o", TCODColor::black, "yn") == 'y')
 			{
 				world.requestQuit = true;
 			}

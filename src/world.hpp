@@ -34,8 +34,9 @@ public:
 	int currentLevel;
 	Point levelOffset;
 	Viewport viewLevel, viewMsg, viewItemList;
-	bool requestQuit;
+	bool requestQuit;  
 	ItemSelection itemSelection;
+  bool gameover;
 
 	World();
 	~World();
@@ -44,8 +45,8 @@ public:
 	int getNumMessages();
 	void popMessage();
 	void drawMessage();
-	unsigned char drawBlockingWindow(std::string title, std::string text, std::string acceptedKeys);
-  void drawBlockingWindow(std::string title, std::string text);
+	unsigned char drawBlockingWindow(std::string title, std::string text, TCODColor color, std::string acceptedKeys);
+  void drawBlockingWindow(std::string title, std::string text, TCODColor color);
 
 	void toggleFullscreen();
 
