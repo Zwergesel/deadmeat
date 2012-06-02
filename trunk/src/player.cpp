@@ -123,7 +123,7 @@ bool Player::addItem(Item* item)
 		}
 	}
 	// ran out of letters
-	world.addMessage("Too many items in backpack.");
+	world.addMessage("Your backpack cannot contain any more items.");
 	return false;
 }
 
@@ -201,12 +201,14 @@ int Player::actionLook(Point pos)
 	}
 	else if (items.size() >= 1)
 	{
-		msg << "You see a several items here:";
+		msg << "You see several items here:";
 		world.addMessage(msg.str());
-		for (std::vector<Item*>::iterator it=items.begin(); it<items.end(); it++)
+		for (std::vector<Item*>::iterator it=items.begin(); it != items.end();)
 		{
 			std::stringstream strlist;
 			strlist << util::indefArticle((*it)->getName()) << " " << (*it)->getName();
+			it++;
+			if (it != items.end()) strlist << ",";
 			world.addMessage(strlist.str());
 		}
 	}
@@ -220,7 +222,7 @@ int Player::actionPickup()
 	std::vector<Item*> items = level->itemsAt(creature->getPos());
 	if (items.size() <= 0)
 	{
-		world.addMessage("Nothing here.");
+		world.addMessage("There's nothing here.");
 		return 0;
 	}
 	else if (items.size() == 1)
@@ -243,7 +245,7 @@ int Player::actionPickup(Item* item)
 	if (addItem(item))
 	{
 		std::stringstream msg;
-		msg << "Picked up " << util::indefArticle(item->getName()) << " " << item->getName() << ".";
+		msg << "You pick up " << util::indefArticle(item->getName()) << " " << item->getName() << ".";
 		world.addMessage(msg.str());
 		level->removeItem(item, false);
 		return 10;
@@ -257,7 +259,7 @@ int Player::actionDrop()
 	world.itemSelection.compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);
 	if (world.itemSelection.getNumChoices() <= 0)
 	{
-		world.addMessage("Nothing to drop.");
+		world.addMessage("You're not carrying any items.");
 		return 0;
 	}
 	state = STATE_DROP;
@@ -270,7 +272,7 @@ int Player::actionDrop(Item* item)
 	std::stringstream msg;
 	if (creature->getArmor() == item)
 	{
-		msg << "You are currently using this!";
+		msg << "You have to take off your armor first.";
 		world.addMessage(msg.str());
 		return 0;
 	}
@@ -279,7 +281,7 @@ int Player::actionDrop(Item* item)
 		creature->wieldMainWeapon(NULL, skills[SKILL_UNARMED].value);
 	}
 	removeItem(item, false);
-	msg << "Dropped " << util::indefArticle(item->getName()) << " " << item->getName() << ".";
+	msg << "You drop " << util::indefArticle(item->getName()) << " " << item->getName() << ".";
 	world.addMessage(msg.str());
 	level->addItem(item, creature->getPos());
 	return 10;
@@ -295,7 +297,7 @@ int Player::actionWield(Item* itemObj)
 	Weapon* weapon = static_cast<Weapon*>(itemObj);
 	if (creature->getMainWeapon() == weapon)
 	{
-		msg << "You were already wielding " << util::indefArticle(weapon->toString()) << " " << weapon->toString() << ".";
+		msg << "You are already wielding " << util::indefArticle(weapon->toString()) << " " << weapon->toString() << ".";
 		world.addMessage(msg.str());
 		return 0;
 	}
@@ -318,7 +320,7 @@ int Player::actionWear(Item* itemObj)
 	Armor* armor = static_cast<Armor*>(itemObj);
 	if (creature->getArmor() == armor)
 	{
-		msg << "You were already wearing " << util::indefArticle(armor->toString()) << " " << armor->toString() << ".";
+		msg << "You are already wearing " << util::indefArticle(armor->toString()) << " " << armor->toString() << ".";
 		world.addMessage(msg.str());
 		return 0;
 	}
@@ -333,30 +335,31 @@ int Player::actionWear(Item* itemObj)
 
 int Player::action()
 {
-  if(creature->getHealth().first < 0)
-  {
-    world.drawBlockingWindow("DEATH", "You died!", TCODColor::red);
-    world.gameover = true;
-    world.requestQuit = true;
-    return 0;
-  }
+	if (creature->getHealth().first <= 0 && world.getNumMessages() <= 1)
+	{
+		world.drawBlockingWindow("GAME OVER", "You are dead!", TCODColor::red);
+		world.gameover = true;
+		world.requestQuit = true;
+		return 0;
+	}
+	
 	do
 	{
 		TCOD_key_t key = waitForKeypress(true);
 
-    // quit/abandon game
-    if (state == STATE_DEFAULT && key.c == 'Q')
-    {
-      if (world.drawBlockingWindow("Save & Quit", "Quit game without saving?\n\n[y]es / [n]o", TCODColor::red, "yn") == 'y')
-			{       
-        world.gameover = true;
+		// quit/abandon game
+		if (state == STATE_DEFAULT && key.c == 'Q')
+		{
+			if (world.drawBlockingWindow("Save & Quit", "Quit game without saving?\n\n[y]es / [n]o", TCODColor::red, "yn") == 'y')
+			{
+				world.gameover = true;
 				world.requestQuit = true;
 			}
 			return 0;
-    }
+		}
 		// save&quit
 		if (state == STATE_DEFAULT && key.c == 'S')
-		{			
+		{
 			if (world.drawBlockingWindow("Save & Quit", "Save game and quit?\n\n[y]es / [n]o", TCODColor::black, "yn") == 'y')
 			{
 				world.requestQuit = true;

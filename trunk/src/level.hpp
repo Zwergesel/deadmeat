@@ -15,7 +15,7 @@ struct TimelineAction
 {
 	Creature* actor;
 	int time;
-	TimelineAction(Creature* c, int t):actor(c),time(t){};
+	TimelineAction(Creature* c, int t):actor(c),time(t) {};
 };
 
 bool operator<(TimelineAction a, TimelineAction b);
