@@ -105,6 +105,18 @@ SaveBlock& SaveBlock::ptr(const std::string& name, unsigned int voidPtrId)
 	return *this;
 }
 
+SaveBlock& SaveBlock::operator()(const std::string& name, Tile* map, int width, int height)
+{
+	data << name << ":";
+	for (int t=0; t<width*height; t++)
+	{
+		if ((t % width) == 0) data << std::endl;
+		data << Savegame::letters.at(static_cast<int>(map[t]));
+	}
+	data << std::endl;
+	return *this;
+}
+
 /*--------------------------------------------------------------*/
 ///////******************** LOADING ***********************///////
 /*--------------------------------------------------------------*/
@@ -200,6 +212,12 @@ void Savegame::loadObject()
 		objects[id] = static_cast<void*>(obj);
 		obj->load(load);
 	}
+	else if (objClass == "Goblin")
+	{
+		Goblin* obj = new Goblin();
+		objects[id] = static_cast<void*>(obj);
+		obj->load(load);
+	}
 	else
 	{
 		throw SavegameFormatException("loadObj _ objClass invalid: " + objClass);
@@ -221,7 +239,7 @@ LoadBlock& operator<<(LoadBlock& lb, const std::string& input)
 std::string LoadBlock::parseLine(const std::string& name)
 {
 	std::string line;
-	getline(data, line);
+	if (getline(data, line).eof()) throw SavegameFormatException("parseLine _ unexpected end-of-file");
 	size_t pos = line.find(": ");
 	if (pos == std::string::npos) throw SavegameFormatException("parseLine _ no colon: " + line);
 	if (line.substr(0,pos) != name) throw SavegameFormatException("parseLine: " + name + " != " + line.substr(0,pos));
@@ -301,6 +319,25 @@ LoadBlock& LoadBlock::operator()(const std::string& name, TCODColor& output)
 	return *this;
 }
 
+LoadBlock& LoadBlock::operator()(const std::string& name, Tile* map, int width, int height)
+{
+	std::string line;
+	if (getline(data, line).eof()) throw SavegameFormatException("loadMap _ unexpected end-of-file");
+	if (line != name + ":") throw SavegameFormatException("loadMap _ expected name " + name);
+	for (int y=0; y<height; y++)
+	{
+		if (getline(data, line).eof()) throw SavegameFormatException("loadMap _ unexpected end-of-file");
+		if (static_cast<int>(line.length()) != width) throw SavegameFormatException("loadMap _ illegal width" + line.length());
+		for (int x=0; x<width; x++)
+		{
+			size_t t = Savegame::letters.find(line.at(x));
+			if (t == std::string::npos || t >= TILES_LENGTH) throw SavegameFormatException("loadMap _ illegal character");
+			map[y*width+x] = static_cast<Tile>(t);
+		}
+	}
+	return *this;
+}
+
 void* LoadBlock::ptr(const std::string& name)
 {
 	int id;
@@ -322,3 +359,5 @@ void* LoadBlock::ptr(const std::string& name)
 	//std::cerr << "loadPointer @ " << id << ": " << savegame->objects[id] << std::endl;
 	return savegame->objects[id];
 }
+
+std::string Savegame::letters = "0123456789abcdefghijlmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,.-+#*'_:;!%&/()=?[]{}";

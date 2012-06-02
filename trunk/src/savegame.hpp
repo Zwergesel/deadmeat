@@ -9,6 +9,7 @@
 #include <libtcod.hpp>
 #include <map>
 #include "utility.hpp"
+#include "tileset.hpp"
 
 /* Forward declarations */
 class World;
@@ -48,6 +49,7 @@ public:
 	SaveBlock& operator()(const std::string& name, const Point& input);
 	SaveBlock& operator()(const std::string& name, const TCODColor& input);
 	SaveBlock& ptr(const std::string& name, unsigned int voidPtrId);
+	SaveBlock& operator()(const std::string& name, Tile* map, int width, int height);
 	friend Savegame& operator<<(Savegame& sg, const SaveBlock& sb);
 };
 
@@ -66,6 +68,7 @@ public:
 	LoadBlock& operator()(const std::string& name, bool& output);
 	LoadBlock& operator()(const std::string& name, Point& output);
 	LoadBlock& operator()(const std::string& name, TCODColor& output);
+	LoadBlock& operator()(const std::string& name, Tile* map, int width, int height);
 	void* ptr(const std::string& name);
 };
 
@@ -89,6 +92,8 @@ public:
 	bool saved(void* voidPtr, unsigned int* voidPtrId);
 	void saveWorld(World& world, std::string fileName);
 	void loadWorld(std::string fileName);
+
+	static std::string letters;
 };
 
 #endif
