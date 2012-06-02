@@ -268,12 +268,16 @@ int Player::actionDrop(Item* item)
 {
 	Level* level = world.levels[world.currentLevel];
 	std::stringstream msg;
-	if (creature->getArmor() == item || creature->getMainWeapon() == item)
+	if (creature->getArmor() == item)
 	{
 		msg << "You are currently using this!";
 		world.addMessage(msg.str());
 		return 0;
 	}
+  if (creature->getMainWeapon() == item)
+  {
+    creature->wieldMainWeapon(NULL, skills[SKILL_UNARMED].value);
+  }
 	removeItem(item, false);
 	msg << "Dropped " << util::indefArticle(item->getName()) << " " << item->getName() << ".";
 	world.addMessage(msg.str());
