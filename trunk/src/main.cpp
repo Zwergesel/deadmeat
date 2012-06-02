@@ -46,7 +46,6 @@ int main()
 		world.currentLevel = 0;
 		world.player->getCreature()->moveTo(Point(35, 22));
 		Goblin* gobbo = new Goblin();
-		FailWhale* twitter = new FailWhale();
 		Creature* defaulto = new Creature(Point(10,10), "default", 'd', TCODColor::amber, 20);
 		Weapon* sword = new Weapon("sword", '(', TCODColor::red, 10, 30, 1, 10, 20, 30, SKILL_SWORD, 1);
 		Weapon* dagger = new Weapon("dagger", '(', TCODColor::red, 4, 10, 8, 1, 4, 12, SKILL_DAGGER, 1);
@@ -55,10 +54,10 @@ int main()
 		Weapon* mace = new Weapon("cursed mace", '(', TCODColor::red, 15, -60, 4, 1, 1, -60, SKILL_MACEFLAIL, 1);
 		Armor* uber = new Armor("uber armor", ')', TCODColor::black, 1000, 10, SKILL_PLATE_ARMOR);
 		Armor* crap = new Armor("crap armor", ')', TCODColor::black, -1000, 0, SKILL_LEATHER_ARMOR);
-		world.levels[0]->addCreature(gobbo);
+		world.levels[0]->addCreature(gobbo, 0);
 		//world.levels[0]->addCreature(twitter);
-		world.levels[0]->addCreature(defaulto);
-		world.levels[0]->addCreature(world.player->getCreature());
+		world.levels[0]->addCreature(defaulto, 0);
+		world.levels[0]->addCreature(world.player->getCreature(), 0);
 		world.levels[0]->addItem(dagger, Point(30,30));
 		world.levels[0]->addItem(item1, Point(30,30));
 		world.levels[0]->addItem(item2, Point(30,30));

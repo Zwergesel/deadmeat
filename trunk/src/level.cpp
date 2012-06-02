@@ -18,7 +18,6 @@ Level::Level(int width, int height)
 	this->height = height;
 	this->map = new Tile[width*height];
 	creatures.clear();
-	timeline.clear();
 	items.clear();
 	std::fill(map, map+width*height, TILE_CAVE_FLOOR);
 }
@@ -30,20 +29,20 @@ Level::~Level()
 		delete[] map;
 		map = NULL;
 	}
-	for (std::vector<Creature*>::iterator it=creatures.begin(); it<creatures.end(); it++)
+	for (std::vector<TimelineAction>::iterator it=creatures.begin(); it<creatures.end(); it++)
 	{
-		if ((*it) != NULL)
+		if (it->actor != NULL)
 		{
-			delete *it;
-			(*it) = NULL;
+			delete it->actor;
+			it->actor = NULL;
 		}
 	}
 	for (std::vector<std::pair<Point, Item*> >::iterator it=items.begin(); it<items.end(); it++)
 	{
-		if ((*it).second != NULL)
+		if (it->second != NULL)
 		{
-			delete (*it).second;
-			(*it).second = NULL;
+			delete it->second;
+			it->second = NULL;
 		}
 	}
 }
@@ -76,45 +75,33 @@ int Level::getHeight()
 
 Creature* Level::creatureAt(Point pos)
 {
-	for (std::vector<Creature*>::iterator it=creatures.begin(); it<creatures.end(); it++)
+	for (std::vector<TimelineAction>::iterator it=creatures.begin(); it<creatures.end(); it++)
 	{
-		if ((*it)->getPos() == pos) return (*it);
+		if (it->actor->getPos() == pos) return it->actor;
 	}
 	return NULL;
 }
 
-std::vector<Creature*> Level::getCreatures()
+std::vector<TimelineAction> Level::getCreatures()
 {
 	return creatures;
 }
 
-void Level::addCreature(Creature* c)
+void Level::addCreature(Creature* c, int time)
 {
-	creatures.push_back(c);
-	// Put creature into timeline
-	timeline.push_back(TimelineAction(0,c));	// TODO: should init with current time
-	push_heap(timeline.begin(), timeline.end());
+	creatures.push_back(TimelineAction(c, time));
+	push_heap(creatures.begin(), creatures.end());
 	// Set level
 	c->setLevel(this);
 }
 
 void Level::removeCreature(Creature* c, bool del)
 {
-	for (std::vector<Creature*>::iterator it=creatures.begin(); it<creatures.end(); it++)
-	{
-		if (*it == c)
-		{
-			creatures.erase(it);
-			break;
-		}
-	}
-
-	// Remove creature from timeline and rebuild
-	for (std::vector<TimelineAction>::iterator it=timeline.begin(); it<timeline.end(); it++)
+	for (std::vector<TimelineAction>::iterator it=creatures.begin(); it<creatures.end(); it++)
 	{
 		if (it->actor == c)
 		{
-			timeline.erase(it);
+			creatures.erase(it);
 			break;
 		}
 	}
@@ -166,20 +153,21 @@ void Level::removeItem(Item* i, bool del)
 
 void Level::buildTimeline()
 {
-	make_heap(timeline.begin(), timeline.end());
+	std::make_heap(creatures.begin(), creatures.end());
 }
 
 bool Level::isPlayerTurn()
 {
-	return (!timeline.empty() && timeline.front().actor->isControlled());
+	return (!creatures.empty() && creatures.front().actor->isControlled());
 }
 
 void Level::performCreatureTurn()
 {
 	// pop_heap puts currently active creature to the back of the vector
-	pop_heap(timeline.begin(), timeline.end());
+	pop_heap(creatures.begin(), creatures.end());
+	world.time = creatures.back().time;
 	int time;
-	if (timeline.back().actor->isControlled())
+	if (creatures.back().actor->isControlled())
 	{
 		// player action; returns time the action took
 		time = world.player->action();
@@ -187,13 +175,13 @@ void Level::performCreatureTurn()
 	else
 	{
 		// creature action; returns time the action took
-		time = timeline.back().actor->action();
+		time = creatures.back().actor->action();
 		// creatures should never use zero time
 		assert(time > 0);
 	}
 	// update heap
-	timeline.back().time += time;
-	push_heap(timeline.begin(), timeline.end());
+	creatures.back().time += time;
+	push_heap(creatures.begin(), creatures.end());
 }
 
 bool operator<(TimelineAction a, TimelineAction b)
@@ -214,8 +202,8 @@ unsigned int Level::save(Savegame& sg)
 	store ("#creatures", (int) creatures.size());
 	for (unsigned int d=0; d<creatures.size(); d++)
 	{
-		// TODO : time from timeline
-		store.ptr("_creature", creatures[d]->save(sg));
+		store.ptr("_creature", creatures[d].actor->save(sg));
+		store("_time", creatures[d].time);
 	}
 	store ("#items", (int) items.size());
 	for (unsigned int d=0; d<items.size(); d++)
@@ -234,8 +222,10 @@ void Level::load(LoadBlock& load)
 	load ("map", map, width, height) ("#creatures", n);
 	while (n-->0)
 	{
+		int time;
 		Creature* c = static_cast<Creature*>(load.ptr("_creature"));
-		addCreature(c);
+		load ("_time", time);
+		addCreature(c, time);
 	}
 	load ("#items", n);
 	while (n-->0)
