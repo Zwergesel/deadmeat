@@ -44,6 +44,7 @@ public:
 	SaveBlock(const std::string& header, unsigned int voidPtrId);
 	SaveBlock& operator()(const std::string& name, const std::string& input);
 	SaveBlock& operator()(const std::string& name, int input);
+	SaveBlock& operator()(const std::string& name, unsigned int input);
 	SaveBlock& operator()(const std::string& name, double input);
 	SaveBlock& operator()(const std::string& name, bool input);
 	SaveBlock& operator()(const std::string& name, const Point& input);
@@ -64,6 +65,7 @@ public:
 	LoadBlock(Savegame*);
 	LoadBlock& operator()(const std::string& name, std::string& output);
 	LoadBlock& operator()(const std::string& name, int& output);
+	LoadBlock& operator()(const std::string& name, unsigned int& output);	
 	LoadBlock& operator()(const std::string& name, double& output);
 	LoadBlock& operator()(const std::string& name, bool& output);
 	LoadBlock& operator()(const std::string& name, Point& output);
@@ -75,12 +77,14 @@ public:
 class Savegame
 {
 private:
+	static std::string version;
 	unsigned int uniqueId;
 	std::map<void*,unsigned int> obj2id;
-	void* objects[100];
+	void** objects;
 	std::ofstream saveStream;
 	std::ifstream loadStream;
-	bool firstBlock;
+	void writeHeader(unsigned int numObjects);
+	void loadHeader(std::string& version, unsigned int& numObjects);
 	void loadObject();
 	friend Savegame& operator<<(Savegame& sg, const SaveBlock& sb);
 	friend void* LoadBlock::ptr(const std::string& name);

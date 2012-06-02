@@ -61,7 +61,7 @@ public:
 
 	virtual int action();
 
-	unsigned int save(Savegame& sg);
+	virtual unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);
 };
 
@@ -70,6 +70,7 @@ class Goblin: public Creature
 public:
 	Goblin();
 	int action();
+	unsigned int save(Savegame& sg);
 };
 
 class FailWhale: public Creature
@@ -77,6 +78,7 @@ class FailWhale: public Creature
 public:
 	FailWhale();
 	int action();
+	unsigned int save(Savegame& sg);
 };
 
 #endif
