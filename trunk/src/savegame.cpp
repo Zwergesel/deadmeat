@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <algorithm>
+#include <sys/stat.h>
 #include "savegame.hpp"
 #include "world.hpp"
 #include "level.hpp"
@@ -54,6 +55,12 @@ bool Savegame::saved(void* voidPtr, unsigned int* voidPtrId)
 		*voidPtrId = it->second;
 		return true;
 	}
+}
+
+bool Savegame::exists(const std::string& fileName)
+{
+	struct stat fileInfo;
+    return stat(fileName.c_str(), &fileInfo) == 0;
 }
 
 SaveBlock::SaveBlock(const std::string& header, unsigned int voidPtrId)
