@@ -19,7 +19,7 @@ World::World()
 	currentLevel = 0;
 	levelOffset = Point(0,0);
 	requestQuit = false;
-  gameover = false;
+	gameover = false;
 	time = 0;
 }
 
@@ -207,7 +207,7 @@ unsigned char World::drawBlockingWindow(std::string title, std::string text, TCO
 	int w = viewItemList.width;
 	int h = 4 + TCODConsole::root->getHeightRect(0,0, w - 4, 100, text.c_str());
 	TCODConsole window(w, h);
-  window.setDefaultBackground(color);
+	window.setDefaultBackground(color);
 	window.printFrame(0, 0, window.getWidth(), window.getHeight(), true, TCOD_BKGND_DEFAULT, title.c_str());
 	window.printRectEx(window.getWidth()/2, 2, w - 4, h - 4, TCOD_BKGND_DEFAULT, TCOD_CENTER, text.c_str());
 	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, viewItemList.x, viewLevel.y + viewLevel.height/2 - h/2, 1.f, 0.9f);
@@ -217,7 +217,7 @@ unsigned char World::drawBlockingWindow(std::string title, std::string text, TCO
 	do
 	{
 		key = player->waitForKeypress(true);
-    if(acceptedKeys.find_first_of(key.c)  != std::string::npos) done = true;
+		if (acceptedKeys.find_first_of(key.c)  != std::string::npos) done = true;
 	}
 	while (!done && !world.requestQuit);
 	return key.c;
@@ -225,10 +225,10 @@ unsigned char World::drawBlockingWindow(std::string title, std::string text, TCO
 
 void World::drawBlockingWindow(std::string title, std::string text, TCODColor color)
 {
-  int w = viewItemList.width;
+	int w = viewItemList.width;
 	int h = 4 + TCODConsole::root->getHeightRect(0,0, w - 4, 100, text.c_str());
 	TCODConsole window(w, h);
-  window.setDefaultBackground(color);
+	window.setDefaultBackground(color);
 	window.printFrame(0, 0, window.getWidth(), window.getHeight(), true, TCOD_BKGND_DEFAULT, title.c_str());
 	window.printRectEx(window.getWidth()/2, 2, w - 4, h - 4, TCOD_BKGND_DEFAULT, TCOD_CENTER, text.c_str());
 	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, viewItemList.x, viewLevel.y + viewLevel.height/2 - h/2, 1.f, 0.9f);
@@ -238,7 +238,7 @@ void World::drawBlockingWindow(std::string title, std::string text, TCODColor co
 	{
 		key = player->waitForKeypress(true);
 	}
-  while (key.vk != TCODK_SPACE && !world.requestQuit);
+	while (key.vk != TCODK_SPACE && !world.requestQuit);
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/

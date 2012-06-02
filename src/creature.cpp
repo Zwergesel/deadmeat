@@ -106,10 +106,9 @@ void Creature::die(Creature* instigator)
 {
 	if (controlled)
 	{
-		/*world.addMessage("You die...", true);
-		world.addMessage("Suddenly the amulet around your neck begins to glow brightly...", true);
-		world.addMessage("You feel better!", true);
-		health = maxHealth;*/
+		world.addMessage("You die...", true);
+		// This message will not be visible, TODO: think of a better way to do this
+		world.addMessage("", true);
 	}
 	else
 	{

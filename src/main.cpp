@@ -99,14 +99,14 @@ int main()
 		}
 	}
 
-  if (world.gameover)
+	if (world.gameover)
 	{
 		save.deleteSave("save.txt");
 	}
-  else
-  {
-    save.saveWorld(world, "save.txt");
-  }
+	else
+	{
+		save.saveWorld(world, "save.txt");
+	}
 
 	return 0;
 }
