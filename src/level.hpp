@@ -13,9 +13,9 @@ enum Tile;
 
 struct TimelineAction
 {
-	int time;
 	Creature* actor;
-	TimelineAction(int t, Creature* c):time(t),actor(c) {};
+	int time;
+	TimelineAction(Creature* c, int t):actor(c),time(t){};
 };
 
 bool operator<(TimelineAction a, TimelineAction b);
@@ -25,8 +25,7 @@ class Level
 private:
 	int width, height;
 	Tile* map;
-	std::vector<Creature*> creatures;
-	std::vector<TimelineAction> timeline;
+	std::vector<TimelineAction> creatures;
 	std::vector<std::pair<Point, Item*> > items;
 	inline int coord(Point pos);
 
@@ -42,8 +41,8 @@ public:
 	int getHeight();
 	// returns creature at given position, NULL otherwise
 	Creature* creatureAt(Point pos);
-	std::vector<Creature*> getCreatures();
-	void addCreature(Creature* c);
+	std::vector<TimelineAction> getCreatures();
+	void addCreature(Creature* c, int time);
 	void removeCreature(Creature* c, bool del);
 	std::vector<Item*> itemsAt(Point pos);
 	std::vector<std::pair<Point, Item*> > getItems();

@@ -37,6 +37,7 @@ public:
 	bool requestQuit;  
 	ItemSelection itemSelection;
   bool gameover;
+	int time;
 
 	World();
 	~World();

@@ -20,6 +20,7 @@ World::World()
 	levelOffset = Point(0,0);
 	requestQuit = false;
   gameover = false;
+	time = 0;
 }
 
 World::~World()
@@ -124,10 +125,10 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 		drawItem((*it).second, (*it).first, offset, view);
 	}
 	// draw creatures
-	std::vector<Creature*> creatures = level->getCreatures();
-	for (std::vector<Creature*>::iterator it=creatures.begin(); it<creatures.end(); it++)
+	std::vector<TimelineAction> creatures = level->getCreatures();
+	for (std::vector<TimelineAction>::iterator it=creatures.begin(); it<creatures.end(); it++)
 	{
-		drawCreature(*it, offset, view);
+		drawCreature(it->actor, offset, view);
 	}
 }
 
@@ -247,7 +248,7 @@ unsigned int World::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("World", id);
-	store ("currentLevel", currentLevel) ("levelOffset", levelOffset);
+	store ("currentLevel", currentLevel) ("levelOffset", levelOffset) ("time", time);
 	// TODO : all levels
 	store.ptr("player", player->save(sg)) ("#levels", 1) .ptr("_level", levels[0]->save(sg));
 	sg << store;
@@ -256,7 +257,7 @@ unsigned int World::save(Savegame& sg)
 
 void World::load(LoadBlock& load)
 {
-	load ("currentLevel", currentLevel) ("levelOffset", levelOffset);
+	load ("currentLevel", currentLevel) ("levelOffset", levelOffset) ("time", time);
 	// TODO: delete player and levels [MEMORY LEAK]
 	player = static_cast<Player*>(load.ptr("player"));
 	int n;
