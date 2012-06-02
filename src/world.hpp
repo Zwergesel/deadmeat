@@ -44,7 +44,8 @@ public:
 	int getNumMessages();
 	void popMessage();
 	void drawMessage();
-	unsigned char drawBlockingWindow(std::string title, std::string text, std::vector<unsigned char> acceptedKeys);
+	unsigned char drawBlockingWindow(std::string title, std::string text, std::string acceptedKeys);
+  void drawBlockingWindow(std::string title, std::string text);
 
 	void toggleFullscreen();
 

@@ -100,11 +100,14 @@ int main()
 		}
 	}
 
-	// TODO: check for gameover
-	if (/*gameover == false*/ true)
+  if (world.player->getCreature()->getHealth().first < 0)
 	{
-		save.saveWorld(world, "save.txt");
+		save.deleteSave("save.txt");
 	}
+  else
+  {
+    save.saveWorld(world, "save.txt");
+  }
 
 	return 0;
 }

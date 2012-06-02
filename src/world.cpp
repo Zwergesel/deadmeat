@@ -200,7 +200,7 @@ void World::drawItemSelection(ItemSelection& sel)
 	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, viewItemList.x, viewItemList.y, 1.f, 0.9f);
 }
 
-unsigned char World::drawBlockingWindow(std::string title, std::string text, std::vector<unsigned char> acceptedKeys)
+unsigned char World::drawBlockingWindow(std::string title, std::string text, std::string acceptedKeys)
 {
 	int w = viewItemList.width;
 	int h = 4 + TCODConsole::root->getHeightRect(0,0, w - 4, 100, text.c_str());
@@ -214,13 +214,27 @@ unsigned char World::drawBlockingWindow(std::string title, std::string text, std
 	do
 	{
 		key = player->waitForKeypress(true);
-		for (std::vector<unsigned char>::iterator it=acceptedKeys.begin(); it<acceptedKeys.end(); it++)
-		{
-			if ((*it) == key.c) done = true;
-		}
+    if(acceptedKeys.find_first_of(key.c)  != std::string::npos) done = true;
 	}
 	while (!done && !world.requestQuit);
 	return key.c;
+}
+
+void World::drawBlockingWindow(std::string title, std::string text)
+{
+  int w = viewItemList.width;
+	int h = 4 + TCODConsole::root->getHeightRect(0,0, w - 4, 100, text.c_str());
+	TCODConsole window(w, h);
+	window.printFrame(0, 0, window.getWidth(), window.getHeight(), true, TCOD_BKGND_DEFAULT, title.c_str());
+	window.printRectEx(window.getWidth()/2, 2, w - 4, h - 4, TCOD_BKGND_DEFAULT, TCOD_CENTER, text.c_str());
+	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, viewItemList.x, viewLevel.y + viewLevel.height/2 - h/2, 1.f, 0.9f);
+	TCODConsole::root->flush();
+	TCOD_key_t key;
+	do
+	{
+		key = player->waitForKeypress(true);
+	}
+  while (key.vk != TCODK_SPACE && !world.requestQuit);
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/
