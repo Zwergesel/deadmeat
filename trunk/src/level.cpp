@@ -187,7 +187,10 @@ void Level::performCreatureTurn()
 bool operator<(TimelineAction a, TimelineAction b)
 {
 	// Max heap, but we want minimum time
-	return a.time > b.time;
+	if (a.time != b.time) return a.time > b.time;
+	// In case of a tie player creatures always go first
+	if (a.actor->isControlled() != b.actor->isControlled()) return b.actor->isControlled();
+	return true;
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/
