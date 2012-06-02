@@ -9,6 +9,7 @@
 #include "savegame.hpp"
 
 class Creature;
+enum Tile;
 
 struct TimelineAction
 {

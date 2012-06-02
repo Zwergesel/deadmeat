@@ -5,6 +5,7 @@
 #include "world.hpp"
 #include "savegame.hpp"
 #include "items/weapon.hpp"
+#include "tileset.hpp"
 
 Level::Level()
 {
@@ -208,8 +209,9 @@ unsigned int Level::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Level", id);
-	// TODO: map
-	store ("width", width) ("height", height) ("#creatures", (int) creatures.size());
+	store ("width", width) ("height", height);
+	store ("map", map, width, height);
+	store ("#creatures", (int) creatures.size());
 	for (unsigned int d=0; d<creatures.size(); d++)
 	{
 		// TODO : time from timeline
@@ -226,11 +228,10 @@ unsigned int Level::save(Savegame& sg)
 
 void Level::load(LoadBlock& load)
 {
+	int n;
 	load ("width", width) ("height", height);
 	map = new Tile[width*height];
-	std::fill(map, map+width*height, TILE_CAVE_FLOOR);
-	int n;
-	load ("#creatures", n);
+	load ("map", map, width, height) ("#creatures", n);
 	while (n-->0)
 	{
 		Creature* c = static_cast<Creature*>(load.ptr("_creature"));
