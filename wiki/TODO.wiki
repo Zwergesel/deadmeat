@@ -5,13 +5,12 @@
 == Bug fixes / Issues ==
   * (Alex) Timeline needs a unique tiebreaker
   * Wearing armor should not have an effect before the time it takes to put it on has passed (You begin your dressing maneuver...)
-  * "You see many items here": separate list with commas
-  * "You are currently wearing this" => "Take off the [...] before dropping it!"
+  * Don't allow any additional actions after player death, but still show all pending messages
 
 == Small improvement ==
   * Display player information (health, mana, time, status, points, ...)
   * Choosing an item from the inventory should bring up a list of options
-  * Wearing multiple types of armor (hats, shoes, cloaks, hats, gloves, hats)
+  * Wearing multiple types of armor (hats, shoes, cloaks, hats, gloves, hats, TF2 anyone?)
   * 'T' for taking armor off
 
 == Major improvements ==
