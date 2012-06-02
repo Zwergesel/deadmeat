@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <iomanip>
 #include <algorithm>
 #include <sys/stat.h>
 #include "savegame.hpp"
@@ -13,6 +14,8 @@
 #include "items/weapon.hpp"
 #include "items/armor.hpp"
 
+std::string Savegame::version = "0.10";
+
 Savegame::Savegame()
 {
 }
@@ -20,24 +23,28 @@ Savegame::Savegame()
 Savegame::~Savegame()
 {
 	std::cerr << "~Savegame() @ " << this << std::endl;
+	if (objects != NULL)
+	{
+		delete[] objects;
+		objects = NULL;
+	}
 }
 
 void Savegame::saveWorld(World& world, std::string fileName)
 {
 	uniqueId = 0;
-	firstBlock = true;
 
 	// TODO: catch I/O exceptions
 	saveStream.open(fileName.c_str());
+	writeHeader(0);
 	world.save(*this);
+	writeHeader(uniqueId);
 	saveStream.close();
 }
 
 Savegame& operator<<(Savegame& sg, const SaveBlock& sb)
 {
-	if (!sg.firstBlock) sg.saveStream << std::endl;
-	sg.saveStream << sb.data.str();
-	sg.firstBlock = false;
+	sg.saveStream << std::endl << sb.data.str();
 	return sg;
 }
 
@@ -63,6 +70,13 @@ bool Savegame::exists(const std::string& fileName)
     return stat(fileName.c_str(), &fileInfo) == 0;
 }
 
+void Savegame::writeHeader(unsigned int numObjects)
+{
+	saveStream.seekp(0);
+	saveStream << "Version: " << version << std::endl;
+	saveStream << "SavedObjects: " << std::setw(8) << std::left << numObjects << std::endl;
+}
+
 SaveBlock::SaveBlock(const std::string& header, unsigned int voidPtrId)
 {
 	data << "[[" << header << ": " << voidPtrId << "]]" << std::endl;
@@ -75,6 +89,12 @@ SaveBlock& SaveBlock::operator()(const std::string& name, const std::string& inp
 }
 
 SaveBlock& SaveBlock::operator()(const std::string& name, int input)
+{
+	data << name << ": " << input << std::endl;
+	return *this;
+}
+
+SaveBlock& SaveBlock::operator()(const std::string& name, unsigned int input)
 {
 	data << name << ": " << input << std::endl;
 	return *this;
@@ -130,14 +150,18 @@ SaveBlock& SaveBlock::operator()(const std::string& name, Tile* map, int width, 
 
 void Savegame::loadWorld(std::string fileName)
 {
-	for (int i=0; i<100; i++) objects[i] = NULL;
-
 	// TODO: catch I/O exceptions
 	loadStream.open(fileName.c_str());
 
 	try
 	{
 		std::string line;
+		unsigned int numObjects;
+		loadHeader(line, numObjects);
+		
+		objects = new void*[numObjects+1];
+		for (unsigned int x=0; x <= numObjects; x++) objects[x] = NULL;
+		
 		while (!loadStream.eof())
 		{
 			loadObject();
@@ -151,6 +175,17 @@ void Savegame::loadWorld(std::string fileName)
 	std::cerr << "Savegame loading complete!" << std::endl;
 
 	loadStream.close();
+}
+
+void Savegame::loadHeader(std::string& v, unsigned int& nObj)
+{
+	std::string line;
+	LoadBlock load(this);
+	while (!getline(loadStream, line).eof() && line.length() > 0)
+	{
+		load << line;
+	}
+	load ("Version", v) ("SavedObjects", nObj);
 }
 
 void Savegame::loadObject()
@@ -266,6 +301,18 @@ LoadBlock& LoadBlock::operator()(const std::string& name, int& output)
 	if ((ss >> result).fail())
 	{
 		throw SavegameFormatException("loadInt _ conversion: " + ss.str());
+	}
+	output = result;
+	return *this;
+}
+
+LoadBlock& LoadBlock::operator()(const std::string& name, unsigned int& output)
+{
+	std::stringstream ss(parseLine(name));
+	unsigned int result;
+	if ((ss >> result).fail())
+	{
+		throw SavegameFormatException("loadUnsignedInt _ conversion: " + ss.str());
 	}
 	output = result;
 	return *this;

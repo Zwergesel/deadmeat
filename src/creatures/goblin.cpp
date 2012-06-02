@@ -34,3 +34,23 @@ int Goblin::action()
 	}
 	return 10;
 }
+
+/*--------------------- SAVING AND LOADING ---------------------*/
+
+unsigned int Goblin::save(Savegame& sg)
+{
+	unsigned int id;
+	if (sg.saved(this, &id)) return id;
+	SaveBlock store("Goblin", id);
+	store ("name", name) ("symbol", symbol) ("position", position);
+	store ("color", color) ("health", health) ("maxHealth", maxHealth);
+	store ("controlled", controlled);
+	store.ptr("mainWeapon", mainWeapon == NULL ? 0 : mainWeapon->save(sg));
+	store.ptr("armor", armor == NULL ? 0 : armor->save(sg));
+	store ("attackSkill", attackSkill) ("armorSkill", armorSkill);
+	store.ptr("baseWeapon", baseWeapon.save(sg)).ptr("baseArmor", baseArmor.save(sg));
+	sg << store;
+	return id;
+}
+
+// Note: Loading should work fine through Creature::load
