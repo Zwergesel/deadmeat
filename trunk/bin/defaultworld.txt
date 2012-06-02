@@ -194,10 +194,15 @@ map:
 11111111111111111111111111111111111111111111111111111111111111111111111111111111
 #creatures: 5
 _creature: @3
+_time: 1
 _creature: @6
+_time: 0
 _creature: @17
+_time: 1
 _creature: @18
+_time: 1
 _creature: @19
+_time: 1
 #items: 7
 _position: 30, 30
 _item: @9
@@ -268,6 +273,7 @@ baseArmor: @4
 [[World: 1]]
 currentLevel: 0
 levelOffset: 0, 0
+time: 0
 player: @16
 #levels: 1
 _level: @2
