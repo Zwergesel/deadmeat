@@ -100,7 +100,7 @@ int main()
 		}
 	}
 
-  if (world.player->getCreature()->getHealth().first < 0)
+  if (world.gameover)
 	{
 		save.deleteSave("save.txt");
 	}
