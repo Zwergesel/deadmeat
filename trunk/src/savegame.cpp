@@ -18,6 +18,7 @@ std::string Savegame::version = "0.10";
 
 Savegame::Savegame()
 {
+	objects = NULL;
 }
 
 Savegame::~Savegame()
@@ -67,7 +68,7 @@ bool Savegame::saved(void* voidPtr, unsigned int* voidPtrId)
 bool Savegame::exists(const std::string& fileName)
 {
 	struct stat fileInfo;
-    return stat(fileName.c_str(), &fileInfo) == 0;
+	return stat(fileName.c_str(), &fileInfo) == 0;
 }
 
 void Savegame::writeHeader(unsigned int numObjects)
@@ -158,10 +159,10 @@ void Savegame::loadWorld(std::string fileName)
 		std::string line;
 		unsigned int numObjects;
 		loadHeader(line, numObjects);
-		
+
 		objects = new void*[numObjects+1];
 		for (unsigned int x=0; x <= numObjects; x++) objects[x] = NULL;
-		
+
 		while (!loadStream.eof())
 		{
 			loadObject();
