@@ -2,14 +2,18 @@
 
 = TODO-List =
 
-== Bug fixes ==
+== Bug fixes / Issues ==
   * (Alex) Save class should save timeline
   * Wearing armor should not have an effect before the time it takes to put it on has passed (You begin your dressing maneuver...)
+  * "You see many items here": separate list with commas
+  * "You are currently wearing this" => "Take off the [...] before dropping it!"
 
 == Small improvement ==
   * (Alex) World should contain a global time variable
   * Display player information (health, mana, time, status, points, ...)
   * Choosing an item from the inventory should bring up a list of options
+  * Wearing multiple types of armor (hats, shoes, cloaks, hats, gloves, hats)
+  * 'T' for taking armor off
 
 == Major improvements ==
   * Fully implement attributes
@@ -26,3 +30,4 @@
   * Magic system
   * Character creation
   * Random level generation
+  * Environment objects: Doors, traps, ...
