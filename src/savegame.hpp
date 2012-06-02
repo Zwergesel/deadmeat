@@ -65,7 +65,7 @@ public:
 	LoadBlock(Savegame*);
 	LoadBlock& operator()(const std::string& name, std::string& output);
 	LoadBlock& operator()(const std::string& name, int& output);
-	LoadBlock& operator()(const std::string& name, unsigned int& output);	
+	LoadBlock& operator()(const std::string& name, unsigned int& output);
 	LoadBlock& operator()(const std::string& name, double& output);
 	LoadBlock& operator()(const std::string& name, bool& output);
 	LoadBlock& operator()(const std::string& name, Point& output);

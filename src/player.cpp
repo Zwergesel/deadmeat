@@ -274,10 +274,10 @@ int Player::actionDrop(Item* item)
 		world.addMessage(msg.str());
 		return 0;
 	}
-  if (creature->getMainWeapon() == item)
-  {
-    creature->wieldMainWeapon(NULL, skills[SKILL_UNARMED].value);
-  }
+	if (creature->getMainWeapon() == item)
+	{
+		creature->wieldMainWeapon(NULL, skills[SKILL_UNARMED].value);
+	}
 	removeItem(item, false);
 	msg << "Dropped " << util::indefArticle(item->getName()) << " " << item->getName() << ".";
 	world.addMessage(msg.str());
@@ -337,17 +337,18 @@ int Player::action()
 	{
 		TCOD_key_t key = waitForKeypress(true);
 
-    // save&quit
-    if (state == STATE_DEFAULT && key.c == 'S')
-    {
-      std::vector<unsigned char> yesno;
-      yesno.push_back('y'); yesno.push_back('n');
-      if(world.drawBlockingWindow("Save & Quit", "Save game and quit?", yesno) == 'y')
-      {
-        world.requestQuit = true;
-      }
-      return 0;
-    }
+		// save&quit
+		if (state == STATE_DEFAULT && key.c == 'S')
+		{
+			std::vector<unsigned char> yesno;
+			yesno.push_back('y');
+			yesno.push_back('n');
+			if (world.drawBlockingWindow("Save & Quit", "Save game and quit?", yesno) == 'y')
+			{
+				world.requestQuit = true;
+			}
+			return 0;
+		}
 		// numpad player movement
 		if (state == STATE_DEFAULT && key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
 		{
