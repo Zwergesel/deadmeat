@@ -333,17 +333,20 @@ int Player::actionWear(Item* itemObj)
 
 int Player::action()
 {
+  if(creature->getHealth().first < 0)
+  {
+    world.drawBlockingWindow("DEATH", "You died!");
+    world.requestQuit = true;
+    return 0;
+  }
 	do
 	{
 		TCOD_key_t key = waitForKeypress(true);
 
 		// save&quit
 		if (state == STATE_DEFAULT && key.c == 'S')
-		{
-			std::vector<unsigned char> yesno;
-			yesno.push_back('y');
-			yesno.push_back('n');
-			if (world.drawBlockingWindow("Save & Quit", "Save game and quit?", yesno) == 'y')
+		{			
+			if (world.drawBlockingWindow("Save & Quit", "Save game and quit?\n\n[y]es / [n]o", "yn") == 'y')
 			{
 				world.requestQuit = true;
 			}
