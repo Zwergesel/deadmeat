@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <iomanip>
+#include <stdio.h>
 #include <algorithm>
 #include <sys/stat.h>
 #include "savegame.hpp"
@@ -69,6 +70,17 @@ bool Savegame::exists(const std::string& fileName)
 {
 	struct stat fileInfo;
 	return stat(fileName.c_str(), &fileInfo) == 0;
+}
+
+void Savegame::deleteSave(const std::string& fileName)
+{
+	if (exists(fileName))
+	{
+		if (remove(fileName.c_str()) != 0)
+		{
+			std::cerr << "Could not delete savegame '" << fileName << "' (check write permission)." << std::endl;
+		}
+	}
 }
 
 void Savegame::writeHeader(unsigned int numObjects)

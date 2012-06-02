@@ -94,6 +94,7 @@ public:
 	~Savegame();
 
 	bool exists(const std::string& fileName);
+	void deleteSave(const std::string& fileName);
 	bool saved(void* voidPtr, unsigned int* voidPtrId);
 	void saveWorld(World& world, std::string fileName);
 	void loadWorld(std::string fileName);
