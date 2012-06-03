@@ -3,9 +3,8 @@
 = TODO-List =
 
 == Test == 
-
-== Bug fixes / Issues ==
   * Wearing armor should not have an effect before the time it takes to put it on has passed (You begin your dressing maneuver...)
+== Bug fixes / Issues ==
   * Don't allow any additional actions after player death, but still show all pending messages
 
 == Small improvement ==
