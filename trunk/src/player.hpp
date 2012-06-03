@@ -23,7 +23,8 @@ enum STATE
   STATE_PICKUP,
   STATE_WIELD,
   STATE_WEAR,
-  STATE_DROP
+  STATE_DROP,
+  STATE_DRESSING
 };
 
 typedef std::vector<std::pair<int, Item*> >::iterator InventoryIterator;
