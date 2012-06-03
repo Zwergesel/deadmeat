@@ -96,7 +96,7 @@ TCOD_key_t Player::waitForKeypress(bool clBuf)
 		}
 		else if (key.pressed && (key.lalt || key.ralt) && key.vk == TCODK_ENTER)
 		{
-			world.toggleFullscreen();      
+			world.toggleFullscreen();
 		}
 		else if (key.pressed)
 		{
@@ -313,27 +313,44 @@ int Player::actionWield(Item* itemObj)
 int Player::actionWear(Item* itemObj)
 {
 	std::stringstream msg;
-	if (itemObj == NULL) return 0;
+	if (itemObj == NULL)
+	{
+		state = STATE_DEFAULT;
+		return 0;
+	}
 	assert(itemObj->getType() == ITEM_ARMOR);
 
 	Armor* armor = static_cast<Armor*>(itemObj);
 	if (creature->getArmor() == armor)
 	{
+		state = STATE_DEFAULT;
 		msg << "You are already wearing " << util::indefArticle(armor->toString()) << " " << armor->toString() << ".";
-		world.addMessage(msg.str());
+		world.addMessage(msg.str(), true);
 		return 0;
 	}
 	else
 	{
-		creature->wearArmor(armor, computeArmorBonus(armor));
-		msg << "You are now wearing " << util::indefArticle(armor->toString()) << " " << armor->toString() << ".";
-		world.addMessage(msg.str());
-		return 30;
+		if (state == STATE_WEAR)
+		{
+			state = STATE_DRESSING;
+			return 30;
+		}
+		else if (state == STATE_DRESSING)
+		{
+			creature->wearArmor(armor, computeArmorBonus(armor));
+			state = STATE_DEFAULT;
+			msg << "You finished putting on " << util::indefArticle(armor->toString()) << " " << armor->toString() << ".";
+			world.addMessage(msg.str());
+			return 0;
+		}
 	}
+	assert(false);
+	return 0;
 }
 
 int Player::action()
 {
+	// am i dead yet?
 	if (creature->getHealth().first <= 0 && world.getNumMessages() <= 1)
 	{
 		world.drawBlockingWindow("GAME OVER", "You are dead!", TCODColor::red);
@@ -341,7 +358,13 @@ int Player::action()
 		world.requestQuit = true;
 		return 0;
 	}
-	
+	// finish putting armor on
+	if (state == STATE_DRESSING)
+	{
+		return actionWear(world.itemSelection.getItem());
+	}
+
+
 	do
 	{
 		TCOD_key_t key = waitForKeypress(true);
@@ -492,7 +515,6 @@ int Player::action()
 		{
 			if (world.itemSelection.keyInput(key))
 			{
-				state = STATE_DEFAULT;
 				return actionWear(world.itemSelection.getItem());
 			}
 			return 0;
@@ -522,8 +544,8 @@ int Player::computeArmorBonus(Armor* a)
 
 unsigned int Player::save(Savegame& sg)
 {
-  // saving resets the state
-  state = STATE_DEFAULT;
+	// saving resets the state
+	state = STATE_DEFAULT;
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Player", id);
