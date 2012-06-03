@@ -173,7 +173,6 @@ void World::drawInfo()
 void World::toggleFullscreen()
 {
 	TCODConsole::root->setFullscreen(!TCODConsole::root->isFullscreen());
-	drawWorld();
 	TCODConsole::root->flush();
 }
 
