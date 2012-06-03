@@ -96,7 +96,7 @@ TCOD_key_t Player::waitForKeypress(bool clBuf)
 		}
 		else if (key.pressed && (key.lalt || key.ralt) && key.vk == TCODK_ENTER)
 		{
-			world.toggleFullscreen();
+			world.toggleFullscreen();      
 		}
 		else if (key.pressed)
 		{
@@ -312,7 +312,6 @@ int Player::actionWield(Item* itemObj)
 
 int Player::actionWear(Item* itemObj)
 {
-	//Item* itemObj = getInventoryItem(item);
 	std::stringstream msg;
 	if (itemObj == NULL) return 0;
 	assert(itemObj->getType() == ITEM_ARMOR);
@@ -523,6 +522,8 @@ int Player::computeArmorBonus(Armor* a)
 
 unsigned int Player::save(Savegame& sg)
 {
+  // saving resets the state
+  state = STATE_DEFAULT;
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Player", id);
