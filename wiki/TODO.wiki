@@ -5,6 +5,7 @@
 == Bug fixes / Issues ==
   * Wearing armor should not have an effect before the time it takes to put it on has passed (You begin your dressing maneuver...)
   * Don't allow any additional actions after player death, but still show all pending messages
+  * Switching to fullscreen while the "Quit game?" or "Save game?" dialog is visible makes it disappear.
 
 == Small improvement ==
   * Display player information (health, mana, time, status, points, ...)
