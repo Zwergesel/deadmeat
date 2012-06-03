@@ -3,8 +3,6 @@
 = TODO-List =
 
 == Test == 
-  * Switching to fullscreen while the "Quit game?" or "Save game?" dialog is visible makes it disappear.
-
 
 == Bug fixes / Issues ==
   * Wearing armor should not have an effect before the time it takes to put it on has passed (You begin your dressing maneuver...)
@@ -15,6 +13,7 @@
   * Choosing an item from the inventory should bring up a list of options
   * Wearing multiple types of armor (hats, shoes, cloaks, hats, gloves, hats, TF2 anyone?)
   * 'T' for taking armor off
+  * Implement creature walk speed and armor hindrance
 
 == Major improvements ==
   * Fully implement attributes
@@ -26,6 +25,8 @@
   * Display unseen items where the player has last seen them even if a monster picked them up
   * Looking at things that are not at the player's location
   * Load monsters and levels from files (not savegame loading, just general monster information)
+  * Generate monsters with items
+  * Let monsters drop their items when they die
 
 == Milestones for later / No priority ==
   * Magic system
