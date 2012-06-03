@@ -190,7 +190,7 @@ bool operator<(TimelineAction a, TimelineAction b)
 	if (a.time != b.time) return a.time > b.time;
 	// In case of a tie player creatures always go first
 	if (a.actor->isControlled() != b.actor->isControlled()) return b.actor->isControlled();
-	return true;
+	return false;
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/
