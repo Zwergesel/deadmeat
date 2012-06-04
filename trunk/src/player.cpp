@@ -1,5 +1,6 @@
 #include <libtcod.hpp>
 #include <sstream>
+#include <iostream>
 #include <cassert>
 #include "player.hpp"
 #include "creature.hpp"
@@ -105,7 +106,7 @@ TCOD_key_t Player::waitForKeypress(bool clBuf)
 		}
 		else if (key.pressed)
 		{
-			world.clearMessage = true;
+			if (world.getNumMessages() > 0) world.clearMessage = true;
 			return key;
 		}
 	}
@@ -345,7 +346,7 @@ int Player::actionWear(Item* itemObj)
 		{
 			creature->wearArmor(armor, computeArmorBonus(armor));
 			state = STATE_DEFAULT;
-			msg << "You finished putting on " << util::indefArticle(armor->toString()) << " " << armor->toString() << ".";
+			msg << "You finish putting on " << util::indefArticle(armor->toString()) << " " << armor->toString() << ".";
 			world.addMessage(msg.str());
 			return 0;
 		}
