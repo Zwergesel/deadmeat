@@ -96,8 +96,10 @@ public:
 	bool exists(const std::string& fileName);
 	void deleteSave(const std::string& fileName);
 	bool saved(void* voidPtr, unsigned int* voidPtrId);
+	void beginSave(std::string fileName);
+	void endSave();
 	void saveWorld(World& world, std::string fileName);
-	void loadWorld(std::string fileName);
+	void loadSavegame(std::string fileName);
 
 	static std::string letters;
 };

@@ -5,10 +5,29 @@
 #include "../level.hpp"
 #include "../pathfinding.hpp"
 
-Goblin::Goblin() : Creature(Point(20, 20), "goblin", 'g', TCODColor::green, 20)
+Goblin::Goblin()
+{
+}
+
+Goblin::Goblin(Point p, std::string n, int s, TCODColor t, int h) : Creature(p, n, s, t, h)
 {
 	baseWeapon = Weapon("hands", (unsigned char)'¤', TCODColor::pink, 15, 10, 10, 0, 0, 2, SKILL_UNARMED, 2);
 	attackSkill = 10;
+}
+
+Creature* Goblin::clone()
+{
+	Goblin* copy = new Goblin(position, name, symbol, color, maxHealth);
+	copy->health = health;
+	copy->controlled = controlled;
+	// TODO: clone weapon and armor
+	copy->mainWeapon = mainWeapon;
+	copy->armor = armor;
+	copy->attackSkill = attackSkill;
+	copy->armorSkill = armorSkill;
+	copy->baseWeapon = baseWeapon;
+	copy->armorSkill = armorSkill;
+	return copy;
 }
 
 int Goblin::action()

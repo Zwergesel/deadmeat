@@ -14,6 +14,7 @@
 #include "item.hpp"
 #include "items/weapon.hpp"
 #include "items/armor.hpp"
+#include "monsterfactory.hpp"
 
 std::string Savegame::version = "0.10";
 
@@ -24,7 +25,6 @@ Savegame::Savegame()
 
 Savegame::~Savegame()
 {
-	std::cerr << "~Savegame() @ " << this << std::endl;
 	if (objects != NULL)
 	{
 		delete[] objects;
@@ -34,12 +34,22 @@ Savegame::~Savegame()
 
 void Savegame::saveWorld(World& world, std::string fileName)
 {
-	uniqueId = 0;
+	beginSave(fileName);
+	world.save(*this);
+	endSave();
+}
 
+void Savegame::beginSave(std::string fileName)
+{
 	// TODO: catch I/O exceptions
+	uniqueId = 0;
+	obj2id.clear();
 	saveStream.open(fileName.c_str());
 	writeHeader(0);
-	world.save(*this);
+}
+
+void Savegame::endSave()
+{
 	writeHeader(uniqueId);
 	saveStream.close();
 }
@@ -161,7 +171,7 @@ SaveBlock& SaveBlock::operator()(const std::string& name, Tile* map, int width, 
 ///////******************** LOADING ***********************///////
 /*--------------------------------------------------------------*/
 
-void Savegame::loadWorld(std::string fileName)
+void Savegame::loadSavegame(std::string fileName)
 {
 	// TODO: catch I/O exceptions
 	loadStream.open(fileName.c_str());
@@ -231,6 +241,12 @@ void Savegame::loadObject()
 		objects[id] = static_cast<void*>(&world);
 		world.load(load);
 	}
+	else if (objClass == "MonsterFactory")
+	{
+		// No new MonsterFactory object. Global MonsterFactory loads this
+		objects[id] = static_cast<void*>(&monsterfactory);
+		monsterfactory.load(load);
+	}
 	else if (objClass == "Creature")
 	{
 		Creature* obj = new Creature();
@@ -277,7 +293,7 @@ void Savegame::loadObject()
 	{
 		throw SavegameFormatException("loadObj _ objClass invalid: " + objClass);
 	}
-	std::cerr << objClass << " [" << id << "] @ " << objects[id] << std::endl;
+	//std::cerr << objClass << " [" << id << "] @ " << objects[id] << std::endl;
 }
 
 LoadBlock::LoadBlock(Savegame* sg)

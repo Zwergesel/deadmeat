@@ -31,12 +31,14 @@ protected:
 	Weapon baseWeapon;
 	Armor baseArmor;
 	void die(Creature* instigator);
+	Creature(const Creature& copy);
 
 public:
 
 	Creature(); // for savegames
 	Creature(Point p, std::string name, int symbol, TCODColor color, int health);
 	~Creature();
+	virtual Creature* clone();
 	std::string getName();
 	Point getPos();
 	int getSymbol();
@@ -69,14 +71,8 @@ class Goblin: public Creature
 {
 public:
 	Goblin();
-	int action();
-	unsigned int save(Savegame& sg);
-};
-
-class FailWhale: public Creature
-{
-public:
-	FailWhale();
+	Goblin(Point p, std::string n, int s, TCODColor t, int h);
+	Creature* clone();
 	int action();
 	unsigned int save(Savegame& sg);
 };
