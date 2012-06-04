@@ -166,8 +166,36 @@ void World::drawWorld()
 void World::drawInfo()
 {
 	std::pair<int,int> health = player->getCreature()->getHealth();
-	TCODConsole::root->setColorControl(TCOD_COLCTRL_1, TCODColor::green, TCODColor::black);
-	TCODConsole::root->printEx(TCODConsole::root->getWidth()-2, 3, TCOD_BKGND_NONE, TCOD_RIGHT, "%c%d/%d%c", TCOD_COLCTRL_1, health.first, health.second, TCOD_COLCTRL_STOP);
+	// Healthpoints color
+	float coef = 1.0f * health.first / health.second;
+	TCODColor hcol = TCODColor::red;
+	if (coef >= 0.0f && coef < 0.5f) hcol = TCODColor::lerp(TCODColor::red, TCODColor::yellow, 2.0f * coef);
+	else if (coef >= 0.5 && coef <= 1.0f) hcol = TCODColor::lerp(TCODColor::yellow, TCODColor::green, 2.0f * coef - 1.0f);
+	else if (coef > 1.0f) hcol = TCODColor::green;
+	// Health points
+	TCODConsole::root->setColorControl(TCOD_COLCTRL_1, hcol, TCODColor::black);
+	TCODConsole::root->printEx(viewInfo.x, viewInfo.y, TCOD_BKGND_NONE, TCOD_LEFT, "HP");
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y, TCOD_BKGND_NONE, TCOD_RIGHT, "%c%d/%d%c", TCOD_COLCTRL_1, health.first, health.second, TCOD_COLCTRL_STOP);
+	// Mana points
+	TCODConsole::root->setColorControl(TCOD_COLCTRL_2, TCODColor(30,180,240), TCODColor::black);
+	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 2, TCOD_BKGND_NONE, TCOD_LEFT, "MP");
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 2, TCOD_BKGND_NONE, TCOD_RIGHT, "%c0/0%c", TCOD_COLCTRL_2, TCOD_COLCTRL_STOP);
+	// Attributes
+	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 5, TCOD_BKGND_NONE, TCOD_LEFT, "STR 11 DEX  8");
+	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 7, TCOD_BKGND_NONE, TCOD_LEFT, "CON 14 INT  6");
+	// Time
+	int sec = (time/10) % 60;
+	int min = (time/600) % 60;
+	int hour = (time/36000) % 24;
+	int days = (time/864000);
+	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 10, TCOD_BKGND_NONE, TCOD_LEFT, "TIME PASSED");
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 12, TCOD_BKGND_NONE, TCOD_RIGHT, "%d DAY%s   ", days, days == 1 ? " " : "S");
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 13, TCOD_BKGND_NONE, TCOD_RIGHT, "%d HOUR%s  ", hour, hour == 1 ? " " : "S");
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 14, TCOD_BKGND_NONE, TCOD_RIGHT, "%d MINUTE%s", min, min == 1 ? " " : "S");
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 15, TCOD_BKGND_NONE, TCOD_RIGHT, "%d SECOND%s", sec, sec == 1 ? " " : "S");
+	// Score
+	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 18, TCOD_BKGND_NONE, TCOD_LEFT, "SCORE");
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 19, TCOD_BKGND_NONE, TCOD_RIGHT, "14324");
 }
 
 void World::toggleFullscreen()

@@ -364,7 +364,6 @@ int Player::action()
 		return actionWear(world.itemSelection.getItem());
 	}
 
-
 	do
 	{
 		TCOD_key_t key = waitForKeypress(true);
@@ -520,9 +519,10 @@ int Player::action()
 			return 0;
 		}
 	}
-	while (!TCODConsole::isWindowClosed() && !world.requestQuit);
-	// should not be reached, return time of action
-	return 1;
+	while (!world.requestQuit);
+	
+	// this return should only be reached on requestQuit
+	return 0;
 }
 
 STATE Player::getState()

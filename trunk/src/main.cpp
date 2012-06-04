@@ -38,8 +38,9 @@ int main()
 
 	// Init hardcoded world
 	LevelGen level_generator;
-	world.viewLevel = Viewport(1, 1, TCODConsole::root->getWidth() - 10, TCODConsole::root->getHeight() - 5);
+	world.viewLevel = Viewport(1, 1, TCODConsole::root->getWidth() - 16, TCODConsole::root->getHeight() - 5);
 	world.viewMsg = Viewport(2, TCODConsole::root->getHeight() - 3, TCODConsole::root->getWidth() - 4, 2);
+	world.viewInfo = Viewport(TCODConsole::root->getWidth() - 14, 3, 13, TCODConsole::root->getHeight() - 7);
 	world.viewItemList = Viewport(
 	                       world.viewLevel.x + world.viewLevel.width/8,
 	                       world.viewLevel.y + world.viewLevel.height/8,
