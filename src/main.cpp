@@ -31,6 +31,28 @@ Point getRandomLocation(Level* lev)
 	return p;
 }
 
+int corruptSave(const std::string& fileName)
+{
+	TCODConsole::root->setDefaultBackground(TCODColor::blue);
+	TCODConsole::root->setDefaultForeground(TCODColor::white);
+	TCODConsole::root->clear();
+	TCODConsole::root->printEx(40, 18, TCOD_BKGND_NONE, TCOD_CENTER, "ERROR - SAVEGAME IS CORRUPT\n\nDELETE CORRUPT SAVEGAME?\n\n[Y]es / [N]o");
+	TCODConsole::root->flush();
+	while (true)
+	{
+		TCOD_key_t key = TCODConsole::root->waitForKeypress(true);
+		if (key.c == 'Y')
+		{
+			Savegame::deleteSave(fileName);
+			return 0;
+		}
+		else if (key.c == 'N' || TCODConsole::root->isWindowClosed())
+		{
+			return 0;
+		}
+	}
+}
+
 int main()
 {
 	TCODConsole::initRoot(80,51,"deadmeat",false);
@@ -50,7 +72,7 @@ int main()
 
 	{
 		Savegame save;
-		save.loadSavegame("monsters.txt");
+		if (!save.loadSavegame("monsters.txt")) return corruptSave("monsters.txt");
 	}
 
 	if (false)
@@ -69,13 +91,9 @@ int main()
 	}
 
 	Savegame save;
-	if (save.exists("save.txt"))
+	if (Savegame::exists("save.txt"))
 	{
-		save.loadSavegame("save.txt");
-	}
-	else if (false && save.exists("defaultworld.txt"))
-	{
-		save.loadSavegame("defaultworld.txt");
+		if (!save.loadSavegame("save.txt")) return corruptSave("save.txt");
 	}
 	else
 	{
@@ -143,7 +161,7 @@ int main()
 
 	if (world.gameover)
 	{
-		save.deleteSave("save.txt");
+		Savegame::deleteSave("save.txt");
 	}
 	else
 	{
