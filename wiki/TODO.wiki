@@ -4,10 +4,12 @@
 
 == Test == 
   * Wearing armor should not have an effect before the time it takes to put it on has passed (You begin your dressing maneuver...)
+
 == Bug fixes / Issues ==
   * Don't allow any additional actions after player death, but still show all pending messages
+  * Escape / Alt+F4 / Close Window should be possible in quit and save dialogs
 
-== Small improvement ==
+== Small improvements ==
   * Display player information (health, mana, time, status, points, ...)
   * Choosing an item from the inventory should bring up a list of options
   * Wearing multiple types of armor (hats, shoes, cloaks, hats, gloves, hats, TF2 anyone?)
