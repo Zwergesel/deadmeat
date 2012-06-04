@@ -21,6 +21,7 @@ World::World()
 	requestQuit = false;
 	gameover = false;
 	time = 0;
+	clearMessage = false;
 }
 
 World::~World()
@@ -80,10 +81,11 @@ int World::getNumMessages()
 
 void World::popMessage()
 {
-	if (!messageQueue.empty())
+	if (!messageQueue.empty() && clearMessage)
 	{
 		messageQueue.pop_front();
 	}
+	clearMessage = false;
 }
 
 void World::drawMessage()

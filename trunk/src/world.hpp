@@ -26,6 +26,7 @@ class World
 {
 private:
 	std::deque<std::string> messageQueue;
+	World(const World& copy);
 
 public:
 	TileSet* tileSet;
@@ -38,6 +39,7 @@ public:
 	ItemSelection itemSelection;
 	bool gameover;
 	int time;
+	bool clearMessage;
 
 	World();
 	~World();

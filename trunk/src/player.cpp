@@ -105,6 +105,7 @@ TCOD_key_t Player::waitForKeypress(bool clBuf)
 		}
 		else if (key.pressed)
 		{
+			world.clearMessage = true;
 			return key;
 		}
 	}
@@ -338,7 +339,7 @@ int Player::actionWear(Item* itemObj)
 		if (state == STATE_WEAR)
 		{
 			state = STATE_DRESSING;
-			return 30;
+			return 50;
 		}
 		else if (state == STATE_DRESSING)
 		{

@@ -137,11 +137,9 @@ int main()
 
 		// Show new game state
 		world.drawWorld();
-		// TODO: this somewhat breaks fullscreen, so fix it later
-		world.popMessage();
 		TCODConsole::root->flush();
 
-		if (world.getNumMessages() > 0)
+		if (world.getNumMessages() > 1)
 		{
 			// Player has to clear pending messages
 			TCOD_key_t key;
@@ -150,12 +148,15 @@ int main()
 				key = world.player->waitForKeypress(true);
 			}
 			while (key.vk != TCODK_SPACE && !world.requestQuit);
+			world.popMessage();
 		}
 		else
 		{
 			// This is the player turn made by a player controlled creature
 			// We know this because level->isPlayerTurn() must be true here
+			int nMsg = world.getNumMessages();
 			level->performCreatureTurn();
+			if (nMsg > 0) world.popMessage();
 		}
 	}
 
