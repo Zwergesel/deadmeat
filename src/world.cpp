@@ -46,7 +46,7 @@ World::~World()
 /* forceBreak is optional (default: false) */
 void World::addMessage(std::string m, bool forceBreak)
 {
-	if (messageQueue.empty())
+	if (messageQueue.empty() || (messageQueue.size() == 1 && clearMessage))
 	{
 		messageQueue.push_back(m);
 	}
