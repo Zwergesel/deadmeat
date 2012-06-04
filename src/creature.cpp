@@ -33,6 +33,21 @@ Creature::~Creature()
 	// nothing
 }
 
+Creature* Creature::clone()
+{
+	Creature* copy = new Creature(position, name, symbol, color, maxHealth);
+	copy->health = health;
+	copy->controlled = controlled;
+	// TODO: clone weapon and armor
+	copy->mainWeapon = mainWeapon;
+	copy->armor = armor;
+	copy->attackSkill = attackSkill;
+	copy->armorSkill = armorSkill;
+	copy->baseWeapon = baseWeapon;
+	copy->armorSkill = armorSkill;
+	return copy;
+}
+
 std::string Creature::getName()
 {
 	return name;
