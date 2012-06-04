@@ -171,7 +171,7 @@ SaveBlock& SaveBlock::operator()(const std::string& name, Tile* map, int width, 
 ///////******************** LOADING ***********************///////
 /*--------------------------------------------------------------*/
 
-void Savegame::loadSavegame(std::string fileName)
+bool Savegame::loadSavegame(std::string fileName)
 {
 	// TODO: catch I/O exceptions
 	loadStream.open(fileName.c_str());
@@ -192,12 +192,13 @@ void Savegame::loadSavegame(std::string fileName)
 	}
 	catch (SavegameFormatException& e)
 	{
-		std::cout << "Savegame is corrupt: " << e.what() << std::endl;
+		std::cerr << "Savegame is corrupt: " << e.what() << std::endl;
+		return false;
 	}
 
-	std::cerr << "Savegame loading complete!" << std::endl;
-
+	std::cerr << "Savegame '" << fileName << "' successfully loaded!" << std::endl;
 	loadStream.close();
+	return true;
 }
 
 void Savegame::loadHeader(std::string& v, unsigned int& nObj)

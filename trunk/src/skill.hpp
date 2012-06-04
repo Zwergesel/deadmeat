@@ -8,7 +8,8 @@ enum ATTRIBUTE
   ATTR_STR,
   ATTR_DEX,
   ATTR_CON,
-  ATTR_INT
+  ATTR_INT,
+  NUM_ATTR
 };
 
 enum SKILLS

@@ -181,8 +181,8 @@ void World::drawInfo()
 	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 2, TCOD_BKGND_NONE, TCOD_LEFT, "MP");
 	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 2, TCOD_BKGND_NONE, TCOD_RIGHT, "%c0/0%c", TCOD_COLCTRL_2, TCOD_COLCTRL_STOP);
 	// Attributes
-	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 5, TCOD_BKGND_NONE, TCOD_LEFT, "STR 11 DEX  8");
-	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 7, TCOD_BKGND_NONE, TCOD_LEFT, "CON 14 INT  6");
+	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 5, TCOD_BKGND_NONE, TCOD_LEFT, "STR %2d DEX %2d", player->getAttribute(ATTR_STR), player->getAttribute(ATTR_DEX));
+	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 7, TCOD_BKGND_NONE, TCOD_LEFT, "CON %2d INT %2d", player->getAttribute(ATTR_CON), player->getAttribute(ATTR_INT));
 	// Time
 	int sec = (time/10) % 60;
 	int min = (time/600) % 60;

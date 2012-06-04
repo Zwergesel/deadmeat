@@ -61,6 +61,11 @@ Player::Player(std::string name):
 	skills[SKILL_BOW] = Skill("bow", 0, ATTR_DEX);
 	skills[SKILL_CROSSBOW] = Skill("crossbow", 0, ATTR_DEX);
 	skills[SKILL_SLING] = Skill("sling", 0, ATTR_DEX);
+	TCODRandom* rng = TCODRandom::getInstance();
+	attributes[ATTR_STR] = rng->getInt(5,20);
+	attributes[ATTR_DEX] = rng->getInt(5,20);
+	attributes[ATTR_CON] = rng->getInt(5,20);
+	attributes[ATTR_INT] = rng->getInt(5,20);
 	creature = new Creature(Point(40,22), name, (unsigned char)'@', TCODColor::black, 250);
 	creature->setControlled(true);
 	creature->setAttackSkill(skills[SKILL_UNARMED].value);
@@ -520,7 +525,7 @@ int Player::action()
 		}
 	}
 	while (!world.requestQuit);
-	
+
 	// this return should only be reached on requestQuit
 	return 0;
 }
@@ -528,6 +533,11 @@ int Player::action()
 STATE Player::getState()
 {
 	return state;
+}
+
+int Player::getAttribute(ATTRIBUTE attr)
+{
+	return attributes[attr];
 }
 
 int Player::computeAttackBonus(Weapon* w)
@@ -556,6 +566,8 @@ unsigned int Player::save(Savegame& sg)
 		store ("_invKey", inventory[d].first) .ptr("_invItem", inventory[d].second->save(sg));
 	}
 	store ("state", (int) state);
+	store ("strength", attributes[ATTR_STR]) ("dexterity", attributes[ATTR_DEX]);
+	store ("intelligence", attributes[ATTR_INT]) ("constitution", attributes[ATTR_CON]);
 	sg << store;
 	return id;
 }
@@ -573,8 +585,10 @@ void Player::load(LoadBlock& load)
 		Item* item = static_cast<Item*>(load.ptr("_invItem"));
 		inventory.push_back(std::make_pair(key,item));
 	}
-	// TODO : check range 0 - STATE_MAX(?)
 	int s;
 	load ("state", s);
+	if (s < 0 || s >= NUM_STATE) throw SavegameFormatException("Player::load _ illegal state");
 	state = static_cast<STATE>(s);
+	load ("strength", attributes[ATTR_STR]) ("dexterity", attributes[ATTR_DEX]);
+	load ("intelligence", attributes[ATTR_INT]) ("constitution", attributes[ATTR_CON]);
 }

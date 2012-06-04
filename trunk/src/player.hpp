@@ -24,7 +24,8 @@ enum STATE
   STATE_WIELD,
   STATE_WEAR,
   STATE_DROP,
-  STATE_DRESSING
+  STATE_DRESSING,
+  NUM_STATE
 };
 
 typedef std::vector<std::pair<int, Item*> >::iterator InventoryIterator;
@@ -35,6 +36,7 @@ private:
 	std::string name;
 	Creature* creature;
 	Skill skills[NUM_SKILL];
+	int attributes[NUM_ATTR];
 	std::vector<std::pair<int, Item*> > inventory;
 	static int dx[9];
 	static int dy[9];
@@ -63,6 +65,7 @@ public:
 	std::vector<std::pair<int, Item*> > getInventory();
 	Item* getInventoryItem(int item);
 	STATE getState();
+	int getAttribute(ATTRIBUTE attr);
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);
