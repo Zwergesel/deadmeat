@@ -4,10 +4,10 @@
 
 == Test == 
   * Wearing armor should not have an effect before the time it takes to put it on has passed (You begin your dressing maneuver...)
+  * Escape should be possible in quit and save dialogs
 
 == Bug fixes / Issues ==
   * Don't allow any additional actions after player death, but still show all pending messages
-  * Escape should be possible in quit and save dialogs
 
 == Small improvements ==
   * Implement mana
