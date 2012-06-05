@@ -75,7 +75,7 @@ int main()
 		if (!save.loadSavegame("monsters.txt")) return corruptSave("monsters.txt");
 	}
 
-	if (true)
+	if (false)
 	{
 		// Add/edit/remove creature templates here
 		Goblin goblin(Point(0,0), "goblin", 'g', TCODColor::green, 50);

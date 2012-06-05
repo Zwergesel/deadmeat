@@ -30,10 +30,13 @@ color: 0, 255, 0
 health: 50
 maxHealth: 50
 controlled: false
+mainWeapon: 0
+armor: 0
 attackSkill: 10
 armorSkill: 0
 baseWeapon: @4
 baseArmor: @3
+#inventory: 0
 
 [[Armor: 6]]
 name: skin
@@ -64,10 +67,13 @@ color: 255, 0, 0
 health: 350
 maxHealth: 350
 controlled: false
+mainWeapon: 0
+armor: 0
 attackSkill: 10
 armorSkill: 0
 baseWeapon: @7
 baseArmor: @6
+#inventory: 0
 
 [[Armor: 9]]
 name: skin
@@ -98,10 +104,13 @@ color: 95, 191, 0
 health: 25
 maxHealth: 25
 controlled: false
+mainWeapon: 0
+armor: 0
 attackSkill: 10
 armorSkill: 0
 baseWeapon: @10
 baseArmor: @9
+#inventory: 0
 
 [[MonsterFactory: 1]]
 #templates: 3

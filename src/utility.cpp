@@ -59,6 +59,7 @@ std::string util::indefArticle(std::string str)
 
 std::string util::plural(std::string str)
 {
+	if (str.compare("armor") == 0 || str.compare("Armor") == 0) return str;
 	std::string ret = str;
 	if (str.size() >= 1 && str[str.size()-1] == 's') ret.append("es");
 	else if (str.size() >= 2 && str[str.size()-2] == 's' && str[str.size()-1] == 'h') ret.append("es");
