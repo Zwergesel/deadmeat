@@ -28,8 +28,6 @@ enum STATE
   NUM_STATE
 };
 
-typedef std::vector<std::pair<int, Item*> >::iterator InventoryIterator;
-
 class Player
 {
 private:
@@ -37,12 +35,9 @@ private:
 	Creature* creature;
 	Skill skills[NUM_SKILL];
 	int attributes[NUM_ATTR];
-	std::vector<std::pair<int, Item*> > inventory;
 	static int dx[9];
 	static int dy[9];
 	STATE state;
-	int computeAttackBonus(Weapon* w);
-	int computeArmorBonus(Armor* w);
 	int actionMove(int direction);
 	int actionLook(Point p);
 	int actionPickup();
@@ -51,6 +46,8 @@ private:
 	int actionWear(Item*);
 	int actionDrop();
 	int actionDrop(Item*);
+  int computeAttackBonus(Weapon* w);
+  int computeArmorBonus(Armor* a);
 
 public:
 	Player();
@@ -60,10 +57,6 @@ public:
 	Creature* getCreature();
 	int action();
 	TCOD_key_t waitForKeypress(bool clBuf);
-	bool addItem(Item* i);
-	void removeItem(Item* i, bool del);
-	std::vector<std::pair<int, Item*> > getInventory();
-	Item* getInventoryItem(int item);
 	STATE getState();
 	int getAttribute(ATTRIBUTE attr);
 

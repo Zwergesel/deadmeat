@@ -75,14 +75,6 @@ Player::Player(std::string name):
 
 Player::~Player()
 {
-	for (std::vector<std::pair<int, Item*> >::iterator it=inventory.begin(); it<inventory.end(); it++)
-	{
-		if ((*it).second != NULL)
-		{
-			delete (*it).second;
-			(*it).second = NULL;
-		}
-	}
 }
 
 Creature* Player::getCreature()
@@ -111,61 +103,6 @@ TCOD_key_t Player::waitForKeypress(bool clBuf)
 		}
 	}
 	return TCOD_key_t();
-}
-
-bool Player::addItem(Item* item)
-{
-	bool used[52];
-	for (int i=0; i<52; i++) used[i] = false;
-	for (std::vector<std::pair<int, Item*> >::iterator it=inventory.begin(); it<inventory.end(); it++)
-	{
-		used[(*it).first] = true;
-	}
-	for (int i=0; i<52; i++)
-	{
-		if (!used[i])
-		{
-			inventory.push_back(std::pair<int, Item*>(i, item));
-			return true;
-		}
-	}
-	// ran out of letters
-	world.addMessage("Your backpack cannot contain any more items.");
-	return false;
-}
-
-void Player::removeItem(Item* item, bool del)
-{
-	for (std::vector<std::pair<int, Item*> >::iterator it=inventory.begin(); it<inventory.end(); it++)
-	{
-		if ((*it).second == item)
-		{
-			if ((*it).second != NULL && del)
-			{
-				delete (*it).second;
-				(*it).second = NULL;
-			}
-			inventory.erase(it);
-			return;
-		}
-	}
-}
-
-std::vector<std::pair<int, Item*> > Player::getInventory()
-{
-	return inventory;
-}
-
-Item* Player::getInventoryItem(int item)
-{
-	for (InventoryIterator it = inventory.begin(); it != inventory.end(); it++)
-	{
-		if (it->first == item)
-		{
-			return it->second;
-		}
-	}
-	return NULL;
 }
 
 int Player::actionMove(int direction)
@@ -249,7 +186,7 @@ int Player::actionPickup()
 int Player::actionPickup(Item* item)
 {
 	Level* level = world.levels[world.currentLevel];
-	if (addItem(item))
+	if (creature->addItem(item))
 	{
 		std::stringstream msg;
 		msg << "You pick up " << util::indefArticle(item->getName()) << " " << item->getName() << ".";
@@ -262,7 +199,7 @@ int Player::actionPickup(Item* item)
 
 int Player::actionDrop()
 {
-	world.itemSelection = ItemSelection(inventory, "Drop what?", true);
+	world.itemSelection = ItemSelection(creature->getInventory(), "Drop what?", true);
 	world.itemSelection.compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);
 	if (world.itemSelection.getNumChoices() <= 0)
 	{
@@ -287,7 +224,7 @@ int Player::actionDrop(Item* item)
 	{
 		creature->wieldMainWeapon(NULL, skills[SKILL_UNARMED].value);
 	}
-	removeItem(item, false);
+	creature->removeItem(item, false);
 	msg << "You drop " << util::indefArticle(item->getName()) << " " << item->getName() << ".";
 	world.addMessage(msg.str());
 	level->addItem(item, creature->getPos());
@@ -296,7 +233,6 @@ int Player::actionDrop(Item* item)
 
 int Player::actionWield(Item* itemObj)
 {
-	//Item* itemObj = getInventoryItem(item);
 	std::stringstream msg;
 	if (itemObj == NULL) return 0;
 	assert(itemObj->getType() == ITEM_WEAPON);
@@ -310,7 +246,7 @@ int Player::actionWield(Item* itemObj)
 	}
 	else
 	{
-		creature->wieldMainWeapon(weapon, computeAttackBonus(weapon));
+    creature->wieldMainWeapon(weapon, computeAttackBonus(weapon));
 		msg << "You are now wiedling " << util::indefArticle(weapon->toString()) << " " << weapon->toString() << ".";
 		world.addMessage(msg.str());
 		return 30;
@@ -459,14 +395,14 @@ int Player::action()
 		else if (state == STATE_DEFAULT && key.c == 'i')
 		{
 			state = STATE_INVENTORY;
-			world.itemSelection = ItemSelection(inventory, "Inventory", false);
+      world.itemSelection = ItemSelection(creature->getInventory(), "Inventory", false);
 			world.itemSelection.compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);
 			return 0;
 		}
 		// open wield weapon screen
 		else if (state == STATE_DEFAULT && key.c == 'w')
 		{
-			world.itemSelection = ItemSelection(inventory, "What do you want to wield?", false);
+			world.itemSelection = ItemSelection(creature->getInventory(), "What do you want to wield?", false);
 			world.itemSelection.filterType(ITEM_WEAPON)->runFilter();
 			if (world.itemSelection.getNumChoices() > 0)
 			{
@@ -482,7 +418,7 @@ int Player::action()
 		// open wear armor screen
 		else if (state == STATE_DEFAULT && key.c == 'W')
 		{
-			world.itemSelection = ItemSelection(inventory, "What do you want to wear?", false);
+			world.itemSelection = ItemSelection(creature->getInventory(), "What do you want to wear?", false);
 			world.itemSelection.filterType(ITEM_ARMOR)->runFilter();
 			if (world.itemSelection.getNumChoices() > 0)
 			{
@@ -501,7 +437,7 @@ int Player::action()
 			if (world.itemSelection.keyInput(key))
 			{
 				// Do something with the item
-				// Item* item = world.itemSelection.getItem();
+				Item* item = world.itemSelection.getItem();
 				state = STATE_DEFAULT;
 			}
 			return 0;
@@ -562,11 +498,7 @@ unsigned int Player::save(Savegame& sg)
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Player", id);
 	// TODO : skills
-	store ("name", name) .ptr("creature", creature->save(sg)) ("#inventory", (int) inventory.size());
-	for (unsigned int d=0; d<inventory.size(); d++)
-	{
-		store ("_invKey", inventory[d].first) .ptr("_invItem", inventory[d].second->save(sg));
-	}
+	store ("name", name) .ptr("creature", creature->save(sg));
 	store ("state", (int) state);
 	store ("strength", attributes[ATTR_STR]) ("dexterity", attributes[ATTR_DEX]);
 	store ("intelligence", attributes[ATTR_INT]) ("constitution", attributes[ATTR_CON]);
@@ -578,15 +510,6 @@ void Player::load(LoadBlock& load)
 {
 	load ("name", name);
 	creature = static_cast<Creature*>(load.ptr("creature"));
-	int n;
-	load ("#inventory", n);
-	while (n-->0)
-	{
-		int key;
-		load ("_invKey", key);
-		Item* item = static_cast<Item*>(load.ptr("_invItem"));
-		inventory.push_back(std::make_pair(key,item));
-	}
 	int s;
 	load ("state", s);
 	if (s < 0 || s >= NUM_STATE) throw SavegameFormatException("Player::load _ illegal state");

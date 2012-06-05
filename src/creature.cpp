@@ -1,4 +1,5 @@
 #include <sstream>
+#include <cassert>
 #include "creature.hpp"
 #include "player.hpp"
 #include "level.hpp"
@@ -11,10 +12,10 @@ Creature::Creature()
 	// for savegames
 }
 
-Creature::Creature(Point p, std::string n, int s, TCODColor c, int h):
+Creature::Creature(Point p, std::string n, symbol s, TCODColor c, int h):
 	name(n),
 	position(p),
-	symbol(s),
+	sym(s),
 	color(c),
 	health(h),
 	maxHealth(h),
@@ -30,15 +31,18 @@ Creature::Creature(Point p, std::string n, int s, TCODColor c, int h):
 
 Creature::~Creature()
 {
-	// nothing
+  for(std::map<symbol, Item*>::iterator it=inventory.begin();it!=inventory.end();it++)
+  {
+    delete (*it).second;
+  }
 }
 
 Creature* Creature::clone()
 {
-	Creature* copy = new Creature(position, name, symbol, color, maxHealth);
+	Creature* copy = new Creature(position, name, sym, color, maxHealth);
 	copy->health = health;
 	copy->controlled = controlled;
-	// TODO: clone weapon and armor
+	// TODO: clone weapon and armor, inventory!
 	copy->mainWeapon = mainWeapon;
 	copy->armor = armor;
 	copy->attackSkill = attackSkill;
@@ -60,7 +64,7 @@ Point Creature::getPos()
 
 int Creature::getSymbol()
 {
-	return symbol;
+	return sym;
 }
 
 TCODColor Creature::getColor()
@@ -70,23 +74,47 @@ TCODColor Creature::getColor()
 
 Weapon* Creature::getMainWeapon()
 {
-	return mainWeapon;
+  if(inventory.count(mainWeapon) > 0)
+  {
+    assert(inventory[mainWeapon]->getType() == ITEM_WEAPON);
+    return static_cast<Weapon*>(inventory[mainWeapon]);
+  }
+  return NULL;
 }
 
 Armor* Creature::getArmor()
 {
-	return armor;
+	if(inventory.count(armor) > 0)
+  {
+    assert(inventory[armor]->getType() == ITEM_ARMOR);
+    return static_cast<Armor*>(inventory[armor]);
+  }
+  return NULL;
 }
 
 void Creature::wieldMainWeapon(Weapon* wpn, int skill)
 {
-	mainWeapon = wpn;
+  mainWeapon = NULL;
+  for(std::map<symbol, Item*>::iterator it=inventory.begin();it!=inventory.end();it++)
+  {
+    if((*it).second == wpn)
+    {
+      mainWeapon = (*it).first;
+    }
+  }	
 	attackSkill = skill;
 }
 
 void Creature::wearArmor(Armor* a, int skill)
 {
-	armor = a;
+	armor = NULL;
+  for(std::map<symbol, Item*>::iterator it=inventory.begin();it!=inventory.end();it++)
+  {
+    if((*it).second == a)
+    {
+      armor = (*it).first;
+    }
+  }	
 	armorSkill = skill;
 }
 
@@ -144,9 +172,10 @@ int Creature::getDefense()
 {
 	// armor + (fighting skill + armor skill)/2
 	int defense = baseArmor.getAC() + armorSkill;
-	if (armor != NULL)
+	if (inventory.count(armor) > 0)
 	{
-		defense = armor->getAC() + armorSkill;
+    assert(inventory[armor]->getType() == ITEM_ARMOR);
+		defense = static_cast<Armor*>(inventory[armor])->getAC() + armorSkill;
 	}
 	return defense;
 }
@@ -175,14 +204,16 @@ int Creature::attack(Creature* target)
 	// base attack speed
 	int speed = baseWeapon.getSpeed() - 0;
 
-	if (mainWeapon != NULL)
+	if (inventory.count(mainWeapon) > 0)
 	{
+    assert(inventory[mainWeapon]->getType() == ITEM_WEAPON);
+    Weapon* w = static_cast<Weapon*>(inventory[mainWeapon]);
 		// (weapon to hit + weapon enchantment) + ((fighting skill + weapon skill)/2)
-		attack = mainWeapon->getHitBonus() + mainWeapon->getEnchantment() + attackSkill;
+		attack = w->getHitBonus() + w->getEnchantment() + attackSkill;
 		// damage = (weapon damage + weapon enchantment)
-		damage = mainWeapon->rollDamage();
+		damage = w->rollDamage();
 		// weapon speed + armor hindrance
-		speed = mainWeapon->getSpeed() - 0;
+		speed = w->getSpeed() - 0;
 	}
 	int defense = target->getDefense();
 	TCODRandom rngGauss;
@@ -223,32 +254,68 @@ void Creature::setBaseWeapon(Weapon base)
 	baseWeapon = base;
 }
 
+bool Creature::addItem(Item* item)
+{
+  bool erg = false;
+  for(int i=0;i<util::numLetters;i++)
+  {
+    if(inventory.insert(std::pair<symbol, Item*>(util::letters[i], item)).second)
+    {
+      erg = true;
+      break;
+    }
+  }
+  return erg;
+}
+
+void Creature::removeItem(Item* item, bool del)
+{
+  for(std::map<symbol, Item*>::iterator it=inventory.begin();it!=inventory.end();it++)
+  {
+    if(item == (*it).second)
+    {
+      if(del && (*it).second != NULL)
+      {
+        delete (*it).second;
+        (*it).second = NULL;
+      }
+      inventory.erase(it);
+      break;
+    }
+  }  
+}
+
+std::map<symbol, Item*> Creature::getInventory()
+{
+  return inventory;
+}
+
 /*--------------------- SAVING AND LOADING ---------------------*/
 
 unsigned int Creature::save(Savegame& sg)
 {
 	unsigned int id;
 	if (sg.saved(this, &id)) return id;
-	SaveBlock store("Creature", id);
-	store ("name", name) ("symbol", symbol) ("position", position);
+	SaveBlock store("Creature", id);/*
+	store ("name", name) ("symbol", sym) ("position", position);
 	store ("color", color) ("health", health) ("maxHealth", maxHealth);
 	store ("controlled", controlled);
-	store.ptr("mainWeapon", mainWeapon == NULL ? 0 : mainWeapon->save(sg));
-	store.ptr("armor", armor == NULL ? 0 : armor->save(sg));
+//	store.ptr("mainWeapon", mainWeapon == NULL ? 0 : mainWeapon->save(sg));
+//	store.ptr("armor", armor == NULL ? 0 : armor->save(sg));
 	store ("attackSkill", attackSkill) ("armorSkill", armorSkill);
 	store.ptr("baseWeapon", baseWeapon.save(sg)).ptr("baseArmor", baseArmor.save(sg));
-	sg << store;
+	sg << store;*/
 	return id;
 }
 
 void Creature::load(LoadBlock& load)
 {
-	load ("name", name) ("symbol", symbol) ("position", position);
+/*	load ("name", name) ("symbol", sym) ("position", position);
 	load ("color", color) ("health", health) ("maxHealth", maxHealth);
 	load ("controlled", controlled);
-	mainWeapon = static_cast<Weapon*>(load.ptr("mainWeapon"));
-	armor = static_cast<Armor*>(load.ptr("armor"));
+//	mainWeapon = static_cast<Weapon*>(load.ptr("mainWeapon"));
+//	armor = static_cast<Armor*>(load.ptr("armor"));
 	load ("attackSkill", attackSkill) ("armorSkill", armorSkill);
 	baseWeapon = *static_cast<Weapon*>(load.ptr("baseWeapon"));
-	baseArmor = *static_cast<Armor*>(load.ptr("baseArmor"));
+	baseArmor = *static_cast<Armor*>(load.ptr("baseArmor"));*/
 }

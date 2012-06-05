@@ -114,7 +114,7 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 			TCODConsole::root->putCharEx(
 			  view.x + x + offset.x,
 			  view.y + y + offset.y,
-			  inf.symbol,
+			  inf.sym,
 			  inf.color,
 			  inf.background
 			);
