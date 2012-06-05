@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <sstream>
 #include <iostream>
+#include <cassert>
 #include <libtcod.hpp>
 #include "itemselection.hpp"
 #include "utility.hpp"
@@ -31,7 +32,8 @@ ItemSelection::ItemSelection(const std::vector<std::pair<int,Item*> >& choices, 
 	page(0),
 	title(title),
 	compiled(false),
-	choice(NULL)
+	choice(NULL),
+	choiceSymbol(0)
 {
 	namedChoices.assign(choices.begin(), choices.end());
 	filterTypes.clear();
@@ -48,7 +50,8 @@ ItemSelection::ItemSelection(const std::vector<Item*>& choices, std::string titl
 	page(0),
 	title(title),
 	compiled(false),
-	choice(NULL)
+	choice(NULL),
+	choiceSymbol(0)
 {
 	anonChoices.assign(choices.begin(), choices.end());
 	filterTypes.clear();
@@ -76,14 +79,20 @@ int ItemSelection::getNumChoices()
 
 Item* ItemSelection::getItem()
 {
-	if (multiple) return NULL;
+	assert(!multiple);
 	return choice;
+}
+
+int ItemSelection::getItemSymbol()
+{
+	assert(!multiple && !anonymous);
+	return choiceSymbol;
 }
 
 std::vector<Item*> ItemSelection::getSelection()
 {
+	assert(multiple);
 	std::vector<Item*> list;
-	if (!multiple) return list;
 	if (anonymous)
 	{
 		for (unsigned int u = 0; u < anonChoices.size(); u++)
@@ -97,6 +106,17 @@ std::vector<Item*> ItemSelection::getSelection()
 		{
 			if (selected[u]) list.push_back(namedChoices[u].second);
 		}
+	}
+	return list;
+}
+
+std::vector<int> ItemSelection::getSelectionSymbols()
+{
+	assert(multiple && !anonymous);
+	std::vector<int> list;
+	for (unsigned int u = 0; u < namedChoices.size(); u++)
+	{
+		if (selected[u]) list.push_back(namedChoices[u].first);
 	}
 	return list;
 }
@@ -214,6 +234,7 @@ bool ItemSelection::keyInput(TCOD_key_t key)
 		else
 		{
 			choice = NULL;
+			choiceSymbol = -1;
 		}
 		return true;
 	}
@@ -277,6 +298,7 @@ bool ItemSelection::toggleItem(char c)
 			else
 			{
 				choice = namedChoices[info.itemIndex].second;
+				choiceSymbol = namedChoices[info.itemIndex].first;
 				return true;
 			}
 		}

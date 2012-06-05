@@ -36,6 +36,7 @@ private:
 	std::vector<int> pageStart;
 	std::vector<bool> selected;
 	Item* choice;
+	int choiceSymbol;
 	int drawCounter;
 
 	bool removeAnonItem(Item* item);
@@ -63,6 +64,8 @@ public:
 	bool keyInput(TCOD_key_t key); /* returns true if selection should close and result is ready */
 	Item* getItem();
 	std::vector<Item*> getSelection();
+	int getItemSymbol();
+	std::vector<int> getSelectionSymbols();
 
 };
 
