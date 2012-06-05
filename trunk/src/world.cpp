@@ -248,7 +248,7 @@ unsigned char World::drawBlockingWindow(std::string title, std::string text, TCO
 		key = player->waitForKeypress(true);
 		if (acceptedKeys.find_first_of(key.c)  != std::string::npos) done = true;
 	}
-	while (!done && !world.requestQuit);
+	while (!done && !world.requestQuit && key.vk != TCODK_ESCAPE);
 	return key.c;
 }
 
@@ -267,7 +267,7 @@ void World::drawBlockingWindow(std::string title, std::string text, TCODColor co
 	{
 		key = player->waitForKeypress(true);
 	}
-	while (key.vk != TCODK_SPACE && !world.requestQuit);
+	while (key.vk != TCODK_SPACE && key.vk != TCODK_ESCAPE && !world.requestQuit);
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/
