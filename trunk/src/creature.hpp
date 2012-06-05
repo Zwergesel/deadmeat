@@ -26,7 +26,7 @@ protected:
 	bool controlled;
 	Level* level;
 	symbol mainWeapon;
-	symbol armor;
+	symbol armor[NUM_ARMOR_SLOTS];
 	int attackSkill;
 	int armorSkill;
 	Weapon baseWeapon;
@@ -49,11 +49,12 @@ public:
 	void move(Point pos);
 	void moveTo(Point pos);
 	int getDefense();
+	int getAttack();
 	bool isControlled();
 	void setControlled(bool);
 	void setLevel(Level* l);
 	Weapon* getMainWeapon();
-	Armor* getArmor();
+	Armor* getArmor(ArmorSlot slot);
 	void wieldMainWeapon(Weapon* wpn, int attackSkill);
 	void wearArmor(Armor* armor, int armorSkill);
 	void setAttackSkill(int attackSkill);
