@@ -296,26 +296,42 @@ unsigned int Creature::save(Savegame& sg)
 {
 	unsigned int id;
 	if (sg.saved(this, &id)) return id;
-	SaveBlock store("Creature", id);/*
+	SaveBlock store("Creature", id);
 	store ("name", name) ("symbol", sym) ("position", position);
 	store ("color", color) ("health", health) ("maxHealth", maxHealth);
 	store ("controlled", controlled);
-//	store.ptr("mainWeapon", mainWeapon == NULL ? 0 : mainWeapon->save(sg));
-//	store.ptr("armor", armor == NULL ? 0 : armor->save(sg));
+	store ("mainWeapon", (int) mainWeapon);
+	store ("armor", (int) armor);
 	store ("attackSkill", attackSkill) ("armorSkill", armorSkill);
 	store.ptr("baseWeapon", baseWeapon.save(sg)).ptr("baseArmor", baseArmor.save(sg));
-	sg << store;*/
+	store ("#inventory", (int) inventory.size());
+	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
+	{
+		store ("_symbol", (int) it->first) .ptr("_item", it->second->save(sg));
+	}
+	sg << store;
 	return id;
 }
 
 void Creature::load(LoadBlock& load)
 {
-	/*	load ("name", name) ("symbol", sym) ("position", position);
-		load ("color", color) ("health", health) ("maxHealth", maxHealth);
-		load ("controlled", controlled);
-	//	mainWeapon = static_cast<Weapon*>(load.ptr("mainWeapon"));
-	//	armor = static_cast<Armor*>(load.ptr("armor"));
-		load ("attackSkill", attackSkill) ("armorSkill", armorSkill);
-		baseWeapon = *static_cast<Weapon*>(load.ptr("baseWeapon"));
-		baseArmor = *static_cast<Armor*>(load.ptr("baseArmor"));*/
+	int intsym;
+	load ("name", name) ("symbol", intsym) ("position", position);
+	sym = static_cast<symbol>(intsym);
+	load ("color", color) ("health", health) ("maxHealth", maxHealth);
+	load ("controlled", controlled);
+	int symWeapon, symArmor;
+	load ("mainWeapon", symWeapon) ("armor", symArmor);
+	mainWeapon = (symbol) symWeapon;
+	armor = (symbol) symArmor;
+	load ("attackSkill", attackSkill) ("armorSkill", armorSkill);
+	baseWeapon = *static_cast<Weapon*>(load.ptr("baseWeapon"));
+	baseArmor = *static_cast<Armor*>(load.ptr("baseArmor"));
+	int n;
+	load ("#inventory", n);
+	while (n-->0)
+	{
+		load ("_symbol", intsym);
+		inventory[static_cast<symbol>(intsym)] = static_cast<Item*>(load.ptr("_item"));
+	}
 }
