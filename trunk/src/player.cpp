@@ -294,14 +294,6 @@ int Player::actionWear(Item* itemObj)
 
 int Player::action()
 {
-	// am i dead yet?
-	if (creature->getHealth().first <= 0 && world.getNumMessages() <= 1)
-	{
-		world.drawBlockingWindow("GAME OVER", "You are dead!", TCODColor::red);
-		world.gameover = true;
-		world.requestQuit = true;
-		return 0;
-	}
 	// finish putting armor on
 	if (state == STATE_DRESSING)
 	{

@@ -152,6 +152,7 @@ void Creature::die(Creature* instigator)
 		world.addMessage("You die...", true);
 		// This message will not be visible, TODO: think of a better way to do this
 		world.addMessage("", true);
+		world.gameover = true;
 	}
 	else
 	{
