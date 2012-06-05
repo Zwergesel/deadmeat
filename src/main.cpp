@@ -70,6 +70,7 @@ int main()
 	                       world.viewLevel.height - world.viewLevel.height/4
 	                     );
 
+	if (Savegame::exists("monsters.txt"))
 	{
 		Savegame save;
 		if (!save.loadSavegame("monsters.txt")) return corruptSave("monsters.txt");
@@ -108,8 +109,9 @@ int main()
 		Item* item1 = new Item("item1", '1', TCODColor::blue);
 		Item* item2 = new Item("item2", '2', TCODColor::green);
 		Weapon* mace = new Weapon("cursed mace", '(', TCODColor::red, 15, -60, 4, 1, 1, -60, SKILL_MACEFLAIL, 1);
-		Armor* uber = new Armor("uber armor", ')', TCODColor::black, 150, 10, SKILL_PLATE_ARMOR);
-		Armor* crap = new Armor("crap armor", ')', TCODColor::black, -60, 0, SKILL_LEATHER_ARMOR);
+		Armor* uber = new Armor("uber armor", ')', TCODColor::black, 150, 10, ARMOR_BODY, SKILL_PLATE_ARMOR);
+		Armor* crap = new Armor("prussian pickelhaube", ')', TCODColor::black, 50, 0, ARMOR_HAT, SKILL_PLATE_ARMOR);
+		Armor* boots = new Armor("clown shoes", ')', TCODColor::black, 30, 12, ARMOR_BOOTS, SKILL_CLOTH_ARMOR);
 		std::string cr[6] = { "goblin","goblin","goblin","snake","snake","red dragon" };
 		for (int i=0; i<6; i++)
 		{
@@ -125,6 +127,7 @@ int main()
 		world.levels[0]->addItem(mace, getRandomLocation(world.levels[0]));
 		world.levels[0]->addItem(uber, getRandomLocation(world.levels[0]));
 		world.levels[0]->addItem(crap, getRandomLocation(world.levels[0]));
+		world.levels[0]->addItem(boots, getRandomLocation(world.levels[0]));
 	}
 
 	while (!world.requestQuit)

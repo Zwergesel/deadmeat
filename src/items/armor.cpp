@@ -1,13 +1,13 @@
 #include "armor.hpp"
 #include "savegame.hpp"
 
-Armor::Armor() : Item("default", (unsigned char)'¤', TCODColor::pink), ac(0), hindrance(0), skill(SKILL_UNARMORED)
+Armor::Armor() : Item("default", (unsigned char)'¤', TCODColor::pink), ac(0), hindrance(0), slot(ARMOR_BODY), skill(SKILL_UNARMORED)
 {
 	type = ITEM_ARMOR;
 	strType = "armor";
 }
 
-Armor::Armor(std::string n, int sym, TCODColor c, int a, int h, SKILLS s) : Item(n, sym, c), ac(a), hindrance(h), skill(s)
+Armor::Armor(std::string n, int sym, TCODColor c, int a, int h, ArmorSlot as, SKILLS s) : Item(n, sym, c), ac(a), hindrance(h), slot(as), skill(s)
 {
 	type = ITEM_ARMOR;
 	strType = "armor";
@@ -21,6 +21,11 @@ int Armor::getAC()
 int Armor::getHindrance()
 {
 	return hindrance;
+}
+
+ArmorSlot Armor::getSlot()
+{
+	return slot;
 }
 
 SKILLS Armor::getSkill()

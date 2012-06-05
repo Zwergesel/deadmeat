@@ -1,4 +1,5 @@
 #include <sstream>
+#include <algorithm>
 #include <cassert>
 #include "creature.hpp"
 #include "player.hpp"
@@ -20,13 +21,13 @@ Creature::Creature(Point p, std::string n, symbol s, TCODColor c, int h):
 	health(h),
 	maxHealth(h),
 	controlled(false),
-	mainWeapon(NULL),
-	armor(NULL)
+	mainWeapon(NULL)
 {
 	baseWeapon = Weapon("hands", (unsigned char)'¤', TCODColor::pink, 10, 10, 10, 0, 0, 0, SKILL_UNARMED, 2);
-	baseArmor = Armor("skin", (unsigned char)'¤', TCODColor::pink, 0, 0, SKILL_UNARMORED);
+	baseArmor = Armor("skin", (unsigned char)'¤', TCODColor::pink, 0, 0, ARMOR_BODY, SKILL_UNARMORED);
 	attackSkill = 0;
 	armorSkill = 0;
+	std::fill(armor, armor+NUM_ARMOR_SLOTS, 0);
 }
 
 Creature::~Creature()
@@ -44,7 +45,7 @@ Creature* Creature::clone()
 	copy->controlled = controlled;
 	// TODO: clone weapon and armor, inventory!
 	copy->mainWeapon = mainWeapon;
-	copy->armor = armor;
+	std::copy(armor, armor+NUM_ARMOR_SLOTS, copy->armor);
 	copy->attackSkill = attackSkill;
 	copy->armorSkill = armorSkill;
 	copy->baseWeapon = baseWeapon;
@@ -82,12 +83,12 @@ Weapon* Creature::getMainWeapon()
 	return NULL;
 }
 
-Armor* Creature::getArmor()
+Armor* Creature::getArmor(ArmorSlot slot)
 {
-	if (inventory.count(armor) > 0)
+	if (armor[slot] != 0 && inventory.count(armor[slot]) > 0)
 	{
-		assert(inventory[armor]->getType() == ITEM_ARMOR);
-		return static_cast<Armor*>(inventory[armor]);
+		assert(inventory[armor[slot]]->getType() == ITEM_ARMOR);
+		return static_cast<Armor*>(inventory[armor[slot]]);
 	}
 	return NULL;
 }
@@ -107,12 +108,12 @@ void Creature::wieldMainWeapon(Weapon* wpn, int skill)
 
 void Creature::wearArmor(Armor* a, int skill)
 {
-	armor = NULL;
+	armor[a->getSlot()] = 0;
 	for (std::map<symbol, Item*>::iterator it=inventory.begin(); it!=inventory.end(); it++)
 	{
 		if ((*it).second == a)
 		{
-			armor = (*it).first;
+			armor[a->getSlot()] = (*it).first;
 		}
 	}
 	armorSkill = skill;
@@ -169,14 +170,30 @@ int Creature::action()
 	return 1;
 }
 
+int Creature::getAttack()
+{
+	if (inventory.count(mainWeapon) > 0)
+	{
+		assert(inventory[mainWeapon]->getType() == ITEM_WEAPON);
+		Weapon* w = static_cast<Weapon*>(inventory[mainWeapon]);
+		return w->getHitBonus() + w->getEnchantment() + attackSkill;
+	}
+	else
+	{
+		return baseWeapon.getHitBonus() + baseWeapon.getEnchantment() + attackSkill;
+	}
+}
+
 int Creature::getDefense()
 {
 	// armor + (fighting skill + armor skill)/2
-	int defense = baseArmor.getAC() + armorSkill;
-	if (inventory.count(armor) > 0)
+	int defense = armorSkill;
+	if (armor[ARMOR_BODY] == 0) defense += baseArmor.getAC();
+	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
 	{
-		assert(inventory[armor]->getType() == ITEM_ARMOR);
-		defense = static_cast<Armor*>(inventory[armor])->getAC() + armorSkill;
+		Armor* ar = getArmor(static_cast<ArmorSlot>(slot));
+		if (ar != NULL) defense += ar->getAC();
+		// TODO: body armor uses it's own skill
 	}
 	return defense;
 }
@@ -302,7 +319,10 @@ unsigned int Creature::save(Savegame& sg)
 	store ("color", color) ("health", health) ("maxHealth", maxHealth);
 	store ("controlled", controlled);
 	store ("mainWeapon", (int) mainWeapon);
-	store ("armor", (int) armor);
+	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
+	{
+		store ("armor"+slot, armor[slot]);
+	}
 	store ("attackSkill", attackSkill) ("armorSkill", armorSkill);
 	store.ptr("baseWeapon", baseWeapon.save(sg)).ptr("baseArmor", baseArmor.save(sg));
 	store ("#inventory", (int) inventory.size());
@@ -321,10 +341,13 @@ void Creature::load(LoadBlock& load)
 	sym = static_cast<symbol>(intsym);
 	load ("color", color) ("health", health) ("maxHealth", maxHealth);
 	load ("controlled", controlled);
-	int symWeapon, symArmor;
-	load ("mainWeapon", symWeapon) ("armor", symArmor);
-	mainWeapon = (symbol) symWeapon;
-	armor = (symbol) symArmor;
+	load ("mainWeapon", intsym);
+	mainWeapon = (symbol) intsym;
+	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
+	{
+		load ("armor"+slot, intsym);
+		armor[slot] = (symbol) intsym;
+	}
 	load ("attackSkill", attackSkill) ("armorSkill", armorSkill);
 	baseWeapon = *static_cast<Weapon*>(load.ptr("baseWeapon"));
 	baseArmor = *static_cast<Armor*>(load.ptr("baseArmor"));

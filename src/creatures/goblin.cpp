@@ -4,6 +4,7 @@
 #include "../tileset.hpp"
 #include "../level.hpp"
 #include "../pathfinding.hpp"
+#include <algorithm>
 
 Goblin::Goblin()
 {
@@ -20,9 +21,9 @@ Creature* Goblin::clone()
 	Goblin* copy = new Goblin(position, name, sym, color, maxHealth);
 	copy->health = health;
 	copy->controlled = controlled;
-	// TODO: clone weapon and armor
+	// TODO: clone inventory
 	copy->mainWeapon = mainWeapon;
-	copy->armor = armor;
+	std::copy(armor, armor+NUM_ARMOR_SLOTS, copy->armor);
 	copy->attackSkill = attackSkill;
 	copy->armorSkill = armorSkill;
 	copy->baseWeapon = baseWeapon;
@@ -65,7 +66,10 @@ unsigned int Goblin::save(Savegame& sg)
 	store ("color", color) ("health", health) ("maxHealth", maxHealth);
 	store ("controlled", controlled);
 	store ("mainWeapon", (int) mainWeapon);
-	store ("armor", (int) armor);
+	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
+	{
+		store ("armor"+slot, armor[slot]);
+	}
 	store ("attackSkill", attackSkill) ("armorSkill", armorSkill);
 	store.ptr("baseWeapon", baseWeapon.save(sg)).ptr("baseArmor", baseArmor.save(sg));
 	store ("#inventory", (int) inventory.size());

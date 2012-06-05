@@ -8,19 +8,29 @@
 class Savegame;
 class LoadBlock;
 
+enum ArmorSlot
+{
+	ARMOR_BODY,
+	ARMOR_BOOTS,
+	ARMOR_HAT,
+	NUM_ARMOR_SLOTS
+};
+
 class Armor : public Item
 {
 
 private:
 	int ac;
 	int hindrance;
+	ArmorSlot slot;
 	SKILLS skill;
 
 public:
 	Armor();
-	Armor(std::string name, int symbol, TCODColor color, int ac, int hindrance, SKILLS skill);
+	Armor(std::string name, int symbol, TCODColor color, int ac, int hindrance, ArmorSlot as, SKILLS skill);
 	int getAC();
 	int getHindrance();
+	ArmorSlot getSlot();
 	SKILLS getSkill();
 
 	unsigned int save(Savegame& sg);

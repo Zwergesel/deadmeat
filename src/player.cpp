@@ -214,7 +214,7 @@ int Player::actionDrop(Item* item)
 {
 	Level* level = world.levels[world.currentLevel];
 	std::stringstream msg;
-	if (creature->getArmor() == item)
+	if (item->getType() == ITEM_ARMOR && creature->getArmor(static_cast<Armor*>(item)->getSlot()) == item)
 	{
 		msg << "You have to take off your armor first.";
 		world.addMessage(msg.str());
@@ -264,7 +264,7 @@ int Player::actionWear(Item* itemObj)
 	assert(itemObj->getType() == ITEM_ARMOR);
 
 	Armor* armor = static_cast<Armor*>(itemObj);
-	if (creature->getArmor() == armor)
+	if (creature->getArmor(armor->getSlot()) == armor)
 	{
 		state = STATE_DEFAULT;
 		msg << "You are already wearing " << util::indefArticle(armor->toString()) << " " << armor->toString() << ".";
@@ -276,7 +276,7 @@ int Player::actionWear(Item* itemObj)
 		if (state == STATE_WEAR)
 		{
 			state = STATE_DRESSING;
-      world.addMessage("You start changing..");
+      world.addMessage("You start changing...");
 			return 50;
 		}
 		else if (state == STATE_DRESSING)
@@ -446,7 +446,7 @@ int Player::action()
 					request.append("\n\ne - eat");
 				}
 				request.append("\n\nt - throw");
-				if (item->getType() == ITEM_ARMOR && creature->getArmor() == item)
+				if (item->getType() == ITEM_ARMOR && creature->getArmor(static_cast<Armor*>(item)->getSlot()) == item)
 				{
 					options.append("T");
 					request.append("\n\nT - take off");
@@ -461,7 +461,7 @@ int Player::action()
 					options.append("w");
 					request.append("\n\nw - wield");
 				}
-				if (item->getType() == ITEM_ARMOR && creature->getArmor() != item)
+				if (item->getType() == ITEM_ARMOR && creature->getArmor(static_cast<Armor*>(item)->getSlot()) != item)
 				{
 					options.append("W");
 					request.append("\n\nW - wear");

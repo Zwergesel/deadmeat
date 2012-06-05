@@ -185,19 +185,21 @@ void World::drawInfo()
 	// Attributes
 	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 5, TCOD_BKGND_NONE, TCOD_LEFT, "STR %2d DEX %2d", player->getAttribute(ATTR_STR), player->getAttribute(ATTR_DEX));
 	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 7, TCOD_BKGND_NONE, TCOD_LEFT, "CON %2d INT %2d", player->getAttribute(ATTR_CON), player->getAttribute(ATTR_INT));
+	// Attack value and Armor Class
+	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 10, TCOD_BKGND_NONE, TCOD_LEFT, "AT %3d AC %3d", player->getCreature()->getAttack(), player->getCreature()->getDefense());
 	// Time
 	int sec = (time/10) % 60;
 	int min = (time/600) % 60;
 	int hour = (time/36000) % 24;
 	int days = (time/864000);
-	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 10, TCOD_BKGND_NONE, TCOD_LEFT, "TIME PASSED");
-	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 12, TCOD_BKGND_NONE, TCOD_RIGHT, "%d DAY%s   ", days, days == 1 ? " " : "S");
-	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 13, TCOD_BKGND_NONE, TCOD_RIGHT, "%d HOUR%s  ", hour, hour == 1 ? " " : "S");
-	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 14, TCOD_BKGND_NONE, TCOD_RIGHT, "%d MINUTE%s", min, min == 1 ? " " : "S");
-	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 15, TCOD_BKGND_NONE, TCOD_RIGHT, "%d SECOND%s", sec, sec == 1 ? " " : "S");
+	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 13, TCOD_BKGND_NONE, TCOD_LEFT, "TIME PASSED");
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 15, TCOD_BKGND_NONE, TCOD_RIGHT, "%d DAY%s   ", days, days == 1 ? " " : "S");
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 16, TCOD_BKGND_NONE, TCOD_RIGHT, "%d HOUR%s  ", hour, hour == 1 ? " " : "S");
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 17, TCOD_BKGND_NONE, TCOD_RIGHT, "%d MINUTE%s", min, min == 1 ? " " : "S");
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 18, TCOD_BKGND_NONE, TCOD_RIGHT, "%d SECOND%s", sec, sec == 1 ? " " : "S");
 	// Score
-	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 18, TCOD_BKGND_NONE, TCOD_LEFT, "SCORE");
-	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 19, TCOD_BKGND_NONE, TCOD_RIGHT, "14324");
+	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 21, TCOD_BKGND_NONE, TCOD_LEFT, "SCORE");
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 22, TCOD_BKGND_NONE, TCOD_RIGHT, "14324");
 }
 
 void World::toggleFullscreen()
