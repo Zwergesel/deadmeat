@@ -54,7 +54,7 @@ int corruptSave(const std::string& fileName)
 }
 
 int main()
-{
+{ 
 	TCODConsole::initRoot(80,51,"deadmeat",false);
 	TCODSystem::setFps(30);
 
@@ -75,7 +75,7 @@ int main()
 		if (!save.loadSavegame("monsters.txt")) return corruptSave("monsters.txt");
 	}
 
-	if (false)
+	if (true)
 	{
 		// Add/edit/remove creature templates here
 		Goblin goblin(Point(0,0), "goblin", 'g', TCODColor::green, 50);

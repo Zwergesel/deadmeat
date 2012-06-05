@@ -4,6 +4,7 @@
 #include <libtcod.hpp>
 #include <string>
 #include <sstream>
+#include <map>
 #include "utility.hpp"
 #include "items/weapon.hpp"
 #include "items/armor.hpp"
@@ -19,24 +20,25 @@ class Creature
 protected:
 	std::string name;
 	Point position;
-	int symbol;
+	symbol sym;
 	TCODColor color;
 	int health, maxHealth;
 	bool controlled;
 	Level* level;
-	Weapon* mainWeapon;
-	Armor* armor;
+	symbol mainWeapon;
+	symbol armor;
 	int attackSkill;
 	int armorSkill;
 	Weapon baseWeapon;
 	Armor baseArmor;
+  std::map<symbol, Item*> inventory;
 	void die(Creature* instigator);
 	Creature(const Creature& copy);
 
 public:
 
 	Creature(); // for savegames
-	Creature(Point p, std::string name, int symbol, TCODColor color, int health);
+	Creature(Point p, std::string name, symbol s, TCODColor color, int health);
 	~Creature();
 	virtual Creature* clone();
 	std::string getName();
@@ -56,6 +58,9 @@ public:
 	void wearArmor(Armor* armor, int armorSkill);
 	void setAttackSkill(int attackSkill);
 	void setBaseWeapon(Weapon base);
+  bool addItem(Item* item);
+  void removeItem(Item* item, bool del);
+  std::map<symbol, Item*> getInventory();
 	std::pair<int,int> getHealth();
 
 	/* Hurt returns true if the creature was killed */

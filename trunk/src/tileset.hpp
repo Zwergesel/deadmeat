@@ -3,6 +3,7 @@
 
 #include <libtcod.hpp>
 #include <sstream>
+#include "utility.hpp"
 
 class Savegame;
 
@@ -20,13 +21,13 @@ enum Tile
 struct TileInfo
 {
 	bool passable;
-	int symbol;
+	symbol sym;
 	TCODColor color, background;
 
 	TileInfo():
-		passable(false), symbol('?'), color(TCODColor::black), background(TCODColor::white) {};
+		passable(false), sym('?'), color(TCODColor::black), background(TCODColor::white) {};
 	TileInfo(bool p, int s, TCODColor c, TCODColor b):
-		passable(p), symbol(s), color(c), background(b) {};
+		passable(p), sym(s), color(c), background(b) {};
 };
 
 class TileSet

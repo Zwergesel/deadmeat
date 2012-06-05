@@ -44,6 +44,28 @@ ItemSelection::ItemSelection(const std::vector<std::pair<int,Item*> >& choices, 
 	}
 }
 
+ItemSelection::ItemSelection(const std::map<symbol,Item*>& choices, std::string title, bool multiple, bool sort):
+	anonymous(false),
+	multiple(multiple),
+	page(0),
+	title(title),
+	compiled(false),
+	choice(NULL)
+{
+  std::vector<std::pair<int,Item*> > choices2;
+  for(std::map<symbol,Item*>::const_iterator it=choices.begin();it!=choices.end();it++)
+  {
+    choices2.push_back(std::pair<int, Item*>((*it).first, (*it).second));
+  }
+	namedChoices.assign(choices2.begin(), choices2.end());
+	filterTypes.clear();
+	if (sort) std::sort(namedChoices.begin(), namedChoices.end(), sortNamed);
+	if (multiple)
+	{
+		selected.assign(namedChoices.size(), false);
+	}
+}
+
 ItemSelection::ItemSelection(const std::vector<Item*>& choices, std::string title, bool multiple, bool sort):
 	anonymous(true),
 	multiple(multiple),
