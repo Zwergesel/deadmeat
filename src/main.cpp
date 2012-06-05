@@ -130,7 +130,7 @@ int main()
 	while (!world.requestQuit)
 	{
 		Level* level = world.levels[world.currentLevel];
-		while (!level->isPlayerTurn() && world.getNumMessages() <= 1)
+		while (!level->isPlayerTurn() && world.getNumMessages() <= 1 && !world.gameover)
 		{
 			level->performCreatureTurn();
 		}
@@ -149,6 +149,12 @@ int main()
 			}
 			while (key.vk != TCODK_SPACE && !world.requestQuit);
 			world.popMessage();
+		}
+		else if (world.gameover)
+		{
+			// Game over
+			world.drawBlockingWindow("GAME OVER", "You are dead!", TCODColor::red);
+			world.requestQuit = true;
 		}
 		else
 		{
