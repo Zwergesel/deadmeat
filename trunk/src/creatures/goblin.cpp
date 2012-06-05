@@ -64,10 +64,15 @@ unsigned int Goblin::save(Savegame& sg)
 	store ("name", name) ("symbol", sym) ("position", position);
 	store ("color", color) ("health", health) ("maxHealth", maxHealth);
 	store ("controlled", controlled);
-//	store.ptr("mainWeapon", mainWeapon == NULL ? 0 : mainWeapon->save(sg));
-//	store.ptr("armor", armor == NULL ? 0 : armor->save(sg));
+	store ("mainWeapon", (int) mainWeapon);
+	store ("armor", (int) armor);
 	store ("attackSkill", attackSkill) ("armorSkill", armorSkill);
 	store.ptr("baseWeapon", baseWeapon.save(sg)).ptr("baseArmor", baseArmor.save(sg));
+	store ("#inventory", (int) inventory.size());
+	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
+	{
+		store ("_symbol", (int) it->first) .ptr("_item", it->second->save(sg));
+	}
 	sg << store;
 	return id;
 }
