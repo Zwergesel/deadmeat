@@ -276,6 +276,7 @@ int Player::actionWear(Item* itemObj)
 		if (state == STATE_WEAR)
 		{
 			state = STATE_DRESSING;
+      world.addMessage("You start changing..");
 			return 50;
 		}
 		else if (state == STATE_DRESSING)
