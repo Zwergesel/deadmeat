@@ -246,7 +246,7 @@ int Player::actionWield(Item* itemObj)
 	}
 	else
 	{
-    creature->wieldMainWeapon(weapon, computeAttackBonus(weapon));
+		creature->wieldMainWeapon(weapon, computeAttackBonus(weapon));
 		msg << "You are now wiedling " << util::indefArticle(weapon->toString()) << " " << weapon->toString() << ".";
 		world.addMessage(msg.str());
 		return 30;
@@ -395,7 +395,7 @@ int Player::action()
 		else if (state == STATE_DEFAULT && key.c == 'i')
 		{
 			state = STATE_INVENTORY;
-      world.itemSelection = ItemSelection(creature->getInventory(), "Inventory", false);
+			world.itemSelection = ItemSelection(creature->getInventory(), "Inventory", false);
 			world.itemSelection.compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);
 			return 0;
 		}

@@ -46,8 +46,8 @@ private:
 	int actionWear(Item*);
 	int actionDrop();
 	int actionDrop(Item*);
-  int computeAttackBonus(Weapon* w);
-  int computeArmorBonus(Armor* a);
+	int computeAttackBonus(Weapon* w);
+	int computeArmorBonus(Armor* a);
 
 public:
 	Player();

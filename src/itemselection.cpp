@@ -52,11 +52,11 @@ ItemSelection::ItemSelection(const std::map<symbol,Item*>& choices, std::string 
 	compiled(false),
 	choice(NULL)
 {
-  std::vector<std::pair<int,Item*> > choices2;
-  for(std::map<symbol,Item*>::const_iterator it=choices.begin();it!=choices.end();it++)
-  {
-    choices2.push_back(std::pair<int, Item*>((*it).first, (*it).second));
-  }
+	std::vector<std::pair<int,Item*> > choices2;
+	for (std::map<symbol,Item*>::const_iterator it=choices.begin(); it!=choices.end(); it++)
+	{
+		choices2.push_back(std::pair<int, Item*>((*it).first, (*it).second));
+	}
 	namedChoices.assign(choices2.begin(), choices2.end());
 	filterTypes.clear();
 	if (sort) std::sort(namedChoices.begin(), namedChoices.end(), sortNamed);
