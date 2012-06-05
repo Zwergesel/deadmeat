@@ -13,18 +13,18 @@ class Player;
 struct CompiledData
 {
 	int row;
-	char letter;
+	symbol letter;
 	std::string text;
 	bool category;
 	int itemIndex;
-	CompiledData(int r, char l, std::string t, bool c, int i):row(r),letter(l),text(t),category(c),itemIndex(i) {};
+	CompiledData(int r, symbol l, std::string t, bool c, int i):row(r),letter(l),text(t),category(c),itemIndex(i) {};
 };
 
 class ItemSelection
 {
 
 private:
-	std::vector<std::pair<int,Item*> > namedChoices;
+	std::vector<std::pair<symbol,Item*> > namedChoices;
 	std::vector<Item*> anonChoices;
 	bool anonymous;
 	bool multiple;
@@ -37,18 +37,18 @@ private:
 	std::vector<int> pageStart;
 	std::vector<bool> selected;
 	Item* choice;
-	int choiceSymbol;
+	symbol choiceSymbol;
 	int drawCounter;
 
 	bool removeAnonItem(Item* item);
-	bool removeNamedItem(std::pair<int,Item*> item);
+	bool removeNamedItem(std::pair<symbol,Item*> item);
 	bool toggleItem(char c);
 	void selectAllOnPage(bool set);
 
 public:
 	ItemSelection();
 	ItemSelection(const std::vector<Item*>& choices, std::string title, bool multiple = false, bool sort = true);
-	ItemSelection(const std::vector<std::pair<int,Item*> >& choices, std::string title, bool multiple = false, bool sort = true);
+	ItemSelection(const std::vector<std::pair<symbol,Item*> >& choices, std::string title, bool multiple = false, bool sort = true);
 	ItemSelection(const std::map<symbol,Item*>& choices, std::string title, bool multiple = false, bool sort = true);
 
 	ItemSelection* filterType(ITEM_TYPE type);
@@ -66,8 +66,8 @@ public:
 	bool keyInput(TCOD_key_t key); /* returns true if selection should close and result is ready */
 	Item* getItem();
 	std::vector<Item*> getSelection();
-	int getItemSymbol();
-	std::vector<int> getSelectionSymbols();
+	symbol getItemSymbol();
+	std::vector<symbol> getSelectionSymbols();
 
 };
 

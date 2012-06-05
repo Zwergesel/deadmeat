@@ -8,10 +8,10 @@
 #include "player.hpp"
 
 // TODO: these are not in the header file and in global namespace
-bool sortNamed(std::pair<int, Item*> a, std::pair<int, Item*> b)
+bool sortNamed(std::pair<symbol, Item*> a, std::pair<symbol, Item*> b)
 {
 	if (a.second->getType() < b.second->getType()) return true;
-	if (a.second->getType() == b.second->getType() && a.first < b.first) return true;
+	if (a.second->getType() == b.second->getType()) return a.first < b.first;
 	return false;
 }
 
@@ -26,14 +26,14 @@ ItemSelection::ItemSelection(): anonymous(true),multiple(false),page(0),title(""
 {
 }
 
-ItemSelection::ItemSelection(const std::vector<std::pair<int,Item*> >& choices, std::string title, bool multiple, bool sort):
+ItemSelection::ItemSelection(const std::vector<std::pair<symbol,Item*> >& choices, std::string title, bool multiple, bool sort):
 	anonymous(false),
 	multiple(multiple),
 	page(0),
 	title(title),
 	compiled(false),
 	choice(NULL),
-	choiceSymbol(0)
+	choiceSymbol('\0')
 {
 	namedChoices.assign(choices.begin(), choices.end());
 	filterTypes.clear();
@@ -50,14 +50,13 @@ ItemSelection::ItemSelection(const std::map<symbol,Item*>& choices, std::string 
 	page(0),
 	title(title),
 	compiled(false),
-	choice(NULL)
+	choice(NULL),
+	choiceSymbol('\0')
 {
-	std::vector<std::pair<int,Item*> > choices2;
-	for (std::map<symbol,Item*>::const_iterator it=choices.begin(); it!=choices.end(); it++)
+	for (std::map<symbol,Item*>::const_iterator it = choices.begin(); it != choices.end(); it++)
 	{
-		choices2.push_back(std::pair<int, Item*>((*it).first, (*it).second));
+		namedChoices.push_back(*it);
 	}
-	namedChoices.assign(choices2.begin(), choices2.end());
 	filterTypes.clear();
 	if (sort) std::sort(namedChoices.begin(), namedChoices.end(), sortNamed);
 	if (multiple)
@@ -73,7 +72,7 @@ ItemSelection::ItemSelection(const std::vector<Item*>& choices, std::string titl
 	title(title),
 	compiled(false),
 	choice(NULL),
-	choiceSymbol(0)
+	choiceSymbol('\0')
 {
 	anonChoices.assign(choices.begin(), choices.end());
 	filterTypes.clear();
@@ -105,7 +104,7 @@ Item* ItemSelection::getItem()
 	return choice;
 }
 
-int ItemSelection::getItemSymbol()
+symbol ItemSelection::getItemSymbol()
 {
 	assert(!multiple && !anonymous);
 	return choiceSymbol;
@@ -132,10 +131,10 @@ std::vector<Item*> ItemSelection::getSelection()
 	return list;
 }
 
-std::vector<int> ItemSelection::getSelectionSymbols()
+std::vector<symbol> ItemSelection::getSelectionSymbols()
 {
 	assert(multiple && !anonymous);
-	std::vector<int> list;
+	std::vector<symbol> list;
 	for (unsigned int u = 0; u < namedChoices.size(); u++)
 	{
 		if (selected[u]) list.push_back(namedChoices[u].first);
@@ -160,7 +159,7 @@ ItemSelection* ItemSelection::compile(int height)
 
 	if (anonymous)
 	{
-		char currentLetter = 'a';
+		symbol currentLetter = 'a';
 		for (std::vector<Item*>::iterator it = anonChoices.begin(); it != anonChoices.end(); it++)
 		{
 			if (currentRow == 2 || (*it)->getType() != prevType || currentRow >= pageHeight)
@@ -174,7 +173,7 @@ ItemSelection* ItemSelection::compile(int height)
 					pageStart.push_back(compiledStrings.size());
 				}
 				currentRow++;
-				compiledStrings.push_back(CompiledData(currentRow, '#', util::plural((*it)->typeString()), true, -1));
+				compiledStrings.push_back(CompiledData(currentRow, '\0', util::plural((*it)->typeString()), true, -1));
 				currentRow += 2;
 			}
 			/* Item */
@@ -189,7 +188,7 @@ ItemSelection* ItemSelection::compile(int height)
 	}
 	else
 	{
-		for (std::vector<std::pair<int,Item*> >::iterator it = namedChoices.begin(); it != namedChoices.end(); it++)
+		for (std::vector<std::pair<symbol,Item*> >::iterator it = namedChoices.begin(); it != namedChoices.end(); it++)
 		{
 			if (currentRow == 2 || it->second->getType() != prevType || currentRow >= pageHeight)
 			{
@@ -201,12 +200,11 @@ ItemSelection* ItemSelection::compile(int height)
 					pageStart.push_back(compiledStrings.size());
 				}
 				currentRow++;
-				compiledStrings.push_back(CompiledData(currentRow, '#', util::plural(it->second->typeString()), true, -1));
+				compiledStrings.push_back(CompiledData(currentRow, '\0', util::plural(it->second->typeString()), true, -1));
 				currentRow += 2;
 			}
 			/* Item */
-			compiledStrings.push_back(CompiledData(currentRow, util::letters[it->first],
-			                                       it->second->toString(), false, currentItem));
+			compiledStrings.push_back(CompiledData(currentRow, it->first, it->second->toString(), false, currentItem));
 
 			/* Advance */
 			currentRow++;
@@ -256,7 +254,7 @@ bool ItemSelection::keyInput(TCOD_key_t key)
 		else
 		{
 			choice = NULL;
-			choiceSymbol = -1;
+			choiceSymbol = '\0';
 		}
 		return true;
 	}
@@ -368,7 +366,7 @@ bool ItemSelection::removeAnonItem(Item* item)
 	return filterTypes.find(item->getType()) == filterTypes.end();
 }
 
-bool ItemSelection::removeNamedItem(std::pair<int,Item*> item)
+bool ItemSelection::removeNamedItem(std::pair<symbol,Item*> item)
 {
 	return filterTypes.find(item.second->getType()) == filterTypes.end();
 }
