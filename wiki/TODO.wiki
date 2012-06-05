@@ -6,9 +6,10 @@
   * Wearing armor should not have an effect before the time it takes to put it on has passed (You begin your dressing maneuver...)
   * Escape should be possible in quit and save dialogs
   * Choosing an item from the inventory should bring up a list of item-specific options
+  * Don't allow any additional actions after player death, but still show all pending messages
 
 == Bug fixes / Issues ==
-  * Don't allow any additional actions after player death, but still show all pending messages
+  
 
 == Small improvements ==
   * Implement mana
