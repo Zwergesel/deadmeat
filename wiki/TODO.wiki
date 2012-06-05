@@ -7,7 +7,7 @@
 
 == Bug fixes / Issues ==
   * Don't allow any additional actions after player death, but still show all pending messages
-  * Escape / Alt+F4 / Close Window should be possible in quit and save dialogs
+  * Escape should be possible in quit and save dialogs
 
 == Small improvements ==
   * Display player information (health, mana, time, status, points, ...)
