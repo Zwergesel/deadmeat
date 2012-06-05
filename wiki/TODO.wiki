@@ -10,8 +10,9 @@
   * Escape should be possible in quit and save dialogs
 
 == Small improvements ==
-  * Display player information (health, mana, time, status, points, ...)
-  * Choosing an item from the inventory should bring up a list of options
+  * Implement mana
+  * Implement points
+  * Choosing an item from the inventory should bring up a list of item-specific options
   * Wearing multiple types of armor (hats, shoes, cloaks, hats, gloves, hats, TF2 anyone?)
   * 'T' for taking armor off
   * Implement creature walk speed and armor hindrance
@@ -25,12 +26,12 @@
   * Changing levels
   * Display unseen items where the player has last seen them even if a monster picked them up
   * Looking at things that are not at the player's location
-  * Load monsters and levels from files (not savegame loading, just general monster information)
   * Generate monsters with items
   * Let monsters drop their items when they die
+  * Load level data from save files (possible monsters, possible loot, ...)
+  * Environment objects: Doors, traps, ...
 
 == Milestones for later / No priority ==
   * Magic system
   * Character creation
   * Random level generation
-  * Environment objects: Doors, traps, ...
