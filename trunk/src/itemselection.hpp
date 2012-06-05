@@ -49,7 +49,7 @@ public:
 	ItemSelection();
 	ItemSelection(const std::vector<Item*>& choices, std::string title, bool multiple = false, bool sort = true);
 	ItemSelection(const std::vector<std::pair<int,Item*> >& choices, std::string title, bool multiple = false, bool sort = true);
-  ItemSelection(const std::map<symbol,Item*>& choices, std::string title, bool multiple = false, bool sort = true);
+	ItemSelection(const std::map<symbol,Item*>& choices, std::string title, bool multiple = false, bool sort = true);
 
 	ItemSelection* filterType(ITEM_TYPE type);
 	ItemSelection* runFilter();

@@ -193,7 +193,7 @@ bool Savegame::loadSavegame(std::string fileName)
 	catch (SavegameFormatException& e)
 	{
 		std::cerr << "Savegame is corrupt: " << e.what() << std::endl;
-    loadStream.close();
+		loadStream.close();
 		return false;
 	}
 

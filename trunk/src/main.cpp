@@ -54,7 +54,7 @@ int corruptSave(const std::string& fileName)
 }
 
 int main()
-{ 
+{
 	TCODConsole::initRoot(80,51,"deadmeat",false);
 	TCODSystem::setFps(30);
 

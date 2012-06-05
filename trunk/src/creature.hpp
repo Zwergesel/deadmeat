@@ -31,7 +31,7 @@ protected:
 	int armorSkill;
 	Weapon baseWeapon;
 	Armor baseArmor;
-  std::map<symbol, Item*> inventory;
+	std::map<symbol, Item*> inventory;
 	void die(Creature* instigator);
 	Creature(const Creature& copy);
 
@@ -58,9 +58,9 @@ public:
 	void wearArmor(Armor* armor, int armorSkill);
 	void setAttackSkill(int attackSkill);
 	void setBaseWeapon(Weapon base);
-  bool addItem(Item* item);
-  void removeItem(Item* item, bool del);
-  std::map<symbol, Item*> getInventory();
+	bool addItem(Item* item);
+	void removeItem(Item* item, bool del);
+	std::map<symbol, Item*> getInventory();
 	std::pair<int,int> getHealth();
 
 	/* Hurt returns true if the creature was killed */
