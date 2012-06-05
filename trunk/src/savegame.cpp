@@ -3,7 +3,7 @@
 #include <sstream>
 #include <string>
 #include <iomanip>
-#include <stdio.h>
+#include <cstdio>
 #include <algorithm>
 #include <sys/stat.h>
 #include "savegame.hpp"
@@ -86,7 +86,7 @@ void Savegame::deleteSave(const std::string& fileName)
 {
 	if (exists(fileName))
 	{
-		if (remove(fileName.c_str()) != 0)
+		if (std::remove(fileName.c_str()) != 0)
 		{
 			std::cerr << "Could not delete savegame '" << fileName << "' (check write permission)." << std::endl;
 		}
@@ -193,6 +193,7 @@ bool Savegame::loadSavegame(std::string fileName)
 	catch (SavegameFormatException& e)
 	{
 		std::cerr << "Savegame is corrupt: " << e.what() << std::endl;
+    loadStream.close();
 		return false;
 	}
 
