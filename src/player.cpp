@@ -436,9 +436,60 @@ int Player::action()
 		{
 			if (world.itemSelection.keyInput(key))
 			{
-				// Do something with the item
 				Item* item = world.itemSelection.getItem();
-				state = STATE_DEFAULT;
+				if (item == NULL)
+				{
+					state = STATE_DEFAULT;
+					return 0;
+				}
+				std::string options = "dtX";
+				std::string request = "Examining a ";
+				request.append(item->getName());
+				request.append(":");
+				request.append("\n\nd - drop");
+				if (true /* combestibles */)
+				{
+					options.append("e");
+					request.append("\n\ne - eat");
+				}
+				request.append("\n\nt - throw");
+				if (item->getType() == ITEM_ARMOR && creature->getArmor() == item)
+				{
+					options.append("T");
+					request.append("\n\nT - take off");
+				}
+				if (true /* tools */)
+				{
+					options.append("u");
+					request.append("\n\nu - use");
+				}
+				if (item->getType() == ITEM_WEAPON)
+				{
+					options.append("w");
+					request.append("\n\nw - wield");
+				}
+				if (item->getType() == ITEM_ARMOR && creature->getArmor() != item)
+				{
+					options.append("W");
+					request.append("\n\nW - wear");
+				}
+				request.append("\n\nX - destroy");
+				char reply = world.drawBlockingWindow("What do you want to do?", request, TCODColor::black, options);
+				if (reply == 'd')
+				{
+					state = STATE_DEFAULT;
+					return actionDrop(item);
+				}
+				else if (reply == 'w')
+				{
+					state = STATE_DEFAULT;
+					return actionWield(item);
+				}
+				else if (reply == 'W')
+				{
+					state = STATE_WEAR;
+					return actionWear(item);
+				}
 			}
 			return 0;
 		}
