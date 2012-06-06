@@ -54,9 +54,11 @@ public:
 	void setControlled(bool);
 	void setLevel(Level* l);
 	Weapon* getMainWeapon();
+	std::map<symbol,Item*> getArmor();
 	Armor* getArmor(ArmorSlot slot);
 	void wieldMainWeapon(Weapon* wpn, int attackSkill);
 	void wearArmor(Armor* armor, int armorSkill);
+	void takeOffArmor(Armor* armor);
 	void setAttackSkill(int attackSkill);
 	void setBaseWeapon(Weapon base);
 	bool addItem(Item* item);

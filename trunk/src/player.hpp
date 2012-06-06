@@ -25,6 +25,7 @@ enum STATE
   STATE_WEAR,
   STATE_DROP,
   STATE_DRESSING,
+  STATE_TAKEOFF,
   NUM_STATE
 };
 
@@ -44,6 +45,7 @@ private:
 	int actionPickup(Item*);
 	int actionWield(Item*);
 	int actionWear(Item*);
+	int actionTakeoff(Item*);
 	int actionDrop();
 	int actionDrop(Item*);
 	int computeAttackBonus(Weapon* w);

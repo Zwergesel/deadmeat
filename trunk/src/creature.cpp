@@ -93,6 +93,21 @@ Armor* Creature::getArmor(ArmorSlot slot)
 	return NULL;
 }
 
+std::map<symbol,Item*> Creature::getArmor()
+{
+	std::map<symbol,Item*> worn;
+	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
+	{
+		// TODO: this can be optimized for performance
+		if (armor[slot] != 0 && inventory.count(armor[slot]) > 0)
+		{
+			assert(inventory[armor[slot]]->getType() == ITEM_ARMOR);
+			worn[armor[slot]] = inventory[armor[slot]];
+		}
+	}
+	return worn;
+}
+
 void Creature::wieldMainWeapon(Weapon* wpn, int skill)
 {
 	mainWeapon = NULL;
@@ -117,6 +132,15 @@ void Creature::wearArmor(Armor* a, int skill)
 		}
 	}
 	armorSkill = skill;
+}
+
+void Creature::takeOffArmor(Armor* a)
+{
+	symbol s = armor[a->getSlot()];
+	if (s > 0 && inventory.count(s) > 0 && inventory[s] == a)
+	{
+		armor[a->getSlot()] = 0;
+	}
 }
 
 void Creature::move(Point dpos)
