@@ -32,6 +32,7 @@ Creature::Creature(std::string n, symbol s, TCODColor c, int h, int m, Weapon w,
 	position(Point(0,0))
 {
 	std::fill(armor, armor+NUM_ARMOR_SLOTS, 0);
+	lastTimeRegen = world.time;
 }
 
 Creature::~Creature()
@@ -54,6 +55,7 @@ Creature* Creature::clone()
 	copy->level = level;
 	copy->position = position;
 	copy->walkingSpeed = walkingSpeed;
+	copy->lastTimeRegen = lastTimeRegen;
 	std::copy(armor, armor+NUM_ARMOR_SLOTS, copy->armor);
 	// Clone inventory
 	for (std::map<symbol,Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
@@ -196,6 +198,15 @@ void Creature::die(Creature* instigator)
 		msg << " the " << name << ".";
 		world.addMessage(msg.str());
 		level->removeCreature(this, true);
+	}
+}
+
+void Creature::regenerate(int speedup)
+{
+	if ((world.time - lastTimeRegen) > (100 - speedup))
+	{
+		health += (world.time - lastTimeRegen) / (100 - speedup);
+		lastTimeRegen = world.time;
 	}
 }
 
@@ -382,6 +393,7 @@ unsigned int Creature::save(Savegame& sg)
 	store.ptr("baseWeapon", baseWeapon.save(sg));
 	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	store ("walkingSpeed", walkingSpeed);
+	store ("lastTimeRegen", lastTimeRegen);
 	store ("#inventory", (int) inventory.size());
 	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
 	{
@@ -406,6 +418,7 @@ void Creature::load(LoadBlock& load)
 	baseWeapon = *static_cast<Weapon*>(load.ptr("baseWeapon"));
 	load ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	load ("walkingSpeed", walkingSpeed);
+	load ("lastTimeRegen", lastTimeRegen);
 	int n;
 	load ("#inventory", n);
 	while (n-->0)

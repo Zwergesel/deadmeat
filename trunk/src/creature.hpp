@@ -42,6 +42,7 @@ protected:
 	Level* level;
 	Point position;
 	std::map<symbol,Item*> inventory;
+	int lastTimeRegen;
 
 	void die(Creature* instigator);
 	Creature(const Creature& copy);
@@ -68,6 +69,7 @@ public:
 	std::pair<int,int> getMana();
 	int getHindrance();
 	int getWalkingSpeed();
+	void regenerate(int speedup);
 
 	void setControlled(bool);
 	void setLevel(Level* l);

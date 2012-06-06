@@ -49,6 +49,8 @@ Creature* Goblin::clone()
 
 int Goblin::action()
 {
+	regenerate(0);
+
 	Point ppos = world.player->getCreature()->getPos();
 	TCODPath path = TCODPath(level->getWidth(), level->getHeight(), new PathFindingCallback(), level);
 	path.compute(position.x, position.y, ppos.x, ppos.y);
@@ -92,6 +94,7 @@ unsigned int Goblin::save(Savegame& sg)
 	store.ptr("baseWeapon", baseWeapon.save(sg));
 	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	store ("walkingSpeed", walkingSpeed);
+	store ("lastTimeRegen", lastTimeRegen);
 	store ("#inventory", (int) inventory.size());
 	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
 	{
