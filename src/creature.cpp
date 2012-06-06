@@ -235,7 +235,7 @@ int Creature::getHindrance()
 
 int Creature::getWalkingSpeed()
 {
-	return walkingSpeed + FACT_WALKSPD * getHindrance();
+	return static_cast<int>(walkingSpeed + FACT_WALKSPD * getHindrance());
 }
 
 bool Creature::isControlled()
