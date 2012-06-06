@@ -40,6 +40,7 @@ public:
 	Tile getTile(Point pos);
 	int getWidth();
 	int getHeight();
+	bool isSeen(Point pos);
 	void setSeen(Point pos, bool isSeen);
 	// returns creature at given position, NULL otherwise
 	Creature* creatureAt(Point pos);
