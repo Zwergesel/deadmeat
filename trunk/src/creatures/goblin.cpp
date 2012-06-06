@@ -15,7 +15,7 @@ Goblin::Goblin()
 Goblin::Goblin(std::string n, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws):
 	Creature(n,s,c,h,m,w,a,ws)
 {
-	// TODO: attackSkill and armorSkill, for creature too
+	// TODO: attackSkill and defenseSkill, for creature too
 }
 
 Goblin::~Goblin()
@@ -34,7 +34,7 @@ Creature* Goblin::clone()
 	copy->controlled = controlled;
 	copy->mainWeapon = mainWeapon;
 	copy->attackSkill = attackSkill;
-	copy->armorSkill = armorSkill;
+	copy->defenseSkill = defenseSkill;
 	copy->level = level;
 	copy->position = position;
 	copy->walkingSpeed = walkingSpeed;
@@ -90,7 +90,7 @@ unsigned int Goblin::save(Savegame& sg)
 		store (ss.str(), armor[slot]);
 	}
 	store.ptr("baseWeapon", baseWeapon.save(sg));
-	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("armorSkill", armorSkill);
+	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	store ("walkingSpeed", walkingSpeed);
 	store ("#inventory", (int) inventory.size());
 	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)

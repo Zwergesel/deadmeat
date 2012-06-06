@@ -73,7 +73,7 @@ Player::Player(std::string name):
 	                       );
 	creature->setControlled(true);
 	creature->setAttackSkill(skills[SKILL_UNARMED].value);
-	creature->setArmorSkill(skills[SKILL_UNARMORED].value);
+	creature->setDefenseSkill(skills[SKILL_UNARMORED].value);
 }
 
 Player::~Player()
@@ -308,7 +308,7 @@ int Player::actionTakeoff(Item* item)
 	Armor* armor = static_cast<Armor*>(item);
 
 	creature->takeOffArmor(armor);
-	if (armor->getSlot() == ARMOR_BODY) creature->setArmorSkill(skills[SKILL_UNARMORED].value);
+	if (armor->getSlot() == ARMOR_BODY) creature->setDefenseSkill(skills[SKILL_UNARMORED].value);
 
 	std::stringstream msg;
 	msg << "You take off your " << armor->toString() << ".";

@@ -30,7 +30,7 @@ protected:
 	int baseAC;
 	int walkingSpeed;
 	int attackSkill;
-	int armorSkill;
+	int defenseSkill;
 	Level* level;
 	Point position;
 	std::map<symbol,Item*> inventory;
@@ -64,11 +64,11 @@ public:
 	void setControlled(bool);
 	void setLevel(Level* l);
 	void setAttackSkill(int attackSkill);
-	void setArmorSkill(int armorSkill);
+	void setDefenseSkill(int defenseSkill);
 	void setBaseWeapon(Weapon base);
 
 	void wieldMainWeapon(Weapon* wpn, int attackSkill);
-	void wearArmor(Armor* armor, int armorSkill);
+	void wearArmor(Armor* armor, int defenseSkill);
 	void takeOffArmor(Armor* armor);
 
 	bool addItem(Item* item);
