@@ -28,22 +28,23 @@ protected:
 	symbol armor[NUM_ARMOR_SLOTS];
 	Weapon baseWeapon;
 	int baseAC;
+	int walkingSpeed;
 	int attackSkill;
 	int armorSkill;
 	Level* level;
 	Point position;
 	std::map<symbol,Item*> inventory;
-	
+
 	void die(Creature* instigator);
 	Creature(const Creature& copy);
 
 public:
 
 	Creature(); // for savegames
-	Creature(std::string name, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC);
+	Creature(std::string name, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed);
 	virtual ~Creature();
 	virtual Creature* clone();
-	
+
 	std::string getName();
 	Point getPos();
 	symbol getSymbol();
@@ -57,6 +58,8 @@ public:
 	std::map<symbol, Item*> getInventory();
 	std::pair<int,int> getHealth();
 	std::pair<int,int> getMana();
+	int getHindrance();
+	int getWalkingSpeed();
 
 	void setControlled(bool);
 	void setLevel(Level* l);
@@ -70,7 +73,7 @@ public:
 
 	bool addItem(Item* item);
 	void removeItem(Item* item, bool del);
-	
+
 	int attack(Creature* c);
 	void move(Point pos);
 	void moveTo(Point pos);
@@ -87,10 +90,10 @@ class Goblin: public Creature
 {
 public:
 	Goblin();
-	Goblin(std::string name, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC);
+	Goblin(std::string name, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed);
 	~Goblin();
 	Creature* clone();
-	
+
 	int action();
 	unsigned int save(Savegame& sg);
 };

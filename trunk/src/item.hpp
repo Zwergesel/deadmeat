@@ -31,7 +31,7 @@ public:
 	Item(std::string name, symbol sym, TCODColor color);
 	virtual ~Item();
 	virtual Item* clone();
-	
+
 	ITEM_TYPE getType();
 	symbol getSymbol();
 	TCODColor getColor();

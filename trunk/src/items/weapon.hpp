@@ -25,7 +25,7 @@ public:
 	Weapon(std::string name, symbol sym, TCODColor color, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands);
 	~Weapon();
 	Item* clone();
-	
+
 	int rollDamage();
 	int getMinDamage();
 	int getMaxDamage();

@@ -15,7 +15,7 @@ Item::Item(std::string n, symbol s, TCODColor c):
 	strType = "Item";
 }
 
-Item::~Item(){}
+Item::~Item() {}
 
 Item* Item::clone()
 {

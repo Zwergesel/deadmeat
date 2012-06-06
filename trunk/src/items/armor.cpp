@@ -15,7 +15,7 @@ Armor::Armor(std::string n, symbol s, TCODColor c, int a, int h, ArmorSlot as, S
 	strType = "armor";
 }
 
-Armor::~Armor(){}
+Armor::~Armor() {}
 
 Item* Armor::clone()
 {

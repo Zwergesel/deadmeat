@@ -30,6 +30,7 @@ baseWeapon: @3
 baseAC: 15
 attackSkill: 0
 armorSkill: 0
+walkingSpeed: 10
 #inventory: 0
 
 [[Weapon: 5]]
@@ -61,6 +62,7 @@ baseWeapon: @5
 baseAC: 75
 attackSkill: 0
 armorSkill: 0
+walkingSpeed: 30
 #inventory: 0
 
 [[Weapon: 7]]
@@ -92,6 +94,7 @@ baseWeapon: @7
 baseAC: 0
 attackSkill: 0
 armorSkill: 0
+walkingSpeed: 3
 #inventory: 0
 
 [[MonsterFactory: 1]]
