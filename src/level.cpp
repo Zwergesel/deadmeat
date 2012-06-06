@@ -221,7 +221,7 @@ unsigned int Level::save(Savegame& sg)
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Level", id);
 	store ("width", width) ("height", height);
-	store ("map", map, width, height);
+	store ("map", map, width, height, seen);
 	store ("#creatures", (int) creatures.size());
 	for (unsigned int d=0; d<creatures.size(); d++)
 	{
@@ -243,7 +243,7 @@ void Level::load(LoadBlock& load)
 	load ("width", width) ("height", height);
 	map = new Tile[width*height];
 	seen = new bool[width*height];
-	load ("map", map, width, height) ("#creatures", n);
+	load ("map", map, width, height, seen) ("#creatures", n);
 	while (n-->0)
 	{
 		int time;
