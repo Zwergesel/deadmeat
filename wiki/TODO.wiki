@@ -4,13 +4,13 @@
 
 == Test ==
   * Implement creature (default and calculated) walk speed and armor hindrance (can be speed bonus? boots of speed?)
+  * Hit point regeneration
 
 == Bug fixes / Issues ==
   * Make sure defense and attack calculation in creature work correctly (especially armorSkill, fightingskill)  
   * save&load "seen" in level
 
 == Small improvements ==
-  * Hit point regeneration
 
 == Major improvements ==
   * Fully implement attributes
