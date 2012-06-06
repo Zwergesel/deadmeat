@@ -9,6 +9,7 @@
   * Make sure defense and attack calculation in creature work correctly (especially armorSkill, fightingskill)  
 
 == Small improvements ==
+  * Hit point regeneration
 
 == Major improvements ==
   * Fully implement attributes
