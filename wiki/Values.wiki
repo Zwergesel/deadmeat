@@ -6,3 +6,4 @@
   * *armor enchantment*: hard limit -9 bis +9 mit +0 = normal
   * *armor class*: 0 (minimum) bis 50 (Endspiel)
   * *armor hindrance*: 1:1 mit turn time
+  * *skills*: 0 - 100
