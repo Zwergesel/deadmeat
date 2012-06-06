@@ -32,6 +32,8 @@ maxHealth: 50
 controlled: false
 mainWeapon: 0
 armor: 0
+rmor: 0
+mor: 0
 attackSkill: 10
 armorSkill: 0
 baseWeapon: @4
@@ -69,6 +71,8 @@ maxHealth: 350
 controlled: false
 mainWeapon: 0
 armor: 0
+rmor: 0
+mor: 0
 attackSkill: 10
 armorSkill: 0
 baseWeapon: @7
@@ -106,6 +110,8 @@ maxHealth: 25
 controlled: false
 mainWeapon: 0
 armor: 0
+rmor: 0
+mor: 0
 attackSkill: 10
 armorSkill: 0
 baseWeapon: @10
