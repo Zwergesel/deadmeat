@@ -1,0 +1,8 @@
+#summary Values for weapons/armors/items
+
+  * *weapon enchantment*: hard limit -9 bis +9 mit +0 = normal
+  * *weapon hit bonus*: theoretisches Limit -100 bis +100 (1:1 in die gaussverteilung)
+  * *weapon damage*: 3-5 (Hände), 75-100 (beste Waffe)
+  * *armor enchantment*: hard limit -9 bis +9 mit +0 = normal
+  * *armor class*: 0 (minimum) bis 50 (Endspiel)
+  * *armor hindrance*: 1:1 mit turn time
