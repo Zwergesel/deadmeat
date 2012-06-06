@@ -107,9 +107,6 @@ void World::drawMessage()
 
 void World::drawLevel(Level* level, Point offset, Viewport view)
 {
-	// fov
-	fovMap->computeFov(player->getCreature()->getPos().x,player->getCreature()->getPos().y,0,true,FOV_SHADOW);
-
 	// draw level
 	int startX = (offset.x < 0) ? -offset.x : 0;
 	int startY = (offset.y < 0) ? -offset.y : 0;
@@ -122,6 +119,7 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 			TileInfo inf = tileSet->getInfo(level->getTile(Point(x, y)));
 			if (fovMap->isInFov(x,y))
 			{
+        level->setSeen(Point(x,y), true);
 				TCODConsole::root->putCharEx(
 				  view.x + x + offset.x,
 				  view.y + y + offset.y,
@@ -130,6 +128,20 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 				  inf.background
 				);
 			}
+      else if (!fovMap->isInFov(x,y) && level->isSeen(Point(x,y)))
+      {
+        TCODColor seenColor = inf.color;
+        TCODColor seenBackground = inf.background;
+        seenColor.scaleHSV(0.5f, 0.5f);
+        seenBackground.scaleHSV(0.5f, 0.5f);
+        TCODConsole::root->putCharEx(
+				  view.x + x + offset.x,
+				  view.y + y + offset.y,
+				  inf.sym,
+				  inf.color,
+				  inf.background
+				);
+      }
 		}
 	}
 	// draw items
@@ -148,8 +160,9 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 
 void World::drawItem(Item* i, Point pos, Point offset, Viewport view)
 {
+  if(!fovMap->isInFov(pos.x, pos.y)) return;
 	pos += offset;
-	if (pos.x >= 0 && pos.x < view.width && pos.y >= 0 && pos.y < view.height)
+  if (pos.x >= 0 && pos.x < view.width && pos.y >= 0 && pos.y < view.height)
 	{
 		TCODConsole::root->putChar(view.x + pos.x, view.y + pos.y, i->getSymbol());
 		TCODConsole::root->setCharForeground(view.x + pos.x, view.y + pos.y, i->getColor());
@@ -157,8 +170,9 @@ void World::drawItem(Item* i, Point pos, Point offset, Viewport view)
 }
 
 void World::drawCreature(Creature* c, Point offset, Viewport view)
-{
+{  
 	Point pos = c->getPos();
+  if(!fovMap->isInFov(pos.x, pos.y)) return;
 	pos += offset;
 	if (pos.x >= 0 && pos.x < view.width && pos.y >= 0 && pos.y < view.height)
 	{
@@ -169,7 +183,9 @@ void World::drawCreature(Creature* c, Point offset, Viewport view)
 
 void World::drawWorld()
 {
-	TCODConsole::root->clear();
+  // fov
+	fovMap->computeFov(player->getCreature()->getPos().x,player->getCreature()->getPos().y,0,true,FOV_BASIC);
+	TCODConsole::root->clear();  
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);
 	STATE state = player->getState();
 	if (state == STATE_INVENTORY || state == STATE_PICKUP || state == STATE_WIELD || state == STATE_WEAR || state == STATE_DROP || state == STATE_TAKEOFF)
