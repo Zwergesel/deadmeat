@@ -138,8 +138,8 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 				  view.x + x + offset.x,
 				  view.y + y + offset.y,
 				  inf.sym,
-				  inf.color,
-				  inf.background
+				  seenColor,
+				  seenBackground
 				);
       }
 		}
