@@ -7,6 +7,7 @@
 
 == Bug fixes / Issues ==
   * Make sure defense and attack calculation in creature work correctly (especially armorSkill, fightingskill)  
+  * save&load "seen" in level
 
 == Small improvements ==
   * Hit point regeneration
@@ -15,7 +16,6 @@
   * Fully implement attributes
   * Implement weapon and fighting skill training
   * Implement ranged attacking (targetting system to allow more than 8 directions?)
-  * Line of sight for player
   * Line of sight for monsters
   * Changing levels
   * Display unseen items where the player has last seen them even if a monster picked them up
