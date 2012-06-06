@@ -5,6 +5,7 @@
 #include "../level.hpp"
 #include "../pathfinding.hpp"
 #include <algorithm>
+#include <cmath>
 
 Goblin::Goblin()
 {
@@ -63,7 +64,7 @@ int Goblin::action()
 		}
 		else
 		{
-			float diagonal = ((target - position).x != 0 && (target - position).y != 0)?(std::sqrtf(2.f)):(1.f);
+			float diagonal = ((target - position).x != 0 && (target - position).y != 0)?(std::sqrt(2.f)):(1.f);
 			position = target;
 			return static_cast<int>(static_cast<float>(walkingSpeed + getHindrance()) * diagonal);
 		}
