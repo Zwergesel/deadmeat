@@ -69,7 +69,5 @@ unsigned int Item::save(Savegame& sg)
 
 void Item::load(LoadBlock& load)
 {
-	int s;
-	load ("name", name) ("symbol", s) ("color", color);
-	sym = static_cast<symbol>(s);
+	load ("name", name) ("symbol", sym) ("color", color);
 }
