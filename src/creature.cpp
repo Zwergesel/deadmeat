@@ -18,7 +18,7 @@ Creature::Creature(std::string n, symbol s, TCODColor c, int h, int m, Weapon w,
 	health(h),		maxHealth(h),		mana(m),
 	maxMana(m),		controlled(false),	mainWeapon(0),
 	baseWeapon(w),	baseAC(a),			walkingSpeed(ws),
-	attackSkill(0),	armorSkill(0),		level(NULL),
+	attackSkill(0),	defenseSkill(0),	level(NULL),
 	position(Point(0,0))
 {
 	std::fill(armor, armor+NUM_ARMOR_SLOTS, 0);
@@ -40,7 +40,7 @@ Creature* Creature::clone()
 	copy->controlled = controlled;
 	copy->mainWeapon = mainWeapon;
 	copy->attackSkill = attackSkill;
-	copy->armorSkill = armorSkill;
+	copy->defenseSkill = defenseSkill;
 	copy->level = level;
 	copy->position = position;
 	copy->walkingSpeed = walkingSpeed;
@@ -131,7 +131,7 @@ void Creature::wearArmor(Armor* a, int skill)
 			armor[a->getSlot()] = (*it).first;
 		}
 	}
-	armorSkill = skill;
+	defenseSkill = skill;
 }
 
 void Creature::takeOffArmor(Armor* a)
@@ -210,7 +210,7 @@ int Creature::getAttack()
 
 int Creature::getDefense()
 {
-	int defense = armorSkill;
+	int defense = defenseSkill;
 	if (armor[ARMOR_BODY] == 0) defense += baseAC;
 	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
 	{
@@ -306,9 +306,9 @@ void Creature::setAttackSkill(int value)
 	attackSkill = value;
 }
 
-void Creature::setArmorSkill(int value)
+void Creature::setDefenseSkill(int value)
 {
-	armorSkill = value;
+	defenseSkill = value;
 }
 
 void Creature::setBaseWeapon(Weapon base)
@@ -370,7 +370,7 @@ unsigned int Creature::save(Savegame& sg)
 		store (ss.str(), armor[slot]);
 	}
 	store.ptr("baseWeapon", baseWeapon.save(sg));
-	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("armorSkill", armorSkill);
+	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	store ("walkingSpeed", walkingSpeed);
 	store ("#inventory", (int) inventory.size());
 	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
@@ -394,7 +394,7 @@ void Creature::load(LoadBlock& load)
 		load (ss.str(), armor[slot]);
 	}
 	baseWeapon = *static_cast<Weapon*>(load.ptr("baseWeapon"));
-	load ("baseAC", baseAC) ("attackSkill", attackSkill) ("armorSkill", armorSkill);
+	load ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	load ("walkingSpeed", walkingSpeed);
 	int n;
 	load ("#inventory", n);
