@@ -10,16 +10,19 @@
 Level::Level()
 {
 	// for savegames only
+	map = NULL;
+	seen = NULL;
 }
 
-Level::Level(int width, int height)
+Level::Level(int w, int h):
+	width(w), height(h)
 {
-	this->width = width;
-	this->height = height;
-	this->map = new Tile[width*height];
+	map = new Tile[w*h];
+	seen = new bool[w*h];
 	creatures.clear();
 	items.clear();
-	std::fill(map, map+width*height, TILE_CAVE_FLOOR);
+	std::fill(map, map+w*h, TILE_CAVE_FLOOR);
+	std::fill(seen, seen+w*h, false);
 }
 
 Level::~Level()
@@ -29,6 +32,11 @@ Level::~Level()
 		delete[] map;
 		map = NULL;
 	}
+	if (seen != NULL)
+	{
+		delete[] seen;
+		seen = NULL;
+	}
 	for (std::vector<TimelineAction>::iterator it=creatures.begin(); it<creatures.end(); it++)
 	{
 		if (it->actor != NULL)
@@ -37,6 +45,7 @@ Level::~Level()
 			it->actor = NULL;
 		}
 	}
+	creatures.clear();
 	for (std::vector<std::pair<Point, Item*> >::iterator it=items.begin(); it<items.end(); it++)
 	{
 		if (it->second != NULL)
@@ -45,6 +54,7 @@ Level::~Level()
 			it->second = NULL;
 		}
 	}
+	items.clear();
 }
 
 inline int Level::coord(Point pos)
@@ -71,6 +81,11 @@ int Level::getWidth()
 int Level::getHeight()
 {
 	return height;
+}
+
+void Level::setSeen(Point pos, bool isSeen)
+{
+	seen[coord(pos)] = isSeen;
 }
 
 Creature* Level::creatureAt(Point pos)
@@ -222,6 +237,7 @@ void Level::load(LoadBlock& load)
 	int n;
 	load ("width", width) ("height", height);
 	map = new Tile[width*height];
+	seen = new bool[width*height];
 	load ("map", map, width, height) ("#creatures", n);
 	while (n-->0)
 	{
