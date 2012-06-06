@@ -25,14 +25,14 @@ struct Viewport
 class World
 {
 private:
-	std::deque<std::string> messageQueue;  
+	std::deque<std::string> messageQueue;
 	World(const World& copy);
 
 public:
 	TileSet* tileSet;
 	Player* player;
 	Level** levels;
-  TCODMap* fovMap;
+	TCODMap* fovMap;
 	int currentLevel;
 	Point levelOffset;
 	Viewport viewLevel, viewMsg, viewItemList, viewInfo;

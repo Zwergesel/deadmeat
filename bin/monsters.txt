@@ -13,6 +13,7 @@ diceMax: 3
 enchantment: 0
 skill: 9
 hands: 2
+effect: 0
 
 [[Goblin: 2]]
 name: goblin
@@ -45,6 +46,7 @@ diceMax: 7
 enchantment: 0
 skill: 9
 hands: 2
+effect: 0
 
 [[Goblin: 4]]
 name: red dragon
@@ -77,6 +79,7 @@ diceMax: 6
 enchantment: 0
 skill: 9
 hands: 0
+effect: 0
 
 [[Goblin: 6]]
 name: snake
