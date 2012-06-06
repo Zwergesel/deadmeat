@@ -210,15 +210,15 @@ int Creature::getAttack()
 
 int Creature::getDefense()
 {
-	int defense = defenseSkill;
-	if (armor[ARMOR_BODY] == 0) defense += baseAC;
+	double defense = FACT_DEFSKL * defenseSkill;
+	if (armor[ARMOR_BODY] == 0) defense += FACT_AC * baseAC;
 	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
 	{
 		Armor* ar = getArmor(static_cast<ArmorSlot>(slot));
-		if (ar != NULL) defense += ar->getAC();
+		if (ar != NULL) defense += FACT_AC * ar->getAC();
 		// TODO: body armor uses it's own skill
 	}
-	return defense;
+	return static_cast<int>(defense);
 }
 
 int Creature::getHindrance()
@@ -234,7 +234,7 @@ int Creature::getHindrance()
 
 int Creature::getWalkingSpeed()
 {
-	return walkingSpeed + getHindrance();
+	return walkingSpeed + FACT_WALKSPD * getHindrance();
 }
 
 bool Creature::isControlled()
@@ -255,22 +255,22 @@ void Creature::setLevel(Level* l)
 int Creature::attack(Creature* target)
 {
 	// base attack (hands, claws, etc.)
-	int attack = baseWeapon.getHitBonus() + baseWeapon.getEnchantment() + attackSkill;
+	int attack = static_cast<int>(FACT_HIT * baseWeapon.getHitBonus() + FACT_ENCH * baseWeapon.getEnchantment() + FACT_ATSKL * attackSkill);
 	// base attack damage
 	int damage = baseWeapon.rollDamage();
 	// base attack speed
-	int speed = baseWeapon.getSpeed() - 0;
+	int speed = static_cast<int>(baseWeapon.getSpeed() - FACT_ATSPD * getHindrance());
 
 	if (inventory.count(mainWeapon) > 0)
 	{
 		assert(inventory[mainWeapon]->getType() == ITEM_WEAPON);
 		Weapon* w = static_cast<Weapon*>(inventory[mainWeapon]);
-		// (weapon to hit + weapon enchantment) + ((fighting skill + weapon skill)/2)
-		attack = w->getHitBonus() + w->getEnchantment() + attackSkill;
+		// weapon to hit + weapon enchantment + fighting skill + weapon skill
+		attack = static_cast<int>(FACT_HIT * w->getHitBonus() + FACT_ENCH * w->getEnchantment() + FACT_ATSKL * attackSkill);
 		// damage = (weapon damage + weapon enchantment)
 		damage = w->rollDamage();
 		// weapon speed + armor hindrance
-		speed = w->getSpeed() - 0;
+		speed = static_cast<int>(w->getSpeed() - FACT_ATSPD * getHindrance());
 	}
 	int defense = target->getDefense();
 	TCODRandom rngGauss;

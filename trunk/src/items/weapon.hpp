@@ -8,6 +8,14 @@
 class Savegame;
 class LoadBlock;
 
+enum WeaponEffect
+{
+	EFFECT_NONE,
+	EFFECT_POISON,
+	EFFECT_FIRE,
+	NUM_EFFECT
+};
+
 class Weapon : public Item
 {
 private:
@@ -19,10 +27,11 @@ private:
 	int enchantment;
 	SKILLS skill;
 	int hands;
+	WeaponEffect effect;
 
 public:
 	Weapon();
-	Weapon(std::string name, symbol sym, TCODColor color, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands);
+	Weapon(std::string name, symbol sym, TCODColor color, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands, WeaponEffect effect);
 	~Weapon();
 	Item* clone();
 
