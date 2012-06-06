@@ -80,15 +80,15 @@ int main()
 	{
 		// Add/edit/remove creature templates here
 		Goblin goblin("goblin", 'g', TCODColor::green, 35, 0,
-		              Weapon("claws", '#', TCODColor::pink, 11, 0, 4, 1, 3, 0, SKILL_UNARMED, 2), 15, 10
+		              Weapon("claws", '#', TCODColor::pink, 11, 0, 4, 1, 3, 0, SKILL_UNARMED, 2, EFFECT_NONE), 15, 10
 		             );
 		monsterfactory.setTemplate("goblin", &goblin);
 		Goblin snake("snake", 's', TCODColor::darkChartreuse, 20, 0,
-		             Weapon("teeth", '#', TCODColor::pink, 25, 0, 11, 2, 6, 0, SKILL_UNARMED, 0), 0, 3
+		             Weapon("teeth", '#', TCODColor::pink, 25, 0, 11, 2, 6, 0, SKILL_UNARMED, 0, EFFECT_NONE), 0, 3
 		            );
 		monsterfactory.setTemplate("snake", &snake);
 		Goblin dragon("red dragon", 'D', TCODColor::red, 300, 100,
-		              Weapon("fangs", '#', TCODColor::pink, 15, 50, 19, 3, 7, 0, SKILL_UNARMED, 2), 75, 30
+		              Weapon("fangs", '#', TCODColor::pink, 15, 50, 19, 3, 7, 0, SKILL_UNARMED, 2, EFFECT_NONE), 75, 30
 		             );
 		monsterfactory.setTemplate("red dragon", &dragon);
 		Savegame save;
@@ -110,11 +110,11 @@ int main()
 		world.player->getCreature()->moveTo(newPos);
 		world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - world.levels[0]->getWidth(), 0);
 		world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - world.levels[0]->getHeight(), 0);
-		Weapon* sword = new Weapon("sword", '(', TCODColor::red, 10, 30, 1, 10, 20, 30, SKILL_SWORD, 1);
-		Weapon* dagger = new Weapon("dagger", '(', TCODColor::red, 4, 10, 8, 1, 4, 12, SKILL_DAGGER, 1);
+		Weapon* sword = new Weapon("sword", '(', TCODColor::red, 10, 30, 1, 10, 20, 30, SKILL_SWORD, 1, EFFECT_NONE);
+		Weapon* dagger = new Weapon("dagger", '(', TCODColor::red, 4, 10, 8, 1, 4, 12, SKILL_DAGGER, 1, EFFECT_NONE);
 		Item* item1 = new Item("item1", '1', TCODColor::blue);
 		Item* item2 = new Item("item2", '2', TCODColor::green);
-		Weapon* mace = new Weapon("cursed mace", '(', TCODColor::red, 15, -60, 4, 1, 1, -60, SKILL_MACEFLAIL, 1);
+		Weapon* mace = new Weapon("cursed mace", '(', TCODColor::red, 15, -60, 4, 1, 1, -60, SKILL_MACEFLAIL, 1, EFFECT_NONE);
 		Armor* uber = new Armor("uber armor", ')', TCODColor::black, 150, 10, ARMOR_BODY, SKILL_PLATE_ARMOR);
 		Armor* crap = new Armor("prussian pickelhaube", ')', TCODColor::black, 50, 0, ARMOR_HAT, SKILL_PLATE_ARMOR);
 		Armor* boots = new Armor("clown shoes", ')', TCODColor::black, 30, 12, ARMOR_BOOTS, SKILL_CLOTH_ARMOR);

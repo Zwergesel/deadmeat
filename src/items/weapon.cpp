@@ -11,9 +11,9 @@ Weapon::Weapon()
 	strType = "weapon";
 }
 
-Weapon::Weapon(std::string n, symbol s, TCODColor c, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands)
+Weapon::Weapon(std::string n, symbol s, TCODColor c, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands, WeaponEffect e)
 	:Item(n, s, c), speed(spd), hitBonus(hit), baseDamage(dmg), numDice(dice)
-	,diceMax(dmax), enchantment(ench), skill(skl), hands(hands)
+	,diceMax(dmax), enchantment(ench), skill(skl), hands(hands), effect(e)
 {
 	type = ITEM_WEAPON;
 	strType = "weapon";
@@ -23,7 +23,7 @@ Weapon::~Weapon() {}
 
 Item* Weapon::clone()
 {
-	Weapon* copy = new Weapon(name, sym, color, speed, hitBonus, baseDamage, numDice, diceMax, enchantment, skill, hands);
+	Weapon* copy = new Weapon(name, sym, color, speed, hitBonus, baseDamage, numDice, diceMax, enchantment, skill, hands, effect);
 	return copy;
 }
 
@@ -92,18 +92,19 @@ unsigned int Weapon::save(Savegame& sg)
 	store ("name", name) ("symbol", sym) ("color", color) ("speed", speed);
 	store ("hitBonus", hitBonus) ("baseDamage", baseDamage) ("numDice", numDice);
 	store ("diceMax", diceMax) ("enchantment", enchantment) ("skill", (int)skill);
-	store ("hands", hands);
+	store ("hands", hands) ("effect", effect);
 	sg << store;
 	return id;
 }
 
 void Weapon::load(LoadBlock& load)
 {
-	int s;
+	int s, e;
 	load ("name", name) ("symbol", sym) ("color", color) ("speed", speed);
 	load ("hitBonus", hitBonus) ("baseDamage", baseDamage) ("numDice", numDice);
-	load ("diceMax", diceMax) ("enchantment", enchantment) ("skill", s);
+	load ("diceMax", diceMax) ("enchantment", enchantment) ("skill", s) ("hands", hands) ("effect", e);
 	if (s < 0 || s >= NUM_SKILL) throw SavegameFormatException("Weapon::load _ skill out of range");
+	if (e < 0 || e >= NUM_EFFECT) throw SavegameFormatException("Weapon::load _ effect out of range");
 	skill = static_cast<SKILLS>(s);
-	load ("hands", hands);
+	effect = static_cast<WeaponEffect>(e);
 }

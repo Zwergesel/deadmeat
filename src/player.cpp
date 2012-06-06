@@ -69,7 +69,7 @@ Player::Player(std::string name):
 	attributes[ATTR_CON] = rng->getInt(5,20);
 	attributes[ATTR_INT] = rng->getInt(5,20);
 	creature = new Creature(name, (unsigned char)'@', TCODColor::black, 250, 75,
-	                        Weapon("bare hands", '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, SKILL_UNARMED, 2), 0, 10
+	                        Weapon("bare hands", '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, SKILL_UNARMED, 2, EFFECT_NONE), 0, 10
 	                       );
 	creature->setControlled(true);
 	creature->setAttackSkill(skills[SKILL_UNARMED].value);

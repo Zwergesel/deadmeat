@@ -16,8 +16,15 @@ class LoadBlock;
 
 class Creature
 {
-
 protected:
+	static const double FACT_ATSKL = 1.0;
+	static const double FACT_DEFSKL = 1.0;
+	static const double FACT_AC = 1.0;
+	static const double FACT_HIT = 1.0;
+	static const double FACT_ENCH = 1.0;
+	static const double FACT_ATSPD = 1.0;
+	static const double FACT_WALKSPD = 1.0;
+
 	std::string name;
 	symbol sym;
 	TCODColor color;
