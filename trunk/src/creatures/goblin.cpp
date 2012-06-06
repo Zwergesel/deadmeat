@@ -63,8 +63,9 @@ int Goblin::action()
 		}
 		else
 		{
+			float diagonal = ((target - position).x != 0 && (target - position).y != 0)?(std::sqrtf(2.f)):(1.f);
 			position = target;
-			return walkingSpeed + getHindrance();
+			return static_cast<int>(static_cast<float>(walkingSpeed + getHindrance()) * diagonal);
 		}
 	}
 	return walkingSpeed + getHindrance();
