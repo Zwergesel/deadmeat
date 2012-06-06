@@ -20,17 +20,20 @@ enum ITEM_TYPE
 class Item
 {
 protected:
-	int symbol;
-	TCODColor color;
 	std::string name;
+	symbol sym;
+	TCODColor color;
 	ITEM_TYPE type;
 	std::string strType;
 
 public:
-	Item(); // for savegames
-	Item(std::string name, int symbol, TCODColor color);
+	Item();
+	Item(std::string name, symbol sym, TCODColor color);
+	virtual ~Item();
+	virtual Item* clone();
+	
 	ITEM_TYPE getType();
-	int getSymbol();
+	symbol getSymbol();
 	TCODColor getColor();
 	std::string getName();
 	std::string toString();

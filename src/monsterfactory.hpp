@@ -4,6 +4,7 @@
 /* Includes */
 
 #include <map>
+#include <string>
 
 /* Forward declarations */
 

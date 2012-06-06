@@ -27,7 +27,10 @@ private:
 
 public:
 	Armor();
-	Armor(std::string name, int symbol, TCODColor color, int ac, int hindrance, ArmorSlot as, SKILLS skill);
+	Armor(std::string name, symbol sym, TCODColor color, int ac, int hindrance, ArmorSlot as, SKILLS skill);
+	~Armor();
+	Item* clone();
+	
 	int getAC();
 	int getHindrance();
 	ArmorSlot getSlot();

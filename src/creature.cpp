@@ -10,23 +10,16 @@
 
 Creature::Creature()
 {
-	// for savegames
+	// for savegames, initializes nothing
 }
 
-Creature::Creature(Point p, std::string n, symbol s, TCODColor c, int h):
-	name(n),
-	position(p),
-	sym(s),
-	color(c),
-	health(h),
-	maxHealth(h),
-	controlled(false),
-	mainWeapon(NULL)
+Creature::Creature(std::string n, symbol s, TCODColor c, int h, int m, Weapon w, int a):
+	name(n),		sym(s),				color(c),
+	health(h),		maxHealth(h),		mana(m),
+	maxMana(m),		controlled(false),	mainWeapon(0),
+	baseWeapon(w),	baseAC(a),			attackSkill(0),
+	armorSkill(0),	level(NULL),		position(Point(0,0))
 {
-	baseWeapon = Weapon("hands", (unsigned char)'¤', TCODColor::pink, 10, 10, 10, 0, 0, 0, SKILL_UNARMED, 2);
-	baseArmor = Armor("skin", (unsigned char)'¤', TCODColor::pink, 0, 0, ARMOR_BODY, SKILL_UNARMORED);
-	attackSkill = 0;
-	armorSkill = 0;
 	std::fill(armor, armor+NUM_ARMOR_SLOTS, 0);
 }
 
@@ -34,22 +27,27 @@ Creature::~Creature()
 {
 	for (std::map<symbol, Item*>::iterator it=inventory.begin(); it!=inventory.end(); it++)
 	{
-		delete (*it).second;
+		delete it->second;
 	}
 }
 
 Creature* Creature::clone()
 {
-	Creature* copy = new Creature(position, name, sym, color, maxHealth);
+	Creature* copy = new Creature(name, sym, color, maxHealth, maxMana, baseWeapon, baseAC);
 	copy->health = health;
+	copy->mana = mana;
 	copy->controlled = controlled;
-	// TODO: clone weapon and armor, inventory!
 	copy->mainWeapon = mainWeapon;
-	std::copy(armor, armor+NUM_ARMOR_SLOTS, copy->armor);
 	copy->attackSkill = attackSkill;
 	copy->armorSkill = armorSkill;
-	copy->baseWeapon = baseWeapon;
-	copy->armorSkill = armorSkill;
+	copy->level = level;
+	copy->position = position;
+	std::copy(armor, armor+NUM_ARMOR_SLOTS, copy->armor);
+	// Clone inventory
+	for (std::map<symbol,Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
+	{
+		copy->inventory.insert(std::make_pair(it->first, it->second->clone()));
+	}
 	return copy;
 }
 
@@ -63,7 +61,7 @@ Point Creature::getPos()
 	return position;
 }
 
-int Creature::getSymbol()
+symbol Creature::getSymbol()
 {
 	return sym;
 }
@@ -75,7 +73,7 @@ TCODColor Creature::getColor()
 
 Weapon* Creature::getMainWeapon()
 {
-	if (inventory.count(mainWeapon) > 0)
+	if (mainWeapon > 0 && inventory.count(mainWeapon) > 0)
 	{
 		assert(inventory[mainWeapon]->getType() == ITEM_WEAPON);
 		return static_cast<Weapon*>(inventory[mainWeapon]);
@@ -85,7 +83,7 @@ Weapon* Creature::getMainWeapon()
 
 Armor* Creature::getArmor(ArmorSlot slot)
 {
-	if (armor[slot] != 0 && inventory.count(armor[slot]) > 0)
+	if (armor[slot] > 0 && inventory.count(armor[slot]) > 0)
 	{
 		assert(inventory[armor[slot]]->getType() == ITEM_ARMOR);
 		return static_cast<Armor*>(inventory[armor[slot]]);
@@ -110,7 +108,7 @@ std::map<symbol,Item*> Creature::getArmor()
 
 void Creature::wieldMainWeapon(Weapon* wpn, int skill)
 {
-	mainWeapon = NULL;
+	mainWeapon = 0;
 	for (std::map<symbol, Item*>::iterator it=inventory.begin(); it!=inventory.end(); it++)
 	{
 		if ((*it).second == wpn)
@@ -175,7 +173,7 @@ void Creature::die(Creature* instigator)
 	if (controlled)
 	{
 		world.addMessage("You die...", true);
-		// This message will not be visible, TODO: think of a better way to do this
+		// This message will not be visible, but forces confirmation by the player
 		world.addMessage("", true);
 		world.gameover = true;
 	}
@@ -196,7 +194,7 @@ int Creature::action()
 
 int Creature::getAttack()
 {
-	if (inventory.count(mainWeapon) > 0)
+	if (mainWeapon > 0 && inventory.count(mainWeapon) > 0)
 	{
 		assert(inventory[mainWeapon]->getType() == ITEM_WEAPON);
 		Weapon* w = static_cast<Weapon*>(inventory[mainWeapon]);
@@ -210,9 +208,8 @@ int Creature::getAttack()
 
 int Creature::getDefense()
 {
-	// armor + (fighting skill + armor skill)/2
 	int defense = armorSkill;
-	if (armor[ARMOR_BODY] == 0) defense += baseArmor.getAC();
+	if (armor[ARMOR_BODY] == 0) defense += baseAC;
 	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
 	{
 		Armor* ar = getArmor(static_cast<ArmorSlot>(slot));
@@ -286,9 +283,14 @@ int Creature::attack(Creature* target)
 	return speed;
 }
 
-void Creature::setAttackSkill(int attack)
+void Creature::setAttackSkill(int value)
 {
-	attackSkill = attack;
+	attackSkill = value;
+}
+
+void Creature::setArmorSkill(int value)
+{
+	armorSkill = value;
 }
 
 void Creature::setBaseWeapon(Weapon base)
@@ -347,8 +349,8 @@ unsigned int Creature::save(Savegame& sg)
 	{
 		store ("armor"+slot, armor[slot]);
 	}
-	store ("attackSkill", attackSkill) ("armorSkill", armorSkill);
-	store.ptr("baseWeapon", baseWeapon.save(sg)).ptr("baseArmor", baseArmor.save(sg));
+	store.ptr("baseWeapon", baseWeapon.save(sg));
+	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("armorSkill", armorSkill);
 	store ("#inventory", (int) inventory.size());
 	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
 	{
@@ -372,9 +374,8 @@ void Creature::load(LoadBlock& load)
 		load ("armor"+slot, intsym);
 		armor[slot] = (symbol) intsym;
 	}
-	load ("attackSkill", attackSkill) ("armorSkill", armorSkill);
 	baseWeapon = *static_cast<Weapon*>(load.ptr("baseWeapon"));
-	baseArmor = *static_cast<Armor*>(load.ptr("baseArmor"));
+	load ("baseAC", baseAC) ("attackSkill", attackSkill) ("armorSkill", armorSkill);
 	int n;
 	load ("#inventory", n);
 	while (n-->0)

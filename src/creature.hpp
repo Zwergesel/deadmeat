@@ -19,55 +19,63 @@ class Creature
 
 protected:
 	std::string name;
-	Point position;
 	symbol sym;
 	TCODColor color;
 	int health, maxHealth;
+	int mana, maxMana;
 	bool controlled;
-	Level* level;
 	symbol mainWeapon;
 	symbol armor[NUM_ARMOR_SLOTS];
+	Weapon baseWeapon;
+	int baseAC;
 	int attackSkill;
 	int armorSkill;
-	Weapon baseWeapon;
-	Armor baseArmor;
-	std::map<symbol, Item*> inventory;
+	Level* level;
+	Point position;
+	std::map<symbol,Item*> inventory;
+	
 	void die(Creature* instigator);
 	Creature(const Creature& copy);
 
 public:
 
 	Creature(); // for savegames
-	Creature(Point p, std::string name, symbol s, TCODColor color, int health);
-	~Creature();
+	Creature(std::string name, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC);
+	virtual ~Creature();
 	virtual Creature* clone();
+	
 	std::string getName();
 	Point getPos();
-	int getSymbol();
+	symbol getSymbol();
 	TCODColor getColor();
-	int attack(Creature* c);
-	void move(Point pos);
-	void moveTo(Point pos);
 	int getDefense();
 	int getAttack();
 	bool isControlled();
-	void setControlled(bool);
-	void setLevel(Level* l);
 	Weapon* getMainWeapon();
 	std::map<symbol,Item*> getArmor();
 	Armor* getArmor(ArmorSlot slot);
+	std::map<symbol, Item*> getInventory();
+	std::pair<int,int> getHealth();
+	std::pair<int,int> getMana();
+
+	void setControlled(bool);
+	void setLevel(Level* l);
+	void setAttackSkill(int attackSkill);
+	void setArmorSkill(int armorSkill);
+	void setBaseWeapon(Weapon base);
+
 	void wieldMainWeapon(Weapon* wpn, int attackSkill);
 	void wearArmor(Armor* armor, int armorSkill);
 	void takeOffArmor(Armor* armor);
-	void setAttackSkill(int attackSkill);
-	void setBaseWeapon(Weapon base);
+
 	bool addItem(Item* item);
 	void removeItem(Item* item, bool del);
-	std::map<symbol, Item*> getInventory();
-	std::pair<int,int> getHealth();
+	
+	int attack(Creature* c);
+	void move(Point pos);
+	void moveTo(Point pos);
 
-	/* Hurt returns true if the creature was killed */
-	bool hurt(int damage, Creature* instigator); // ,DamageType dt
+	bool hurt(int damage, Creature* instigator); // TODO : ,DamageType dt
 
 	virtual int action();
 
@@ -79,8 +87,10 @@ class Goblin: public Creature
 {
 public:
 	Goblin();
-	Goblin(Point p, std::string n, int s, TCODColor t, int h);
+	Goblin(std::string name, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC);
+	~Goblin();
 	Creature* clone();
+	
 	int action();
 	unsigned int save(Savegame& sg);
 };
