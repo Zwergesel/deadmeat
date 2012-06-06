@@ -3,13 +3,12 @@
 = TODO-List =
 
 == Bug fixes / Issues ==
-  
+  * Make sure defense and attack calculation in creature work correctly (especially armorSkill, fightingskill)  
 
 == Small improvements ==
+  * Dropping multiple items with 'D'
   * Implement mana
-  * Wearing multiple types of armor (hats, shoes, cloaks, hats, gloves, hats, TF2 anyone?)
-  * 'T' for taking armor off
-  * Implement creature walk speed and armor hindrance
+  * Implement creature (default and calculated) walk speed and armor hindrance (can be speed bonus? boots of speed?)
 
 == Major improvements ==
   * Fully implement attributes
