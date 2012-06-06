@@ -20,18 +20,20 @@ class Armor : public Item
 {
 
 private:
-	int ac;
+	int defense;
+	int enchantment;
 	int hindrance;
 	ArmorSlot slot;
 	SKILLS skill;
 
 public:
 	Armor();
-	Armor(std::string name, symbol sym, TCODColor color, int ac, int hindrance, ArmorSlot as, SKILLS skill);
+	Armor(std::string name, symbol sym, TCODColor color, int defense, int enchantment, int hindrance, ArmorSlot as, SKILLS skill);
 	~Armor();
 	Item* clone();
 
-	int getAC();
+	int getDefense();
+	int getEnchantment();
 	int getHindrance();
 	ArmorSlot getSlot();
 	SKILLS getSkill();

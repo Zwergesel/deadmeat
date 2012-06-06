@@ -17,13 +17,14 @@ class LoadBlock;
 class Creature
 {
 protected:
-	static const double FACT_ATSKL = 1.0;
-	static const double FACT_DEFSKL = 1.0;
-	static const double FACT_AC = 1.0;
-	static const double FACT_HIT = 1.0;
-	static const double FACT_ENCH = 1.0;
-	static const double FACT_ATSPD = 1.0;
-	static const double FACT_WALKSPD = 1.0;
+	static const double FACT_ATSKL = 1.0;	// attack skill -> attack bonus
+	static const double FACT_DEFSKL = 1.0;	// defense skill -> defense bonus
+	static const double FACT_DEF = 1.0;		// defense bonus scaling
+	static const double FACT_HIT = 1.0;		// hitbonus scaling
+	static const double FACT_WENCH = 1.0;	// weapon enchantment -> attack bonus
+	static const double FACT_AENCH = 1.0;	// armor enchantment -> defense bonus
+	static const double FACT_ATSPD = 1.0;	// hindrance -> attack speed
+	static const double FACT_WALKSPD = 1.0; // hindrance -> walk speed
 
 	std::string name;
 	symbol sym;
