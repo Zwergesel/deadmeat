@@ -25,6 +25,7 @@ class Level
 private:
 	int width, height;
 	Tile* map;
+	bool* seen;
 	std::vector<TimelineAction> creatures;
 	std::vector<std::pair<Point, Item*> > items;
 	inline int coord(Point pos);
@@ -39,6 +40,7 @@ public:
 	Tile getTile(Point pos);
 	int getWidth();
 	int getHeight();
+	void setSeen(Point pos, bool isSeen);
 	// returns creature at given position, NULL otherwise
 	Creature* creatureAt(Point pos);
 	std::vector<TimelineAction> getCreatures();
