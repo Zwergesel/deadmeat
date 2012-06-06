@@ -58,9 +58,8 @@ unsigned int Armor::save(Savegame& sg)
 
 void Armor::load(LoadBlock& load)
 {
-	int s0, s1, s2;
-	load ("name", name) ("symbol", s0) ("color", color) ("ac", ac);
-	sym = static_cast<symbol>(s0);
+	int s1, s2;
+	load ("name", name) ("symbol", sym) ("color", color) ("ac", ac);
 	load ("hindrance", hindrance) ("slot", s1) ("skill", s2);
 	if (s1 < 0 || s1 >= NUM_ARMOR_SLOTS) throw SavegameFormatException("Armor::load _ slot out of range");
 	if (s2 < 0 || s2 >= NUM_SKILL) throw SavegameFormatException("Armor::load _ skill out of range");

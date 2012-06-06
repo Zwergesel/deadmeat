@@ -149,6 +149,12 @@ SaveBlock& SaveBlock::operator()(const std::string& name, const TCODColor& input
 	return *this;
 }
 
+SaveBlock& SaveBlock::operator()(const std::string& name, symbol input)
+{
+	data << name << ": " << static_cast<int>(input) << std::endl;
+	return *this;
+}
+
 SaveBlock& SaveBlock::ptr(const std::string& name, unsigned int voidPtrId)
 {
 	data << name << ": @" << voidPtrId << std::endl;
@@ -404,6 +410,14 @@ LoadBlock& LoadBlock::operator()(const std::string& name, TCODColor& output)
 	return *this;
 }
 
+LoadBlock& LoadBlock::operator()(const std::string& name, symbol& output)
+{
+	int result;
+	(*this) (name, result);
+	output = static_cast<symbol>(result);
+	return *this;
+}
+
 LoadBlock& LoadBlock::operator()(const std::string& name, Tile* map, int width, int height)
 {
 	std::string line;
@@ -412,7 +426,7 @@ LoadBlock& LoadBlock::operator()(const std::string& name, Tile* map, int width, 
 	for (int y=0; y<height; y++)
 	{
 		if (getline(data, line).eof()) throw SavegameFormatException("loadMap _ unexpected end-of-file");
-		if (static_cast<int>(line.length()) != width) throw SavegameFormatException("loadMap _ illegal width" + line.length());
+		if (static_cast<int>(line.length()) != width) throw SavegameFormatException("loadMap _ line length does not match map width");
 		for (int x=0; x<width; x++)
 		{
 			size_t t = Savegame::letters.find(line.at(x));
@@ -438,7 +452,7 @@ void* LoadBlock::ptr(const std::string& name)
 	if (id == 0) return NULL;
 	while (savegame->objects[id] == NULL)
 	{
-		if (savegame->loadStream.eof()) throw SavegameFormatException("loadPointer _ unexpected end-of-file: " + id);
+		if (savegame->loadStream.eof()) throw SavegameFormatException("loadPointer _ unexpected end-of-file");
 		savegame->loadObject();
 	}
 	//std::cerr << "loadPointer @ " << id << ": " << savegame->objects[id] << std::endl;

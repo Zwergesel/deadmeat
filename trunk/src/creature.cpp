@@ -347,7 +347,9 @@ unsigned int Creature::save(Savegame& sg)
 	store ("mainWeapon", (int) mainWeapon);
 	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
 	{
-		store ("armor"+slot, armor[slot]);
+		std::stringstream ss;
+		ss << "armor" << slot;
+		store (ss.str(), armor[slot]);
 	}
 	store.ptr("baseWeapon", baseWeapon.save(sg));
 	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("armorSkill", armorSkill);
@@ -362,17 +364,15 @@ unsigned int Creature::save(Savegame& sg)
 
 void Creature::load(LoadBlock& load)
 {
-	int intsym;
-	load ("name", name) ("symbol", intsym) ("position", position);
-	sym = static_cast<symbol>(intsym);
+	load ("name", name) ("symbol", sym) ("position", position);
 	load ("color", color) ("health", health) ("maxHealth", maxHealth);
 	load ("controlled", controlled);
-	load ("mainWeapon", intsym);
-	mainWeapon = (symbol) intsym;
+	load ("mainWeapon", mainWeapon);
 	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
 	{
-		load ("armor"+slot, intsym);
-		armor[slot] = (symbol) intsym;
+		std::stringstream ss;
+		ss << "armor" << slot;
+		load (ss.str(), armor[slot]);
 	}
 	baseWeapon = *static_cast<Weapon*>(load.ptr("baseWeapon"));
 	load ("baseAC", baseAC) ("attackSkill", attackSkill) ("armorSkill", armorSkill);
@@ -380,7 +380,8 @@ void Creature::load(LoadBlock& load)
 	load ("#inventory", n);
 	while (n-->0)
 	{
-		load ("_symbol", intsym);
-		inventory[static_cast<symbol>(intsym)] = static_cast<Item*>(load.ptr("_item"));
+		symbol s;
+		load ("_symbol", s);
+		inventory[s] = static_cast<Item*>(load.ptr("_item"));
 	}
 }

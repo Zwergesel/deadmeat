@@ -99,12 +99,11 @@ unsigned int Weapon::save(Savegame& sg)
 
 void Weapon::load(LoadBlock& load)
 {
-	int s0, s1;
-	load ("name", name) ("symbol", s0) ("color", color) ("speed", speed);
-	sym = static_cast<symbol>(s0);
+	int s;
+	load ("name", name) ("symbol", sym) ("color", color) ("speed", speed);
 	load ("hitBonus", hitBonus) ("baseDamage", baseDamage) ("numDice", numDice);
-	load ("diceMax", diceMax) ("enchantment", enchantment) ("skill", s1);
-	if (s1 < 0 || s1 >= NUM_SKILL) throw SavegameFormatException("Weapon::load _ skill out of range");
-	skill = static_cast<SKILLS>(s1);
+	load ("diceMax", diceMax) ("enchantment", enchantment) ("skill", s);
+	if (s < 0 || s >= NUM_SKILL) throw SavegameFormatException("Weapon::load _ skill out of range");
+	skill = static_cast<SKILLS>(s);
 	load ("hands", hands);
 }

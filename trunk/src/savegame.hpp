@@ -49,8 +49,9 @@ public:
 	SaveBlock& operator()(const std::string& name, bool input);
 	SaveBlock& operator()(const std::string& name, const Point& input);
 	SaveBlock& operator()(const std::string& name, const TCODColor& input);
-	SaveBlock& ptr(const std::string& name, unsigned int voidPtrId);
+	SaveBlock& operator()(const std::string& name, symbol input);
 	SaveBlock& operator()(const std::string& name, Tile* map, int width, int height);
+	SaveBlock& ptr(const std::string& name, unsigned int voidPtrId);
 	friend Savegame& operator<<(Savegame& sg, const SaveBlock& sb);
 };
 
@@ -70,6 +71,7 @@ public:
 	LoadBlock& operator()(const std::string& name, bool& output);
 	LoadBlock& operator()(const std::string& name, Point& output);
 	LoadBlock& operator()(const std::string& name, TCODColor& output);
+	LoadBlock& operator()(const std::string& name, symbol& output);
 	LoadBlock& operator()(const std::string& name, Tile* map, int width, int height);
 	void* ptr(const std::string& name);
 };

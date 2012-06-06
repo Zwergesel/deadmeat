@@ -82,7 +82,9 @@ unsigned int Goblin::save(Savegame& sg)
 	store ("mainWeapon", (int) mainWeapon);
 	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
 	{
-		store ("armor"+slot, armor[slot]);
+		std::stringstream ss;
+		ss << "armor" << slot;
+		store (ss.str(), armor[slot]);
 	}
 	store.ptr("baseWeapon", baseWeapon.save(sg));
 	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("armorSkill", armorSkill);
