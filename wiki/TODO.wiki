@@ -11,6 +11,7 @@
   * save&load "seen" in level
 
 == Small improvements ==
+  * Cursed variable in Items
 
 == Major improvements ==
   * Fully implement attributes
