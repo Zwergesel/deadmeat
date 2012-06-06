@@ -121,10 +121,11 @@ int Player::actionMove(int direction)
 		}
 		else if (world.tileSet->isPassable(level->getTile(newPos)))
 		{
+			float diagonal = ((newPos - ppos).x != 0 && (newPos - ppos).y != 0)?(std::sqrtf(2.f)):(1.f);
 			creature->moveTo(newPos);
 			world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - level->getWidth(), 0);
 			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
-			return creature->getWalkingSpeed() + creature->getHindrance();
+			return static_cast<int>(static_cast<float>(creature->getWalkingSpeed() +  creature->getHindrance()) * diagonal);
 		}
 		else
 		{
