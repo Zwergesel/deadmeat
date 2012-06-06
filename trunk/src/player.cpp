@@ -67,10 +67,12 @@ Player::Player(std::string name):
 	attributes[ATTR_DEX] = rng->getInt(5,20);
 	attributes[ATTR_CON] = rng->getInt(5,20);
 	attributes[ATTR_INT] = rng->getInt(5,20);
-	creature = new Creature(Point(40,22), name, (unsigned char)'@', TCODColor::black, 250);
+	creature = new Creature(name, (unsigned char)'@', TCODColor::black, 250, 75,
+		Weapon("bare hands", '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, SKILL_UNARMED, 2), 0
+	);
 	creature->setControlled(true);
 	creature->setAttackSkill(skills[SKILL_UNARMED].value);
-	creature->setBaseWeapon(Weapon("hands", (unsigned char)'¤', TCODColor::pink, 10, 10, 10, 0, 0, 0, SKILL_UNARMED, 2));
+	creature->setArmorSkill(skills[SKILL_UNARMORED].value);
 }
 
 Player::~Player()
@@ -304,6 +306,8 @@ int Player::actionTakeoff(Item* item)
 	Armor* armor = static_cast<Armor*>(item);
 	
 	creature->takeOffArmor(armor);
+	if (armor->getSlot() == ARMOR_BODY) creature->setArmorSkill(skills[SKILL_UNARMORED].value);
+	
 	std::stringstream msg;
 	msg << "You take off your " << armor->toString() << ".";
 	world.addMessage(msg.str());

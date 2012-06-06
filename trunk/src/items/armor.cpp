@@ -1,16 +1,26 @@
 #include "armor.hpp"
 #include "savegame.hpp"
 
-Armor::Armor() : Item("default", (unsigned char)'¤', TCODColor::pink), ac(0), hindrance(0), slot(ARMOR_BODY), skill(SKILL_UNARMORED)
+Armor::Armor()
+{
+	// empty constructor, for savegames
+	type = ITEM_ARMOR;
+	strType = "armor";
+}
+
+Armor::Armor(std::string n, symbol s, TCODColor c, int a, int h, ArmorSlot as, SKILLS k):
+	Item(n, s, c), ac(a), hindrance(h), slot(as), skill(k)
 {
 	type = ITEM_ARMOR;
 	strType = "armor";
 }
 
-Armor::Armor(std::string n, int sym, TCODColor c, int a, int h, ArmorSlot as, SKILLS s) : Item(n, sym, c), ac(a), hindrance(h), slot(as), skill(s)
+Armor::~Armor(){}
+
+Item* Armor::clone()
 {
-	type = ITEM_ARMOR;
-	strType = "armor";
+	Armor* copy = new Armor(name, sym, color, ac, hindrance, slot, skill);
+	return copy;
 }
 
 int Armor::getAC()
@@ -40,7 +50,7 @@ unsigned int Armor::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Armor", id);
-	store ("name", name) ("symbol", symbol) ("color", color) ("ac", ac);
+	store ("name", name) ("symbol", sym) ("color", color) ("ac", ac);
 	store ("hindrance", hindrance) ("slot", (int)slot) ("skill", (int)skill);
 	sg << store;
 	return id;
@@ -48,8 +58,9 @@ unsigned int Armor::save(Savegame& sg)
 
 void Armor::load(LoadBlock& load)
 {
-	int s1, s2;
-	load ("name", name) ("symbol", symbol) ("color", color) ("ac", ac);
+	int s0, s1, s2;
+	load ("name", name) ("symbol", s0) ("color", color) ("ac", ac);
+	sym = static_cast<symbol>(s0);
 	load ("hindrance", hindrance) ("slot", s1) ("skill", s2);
 	if (s1 < 0 || s1 >= NUM_ARMOR_SLOTS) throw SavegameFormatException("Armor::load _ slot out of range");
 	if (s2 < 0 || s2 >= NUM_SKILL) throw SavegameFormatException("Armor::load _ skill out of range");

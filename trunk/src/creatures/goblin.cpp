@@ -8,26 +8,40 @@
 
 Goblin::Goblin()
 {
+	// empty constructor, for savegames
 }
 
-Goblin::Goblin(Point p, std::string n, int s, TCODColor t, int h) : Creature(p, n, s, t, h)
+Goblin::Goblin(std::string n, symbol s, TCODColor c, int h, int m, Weapon w, int a):
+	Creature(n,s,c,h,m,w,a)
 {
-	baseWeapon = Weapon("hands", (unsigned char)'¤', TCODColor::pink, 15, 10, 10, 0, 0, 2, SKILL_UNARMED, 2);
-	attackSkill = 10;
+	// TODO: attackSkill and armorSkill, for creature too
+}
+
+Goblin::~Goblin()
+{
+	for (std::map<symbol, Item*>::iterator it=inventory.begin(); it!=inventory.end(); it++)
+	{
+		delete it->second;
+	}
 }
 
 Creature* Goblin::clone()
 {
-	Goblin* copy = new Goblin(position, name, sym, color, maxHealth);
+	Goblin* copy = new Goblin(name, sym, color, maxHealth, maxMana, baseWeapon, baseAC);
 	copy->health = health;
+	copy->mana = mana;
 	copy->controlled = controlled;
-	// TODO: clone inventory
 	copy->mainWeapon = mainWeapon;
-	std::copy(armor, armor+NUM_ARMOR_SLOTS, copy->armor);
 	copy->attackSkill = attackSkill;
 	copy->armorSkill = armorSkill;
-	copy->baseWeapon = baseWeapon;
-	copy->armorSkill = armorSkill;
+	copy->level = level;
+	copy->position = position;
+	std::copy(armor, armor+NUM_ARMOR_SLOTS, copy->armor);
+	// Clone inventory
+	for (std::map<symbol,Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
+	{
+		copy->inventory.insert(std::make_pair(it->first, it->second->clone()));
+	}
 	return copy;
 }
 
@@ -70,8 +84,8 @@ unsigned int Goblin::save(Savegame& sg)
 	{
 		store ("armor"+slot, armor[slot]);
 	}
-	store ("attackSkill", attackSkill) ("armorSkill", armorSkill);
-	store.ptr("baseWeapon", baseWeapon.save(sg)).ptr("baseArmor", baseArmor.save(sg));
+	store.ptr("baseWeapon", baseWeapon.save(sg));
+	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("armorSkill", armorSkill);
 	store ("#inventory", (int) inventory.size());
 	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
 	{

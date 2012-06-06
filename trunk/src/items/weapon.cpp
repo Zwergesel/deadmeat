@@ -4,19 +4,27 @@
 #include <iostream>
 #include "savegame.hpp"
 
-Weapon::Weapon() :Item("default", (unsigned char)'¤', TCODColor::pink), speed(0), hitBonus(0), baseDamage(0), numDice(0)
-	,diceMax(0), enchantment(0), skill(SKILL_UNARMED), hands(2)
+Weapon::Weapon()
+{
+	// Empty constructor, for savegames
+	type = ITEM_WEAPON;
+	strType = "weapon";
+}
+
+Weapon::Weapon(std::string n, symbol s, TCODColor c, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands)
+	:Item(n, s, c), speed(spd), hitBonus(hit), baseDamage(dmg), numDice(dice)
+	,diceMax(dmax), enchantment(ench), skill(skl), hands(hands)
 {
 	type = ITEM_WEAPON;
 	strType = "weapon";
 }
 
-Weapon::Weapon(std::string name, int symbol, TCODColor color, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands)
-	:Item(name, symbol, color), speed(spd), hitBonus(hit), baseDamage(dmg), numDice(dice)
-	,diceMax(dmax), enchantment(ench), skill(skl), hands(hands)
+Weapon::~Weapon(){}
+
+Item* Weapon::clone()
 {
-	type = ITEM_WEAPON;
-	strType = "weapon";
+	Weapon* copy = new Weapon(name, sym, color, speed, hitBonus, baseDamage, numDice, diceMax, enchantment, skill, hands);
+	return copy;
 }
 
 int Weapon::rollDamage()
@@ -81,7 +89,7 @@ unsigned int Weapon::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Weapon", id);
-	store ("name", name) ("symbol", symbol) ("color", color) ("speed", speed);
+	store ("name", name) ("symbol", sym) ("color", color) ("speed", speed);
 	store ("hitBonus", hitBonus) ("baseDamage", baseDamage) ("numDice", numDice);
 	store ("diceMax", diceMax) ("enchantment", enchantment) ("skill", (int)skill);
 	store ("hands", hands);
@@ -91,11 +99,12 @@ unsigned int Weapon::save(Savegame& sg)
 
 void Weapon::load(LoadBlock& load)
 {
-	int s;
-	load ("name", name) ("symbol", symbol) ("color", color) ("speed", speed);
+	int s0, s1;
+	load ("name", name) ("symbol", s0) ("color", color) ("speed", speed);
+	sym = static_cast<symbol>(s0);
 	load ("hitBonus", hitBonus) ("baseDamage", baseDamage) ("numDice", numDice);
-	load ("diceMax", diceMax) ("enchantment", enchantment) ("skill", s);
-	// TODO : check range 0 - SKILL_MAX(?)
-	skill = static_cast<SKILLS>(s);
+	load ("diceMax", diceMax) ("enchantment", enchantment) ("skill", s1);
+	if (s1 < 0 || s1 >= NUM_SKILL) throw SavegameFormatException("Weapon::load _ skill out of range");
+	skill = static_cast<SKILLS>(s1);
 	load ("hands", hands);
 }
