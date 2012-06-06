@@ -32,6 +32,7 @@ baseAC: 15
 attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 10
+lastTimeRegen: 0
 #inventory: 0
 
 [[Weapon: 5]]
@@ -65,6 +66,7 @@ baseAC: 75
 attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 30
+lastTimeRegen: 0
 #inventory: 0
 
 [[Weapon: 7]]
@@ -98,6 +100,7 @@ baseAC: 0
 attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 3
+lastTimeRegen: 0
 #inventory: 0
 
 [[MonsterFactory: 1]]

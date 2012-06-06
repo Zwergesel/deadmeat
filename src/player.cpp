@@ -319,6 +319,8 @@ int Player::actionTakeoff(Item* item)
 
 int Player::action()
 {
+	// hp regen
+	creature->regenerate(attributes[ATTR_CON]);
 	// finish putting armor on
 	if (state == STATE_DRESSING)
 	{
