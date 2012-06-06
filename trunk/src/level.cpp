@@ -83,6 +83,11 @@ int Level::getHeight()
 	return height;
 }
 
+bool Level::isSeen(Point pos)
+{
+	return seen[coord(pos)];
+}
+
 void Level::setSeen(Point pos, bool isSeen)
 {
 	seen[coord(pos)] = isSeen;
