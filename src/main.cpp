@@ -80,16 +80,16 @@ int main()
 	{
 		// Add/edit/remove creature templates here
 		Goblin goblin("goblin", 'g', TCODColor::green, 35, 0,
-			Weapon("claws", '#', TCODColor::pink, 11, 0, 4, 1, 3, 0, SKILL_UNARMED, 2), 15
-		);
+		              Weapon("claws", '#', TCODColor::pink, 11, 0, 4, 1, 3, 0, SKILL_UNARMED, 2), 15, 10
+		             );
 		monsterfactory.setTemplate("goblin", &goblin);
 		Goblin snake("snake", 's', TCODColor::darkChartreuse, 20, 0,
-			Weapon("teeth", '#', TCODColor::pink, 25, 0, 11, 2, 6, 0, SKILL_UNARMED, 0), 0
-		);
+		             Weapon("teeth", '#', TCODColor::pink, 25, 0, 11, 2, 6, 0, SKILL_UNARMED, 0), 0, 3
+		            );
 		monsterfactory.setTemplate("snake", &snake);
 		Goblin dragon("red dragon", 'D', TCODColor::red, 300, 100,
-			Weapon("fangs", '#', TCODColor::pink, 15, 50, 19, 3, 7, 0, SKILL_UNARMED, 2), 75
-		);
+		              Weapon("fangs", '#', TCODColor::pink, 15, 50, 19, 3, 7, 0, SKILL_UNARMED, 2), 75, 30
+		             );
 		monsterfactory.setTemplate("red dragon", &dragon);
 		Savegame save;
 		save.beginSave("monsters.txt");
@@ -118,8 +118,8 @@ int main()
 		Armor* uber = new Armor("uber armor", ')', TCODColor::black, 150, 10, ARMOR_BODY, SKILL_PLATE_ARMOR);
 		Armor* crap = new Armor("prussian pickelhaube", ')', TCODColor::black, 50, 0, ARMOR_HAT, SKILL_PLATE_ARMOR);
 		Armor* boots = new Armor("clown shoes", ')', TCODColor::black, 30, 12, ARMOR_BOOTS, SKILL_CLOTH_ARMOR);
-		std::string cr[6] = { "goblin","goblin","goblin","snake","snake","snake" };
-		for (int i=0; i<6; i++)
+		std::string cr[7] = { "goblin","goblin","goblin","snake","snake","snake","red dragon" };
+		for (int i=0; i<7; i++)
 		{
 			Creature* c = monsterfactory.spawnCreature(cr[i]);
 			c->moveTo(getRandomLocation(world.levels[0]));

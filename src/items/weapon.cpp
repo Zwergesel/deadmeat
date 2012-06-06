@@ -19,7 +19,7 @@ Weapon::Weapon(std::string n, symbol s, TCODColor c, int spd, int hit, int dmg, 
 	strType = "weapon";
 }
 
-Weapon::~Weapon(){}
+Weapon::~Weapon() {}
 
 Item* Weapon::clone()
 {

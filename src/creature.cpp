@@ -13,12 +13,12 @@ Creature::Creature()
 	// for savegames, initializes nothing
 }
 
-Creature::Creature(std::string n, symbol s, TCODColor c, int h, int m, Weapon w, int a):
+Creature::Creature(std::string n, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws):
 	name(n),		sym(s),				color(c),
 	health(h),		maxHealth(h),		mana(m),
 	maxMana(m),		controlled(false),	mainWeapon(0),
 	baseWeapon(w),	baseAC(a),			attackSkill(0),
-	armorSkill(0),	level(NULL),		position(Point(0,0))
+	armorSkill(0),	level(NULL),		position(Point(0,0)), walkingSpeed(ws)
 {
 	std::fill(armor, armor+NUM_ARMOR_SLOTS, 0);
 }
@@ -33,7 +33,7 @@ Creature::~Creature()
 
 Creature* Creature::clone()
 {
-	Creature* copy = new Creature(name, sym, color, maxHealth, maxMana, baseWeapon, baseAC);
+	Creature* copy = new Creature(name, sym, color, maxHealth, maxMana, baseWeapon, baseAC, walkingSpeed);
 	copy->health = health;
 	copy->mana = mana;
 	copy->controlled = controlled;
@@ -42,6 +42,7 @@ Creature* Creature::clone()
 	copy->armorSkill = armorSkill;
 	copy->level = level;
 	copy->position = position;
+	copy->walkingSpeed = walkingSpeed;
 	std::copy(armor, armor+NUM_ARMOR_SLOTS, copy->armor);
 	// Clone inventory
 	for (std::map<symbol,Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
@@ -219,6 +220,22 @@ int Creature::getDefense()
 	return defense;
 }
 
+int Creature::getHindrance()
+{
+	int hindrance = 0;
+	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
+	{
+		Armor* ar = getArmor(static_cast<ArmorSlot>(slot));
+		if (ar != NULL) hindrance += ar->getHindrance();
+	}
+	return hindrance;
+}
+
+int Creature::getWalkingSpeed()
+{
+	return walkingSpeed;
+}
+
 bool Creature::isControlled()
 {
 	return controlled;
@@ -353,6 +370,7 @@ unsigned int Creature::save(Savegame& sg)
 	}
 	store.ptr("baseWeapon", baseWeapon.save(sg));
 	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("armorSkill", armorSkill);
+	store ("walkingSpeed", walkingSpeed);
 	store ("#inventory", (int) inventory.size());
 	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
 	{
@@ -376,6 +394,7 @@ void Creature::load(LoadBlock& load)
 	}
 	baseWeapon = *static_cast<Weapon*>(load.ptr("baseWeapon"));
 	load ("baseAC", baseAC) ("attackSkill", attackSkill) ("armorSkill", armorSkill);
+	load ("walkingSpeed", walkingSpeed);
 	int n;
 	load ("#inventory", n);
 	while (n-->0)

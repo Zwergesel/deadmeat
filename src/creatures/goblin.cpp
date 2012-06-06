@@ -11,8 +11,8 @@ Goblin::Goblin()
 	// empty constructor, for savegames
 }
 
-Goblin::Goblin(std::string n, symbol s, TCODColor c, int h, int m, Weapon w, int a):
-	Creature(n,s,c,h,m,w,a)
+Goblin::Goblin(std::string n, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws):
+	Creature(n,s,c,h,m,w,a,ws)
 {
 	// TODO: attackSkill and armorSkill, for creature too
 }
@@ -27,7 +27,7 @@ Goblin::~Goblin()
 
 Creature* Goblin::clone()
 {
-	Goblin* copy = new Goblin(name, sym, color, maxHealth, maxMana, baseWeapon, baseAC);
+	Goblin* copy = new Goblin(name, sym, color, maxHealth, maxMana, baseWeapon, baseAC, walkingSpeed);
 	copy->health = health;
 	copy->mana = mana;
 	copy->controlled = controlled;
@@ -36,6 +36,7 @@ Creature* Goblin::clone()
 	copy->armorSkill = armorSkill;
 	copy->level = level;
 	copy->position = position;
+	copy->walkingSpeed = walkingSpeed;
 	std::copy(armor, armor+NUM_ARMOR_SLOTS, copy->armor);
 	// Clone inventory
 	for (std::map<symbol,Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
@@ -63,10 +64,10 @@ int Goblin::action()
 		else
 		{
 			position = target;
-			return 10;
+			return walkingSpeed + getHindrance();
 		}
 	}
-	return 10;
+	return walkingSpeed + getHindrance();
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/
@@ -88,6 +89,7 @@ unsigned int Goblin::save(Savegame& sg)
 	}
 	store.ptr("baseWeapon", baseWeapon.save(sg));
 	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("armorSkill", armorSkill);
+	store ("walkingSpeed", walkingSpeed);
 	store ("#inventory", (int) inventory.size());
 	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
 	{

@@ -68,8 +68,8 @@ Player::Player(std::string name):
 	attributes[ATTR_CON] = rng->getInt(5,20);
 	attributes[ATTR_INT] = rng->getInt(5,20);
 	creature = new Creature(name, (unsigned char)'@', TCODColor::black, 250, 75,
-		Weapon("bare hands", '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, SKILL_UNARMED, 2), 0
-	);
+	                        Weapon("bare hands", '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, SKILL_UNARMED, 2), 0, 10
+	                       );
 	creature->setControlled(true);
 	creature->setAttackSkill(skills[SKILL_UNARMED].value);
 	creature->setArmorSkill(skills[SKILL_UNARMORED].value);
@@ -124,7 +124,7 @@ int Player::actionMove(int direction)
 			creature->moveTo(newPos);
 			world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - level->getWidth(), 0);
 			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
-			return 12;
+			return creature->getWalkingSpeed() + creature->getHindrance();
 		}
 		else
 		{
@@ -278,7 +278,7 @@ int Player::actionWear(Item* itemObj)
 		if (state == STATE_WEAR)
 		{
 			state = STATE_DRESSING;
-      world.addMessage("You start changing...");
+			world.addMessage("You start changing...");
 			return 50;
 		}
 		else if (state == STATE_DRESSING)
@@ -301,17 +301,17 @@ int Player::actionTakeoff(Item* item)
 		// Selection was cancelled
 		return 0;
 	}
-	
+
 	assert(item->getType() == ITEM_ARMOR);
 	Armor* armor = static_cast<Armor*>(item);
-	
+
 	creature->takeOffArmor(armor);
 	if (armor->getSlot() == ARMOR_BODY) creature->setArmorSkill(skills[SKILL_UNARMORED].value);
-	
+
 	std::stringstream msg;
 	msg << "You take off your " << armor->toString() << ".";
 	world.addMessage(msg.str());
-	
+
 	return 50;
 }
 

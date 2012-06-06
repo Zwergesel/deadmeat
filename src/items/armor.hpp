@@ -10,10 +10,10 @@ class LoadBlock;
 
 enum ArmorSlot
 {
-	ARMOR_BODY,
-	ARMOR_BOOTS,
-	ARMOR_HAT,
-	NUM_ARMOR_SLOTS
+  ARMOR_BODY,
+  ARMOR_BOOTS,
+  ARMOR_HAT,
+  NUM_ARMOR_SLOTS
 };
 
 class Armor : public Item
@@ -30,7 +30,7 @@ public:
 	Armor(std::string name, symbol sym, TCODColor color, int ac, int hindrance, ArmorSlot as, SKILLS skill);
 	~Armor();
 	Item* clone();
-	
+
 	int getAC();
 	int getHindrance();
 	ArmorSlot getSlot();
