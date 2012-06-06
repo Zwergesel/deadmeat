@@ -1,6 +1,7 @@
 #include <sstream>
 #include <algorithm>
 #include <cassert>
+#include <iostream>
 #include "creature.hpp"
 #include "player.hpp"
 #include "level.hpp"
@@ -211,11 +212,11 @@ int Creature::getAttack()
 int Creature::getDefense()
 {
 	double defense = FACT_DEFSKL * defenseSkill;
-	if (armor[ARMOR_BODY] == 0) defense += FACT_AC * baseAC;
+	if (armor[ARMOR_BODY] == 0) defense += FACT_DEF * baseAC;
 	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
 	{
 		Armor* ar = getArmor(static_cast<ArmorSlot>(slot));
-		if (ar != NULL) defense += FACT_AC * ar->getAC();
+		if (ar != NULL) defense += FACT_DEF * ar->getDefense() + FACT_AENCH * ar->getEnchantment();
 		// TODO: body armor uses it's own skill
 	}
 	return static_cast<int>(defense);
@@ -255,7 +256,7 @@ void Creature::setLevel(Level* l)
 int Creature::attack(Creature* target)
 {
 	// base attack (hands, claws, etc.)
-	int attack = static_cast<int>(FACT_HIT * baseWeapon.getHitBonus() + FACT_ENCH * baseWeapon.getEnchantment() + FACT_ATSKL * attackSkill);
+	int attack = static_cast<int>(FACT_HIT * baseWeapon.getHitBonus() + FACT_WENCH * baseWeapon.getEnchantment() + FACT_ATSKL * attackSkill);
 	// base attack damage
 	int damage = baseWeapon.rollDamage();
 	// base attack speed
@@ -266,7 +267,7 @@ int Creature::attack(Creature* target)
 		assert(inventory[mainWeapon]->getType() == ITEM_WEAPON);
 		Weapon* w = static_cast<Weapon*>(inventory[mainWeapon]);
 		// weapon to hit + weapon enchantment + fighting skill + weapon skill
-		attack = static_cast<int>(FACT_HIT * w->getHitBonus() + FACT_ENCH * w->getEnchantment() + FACT_ATSKL * attackSkill);
+		attack = static_cast<int>(FACT_HIT * w->getHitBonus() + FACT_WENCH * w->getEnchantment() + FACT_ATSKL * attackSkill);
 		// damage = (weapon damage + weapon enchantment)
 		damage = w->rollDamage();
 		// weapon speed + armor hindrance

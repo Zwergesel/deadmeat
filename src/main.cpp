@@ -115,9 +115,9 @@ int main()
 		Item* item1 = new Item("item1", '1', TCODColor::blue);
 		Item* item2 = new Item("item2", '2', TCODColor::green);
 		Weapon* mace = new Weapon("cursed mace", '(', TCODColor::red, 15, -60, 4, 1, 1, -60, SKILL_MACEFLAIL, 1, EFFECT_NONE);
-		Armor* uber = new Armor("uber armor", ')', TCODColor::black, 150, 10, ARMOR_BODY, SKILL_PLATE_ARMOR);
-		Armor* crap = new Armor("prussian pickelhaube", ')', TCODColor::black, 50, 0, ARMOR_HAT, SKILL_PLATE_ARMOR);
-		Armor* boots = new Armor("clown shoes", ')', TCODColor::black, 30, 12, ARMOR_BOOTS, SKILL_CLOTH_ARMOR);
+		Armor* uber = new Armor("uber armor", ')', TCODColor::black, 150, 2, 10, ARMOR_BODY, SKILL_PLATE_ARMOR);
+		Armor* crap = new Armor("prussian pickelhaube", ')', TCODColor::black, 50, 1, 0, ARMOR_HAT, SKILL_PLATE_ARMOR);
+		Armor* boots = new Armor("clown shoes", ')', TCODColor::black, -30, -1, 12, ARMOR_BOOTS, SKILL_CLOTH_ARMOR);
 		std::string cr[7] = { "goblin","goblin","goblin","snake","snake","snake","red dragon" };
 		for (int i=0; i<7; i++)
 		{
