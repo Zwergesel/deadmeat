@@ -17,8 +17,9 @@ Creature::Creature(std::string n, symbol s, TCODColor c, int h, int m, Weapon w,
 	name(n),		sym(s),				color(c),
 	health(h),		maxHealth(h),		mana(m),
 	maxMana(m),		controlled(false),	mainWeapon(0),
-	baseWeapon(w),	baseAC(a),			attackSkill(0),
-	armorSkill(0),	level(NULL),		position(Point(0,0)), walkingSpeed(ws)
+	baseWeapon(w),	baseAC(a),			walkingSpeed(ws),
+	attackSkill(0),	armorSkill(0),		level(NULL),
+	position(Point(0,0))
 {
 	std::fill(armor, armor+NUM_ARMOR_SLOTS, 0);
 }
