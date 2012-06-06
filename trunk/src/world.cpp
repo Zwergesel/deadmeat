@@ -16,7 +16,7 @@ World::World()
 	player = new Player("PlayerName");
 	tileSet = new TileSet();
 	levels = new Level*[10];
-  fovMap = NULL;
+	fovMap = NULL;
 	currentLevel = 0;
 	levelOffset = Point(0,0);
 	requestQuit = false;
@@ -42,11 +42,11 @@ World::~World()
 		delete[] levels;
 		levels = NULL;
 	}
-  if (fovMap != NULL)
-  {
-    delete fovMap;
-    fovMap = NULL;
-  }
+	if (fovMap != NULL)
+	{
+		delete fovMap;
+		fovMap = NULL;
+	}
 }
 
 /* forceBreak is optional (default: false) */
@@ -107,8 +107,8 @@ void World::drawMessage()
 
 void World::drawLevel(Level* level, Point offset, Viewport view)
 {
-  // fov  
-  fovMap->computeFov(player->getCreature()->getPos().x,player->getCreature()->getPos().y,0,true,FOV_SHADOW);
+	// fov
+	fovMap->computeFov(player->getCreature()->getPos().x,player->getCreature()->getPos().y,0,true,FOV_SHADOW);
 
 	// draw level
 	int startX = (offset.x < 0) ? -offset.x : 0;
@@ -119,17 +119,17 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 	{
 		for (int x=startX; x<rangeX; x++)
 		{
-			TileInfo inf = tileSet->getInfo(level->getTile(Point(x, y)));      
-      if(fovMap->isInFov(x,y))
-      {
-			  TCODConsole::root->putCharEx(
-			    view.x + x + offset.x,
-			    view.y + y + offset.y,
-			    inf.sym,
-			    inf.color,
-			    inf.background
-			  );
-      }
+			TileInfo inf = tileSet->getInfo(level->getTile(Point(x, y)));
+			if (fovMap->isInFov(x,y))
+			{
+				TCODConsole::root->putCharEx(
+				  view.x + x + offset.x,
+				  view.y + y + offset.y,
+				  inf.sym,
+				  inf.color,
+				  inf.background
+				);
+			}
 		}
 	}
 	// draw items

@@ -9,6 +9,15 @@
 #include "items/weapon.hpp"
 #include "savegame.hpp"
 
+const double Creature::FACT_ATSKL = 1.0;	// attack skill -> attack bonus
+const double Creature::FACT_DEFSKL = 1.0;	// defense skill -> defense bonus
+const double Creature::FACT_DEF = 1.0;		// defense bonus scaling
+const double Creature::FACT_HIT = 1.0;		// hitbonus scaling
+const double Creature::FACT_WENCH = 1.0;	// weapon enchantment -> attack bonus
+const double Creature::FACT_AENCH = 1.0;	// armor enchantment -> defense bonus
+const double Creature::FACT_ATSPD = 1.0;	// hindrance -> attack speed
+const double Creature::FACT_WALKSPD = 1.0; // hindrance -> walk speed
+
 Creature::Creature()
 {
 	// for savegames, initializes nothing

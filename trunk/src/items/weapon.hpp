@@ -10,10 +10,10 @@ class LoadBlock;
 
 enum WeaponEffect
 {
-	EFFECT_NONE,
-	EFFECT_POISON,
-	EFFECT_FIRE,
-	NUM_EFFECT
+  EFFECT_NONE,
+  EFFECT_POISON,
+  EFFECT_FIRE,
+  NUM_EFFECT
 };
 
 class Weapon : public Item
