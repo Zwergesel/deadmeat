@@ -177,7 +177,7 @@ int Player::actionPickup()
 	{
 		state = STATE_PICKUP;
 		world.itemSelection = ItemSelection(items, "Pick up what?", true);
-		world.itemSelection.compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);
+		world.itemSelection.compile(world.viewItemList.height);
 		return 0;
 	}
 	return 0;
@@ -200,7 +200,7 @@ int Player::actionPickup(Item* item)
 int Player::actionDrop()
 {
 	world.itemSelection = ItemSelection(creature->getInventory(), "Drop what?", true);
-	world.itemSelection.compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);
+	world.itemSelection.compile(world.viewItemList.height);
 	if (world.itemSelection.getNumChoices() <= 0)
 	{
 		world.addMessage("You're not carrying any items.");
@@ -290,6 +290,25 @@ int Player::actionWear(Item* itemObj)
 	}
 	assert(false);
 	return 0;
+}
+
+int Player::actionTakeoff(Item* item)
+{
+	if (item == NULL)
+	{
+		// Selection was cancelled
+		return 0;
+	}
+	
+	assert(item->getType() == ITEM_ARMOR);
+	Armor* armor = static_cast<Armor*>(item);
+	
+	creature->takeOffArmor(armor);
+	std::stringstream msg;
+	msg << "You take off your " << armor->toString() << ".";
+	world.addMessage(msg.str());
+	
+	return 50;
 }
 
 int Player::action()
@@ -389,7 +408,7 @@ int Player::action()
 		{
 			state = STATE_INVENTORY;
 			world.itemSelection = ItemSelection(creature->getInventory(), "Inventory", false);
-			world.itemSelection.compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);
+			world.itemSelection.compile(world.viewItemList.height);
 			return 0;
 		}
 		// open wield weapon screen
@@ -399,7 +418,7 @@ int Player::action()
 			world.itemSelection.filterType(ITEM_WEAPON)->runFilter();
 			if (world.itemSelection.getNumChoices() > 0)
 			{
-				world.itemSelection.compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);
+				world.itemSelection.compile(world.viewItemList.height);
 				state = STATE_WIELD;
 			}
 			else
@@ -415,12 +434,57 @@ int Player::action()
 			world.itemSelection.filterType(ITEM_ARMOR)->runFilter();
 			if (world.itemSelection.getNumChoices() > 0)
 			{
-				world.itemSelection.compile(world.viewLevel.height - world.viewLevel.height / 4 - 6);
+				world.itemSelection.compile(world.viewItemList.height);
 				state = STATE_WEAR;
 			}
 			else
 			{
 				world.addMessage("You aren't carrying any armor.");
+			}
+			return 0;
+		}
+		// open take off armor screen
+		else if (state == STATE_DEFAULT && key.c == 'T')
+		{
+			std::map<symbol,Item*> list = creature->getArmor();
+			if (list.size() > 0)
+			{
+				world.itemSelection = ItemSelection(list, "What do you want to take off?", false);
+				world.itemSelection.compile(world.viewItemList.height);
+				state = STATE_TAKEOFF;
+			}
+			else
+			{
+				world.addMessage("You aren't wearing any armor.");
+			}
+			return 0;
+		}
+		// handle wield window
+		else if (state == STATE_WIELD)
+		{
+			if (world.itemSelection.keyInput(key))
+			{
+				state = STATE_DEFAULT;
+				return actionWield(world.itemSelection.getItem());
+			}
+			return 0;
+		}
+		// handle wear window
+		else if (state == STATE_WEAR)
+		{
+			if (world.itemSelection.keyInput(key))
+			{
+				return actionWear(world.itemSelection.getItem());
+			}
+			return 0;
+		}
+		// handle take off window
+		else if (state == STATE_TAKEOFF)
+		{
+			if (world.itemSelection.keyInput(key))
+			{
+				state = STATE_DEFAULT;
+				return actionTakeoff(world.itemSelection.getItem());
 			}
 			return 0;
 		}
@@ -483,25 +547,11 @@ int Player::action()
 					state = STATE_WEAR;
 					return actionWear(item);
 				}
-			}
-			return 0;
-		}
-		// handle wield window
-		else if (state == STATE_WIELD)
-		{
-			if (world.itemSelection.keyInput(key))
-			{
-				state = STATE_DEFAULT;
-				return actionWield(world.itemSelection.getItem());
-			}
-			return 0;
-		}
-		// handle wear window
-		else if (state == STATE_WEAR)
-		{
-			if (world.itemSelection.keyInput(key))
-			{
-				return actionWear(world.itemSelection.getItem());
+				else if (reply == 'T')
+				{
+					state = STATE_DEFAULT;
+					return actionTakeoff(item);
+				}
 			}
 			return 0;
 		}

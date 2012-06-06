@@ -15,15 +15,16 @@ Creature* MonsterFactory::spawnCreature(std::string monsterclass)
 
 void MonsterFactory::setTemplate(std::string monsterclass, Creature* c)
 {
+	Creature* nc = c->clone();
 	std::map<std::string, Creature*>::iterator it = templates.find(monsterclass);
 	if (it != templates.end())
 	{
 		delete it->second;
-		it->second = c;
+		it->second = nc;
 	}
 	else
 	{
-		templates.insert(it, std::make_pair(monsterclass, c));
+		templates.insert(it, std::make_pair(monsterclass, nc));
 	}
 }
 
