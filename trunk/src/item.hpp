@@ -11,9 +11,10 @@ class LoadBlock;
 
 enum ITEM_TYPE
 {
+  ITEM_DEFAULT,
   ITEM_WEAPON,
   ITEM_ARMOR,
-  ITEM_DEFAULT,
+  ITEM_FOOD,
   NUM_ITEM_TYPE
 };
 

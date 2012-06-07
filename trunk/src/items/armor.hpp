@@ -1,9 +1,8 @@
 #ifndef _ARMOR_HPP
 #define _ARMOR_HPP
 
-#include "../player.hpp"
 #include "../item.hpp"
-#include <sstream>
+#include "../skill.hpp"
 
 class Savegame;
 class LoadBlock;
