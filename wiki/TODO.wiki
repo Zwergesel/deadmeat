@@ -5,6 +5,7 @@
 == Test ==
   * Implement creature (default and calculated) walk speed and armor hindrance (can be speed bonus? boots of speed?)
   * Hit point regeneration
+  * Line of sight for monsters
 
 == Bug fixes / Issues ==
   * Make sure defense and attack calculation in creature work correctly (especially armorSkill, fightingskill)  
@@ -17,7 +18,6 @@
   * Fully implement attributes
   * Implement weapon and fighting skill training
   * Implement ranged attacking (targetting system to allow more than 8 directions?)
-  * Line of sight for monsters
   * Changing levels
   * Display unseen items where the player has last seen them even if a monster picked them up
   * Looking at things that are not at the player's location
