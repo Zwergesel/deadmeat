@@ -55,7 +55,8 @@ int corruptSave(const std::string& fileName)
 
 int main()
 {
-	TCODConsole::initRoot(80,51,"deadmeat",false);
+	TCODConsole::setCustomFont("Md_curses_16x16.png",TCOD_FONT_LAYOUT_ASCII_INROW);
+	TCODConsole::initRoot(80,50,"deadmeat",false);
 	TCODSystem::setFps(30);
 
 	// Init hardcoded world
