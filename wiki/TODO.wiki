@@ -7,8 +7,6 @@
   * Hit point regeneration
   * Line of sight for monsters
   * Make sure defense and attack calculation in creature work correctly (especially armorSkill, fightingskill)  
-
-== Bug fixes / Issues ==
   * message log should be saved
   * message log should make sure that it's height does not get too big
 
