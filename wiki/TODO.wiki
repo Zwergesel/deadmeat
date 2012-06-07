@@ -14,6 +14,9 @@
 == Small improvements ==
   * Variable "cursed" in Item
   * Creature::die should work without an instigator
+  * Food should rot
+  * Time to eat should depend on the food
+  * Make 'e' eating
 
 == Major improvements ==
   * Fully implement attributes
