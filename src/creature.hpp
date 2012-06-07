@@ -17,16 +17,17 @@ class LoadBlock;
 class Creature
 {
 protected:
-	static const double FACT_ATSKL;	// attack skill -> attack bonus
+	static const double FACT_ATSKL;		// attack skill -> attack bonus
 	static const double FACT_DEFSKL;	// defense skill -> defense bonus
 	static const double FACT_DEF;		// defense bonus scaling
 	static const double FACT_HIT;		// hitbonus scaling
-	static const double FACT_WENCH;	// weapon enchantment -> attack bonus
-	static const double FACT_AENCH;	// armor enchantment -> defense bonus
-	static const double FACT_ATSPD;	// hindrance -> attack speed
-	static const double FACT_WALKSPD; // hindrance -> walk speed
+	static const double FACT_WENCH;		// weapon enchantment -> attack bonus
+	static const double FACT_AENCH;		// armor enchantment -> defense bonus
+	static const double FACT_ATSPD;		// hindrance -> attack speed
+	static const double FACT_WALKSPD;	// hindrance -> walk speed
 
 	std::string name;
+	uint formatFlags; // combination of FormatFlag
 	symbol sym;
 	TCODColor color;
 	int health, maxHealth;
@@ -52,11 +53,12 @@ protected:
 public:
 
 	Creature(); // for savegames
-	Creature(std::string name, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed);
+	Creature(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed);
 	virtual ~Creature();
 	virtual Creature* clone();
 
 	std::string getName();
+	uint getFormatFlags();
 	Point getPos();
 	symbol getSymbol();
 	TCODColor getColor();
@@ -102,7 +104,7 @@ class Goblin: public Creature
 {
 public:
 	Goblin();
-	Goblin(std::string name, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed);
+	Goblin(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed);
 	~Goblin();
 	Creature* clone();
 

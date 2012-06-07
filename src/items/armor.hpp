@@ -28,7 +28,7 @@ private:
 
 public:
 	Armor();
-	Armor(std::string name, symbol sym, TCODColor color, int defense, int enchantment, int hindrance, ArmorSlot as, SKILLS skill);
+	Armor(std::string name, uint format, symbol sym, TCODColor color, int defense, int enchantment, int hindrance, ArmorSlot as, SKILLS skill);
 	~Armor();
 	Item* clone();
 

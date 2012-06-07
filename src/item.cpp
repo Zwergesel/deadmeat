@@ -8,8 +8,8 @@ Item::Item()
 	strType = "Item";
 }
 
-Item::Item(std::string n, symbol s, TCODColor c):
-	name(n), sym(s), color(c)
+Item::Item(std::string n, uint f, symbol s, TCODColor c):
+	name(n), formatFlags(f), sym(s), color(c)
 {
 	type = ITEM_DEFAULT;
 	strType = "Item";
@@ -19,7 +19,7 @@ Item::~Item() {}
 
 Item* Item::clone()
 {
-	Item* copy = new Item(name, sym, color);
+	Item* copy = new Item(name, formatFlags, sym, color);
 	copy->type = type;
 	copy->strType = strType;
 	return copy;
@@ -43,6 +43,11 @@ TCODColor Item::getColor()
 std::string Item::getName()
 {
 	return name;
+}
+
+uint Item::getFormatFlags()
+{
+	return formatFlags;
 }
 
 std::string Item::toString()
