@@ -1,5 +1,45 @@
 #summary list of skills
+proposal #1
+=Player skills=
+  * health
+  * stealth 
+  * appraise skill 
+  * traps
+  * endurance
+  * identification
+==Magic Skills==
+  * fire
+  * ice
+  * illusion
+  * .. each magic 'school' gets a skill
+==Armor Skills==
+  * unarmored
+  * leather
+  * scale
+  * ring
+  * cloth
+  * plate
+==Weapon Skills==
+===Melee Weapon Skills===
+  * unarmed
+  * axe
+  * sword
+  * mace & flail
+  * staff
+  * dagger
+  * whip
+  * pike
+===Rangend Weapon Skills===
+  * bow
+  * crossbow
+  * sling  
+==Crafting Skills==
+  * alchemy 
+  * cooking
 
+
+
+alt
 =Player skills=
   * melee combat 
   * ranged combat
