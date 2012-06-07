@@ -98,7 +98,7 @@ void World::popMessage()
 
 void World::drawMessage()
 {
-	// TODO: colors
+	// TODO: colors?
 	if (!messageQueue.empty())
 	{
 		TCODConsole::root->printRect(
@@ -109,14 +109,20 @@ void World::drawMessage()
 
 void World::drawMessageLog()
 {
-	std::stringstream log;
+	std::string log;
 	for (auto it = messageLog.begin(); it != messageLog.end(); )
 	{
-		log << (*it);
+		log += (*it);
+		int h = TCODConsole::root->getHeightRect(0, 0, viewItemList.width - 4, 100, log.c_str());
+		if (h > 40)
+		{
+			log = log.substr(0, log.length() - it->length() - 2);
+			break;
+		}
 		it++;
-		if (it != messageLog.end()) log << std::endl << std::endl;
+		if (it != messageLog.end()) log += "\n\n";
 	}
-	drawBlockingWindow("Message Log", log.str(), " ", TCODColor::black, false);
+	drawBlockingWindow("Message Log", log, " ", TCODColor::black, false);
 }
 
 void World::drawLevel(Level* level, Point offset, Viewport view)
@@ -315,19 +321,34 @@ unsigned int World::save(Savegame& sg)
 	store ("currentLevel", currentLevel) ("levelOffset", levelOffset) ("time", time);
 	// TODO : all levels
 	store.ptr("player", player->save(sg)) ("#levels", 1) .ptr("_level", levels[0]->save(sg));
+	store ("#messageLog", (int) messageLog.size());
+	for (auto it = messageLog.begin(); it != messageLog.end(); it++)
+	{
+		store ("_log", *it);
+	}
 	sg << store;
 	return id;
 }
 
 void World::load(LoadBlock& load)
 {
-	load ("currentLevel", currentLevel) ("levelOffset", levelOffset) ("time", time);
+	// Clean
+	messageLog.clear();
 	// TODO: delete player and levels [MEMORY LEAK]
+	// Load
+	load ("currentLevel", currentLevel) ("levelOffset", levelOffset) ("time", time);
 	player = static_cast<Player*>(load.ptr("player"));
 	int n;
 	load ("#levels", n);
 	for (int i=0; i<n; i++)
 	{
 		levels[i] = static_cast<Level*>(load.ptr("_level"));
+	}
+	load ("#messageLog", n);
+	while (n-->0)
+	{
+		std::string m;
+		load ("_log", m);
+		messageLog.push_back(m);
 	}
 }
