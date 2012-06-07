@@ -68,12 +68,14 @@ Player::Player(std::string name):
 	attributes[ATTR_DEX] = rng->getInt(5,20);
 	attributes[ATTR_CON] = rng->getInt(5,20);
 	attributes[ATTR_INT] = rng->getInt(5,20);
-	creature = new Creature(name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 250, 75,
-	                        Weapon("bare hands", F_NEUTER | F_PLURAL, '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, SKILL_UNARMED, 2, EFFECT_NONE), 0, 10
-	                       );
+	creature = new Creature(
+		name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 250, 75,
+		Weapon("bare hands", F_NEUTER | F_PLURAL, '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, SKILL_UNARMED, 2, EFFECT_NONE), 0, 10
+	);
 	creature->setControlled(true);
 	creature->setAttackSkill(skills[SKILL_UNARMED].value);
 	creature->setDefenseSkill(skills[SKILL_UNARMORED].value);
+	nutrition = 2000;
 }
 
 Player::~Player()
@@ -88,6 +90,23 @@ Creature* Player::getCreature()
 Point Player::getCursor()
 {
 	return cursor;
+}
+
+void Player::addNutrition(int delta)
+{
+	if (nutrition >= 800 && nutrition + delta < 800) world.addMessage("You are beginning to feel hungry.");
+	if (nutrition >= 300 && nutrition + delta < 300) world.addMessage("You are beginning to feel weak.");
+	nutrition += delta;
+	if (nutrition < 0)
+	{
+		world.addMessage("You are starving...");
+		creature->kill();
+	}
+}
+
+int Player::getNutrition()
+{
+	return nutrition;
 }
 
 TCOD_key_t Player::waitForKeypress(bool clBuf)
@@ -341,9 +360,19 @@ int Player::actionTakeoff(Item* item)
 
 int Player::action()
 {
-	// hp regen
+	// health regeneration
 	creature->regenerate(attributes[ATTR_CON]);
+	
+	int time = Player::processAction();
+	
+	// hunger
+	addNutrition(-time);
+	
+	return time;
+}
 
+int Player::processAction()
+{
 	// finish putting armor on
 	if (state == STATE_DRESSING)
 	{
@@ -672,7 +701,7 @@ unsigned int Player::save(Savegame& sg)
 	SaveBlock store("Player", id);
 	// TODO : skills
 	store ("name", name) .ptr("creature", creature->save(sg));
-	store ("state", (int) state);
+	store ("state", (int) state) ("nutrition", nutrition);
 	store ("strength", attributes[ATTR_STR]) ("dexterity", attributes[ATTR_DEX]);
 	store ("intelligence", attributes[ATTR_INT]) ("constitution", attributes[ATTR_CON]);
 	sg << store;
@@ -684,7 +713,7 @@ void Player::load(LoadBlock& load)
 	load ("name", name);
 	creature = static_cast<Creature*>(load.ptr("creature"));
 	int s;
-	load ("state", s);
+	load ("state", s) ("nutrition", nutrition);
 	if (s < 0 || s >= NUM_STATE) throw SavegameFormatException("Player::load _ illegal state");
 	state = static_cast<STATE>(s);
 	load ("strength", attributes[ATTR_STR]) ("dexterity", attributes[ATTR_DEX]);

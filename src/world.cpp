@@ -256,6 +256,19 @@ void World::drawInfo()
 	// Score
 	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 21, TCOD_BKGND_NONE, TCOD_LEFT, "SCORE");
 	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 22, TCOD_BKGND_NONE, TCOD_RIGHT, "14324");
+	// Status
+	TCODConsole::root->setColorControl(TCOD_COLCTRL_3, TCODColor::orange, TCODColor::black);
+	TCODConsole::root->setColorControl(TCOD_COLCTRL_4, TCODColor::red, TCODColor::black);
+	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 25, TCOD_BKGND_NONE, TCOD_LEFT, "STATUS");
+	int row = viewInfo.y + 27;
+	if (world.player->getNutrition() < 300)
+	{
+		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cWeak%c", TCOD_COLCTRL_4, TCOD_COLCTRL_STOP);
+	}
+	else if (world.player->getNutrition() < 800)
+	{
+		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cHungry%c", TCOD_COLCTRL_3, TCOD_COLCTRL_STOP);	
+	}
 }
 
 void World::toggleFullscreen()
