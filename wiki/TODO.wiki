@@ -24,6 +24,7 @@
   * Let monsters drop their items when they die
   * Load level data from save files (possible monsters, possible loot, ...)
   * Environment objects: Doors, traps, ...
+  * config file
 
 == Milestones for later / No priority ==
   * Magic system
