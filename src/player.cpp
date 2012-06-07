@@ -85,6 +85,11 @@ Creature* Player::getCreature()
 	return creature;
 }
 
+Point Player::getCursor()
+{
+	return cursor;
+}
+
 TCOD_key_t Player::waitForKeypress(bool clBuf)
 {
 	while (true)
@@ -141,24 +146,32 @@ int Player::actionLook(Point pos)
 {
 	Level* level = world.levels[world.currentLevel];
 	std::stringstream msg;
-	std::vector<Item*> items = level->itemsAt(pos);
-	if (items.size() == 1)
+	if (world.fovMap->isInFov(pos.x, pos.y))
 	{
-		msg << "You see " << util::format(FORMAT_INDEF, items[0]->getName(), items[0]->getFormatFlags()) << " here.";
-		world.addMessage(msg.str());
-	}
-	else if (items.size() >= 1)
-	{
-		msg << "You see several items here:";
-		world.addMessage(msg.str());
-		for (std::vector<Item*>::iterator it=items.begin(); it != items.end();)
+		// If square is visible, view items
+		std::vector<Item*> items = level->itemsAt(pos);
+		if (items.size() == 1)
 		{
-			std::stringstream strlist;
-			strlist << util::format(FORMAT_INDEF, (*it)->getName(), (*it)->getFormatFlags());
-			it++;
-			if (it != items.end()) strlist << ",";
-			world.addMessage(strlist.str());
+			msg << "You see " << util::format(FORMAT_INDEF, items[0]->getName(), items[0]->getFormatFlags()) << " here.";
+			world.addMessage(msg.str());
 		}
+		else if (items.size() >= 1)
+		{
+			msg << "You see several items here:";
+			world.addMessage(msg.str());
+			for (std::vector<Item*>::iterator it=items.begin(); it != items.end();)
+			{
+				std::stringstream strlist;
+				strlist << util::format(FORMAT_INDEF, (*it)->getName(), (*it)->getFormatFlags());
+				it++;
+				if (it != items.end()) strlist << ",";
+				world.addMessage(strlist.str());
+			}
+		} else {
+			world.addMessage("You don't see any items here.");
+		}
+	} else {
+		world.addMessage("You cannot see this spot.");
 	}
 	return 0;
 }
@@ -367,10 +380,39 @@ int Player::action()
 		{
 			return actionMove(key.vk - TCODK_1);
 		}
+		// wait/search
 		else if (state == STATE_DEFAULT && (key.vk == TCODK_5 || key.vk == TCODK_KP5))
 		{
-			// wait/search
 			return 10;
+		}
+		// number pad cursor movement
+		else if (state == STATE_INSPECT && key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
+		{
+			moveCursor(key.vk - TCODK_KP1);
+			return 0;
+		}
+		// number keys cursor movement
+		else if (state == STATE_INSPECT && key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.vk != TCODK_5)
+		{
+			moveCursor(key.vk - TCODK_1);
+			return 0;
+		}
+		// look at a different position
+		else if (state == STATE_DEFAULT && key.c == ';')
+		{
+			state = STATE_INSPECT;
+			cursor = creature->getPos();
+			return 0;
+		}
+		else if (state == STATE_INSPECT && key.c == '.')
+		{
+			state = STATE_DEFAULT;
+			return actionLook(cursor);
+		}
+		else if (state == STATE_INSPECT && key.vk == TCODK_ESCAPE)
+		{
+			state = STATE_DEFAULT;
+			return 0;
 		}
 		// look at current position
 		else if (state == STATE_DEFAULT && key.c == ':')
@@ -595,6 +637,19 @@ int Player::computeAttackBonus(Weapon* w)
 int Player::computeArmorBonus(Armor* a)
 {
 	return (skills[a->getSkill()].value + skills[SKILL_MELEE_COMBAT].value) / 2;
+}
+
+void Player::moveCursor(int dir)
+{
+	Point cnew = Point(cursor.x + dx[dir], cursor.y + dy[dir]);
+	Level* lev = world.levels[world.currentLevel];
+	if (cnew.x >= 0 && cnew.y >= 0 && cnew.x < lev->getWidth() && cnew.y < lev->getHeight()
+		&& cnew.x >= -world.levelOffset.x && cnew.y >= -world.levelOffset.y
+		&& cnew.x < world.viewLevel.width - world.levelOffset.x
+		&& cnew.y < world.viewLevel.height - world.levelOffset.y)
+	{
+		cursor = cnew;
+	}
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/

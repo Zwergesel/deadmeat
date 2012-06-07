@@ -26,6 +26,7 @@ enum STATE
   STATE_DROP,
   STATE_DRESSING,
   STATE_TAKEOFF,
+  STATE_INSPECT,
   NUM_STATE
 };
 
@@ -39,6 +40,7 @@ private:
 	static int dx[9];
 	static int dy[9];
 	STATE state;
+	Point cursor;
 	int actionMove(int direction);
 	int actionLook(Point p);
 	int actionPickup();
@@ -50,6 +52,7 @@ private:
 	int actionDrop(Item*);
 	int computeAttackBonus(Weapon* w);
 	int computeArmorBonus(Armor* a);
+	void moveCursor(int dir);
 
 public:
 	Player();
@@ -57,6 +60,7 @@ public:
 	~Player();
 	std::string getName();
 	Creature* getCreature();
+	Point getCursor();
 	int action();
 	TCOD_key_t waitForKeypress(bool clBuf);
 	STATE getState();
