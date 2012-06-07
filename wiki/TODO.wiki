@@ -17,8 +17,10 @@
   * Food should rot
   * Time to eat should depend on the food
   * Make 'e' eating
+  * character information scree (levelup?)
 
 == Major improvements ==
+  * stacking of items
   * Fully implement attributes
   * Implement weapon and fighting skill training
   * Implement ranged attacking (targetting system to allow more than 8 directions?)
