@@ -13,6 +13,7 @@
 
 == Small improvements ==
   * Variable "cursed" in Item
+  * Creature::die should work without an instigator
 
 == Major improvements ==
   * Fully implement attributes
