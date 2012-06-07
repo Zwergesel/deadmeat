@@ -3,6 +3,7 @@ SavedObjects: 7
 
 [[Weapon: 3]]
 name: claws
+formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 speed: 11
@@ -17,6 +18,7 @@ effect: 0
 
 [[Goblin: 2]]
 name: goblin
+formatFlags: 16384
 symbol: 103
 position: 0, 0
 color: 0, 255, 0
@@ -39,6 +41,7 @@ seenPlayer: false
 
 [[Weapon: 5]]
 name: fangs
+formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 speed: 15
@@ -53,6 +56,7 @@ effect: 0
 
 [[Goblin: 4]]
 name: Smaug
+formatFlags: 16385
 symbol: 68
 position: 0, 0
 color: 255, 0, 0
@@ -75,6 +79,7 @@ seenPlayer: false
 
 [[Weapon: 7]]
 name: teeth
+formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 speed: 25
@@ -89,6 +94,7 @@ effect: 0
 
 [[Goblin: 6]]
 name: snake
+formatFlags: 16384
 symbol: 115
 position: 0, 0
 color: 95, 191, 0
