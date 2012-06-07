@@ -55,9 +55,9 @@ unsigned int Armor::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Armor", id);
-	store ("name", name) ("symbol", sym) ("color", color) ("defense", defense);
-	store ("hindrance", hindrance) ("slot", (int)slot) ("skill", (int)skill);
-	store ("enchantment", enchantment);
+	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color);
+	store ("defense", defense) ("hindrance", hindrance) ("slot", (int)slot);
+	store ("skill", (int)skill) ("enchantment", enchantment);
 	sg << store;
 	return id;
 }
@@ -65,8 +65,8 @@ unsigned int Armor::save(Savegame& sg)
 void Armor::load(LoadBlock& load)
 {
 	int s1, s2;
-	load ("name", name) ("symbol", sym) ("color", color) ("defense", defense);
-	load ("hindrance", hindrance) ("slot", s1) ("skill", s2);
+	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color);
+	load ("defense", defense) ("hindrance", hindrance) ("slot", s1) ("skill", s2);
 	load ("enchantment", enchantment);
 	if (s1 < 0 || s1 >= NUM_ARMOR_SLOTS) throw SavegameFormatException("Armor::load _ slot out of range");
 	if (s2 < 0 || s2 >= NUM_SKILL) throw SavegameFormatException("Armor::load _ skill out of range");

@@ -203,7 +203,7 @@ void Creature::die(Creature* instigator)
 	{
 		std::stringstream msg;
 		instigator->isControlled() ?
-		(msg << "You kill") :
+		(msg << "You kill ") :
 		(msg << util::format(FORMAT_DEF, instigator->getName(), instigator->getFormatFlags(), true) << " kills");
 		msg << util::format(FORMAT_DEF, name, formatFlags) << ".";
 		world.addMessage(msg.str());
@@ -395,7 +395,7 @@ unsigned int Creature::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this, &id)) return id;
 	SaveBlock store("Creature", id);
-	store ("name", name) ("symbol", sym) ("position", position);
+	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("position", position);
 	store ("color", color) ("health", health) ("maxHealth", maxHealth);
 	store ("controlled", controlled);
 	store ("mainWeapon", (int) mainWeapon);
@@ -421,7 +421,7 @@ unsigned int Creature::save(Savegame& sg)
 
 void Creature::load(LoadBlock& load)
 {
-	load ("name", name) ("symbol", sym) ("position", position);
+	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("position", position);
 	load ("color", color) ("health", health) ("maxHealth", maxHealth);
 	load ("controlled", controlled);
 	load ("mainWeapon", mainWeapon);

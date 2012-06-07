@@ -116,7 +116,7 @@ unsigned int Goblin::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this, &id)) return id;
 	SaveBlock store("Goblin", id);
-	store ("name", name) ("symbol", sym) ("position", position);
+	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("position", position);
 	store ("color", color) ("health", health) ("maxHealth", maxHealth);
 	store ("controlled", controlled);
 	store ("mainWeapon", (int) mainWeapon);

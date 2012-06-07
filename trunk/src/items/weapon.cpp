@@ -89,7 +89,7 @@ unsigned int Weapon::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Weapon", id);
-	store ("name", name) ("symbol", sym) ("color", color) ("speed", speed);
+	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("speed", speed);
 	store ("hitBonus", hitBonus) ("baseDamage", baseDamage) ("numDice", numDice);
 	store ("diceMax", diceMax) ("enchantment", enchantment) ("skill", (int)skill);
 	store ("hands", hands) ("effect", effect);
@@ -100,7 +100,7 @@ unsigned int Weapon::save(Savegame& sg)
 void Weapon::load(LoadBlock& load)
 {
 	int s, e;
-	load ("name", name) ("symbol", sym) ("color", color) ("speed", speed);
+	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("speed", speed);
 	load ("hitBonus", hitBonus) ("baseDamage", baseDamage) ("numDice", numDice);
 	load ("diceMax", diceMax) ("enchantment", enchantment) ("skill", s) ("hands", hands) ("effect", e);
 	if (s < 0 || s >= NUM_SKILL) throw SavegameFormatException("Weapon::load _ skill out of range");
