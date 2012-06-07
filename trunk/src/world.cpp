@@ -212,6 +212,11 @@ void World::drawWorld()
 	{
 		drawItemSelection(world.itemSelection);
 	}
+	else if (state == STATE_INSPECT)
+	{
+		Point c = player->getCursor() + levelOffset;
+		TCODConsole::root->setCharBackground(viewLevel.x + c.x, viewLevel.y + c.y, TCODColor::yellow, TCOD_BKGND_ALPHA(0.7));
+	}
 	drawMessage();
 	drawInfo();
 }
