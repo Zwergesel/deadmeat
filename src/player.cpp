@@ -148,8 +148,17 @@ int Player::actionLook(Point pos)
 	std::stringstream msg;
 	if (world.fovMap->isInFov(pos.x, pos.y))
 	{
-		// If square is visible, view items
+		// If square is visible...
+		Creature* c = level->creatureAt(pos);
+		if (c != NULL)
+		{
+			// ...see the creature there...
+			msg << "You see " << util::format(FORMAT_INDEF, c->getName(), c->getFormatFlags()) << " here.";
+			world.addMessage(msg.str());
+			return 0;
+		}
 		std::vector<Item*> items = level->itemsAt(pos);
+		// ...or the items if there is no creature
 		if (items.size() == 1)
 		{
 			msg << "You see " << util::format(FORMAT_INDEF, items[0]->getName(), items[0]->getFormatFlags()) << " here.";
@@ -168,7 +177,7 @@ int Player::actionLook(Point pos)
 				world.addMessage(strlist.str());
 			}
 		} else {
-			world.addMessage("You don't see any items here.");
+			world.addMessage("You don't see anything interesting here.");
 		}
 	} else {
 		world.addMessage("You cannot see this spot.");
