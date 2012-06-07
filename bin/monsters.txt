@@ -52,7 +52,7 @@ hands: 2
 effect: 0
 
 [[Goblin: 4]]
-name: red dragon
+name: Smaug
 symbol: 68
 position: 0, 0
 color: 255, 0, 0

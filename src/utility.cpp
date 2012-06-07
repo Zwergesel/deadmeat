@@ -4,7 +4,7 @@
 int util::sign(int x)
 {
 	return (x > 0) - (x < 0);
-}	
+}
 
 std::string util::format(FormatRequest req, const std::string& name, uint flags, bool cap)
 {
@@ -19,17 +19,17 @@ std::string util::format(FormatRequest req, const std::string& name, uint flags,
 		else if (flags & F_AN)			result = "an " + name;
 		else							result = "a " + name;
 		break;
-		
+
 	case FORMAT_DEF:
 		if (flags & F_PROPER)			result = name;
 		else							result = "the " + name;
 		break;
-		
+
 	case FORMAT_YOUR:
 		if (flags & F_PROPER)			result = name;
 		else							result = "your " + name;
 		break;
-		
+
 	case FORMAT_HIS:
 		if (flags & F_MALE)				result = "his " + name;
 		else if (flags & F_FEMALE)		result = "her " + name;
