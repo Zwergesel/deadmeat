@@ -38,6 +38,7 @@ Creature* Goblin::clone()
 	copy->level = level;
 	copy->position = position;
 	copy->walkingSpeed = walkingSpeed;
+	copy->lastTimeRegen = lastTimeRegen;
 	std::copy(armor, armor+NUM_ARMOR_SLOTS, copy->armor);
 	// Clone inventory
 	for (std::map<symbol,Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
@@ -52,6 +53,33 @@ int Goblin::action()
 	regenerate(0);
 
 	Point ppos = world.player->getCreature()->getPos();
+	// can the goblin see the player?
+	bool seesPlayer = true;
+	Point p = position;
+	TCODLine::init(p.x, p.y, ppos.x, ppos.y);
+	do
+	{
+		if (!world.tileSet->isPassable(world.levels[world.currentLevel]->getTile(p)))
+		{
+			seesPlayer = false;
+			break;
+		}
+	}
+	while (!TCODLine::step(&p.x, &p.y));
+	if (seesPlayer)
+	{
+		seenPlayer = true;
+		lastPlayerPos = ppos;
+	}
+	else if (seenPlayer)
+	{
+		ppos = lastPlayerPos;
+	}
+	else
+	{
+		return 10;
+	}
+
 	TCODPath path = TCODPath(level->getWidth(), level->getHeight(), new PathFindingCallback(), level);
 	path.compute(position.x, position.y, ppos.x, ppos.y);
 
@@ -95,6 +123,7 @@ unsigned int Goblin::save(Savegame& sg)
 	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	store ("walkingSpeed", walkingSpeed);
 	store ("lastTimeRegen", lastTimeRegen);
+	store ("lastPlayerPos", lastPlayerPos) ("seenPlayer", seenPlayer);
 	store ("#inventory", (int) inventory.size());
 	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
 	{
