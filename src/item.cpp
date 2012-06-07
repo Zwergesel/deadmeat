@@ -67,12 +67,12 @@ unsigned int Item::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Item", id);
-	store ("name", name) ("symbol", sym) ("color", color);
+	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color);
 	sg << store;
 	return id;
 }
 
 void Item::load(LoadBlock& load)
 {
-	load ("name", name) ("symbol", sym) ("color", color);
+	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color);
 }
