@@ -54,7 +54,6 @@ namespace util
 	std::string format(FormatRequest req, const std::string& name, uint flags, bool capitalize = false);
 	std::string& capitalize(std::string& str);
 
-	std::string indefArticle(std::string str);
 	std::string plural(std::string str);
 
 	const static unsigned char letters[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
