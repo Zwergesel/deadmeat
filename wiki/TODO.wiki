@@ -9,7 +9,6 @@
 
 == Bug fixes / Issues ==
   * Make sure defense and attack calculation in creature work correctly (especially armorSkill, fightingskill)  
-  * save&load "seen" in level
 
 == Small improvements ==
   * Cursed variable in Items
