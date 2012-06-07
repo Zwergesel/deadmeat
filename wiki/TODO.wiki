@@ -9,6 +9,7 @@
   * Make sure defense and attack calculation in creature work correctly (especially armorSkill, fightingskill)  
   * message log should be saved
   * message log should make sure that it's height does not get too big
+  * Looking at things that are not at the player's location
 
 == Small improvements ==
   * Variable "cursed" in Item
@@ -19,7 +20,6 @@
   * Implement ranged attacking (targetting system to allow more than 8 directions?)
   * Changing levels
   * Display unseen items where the player has last seen them even if a monster picked them up
-  * Looking at things that are not at the player's location
   * Generate monsters with items
   * Let monsters drop their items when they die
   * Load level data from save files (possible monsters, possible loot, ...)
