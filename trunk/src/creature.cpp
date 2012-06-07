@@ -190,6 +190,11 @@ bool Creature::hurt(int damage, Creature* instigator)
 	return false;
 }
 
+void Creature::kill()
+{
+	die(NULL);
+}
+
 void Creature::die(Creature* instigator)
 {
 	if (controlled)

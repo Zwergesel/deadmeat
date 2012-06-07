@@ -41,6 +41,7 @@ private:
 	static int dy[9];
 	STATE state;
 	Point cursor;
+	int nutrition;
 	int actionMove(int direction);
 	int actionLook(Point p);
 	int actionPickup();
@@ -61,7 +62,10 @@ public:
 	std::string getName();
 	Creature* getCreature();
 	Point getCursor();
+	void addNutrition(int delta);
+	int getNutrition();
 	int action();
+	int processAction();
 	TCOD_key_t waitForKeypress(bool clBuf);
 	STATE getState();
 	int getAttribute(ATTRIBUTE attr);

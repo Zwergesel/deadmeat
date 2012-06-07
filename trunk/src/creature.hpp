@@ -93,6 +93,7 @@ public:
 	void moveTo(Point pos);
 
 	bool hurt(int damage, Creature* instigator); // TODO : ,DamageType dt
+	void kill();
 
 	virtual int action();
 
