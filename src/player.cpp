@@ -9,6 +9,7 @@
 #include "world.hpp"
 #include "item.hpp"
 #include "items/weapon.hpp"
+#include "items/food.hpp"
 #include "savegame.hpp"
 
 int Player::dx[] = {-1,0,1,-1,0,1,-1,0,1};
@@ -614,7 +615,7 @@ int Player::processAction()
 				request.append(item->getName());
 				request.append(":");
 				request.append("\n\nd - drop");
-				if (true /* combestibles */)
+				if (item->getType() == ITEM_FOOD)
 				{
 					options.append("e");
 					request.append("\n\ne - eat");
@@ -661,6 +662,18 @@ int Player::processAction()
 				{
 					state = STATE_DEFAULT;
 					return actionTakeoff(item);
+				}
+				else if (reply == 'e')
+				{
+					assert(item->getType() == ITEM_FOOD);
+					Food* f = static_cast<Food*>(item);
+					addNutrition(f->getNutrition());
+					std::stringstream msg;
+					msg << "You eat " << util::format(FORMAT_INDEF, f->getName(), f->getFormatFlags()) << ".";
+					world.addMessage(msg.str());
+					creature->removeItem(item, true);
+					state = STATE_DEFAULT;
+					return 10; // TODO: how long?
 				}
 			}
 			return 0;
