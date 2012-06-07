@@ -26,6 +26,7 @@ class World
 {
 private:
 	std::deque<std::string> messageQueue;
+	std::deque<std::string> messageLog;
 	World(const World& copy);
 
 public:
@@ -49,8 +50,8 @@ public:
 	int getNumMessages();
 	void popMessage();
 	void drawMessage();
-	unsigned char drawBlockingWindow(std::string title, std::string text, TCODColor color, std::string acceptedKeys);
-	void drawBlockingWindow(std::string title, std::string text, TCODColor color);
+	void drawMessageLog();
+	unsigned char drawBlockingWindow(const std::string& title, const std::string& text, const std::string& acceptedKeys, TCODColor color = TCODColor::black, bool center = true);
 
 	void toggleFullscreen();
 
