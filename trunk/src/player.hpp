@@ -41,7 +41,9 @@ private:
 	static int dy[9];
 	STATE state;
 	Point cursor;
+  int level;
 	int nutrition;
+  int experience;
 	int actionMove(int direction);
 	int actionLook(Point p);
 	int actionPickup();
@@ -69,6 +71,12 @@ public:
 	TCOD_key_t waitForKeypress(bool clBuf);
 	STATE getState();
 	int getAttribute(ATTRIBUTE attr);
+  void useSkill(SKILLS skill);
+  void incExperience(int exp);
+  int getLevel();
+  int getExperience();
+  int getNeededExp();
+  void levelUp();
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);

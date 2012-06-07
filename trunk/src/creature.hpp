@@ -46,6 +46,7 @@ protected:
 	int lastTimeRegen;
 	Point lastPlayerPos;
 	bool seenPlayer;
+  int expValue;
 
 	void die(Creature* instigator);
 	Creature(const Creature& copy);
@@ -53,7 +54,7 @@ protected:
 public:
 
 	Creature(); // for savegames
-	Creature(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed);
+	Creature(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed, int expValue);
 	virtual ~Creature();
 	virtual Creature* clone();
 
@@ -105,7 +106,7 @@ class Goblin: public Creature
 {
 public:
 	Goblin();
-	Goblin(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed);
+	Goblin(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed, int expValue);
 	~Goblin();
 	Creature* clone();
 
