@@ -203,8 +203,8 @@ void Creature::die(Creature* instigator)
 	{
 		std::stringstream msg;
 		instigator->isControlled() ?
-			(msg << "You kill") :
-			(msg << util::format(FORMAT_DEF, instigator->getName(), instigator->getFormatFlags(), true) << " kills");
+		(msg << "You kill") :
+		(msg << util::format(FORMAT_DEF, instigator->getName(), instigator->getFormatFlags(), true) << " kills");
 		msg << util::format(FORMAT_DEF, name, formatFlags) << ".";
 		world.addMessage(msg.str());
 		level->removeCreature(this, true);
@@ -317,9 +317,9 @@ int Creature::attack(Creature* target)
 		if (hit > 175) damage *= 2;
 		std::stringstream msg;
 		controlled ? (msg << "You hit ") :
-			(msg << util::format(FORMAT_DEF, name, formatFlags, true) << " hits ");
+		(msg << util::format(FORMAT_DEF, name, formatFlags, true) << " hits ");
 		target->isControlled() ? (msg << "you for ") :
-			(msg << util::format(FORMAT_DEF, target->getName(), target->getFormatFlags()) << " for ");
+		(msg << util::format(FORMAT_DEF, target->getName(), target->getFormatFlags()) << " for ");
 		msg << damage << " damage.";
 		world.addMessage(msg.str());
 		target->hurt(damage, this);
@@ -328,9 +328,9 @@ int Creature::attack(Creature* target)
 	{
 		std::stringstream msg;
 		controlled ? (msg << "You miss ") :
-			(msg << util::format(FORMAT_DEF, name, formatFlags, true) << " misses ");
+		(msg << util::format(FORMAT_DEF, name, formatFlags, true) << " misses ");
 		target->isControlled() ? (msg << "you.") :
-			(msg << util::format(FORMAT_DEF, target->getName(), target->getFormatFlags()) << ".");
+		(msg << util::format(FORMAT_DEF, target->getName(), target->getFormatFlags()) << ".");
 		world.addMessage(msg.str());
 	}
 

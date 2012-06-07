@@ -59,13 +59,15 @@ int Goblin::action()
 	TCODLine::init(p.x, p.y, ppos.x, ppos.y);
 	do
 	{
-		if (!world.tileSet->isPassable(world.levels[world.currentLevel]->getTile(p)))
+		if (!world.tileSet->isPassable(level->getTile(p)))
 		{
 			seesPlayer = false;
 			break;
 		}
 	}
 	while (!TCODLine::step(&p.x, &p.y));
+	// if player sees me, i see him too
+	seesPlayer |= world.fovMap->isInFov(position.x, position.y);
 	if (seesPlayer)
 	{
 		seenPlayer = true;
@@ -73,6 +75,11 @@ int Goblin::action()
 	}
 	else if (seenPlayer)
 	{
+		if (lastPlayerPos == position)
+		{
+			seenPlayer = false;
+			return 10;
+		}
 		ppos = lastPlayerPos;
 	}
 	else

@@ -172,7 +172,7 @@ void World::drawItem(Item* i, Point pos, Point offset, Viewport view)
 void World::drawCreature(Creature* c, Point offset, Viewport view)
 {
 	Point pos = c->getPos();
-//	if (!fovMap->isInFov(pos.x, pos.y)) return;
+	if (!fovMap->isInFov(pos.x, pos.y)) return;
 	pos += offset;
 	if (pos.x >= 0 && pos.x < view.width && pos.y >= 0 && pos.y < view.height)
 	{
@@ -184,7 +184,7 @@ void World::drawCreature(Creature* c, Point offset, Viewport view)
 void World::drawWorld()
 {
 	// fov
-	fovMap->computeFov(player->getCreature()->getPos().x,player->getCreature()->getPos().y,0,true,FOV_BASIC);
+	fovMap->computeFov(player->getCreature()->getPos().x, player->getCreature()->getPos().y, 0, true, FOV_BASIC);
 	TCODConsole::root->clear();
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);
 	STATE state = player->getState();
