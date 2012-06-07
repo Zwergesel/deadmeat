@@ -112,8 +112,8 @@ int main()
 		world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - world.levels[0]->getHeight(), 0);
 		Weapon* sword = new Weapon("sword", F_NEUTER, '(', TCODColor::red, 10, 30, 1, 10, 20, 30, SKILL_SWORD, 1, EFFECT_NONE);
 		Weapon* dagger = new Weapon("dagger", F_NEUTER, '(', TCODColor::red, 4, 10, 8, 1, 4, 12, SKILL_DAGGER, 1, EFFECT_NONE);
-		Item* item1 = new Item("item1", F_NEUTER, '1', TCODColor::blue);
-		Item* item2 = new Item("item2", F_NEUTER, '2', TCODColor::green);
+		Item* item1 = new Item("item1", F_NEUTER | F_AN, '1', TCODColor::blue);
+		Item* item2 = new Item("item2", F_NEUTER | F_AN, '2', TCODColor::green);
 		Weapon* mace = new Weapon("cursed mace", F_NEUTER, '(', TCODColor::red, 15, -60, 4, 1, 1, -60, SKILL_MACEFLAIL, 1, EFFECT_NONE);
 		Armor* uber = new Armor("uber armor", F_NEUTER | F_AN, ')', TCODColor::black, 150, 2, 10, ARMOR_BODY, SKILL_PLATE_ARMOR);
 		Armor* crap = new Armor("prussian pickelhaube", F_NEUTER, ')', TCODColor::black, 50, 1, 0, ARMOR_HAT, SKILL_PLATE_ARMOR);
