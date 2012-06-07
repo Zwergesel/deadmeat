@@ -12,8 +12,8 @@ Goblin::Goblin()
 	// empty constructor, for savegames
 }
 
-Goblin::Goblin(std::string n, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws):
-	Creature(n,s,c,h,m,w,a,ws)
+Goblin::Goblin(std::string n, uint f, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws):
+	Creature(n,f,s,c,h,m,w,a,ws)
 {
 	// TODO: attackSkill and defenseSkill, for creature too
 }
@@ -28,7 +28,7 @@ Goblin::~Goblin()
 
 Creature* Goblin::clone()
 {
-	Goblin* copy = new Goblin(name, sym, color, maxHealth, maxMana, baseWeapon, baseAC, walkingSpeed);
+	Goblin* copy = new Goblin(name, formatFlags, sym, color, maxHealth, maxMana, baseWeapon, baseAC, walkingSpeed);
 	copy->health = health;
 	copy->mana = mana;
 	copy->controlled = controlled;

@@ -20,15 +20,39 @@ struct Point
 	const Point operator-(const Point& p) const;
 };
 
+enum FormatFlags
+{
+	F_DEFAULT = 0,
+	F_PROPER = 1,
+	F_DEFINITE = 2,
+	F_PLURAL = 4,
+	F_BOOTS = 8,
+	F_AN = 16,
+	
+	F_MALE = 16384,
+	F_FEMALE = 32768,
+	F_NEUTER = 65536,
+};
+
+enum FormatRequest
+{
+	FORMAT_INDEF,
+	FORMAT_DEF,
+	FORMAT_YOUR,
+	FORMAT_HIS
+};
+
 namespace util
 {
-
 	int sign(int x);
 
 	template <class T> T clamp(T val, T min, T max)
 	{
 		return std::max(min, std::min(val, max));
 	}
+
+	std::string format(FormatRequest req, const std::string& name, uint flags, bool capitalize = false);
+	std::string& capitalize(std::string& str);
 
 	std::string indefArticle(std::string str);
 	std::string plural(std::string str);

@@ -68,8 +68,8 @@ Player::Player(std::string name):
 	attributes[ATTR_DEX] = rng->getInt(5,20);
 	attributes[ATTR_CON] = rng->getInt(5,20);
 	attributes[ATTR_INT] = rng->getInt(5,20);
-	creature = new Creature(name, (unsigned char)'@', TCODColor::black, 250, 75,
-	                        Weapon("bare hands", '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, SKILL_UNARMED, 2, EFFECT_NONE), 0, 10
+	creature = new Creature(name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 250, 75,
+	                        Weapon("bare hands", F_NEUTER | F_PLURAL, '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, SKILL_UNARMED, 2, EFFECT_NONE), 0, 10
 	                       );
 	creature->setControlled(true);
 	creature->setAttackSkill(skills[SKILL_UNARMED].value);
@@ -144,7 +144,7 @@ int Player::actionLook(Point pos)
 	std::vector<Item*> items = level->itemsAt(pos);
 	if (items.size() == 1)
 	{
-		msg << "You see " << util::indefArticle(items[0]->getName()) << " " << items[0]->getName() << " here.";
+		msg << "You see " << util::format(FORMAT_INDEF, items[0]->getName(), items[0]->getFormatFlags()) << " here.";
 		world.addMessage(msg.str());
 	}
 	else if (items.size() >= 1)
@@ -154,7 +154,7 @@ int Player::actionLook(Point pos)
 		for (std::vector<Item*>::iterator it=items.begin(); it != items.end();)
 		{
 			std::stringstream strlist;
-			strlist << util::indefArticle((*it)->getName()) << " " << (*it)->getName();
+			strlist << util::format(FORMAT_INDEF, (*it)->getName(), (*it)->getFormatFlags());
 			it++;
 			if (it != items.end()) strlist << ",";
 			world.addMessage(strlist.str());
@@ -193,7 +193,7 @@ int Player::actionPickup(Item* item)
 	if (creature->addItem(item))
 	{
 		std::stringstream msg;
-		msg << "You pick up " << util::indefArticle(item->getName()) << " " << item->getName() << ".";
+		msg << "You pick up " << util::format(FORMAT_INDEF, item->getName(), item->getFormatFlags()) << ".";
 		world.addMessage(msg.str());
 		level->removeItem(item, false);
 		return 10;
@@ -229,7 +229,7 @@ int Player::actionDrop(Item* item)
 		creature->wieldMainWeapon(NULL, skills[SKILL_UNARMED].value);
 	}
 	creature->removeItem(item, false);
-	msg << "You drop " << util::indefArticle(item->getName()) << " " << item->getName() << ".";
+	msg << "You drop " << util::format(FORMAT_INDEF, item->getName(), item->getFormatFlags()) << ".";
 	world.addMessage(msg.str());
 	level->addItem(item, creature->getPos());
 	return 10;
@@ -244,14 +244,14 @@ int Player::actionWield(Item* itemObj)
 	Weapon* weapon = static_cast<Weapon*>(itemObj);
 	if (creature->getMainWeapon() == weapon)
 	{
-		msg << "You are already wielding " << util::indefArticle(weapon->toString()) << " " << weapon->toString() << ".";
+		msg << "You are already wielding " << util::format(FORMAT_INDEF, weapon->toString(), weapon->getFormatFlags()) << ".";
 		world.addMessage(msg.str());
 		return 0;
 	}
 	else
 	{
 		creature->wieldMainWeapon(weapon, computeAttackBonus(weapon));
-		msg << "You are now wiedling " << util::indefArticle(weapon->toString()) << " " << weapon->toString() << ".";
+		msg << "You are now wiedling " << util::format(FORMAT_INDEF, weapon->toString(), weapon->getFormatFlags()) << ".";
 		world.addMessage(msg.str());
 		return 30;
 	}
@@ -271,7 +271,7 @@ int Player::actionWear(Item* itemObj)
 	if (creature->getArmor(armor->getSlot()) == armor)
 	{
 		state = STATE_DEFAULT;
-		msg << "You are already wearing " << util::indefArticle(armor->toString()) << " " << armor->toString() << ".";
+		msg << "You are already wearing " << util::format(FORMAT_INDEF, armor->toString(), armor->getFormatFlags()) << ".";
 		world.addMessage(msg.str(), true);
 		return 0;
 	}
@@ -287,7 +287,7 @@ int Player::actionWear(Item* itemObj)
 		{
 			creature->wearArmor(armor, computeArmorBonus(armor));
 			state = STATE_DEFAULT;
-			msg << "You finish putting on " << util::indefArticle(armor->toString()) << " " << armor->toString() << ".";
+			msg << "You finish putting on " << util::format(FORMAT_INDEF, armor->toString(), armor->getFormatFlags()) << ".";
 			world.addMessage(msg.str());
 			return 0;
 		}
@@ -311,7 +311,7 @@ int Player::actionTakeoff(Item* item)
 	if (armor->getSlot() == ARMOR_BODY) creature->setDefenseSkill(skills[SKILL_UNARMORED].value);
 
 	std::stringstream msg;
-	msg << "You take off your " << armor->toString() << ".";
+	msg << "You take off " << util::format(FORMAT_YOUR, armor->toString(), armor->getFormatFlags()) << ".";
 	world.addMessage(msg.str());
 
 	return 50;

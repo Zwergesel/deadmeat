@@ -21,6 +21,7 @@ class Item
 {
 protected:
 	std::string name;
+	uint formatFlags;
 	symbol sym;
 	TCODColor color;
 	ITEM_TYPE type;
@@ -28,7 +29,7 @@ protected:
 
 public:
 	Item();
-	Item(std::string name, symbol sym, TCODColor color);
+	Item(std::string name, uint format, symbol sym, TCODColor color);
 	virtual ~Item();
 	virtual Item* clone();
 
@@ -36,6 +37,7 @@ public:
 	symbol getSymbol();
 	TCODColor getColor();
 	std::string getName();
+	uint getFormatFlags();
 	std::string toString();
 	std::string typeString();
 

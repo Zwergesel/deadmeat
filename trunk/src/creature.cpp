@@ -23,13 +23,14 @@ Creature::Creature()
 	// for savegames, initializes nothing
 }
 
-Creature::Creature(std::string n, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws):
-	name(n),		sym(s),				color(c),
-	health(h),		maxHealth(h),		mana(m),
-	maxMana(m),		controlled(false),	mainWeapon(0),
-	baseWeapon(w),	baseAC(a),			walkingSpeed(ws),
-	attackSkill(0),	defenseSkill(0),	level(NULL),
-	position(Point(0,0)), lastPlayerPos(Point(0,0)), seenPlayer(false)
+Creature::Creature(std::string n, uint f, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws):
+	name(n),		formatFlags(f),		sym(s),
+	color(c),		health(h),			maxHealth(h),
+	mana(m),		maxMana(m),			controlled(false),
+	mainWeapon(0),	baseWeapon(w),		baseAC(a),
+	walkingSpeed(ws),attackSkill(0),	defenseSkill(0),
+	level(NULL),	position(Point(0,0)),
+	lastPlayerPos(Point(0,0)), seenPlayer(false)
 {
 	std::fill(armor, armor+NUM_ARMOR_SLOTS, 0);
 	lastTimeRegen = world.time;
@@ -45,7 +46,7 @@ Creature::~Creature()
 
 Creature* Creature::clone()
 {
-	Creature* copy = new Creature(name, sym, color, maxHealth, maxMana, baseWeapon, baseAC, walkingSpeed);
+	Creature* copy = new Creature(name, formatFlags, sym, color, maxHealth, maxMana, baseWeapon, baseAC, walkingSpeed);
 	copy->health = health;
 	copy->mana = mana;
 	copy->controlled = controlled;
@@ -70,6 +71,11 @@ Creature* Creature::clone()
 std::string Creature::getName()
 {
 	return name;
+}
+
+uint Creature::getFormatFlags()
+{
+	return formatFlags;
 }
 
 Point Creature::getPos()
@@ -196,8 +202,10 @@ void Creature::die(Creature* instigator)
 	else
 	{
 		std::stringstream msg;
-		instigator->isControlled() ? (msg << "You kill") : (msg << "The " << instigator->getName() << " kills");
-		msg << " the " << name << ".";
+		instigator->isControlled() ?
+			(msg << "You kill") :
+			(msg << util::format(FORMAT_DEF, instigator->getName(), instigator->getFormatFlags(), true) << " kills");
+		msg << util::format(FORMAT_DEF, name, formatFlags) << ".";
 		world.addMessage(msg.str());
 		level->removeCreature(this, true);
 	}
@@ -308,8 +316,10 @@ int Creature::attack(Creature* target)
 		if (hit <= 0) damage /= 2;
 		if (hit > 175) damage *= 2;
 		std::stringstream msg;
-		controlled ? (msg << "You hit ") : (msg << "The " << name << " hits ");
-		target->isControlled() ? (msg << "you for ") : (msg << "the " << target->getName() << " for ");
+		controlled ? (msg << "You hit ") :
+			(msg << util::format(FORMAT_DEF, name, formatFlags, true) << " hits ");
+		target->isControlled() ? (msg << "you for ") :
+			(msg << util::format(FORMAT_DEF, target->getName(), target->getFormatFlags()) << " for ");
 		msg << damage << " damage.";
 		world.addMessage(msg.str());
 		target->hurt(damage, this);
@@ -317,8 +327,10 @@ int Creature::attack(Creature* target)
 	else
 	{
 		std::stringstream msg;
-		controlled ? (msg << "You miss ") : (msg << "The " << name << " misses ");
-		target->isControlled() ? (msg << "you.") : (msg << "the " << target->getName() << ".");
+		controlled ? (msg << "You miss ") :
+			(msg << util::format(FORMAT_DEF, name, formatFlags, true) << " misses ");
+		target->isControlled() ? (msg << "you.") :
+			(msg << util::format(FORMAT_DEF, target->getName(), target->getFormatFlags()) << ".");
 		world.addMessage(msg.str());
 	}
 

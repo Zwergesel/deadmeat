@@ -11,8 +11,8 @@ Weapon::Weapon()
 	strType = "weapon";
 }
 
-Weapon::Weapon(std::string n, symbol s, TCODColor c, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands, WeaponEffect e)
-	:Item(n, s, c), speed(spd), hitBonus(hit), baseDamage(dmg), numDice(dice)
+Weapon::Weapon(std::string n, uint f, symbol s, TCODColor c, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands, WeaponEffect e)
+	:Item(n, f, s, c), speed(spd), hitBonus(hit), baseDamage(dmg), numDice(dice)
 	,diceMax(dmax), enchantment(ench), skill(skl), hands(hands), effect(e)
 {
 	type = ITEM_WEAPON;
@@ -23,7 +23,7 @@ Weapon::~Weapon() {}
 
 Item* Weapon::clone()
 {
-	Weapon* copy = new Weapon(name, sym, color, speed, hitBonus, baseDamage, numDice, diceMax, enchantment, skill, hands, effect);
+	Weapon* copy = new Weapon(name, formatFlags, sym, color, speed, hitBonus, baseDamage, numDice, diceMax, enchantment, skill, hands, effect);
 	return copy;
 }
 
