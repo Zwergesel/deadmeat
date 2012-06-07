@@ -29,7 +29,7 @@ Creature::Creature(std::string n, symbol s, TCODColor c, int h, int m, Weapon w,
 	maxMana(m),		controlled(false),	mainWeapon(0),
 	baseWeapon(w),	baseAC(a),			walkingSpeed(ws),
 	attackSkill(0),	defenseSkill(0),	level(NULL),
-	position(Point(0,0))
+	position(Point(0,0)), lastPlayerPos(Point(0,0)), seenPlayer(false)
 {
 	std::fill(armor, armor+NUM_ARMOR_SLOTS, 0);
 	lastTimeRegen = world.time;
@@ -56,6 +56,8 @@ Creature* Creature::clone()
 	copy->position = position;
 	copy->walkingSpeed = walkingSpeed;
 	copy->lastTimeRegen = lastTimeRegen;
+	copy->lastPlayerPos = lastPlayerPos;
+	copy->seenPlayer = seenPlayer;
 	std::copy(armor, armor+NUM_ARMOR_SLOTS, copy->armor);
 	// Clone inventory
 	for (std::map<symbol,Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
@@ -395,6 +397,7 @@ unsigned int Creature::save(Savegame& sg)
 	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	store ("walkingSpeed", walkingSpeed);
 	store ("lastTimeRegen", lastTimeRegen);
+	store ("lastPlayerPos", lastPlayerPos) ("seenPlayer", seenPlayer);
 	store ("#inventory", (int) inventory.size());
 	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
 	{
@@ -420,6 +423,7 @@ void Creature::load(LoadBlock& load)
 	load ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	load ("walkingSpeed", walkingSpeed);
 	load ("lastTimeRegen", lastTimeRegen);
+	load ("lastPlayerPos", lastPlayerPos) ("seenPlayer", seenPlayer);
 	int n;
 	load ("#inventory", n);
 	while (n-->0)

@@ -43,6 +43,8 @@ protected:
 	Point position;
 	std::map<symbol,Item*> inventory;
 	int lastTimeRegen;
+	bool seenPlayer;
+	Point lastPlayerPos;
 
 	void die(Creature* instigator);
 	Creature(const Creature& copy);
