@@ -169,17 +169,16 @@ int Player::actionLook(Point pos)
 	{
 		// If square is visible...
 		Creature* c = level->creatureAt(pos);
-		if (c != NULL)
+		std::vector<Item*> items = level->itemsAt(pos);
+		if (c != NULL && c != creature)
 		{
 			// ...see the creature there...
 			msg << "You see " << util::format(FORMAT_INDEF, c->getName(), c->getFormatFlags()) << " here.";
 			world.addMessage(msg.str());
-			return 0;
 		}
-		std::vector<Item*> items = level->itemsAt(pos);
-		// ...or the items if there is no creature
-		if (items.size() == 1)
+		else if (items.size() == 1)
 		{
+			// ...or the items if there is no creature
 			msg << "You see " << util::format(FORMAT_INDEF, items[0]->getName(), items[0]->getFormatFlags()) << " here.";
 			world.addMessage(msg.str());
 		}
@@ -195,7 +194,23 @@ int Player::actionLook(Point pos)
 				if (it != items.end()) strlist << ",";
 				world.addMessage(strlist.str());
 			}
-		} else {
+		}
+		else if (c != NULL && c == creature)
+		{
+			world.addMessage("You look at yourself...");
+			Armor* a = creature->getArmor(ARMOR_BODY);
+			if (a == NULL)
+			{
+				world.addMessage("You think that you look sexy without any body armor.", true);
+			}
+			else
+			{
+				msg << "You think that you look sexy in " << util::format(FORMAT_YOUR, a->getName(), a->getFormatFlags()) << ".";
+				world.addMessage(msg.str(), true);
+			}
+		}
+		else
+		{
 			world.addMessage("You don't see anything interesting here.");
 		}
 	} else {
