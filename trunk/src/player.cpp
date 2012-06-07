@@ -244,7 +244,7 @@ int Player::actionWield(Item* itemObj)
 	Weapon* weapon = static_cast<Weapon*>(itemObj);
 	if (creature->getMainWeapon() == weapon)
 	{
-		msg << "You are already wielding " << util::format(FORMAT_INDEF, weapon->toString(), weapon->getFormatFlags()) << ".";
+		msg << "You are already wielding " << util::format(FORMAT_DEF, weapon->toString(), weapon->getFormatFlags()) << ".";
 		world.addMessage(msg.str());
 		return 0;
 	}
@@ -271,7 +271,7 @@ int Player::actionWear(Item* itemObj)
 	if (creature->getArmor(armor->getSlot()) == armor)
 	{
 		state = STATE_DEFAULT;
-		msg << "You are already wearing " << util::format(FORMAT_INDEF, armor->toString(), armor->getFormatFlags()) << ".";
+		msg << "You are already wearing " << util::format(FORMAT_DEF, armor->toString(), armor->getFormatFlags()) << ".";
 		world.addMessage(msg.str(), true);
 		return 0;
 	}
