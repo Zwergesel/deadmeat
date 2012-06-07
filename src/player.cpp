@@ -335,7 +335,7 @@ int Player::action()
 		// quit/abandon game
 		if (state == STATE_DEFAULT && key.c == 'Q')
 		{
-			if (world.drawBlockingWindow("Save & Quit", "Quit game without saving?\n\n[y]es / [n]o", TCODColor::red, "yn") == 'y')
+			if (world.drawBlockingWindow("Save & Quit", "Quit game without saving?\n\n[y]es / [n]o", "yn", TCODColor::red) == 'y')
 			{
 				world.gameover = true;
 				world.requestQuit = true;
@@ -345,14 +345,20 @@ int Player::action()
 		// save&quit
 		if (state == STATE_DEFAULT && key.c == 'S')
 		{
-			if (world.drawBlockingWindow("Save & Quit", "Save game and quit?\n\n[y]es / [n]o", TCODColor::black, "yn") == 'y')
+			if (world.drawBlockingWindow("Save & Quit", "Save game and quit?\n\n[y]es / [n]o", "yn") == 'y')
 			{
 				world.requestQuit = true;
 			}
 			return 0;
 		}
+		// message log
+		else if (state == STATE_DEFAULT && key.c == 'L')
+		{
+			world.drawMessageLog();
+			return 0;
+		}
 		// numpad player movement
-		if (state == STATE_DEFAULT && key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
+		else if (state == STATE_DEFAULT && key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
 		{
 			return actionMove(key.vk - TCODK_KP1);
 		}
@@ -540,7 +546,7 @@ int Player::action()
 					request.append("\n\nW - wear");
 				}
 				request.append("\n\nX - destroy");
-				char reply = world.drawBlockingWindow("What do you want to do?", request, TCODColor::black, options);
+				char reply = world.drawBlockingWindow("What do you want to do?", request, options);
 				if (reply == 'd')
 				{
 					state = STATE_DEFAULT;

@@ -78,6 +78,8 @@ void World::addMessage(std::string m, bool forceBreak)
 			messageQueue.push_back(m);
 		}
 	}
+	messageLog.push_back(m);
+	while (messageLog.size() > 30) messageLog.pop_front();
 }
 
 int World::getNumMessages()
@@ -103,6 +105,18 @@ void World::drawMessage()
 		  viewMsg.x, viewMsg.y, viewMsg.width, viewMsg.height, messageQueue.front().c_str()
 		);
 	}
+}
+
+void World::drawMessageLog()
+{
+	std::stringstream log;
+	for (auto it = messageLog.begin(); it != messageLog.end(); )
+	{
+		log << (*it);
+		it++;
+		if (it != messageLog.end()) log << std::endl;
+	}
+	drawBlockingWindow("Message Log", log.str(), " ", TCODColor::black, false);
 }
 
 void World::drawLevel(Level* level, Point offset, Viewport view)
@@ -264,43 +278,31 @@ void World::drawItemSelection(ItemSelection& sel)
 	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, viewItemList.x, viewItemList.y, 1.f, 0.9f);
 }
 
-unsigned char World::drawBlockingWindow(std::string title, std::string text, TCODColor color, std::string acceptedKeys)
+unsigned char World::drawBlockingWindow(const std::string& title, const std::string& text, const std::string& acceptedKeys, TCODColor color, bool center)
 {
 	int w = viewItemList.width;
 	int h = 4 + TCODConsole::root->getHeightRect(0,0, w - 4, 100, text.c_str());
 	TCODConsole window(w, h);
 	window.setDefaultBackground(color);
 	window.printFrame(0, 0, window.getWidth(), window.getHeight(), true, TCOD_BKGND_DEFAULT, title.c_str());
-	window.printRectEx(window.getWidth()/2, 2, w - 4, h - 4, TCOD_BKGND_DEFAULT, TCOD_CENTER, text.c_str());
-	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, viewItemList.x, viewLevel.y + viewLevel.height/2 - h/2, 1.f, 0.9f);
-	TCODConsole::root->flush();
-	TCOD_key_t key;
-	bool done=false;
-	do
+	if (center)
 	{
-		key = player->waitForKeypress(true);
-		if (acceptedKeys.find_first_of(key.c)  != std::string::npos) done = true;
+		window.printRectEx(window.getWidth()/2, 2, w - 4, h - 4, TCOD_BKGND_DEFAULT, TCOD_CENTER, text.c_str());
 	}
-	while (!done && !world.requestQuit && key.vk != TCODK_ESCAPE);
-	return key.c;
-}
-
-void World::drawBlockingWindow(std::string title, std::string text, TCODColor color)
-{
-	int w = viewItemList.width;
-	int h = 4 + TCODConsole::root->getHeightRect(0,0, w - 4, 100, text.c_str());
-	TCODConsole window(w, h);
-	window.setDefaultBackground(color);
-	window.printFrame(0, 0, window.getWidth(), window.getHeight(), true, TCOD_BKGND_DEFAULT, title.c_str());
-	window.printRectEx(window.getWidth()/2, 2, w - 4, h - 4, TCOD_BKGND_DEFAULT, TCOD_CENTER, text.c_str());
+	else
+	{
+		window.printRectEx(2, 2, w - 8, h - 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, text.c_str());	
+	}
 	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, viewItemList.x, viewLevel.y + viewLevel.height/2 - h/2, 1.f, 0.9f);
 	TCODConsole::root->flush();
 	TCOD_key_t key;
 	do
 	{
 		key = player->waitForKeypress(true);
+		if (acceptedKeys.find_first_of(key.c) != std::string::npos) return key.c;
 	}
-	while (key.vk != TCODK_SPACE && key.vk != TCODK_ESCAPE && !world.requestQuit);
+	while (!world.requestQuit && key.vk != TCODK_ESCAPE);
+	return '\0';
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/
