@@ -291,7 +291,7 @@ unsigned char World::drawBlockingWindow(const std::string& title, const std::str
 	}
 	else
 	{
-		window.printRectEx(2, 2, w - 8, h - 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, text.c_str());	
+		window.printRectEx(2, 2, w - 4, h - 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, text.c_str());	
 	}
 	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, viewItemList.x, viewLevel.y + viewLevel.height/2 - h/2, 1.f, 0.9f);
 	TCODConsole::root->flush();
