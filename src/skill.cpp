@@ -12,3 +12,8 @@ Skill::Skill(std::string name, int value, ATTRIBUTE att)
 	this->exp = 0;
 	this->used = 0;
 }
+
+int Skill::expNeeded(int currentValue)
+{
+  return 250 * (currentValue+2) * (currentValue+1);
+}

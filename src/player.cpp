@@ -1,6 +1,7 @@
 #include <libtcod.hpp>
 #include <sstream>
 #include <iostream>
+#include <iomanip>
 #include <cassert>
 #include <cmath>
 #include "player.hpp"
@@ -69,10 +70,11 @@ Player::Player(std::string name):
 	attributes[ATTR_DEX] = rng->getInt(5,20);
 	attributes[ATTR_CON] = rng->getInt(5,20);
 	attributes[ATTR_INT] = rng->getInt(5,20);
-	creature = new Creature(
-		name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 250, 75,
-		Weapon("bare hands", F_NEUTER | F_PLURAL, '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, SKILL_UNARMED, 2, EFFECT_NONE), 0, 10
-	);
+  level = 1;
+  experience = 0;
+	creature = new Creature(name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 250, 75,
+	                        Weapon("bare hands", F_NEUTER | F_PLURAL, '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, SKILL_UNARMED, 2, EFFECT_NONE), 0, 10, 0
+	                       );
 	creature->setControlled(true);
 	creature->setAttackSkill(skills[SKILL_UNARMED].value);
 	creature->setDefenseSkill(skills[SKILL_UNARMORED].value);
@@ -514,6 +516,20 @@ int Player::processAction()
 			}
 			return 0;
 		}
+    // charater screen
+    else if (state == STATE_DEFAULT && key.c == 'C')
+    {      
+      std::stringstream msg;
+      for(int i=0;i<NUM_SKILL;i++)
+      {
+        int percent = (skills[i].exp * 100) / Skill::expNeeded(skills[i].value);
+        std::string name = skills[i].name;
+        name.append(20 - skills[i].name.size(), ' ');
+        msg << name << "   " << std::setw(3) << skills[i].value << "    " << std::setw(3) << percent << "%%\n";
+      }
+      world.drawBlockingWindow("Character Information", msg.str(), " ", TCODColor::blue, true);
+      return 0;
+    }
 		// open inventory screen
 		else if (state == STATE_DEFAULT && key.c == 'i')
 		{
@@ -718,6 +734,54 @@ void Player::moveCursor(int dir)
 	}
 }
 
+void Player::useSkill(SKILLS skill)
+{
+  skills[skill].used++;
+}
+
+void Player::incExperience(int exp)
+{
+  experience += exp;
+  while(experience >= getNeededExp())
+  {
+    levelUp();
+  }
+  int sumSkillsUsed = 0;
+  for(int i=0;i<NUM_SKILL;i++) sumSkillsUsed += skills[i].used;
+  for(int i=0;i<NUM_SKILL;i++)
+  {
+    float factor = static_cast<float>(skills[i].used) / static_cast<float>(sumSkillsUsed);
+    skills[i].exp += static_cast<int>(static_cast<float>(exp) * factor);
+    while(skills[i].exp >= Skill::expNeeded(skills[i].value))
+    {
+      skills[i].exp -= Skill::expNeeded(skills[i].value);
+      skills[i].value++;      
+    }
+  }
+}
+
+int Player::getLevel()
+{
+  return level;
+}
+
+int Player::getExperience()
+{
+  return experience;
+}
+
+int Player::getNeededExp()
+{
+  return 500 * (level+1) * level;
+}
+
+void Player::levelUp()
+{
+  level++;
+  //TODO
+  world.drawBlockingWindow("Level Up!", "Select an Attribute to boost:\n\n[S]trength [D]exterity\n[C]onsitution [I]ntelligence", "SDCI", TCODColor::green, true);
+}
+
 /*--------------------- SAVING AND LOADING ---------------------*/
 
 unsigned int Player::save(Savegame& sg)
@@ -732,6 +796,7 @@ unsigned int Player::save(Savegame& sg)
 	store ("state", (int) state) ("nutrition", nutrition);
 	store ("strength", attributes[ATTR_STR]) ("dexterity", attributes[ATTR_DEX]);
 	store ("intelligence", attributes[ATTR_INT]) ("constitution", attributes[ATTR_CON]);
+  store ("level", level) ("experiene", experience);
 	sg << store;
 	return id;
 }
@@ -746,4 +811,5 @@ void Player::load(LoadBlock& load)
 	state = static_cast<STATE>(s);
 	load ("strength", attributes[ATTR_STR]) ("dexterity", attributes[ATTR_DEX]);
 	load ("intelligence", attributes[ATTR_INT]) ("constitution", attributes[ATTR_CON]);
+  load ("level", level) ("experiene", experience);
 }

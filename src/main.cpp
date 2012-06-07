@@ -57,7 +57,7 @@ int corruptSave(const std::string& fileName)
 int main()
 {
 	TCODConsole::setCustomFont("Md_curses_16x16.png",TCOD_FONT_LAYOUT_ASCII_INROW);
-	TCODConsole::initRoot(80,50,"deadmeat",false);
+	TCODConsole::initRoot(80,64,"deadmeat",false);
 	TCODSystem::setFps(30);
 
 	// Init hardcoded world
@@ -82,15 +82,15 @@ int main()
 	{
 		// Add/edit/remove creature templates here
 		Goblin goblin("goblin", F_MALE, 'g', TCODColor::green, 35, 0,
-		              Weapon("claws", F_DEFAULT, '#', TCODColor::pink, 11, 0, 4, 1, 3, 0, SKILL_UNARMED, 2, EFFECT_NONE), 15, 10
+		              Weapon("claws", F_DEFAULT, '#', TCODColor::pink, 11, 0, 4, 1, 3, 0, SKILL_UNARMED, 2, EFFECT_NONE), 15, 10, 100
 		             );
 		monsterfactory.setTemplate("goblin", &goblin);
 		Goblin snake("snake", F_MALE , 's', TCODColor::darkChartreuse, 20, 0,
-		             Weapon("teeth", F_DEFAULT, '#', TCODColor::pink, 25, 0, 11, 2, 6, 0, SKILL_UNARMED, 0, EFFECT_NONE), 0, 3
+		             Weapon("teeth", F_DEFAULT, '#', TCODColor::pink, 25, 0, 11, 2, 6, 0, SKILL_UNARMED, 0, EFFECT_NONE), 0, 3, 10
 		            );
 		monsterfactory.setTemplate("snake", &snake);
 		Goblin dragon("Smaug", F_PROPER | F_MALE, 'D', TCODColor::red, 300, 100,
-		              Weapon("fangs", F_DEFAULT, '#', TCODColor::pink, 15, 50, 19, 3, 7, 0, SKILL_UNARMED, 2, EFFECT_NONE), 75, 30
+		              Weapon("fangs", F_DEFAULT, '#', TCODColor::pink, 15, 50, 19, 3, 7, 0, SKILL_UNARMED, 2, EFFECT_NONE), 75, 30, 1000
 		             );
 		monsterfactory.setTemplate("red dragon", &dragon);
 		Savegame save;

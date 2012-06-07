@@ -46,6 +46,7 @@ struct Skill
 	int exp;
 	ATTRIBUTE att;
 	int used;
+  static int expNeeded(int currentValue);
 };
 
 #endif

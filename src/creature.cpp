@@ -23,14 +23,14 @@ Creature::Creature()
 	// for savegames, initializes nothing
 }
 
-Creature::Creature(std::string n, uint f, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws):
+Creature::Creature(std::string n, uint f, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws, int exp):
 	name(n),		formatFlags(f),		sym(s),
 	color(c),		health(h),			maxHealth(h),
 	mana(m),		maxMana(m),			controlled(false),
 	mainWeapon(0),	baseWeapon(w),		baseAC(a),
 	walkingSpeed(ws),attackSkill(0),	defenseSkill(0),
 	level(NULL),	position(Point(0,0)),
-	lastPlayerPos(Point(0,0)), seenPlayer(false)
+	lastPlayerPos(Point(0,0)), seenPlayer(false), expValue(exp)
 {
 	std::fill(armor, armor+NUM_ARMOR_SLOTS, 0);
 	lastTimeRegen = world.time;
@@ -46,7 +46,7 @@ Creature::~Creature()
 
 Creature* Creature::clone()
 {
-	Creature* copy = new Creature(name, formatFlags, sym, color, maxHealth, maxMana, baseWeapon, baseAC, walkingSpeed);
+  Creature* copy = new Creature(name, formatFlags, sym, color, maxHealth, maxMana, baseWeapon, baseAC, walkingSpeed, expValue);
 	copy->health = health;
 	copy->mana = mana;
 	copy->controlled = controlled;
@@ -59,6 +59,7 @@ Creature* Creature::clone()
 	copy->lastTimeRegen = lastTimeRegen;
 	copy->lastPlayerPos = lastPlayerPos;
 	copy->seenPlayer = seenPlayer;
+  copy->expValue = expValue;
 	std::copy(armor, armor+NUM_ARMOR_SLOTS, copy->armor);
 	// Clone inventory
 	for (std::map<symbol,Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
@@ -212,6 +213,7 @@ void Creature::die(Creature* instigator)
 		(msg << util::format(FORMAT_DEF, instigator->getName(), instigator->getFormatFlags(), true) << " kills");
 		msg << util::format(FORMAT_DEF, name, formatFlags) << ".";
 		world.addMessage(msg.str());
+    if(instigator->isControlled()) world.player->incExperience(expValue);
 		level->removeCreature(this, true);
 	}
 }
@@ -232,7 +234,7 @@ int Creature::action()
 }
 
 int Creature::getAttack()
-{
+{  
 	if (mainWeapon > 0 && inventory.count(mainWeapon) > 0)
 	{
 		assert(inventory[mainWeapon]->getType() == ITEM_WEAPON);
@@ -302,6 +304,11 @@ int Creature::attack(Creature* target)
 	{
 		assert(inventory[mainWeapon]->getType() == ITEM_WEAPON);
 		Weapon* w = static_cast<Weapon*>(inventory[mainWeapon]);
+    if (controlled)
+    {
+      world.player->useSkill(SKILL_MELEE_COMBAT);
+      world.player->useSkill(w->getSkill());
+    }
 		// weapon to hit + weapon enchantment + fighting skill + weapon skill
 		attack = static_cast<int>(FACT_HIT * w->getHitBonus() + FACT_WENCH * w->getEnchantment() + FACT_ATSKL * attackSkill);
 		// damage = (weapon damage + weapon enchantment)
@@ -309,6 +316,14 @@ int Creature::attack(Creature* target)
 		// weapon speed + armor hindrance
 		speed = static_cast<int>(w->getSpeed() + FACT_ATSPD * getHindrance());
 	}
+  else
+  {
+    if (controlled)
+    {
+      world.player->useSkill(SKILL_MELEE_COMBAT);
+      world.player->useSkill(SKILL_UNARMED);
+    }
+  }
 	int defense = target->getDefense();
 	TCODRandom rngGauss;
 	rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
@@ -415,6 +430,7 @@ unsigned int Creature::save(Savegame& sg)
 	store ("walkingSpeed", walkingSpeed);
 	store ("lastTimeRegen", lastTimeRegen);
 	store ("lastPlayerPos", lastPlayerPos) ("seenPlayer", seenPlayer);
+  store ("expValue", expValue);
 	store ("#inventory", (int) inventory.size());
 	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
 	{
@@ -441,6 +457,7 @@ void Creature::load(LoadBlock& load)
 	load ("walkingSpeed", walkingSpeed);
 	load ("lastTimeRegen", lastTimeRegen);
 	load ("lastPlayerPos", lastPlayerPos) ("seenPlayer", seenPlayer);
+  load ("expValue", expValue);
 	int n;
 	load ("#inventory", n);
 	while (n-->0)
