@@ -13,6 +13,7 @@
 
 == Small improvements ==
   * Variable "cursed" in Item
+  * Look at more than just items
 
 == Major improvements ==
   * Fully implement attributes
