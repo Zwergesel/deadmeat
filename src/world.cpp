@@ -79,7 +79,7 @@ void World::addMessage(std::string m, bool forceBreak)
 		}
 	}
 	messageLog.push_back(m);
-	while (messageLog.size() > 30) messageLog.pop_front();
+	while (messageLog.size() > 20) messageLog.pop_front();
 }
 
 int World::getNumMessages()
@@ -114,7 +114,7 @@ void World::drawMessageLog()
 	{
 		log << (*it);
 		it++;
-		if (it != messageLog.end()) log << std::endl;
+		if (it != messageLog.end()) log << std::endl << std::endl;
 	}
 	drawBlockingWindow("Message Log", log.str(), " ", TCODColor::black, false);
 }
