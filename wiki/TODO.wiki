@@ -9,9 +9,11 @@
   * Make sure defense and attack calculation in creature work correctly (especially armorSkill, fightingskill)  
 
 == Bug fixes / Issues ==
+  * message log should be saved
+  * message log should make sure that it's height does not get too big
 
 == Small improvements ==
-  * Cursed variable in Items
+  * Variable "cursed" in Item
 
 == Major improvements ==
   * Fully implement attributes
