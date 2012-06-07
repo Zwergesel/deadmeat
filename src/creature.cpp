@@ -291,7 +291,7 @@ int Creature::attack(Creature* target)
 	// base attack damage
 	int damage = baseWeapon.rollDamage();
 	// base attack speed
-	int speed = static_cast<int>(baseWeapon.getSpeed() - FACT_ATSPD * getHindrance());
+	int speed = static_cast<int>(baseWeapon.getSpeed() + FACT_ATSPD * getHindrance());
 
 	if (inventory.count(mainWeapon) > 0)
 	{
@@ -302,7 +302,7 @@ int Creature::attack(Creature* target)
 		// damage = (weapon damage + weapon enchantment)
 		damage = w->rollDamage();
 		// weapon speed + armor hindrance
-		speed = static_cast<int>(w->getSpeed() - FACT_ATSPD * getHindrance());
+		speed = static_cast<int>(w->getSpeed() + FACT_ATSPD * getHindrance());
 	}
 	int defense = target->getDefense();
 	TCODRandom rngGauss;
