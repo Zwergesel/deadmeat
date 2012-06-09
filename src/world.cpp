@@ -208,7 +208,8 @@ void World::drawWorld()
 	TCODConsole::root->clear();
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);
 	STATE state = player->getState();
-	if (state == STATE_INVENTORY || state == STATE_PICKUP || state == STATE_WIELD || state == STATE_WEAR || state == STATE_DROP || state == STATE_TAKEOFF)
+	if (state == STATE_INVENTORY || state == STATE_PICKUP || state == STATE_WIELD || state == STATE_WEAR
+		|| state == STATE_DROP || state == STATE_TAKEOFF || state == STATE_EAT)
 	{
 		drawItemSelection(world.itemSelection);
 	}

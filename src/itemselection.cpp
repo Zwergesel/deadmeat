@@ -18,7 +18,7 @@ bool sortNamed(std::pair<symbol, Item*> a, std::pair<symbol, Item*> b)
 bool sortAnon(Item* a, Item* b)
 {
 	if (a->getType() < b->getType()) return true;
-	if (a->getType() == b->getType() && a->getName() < b->getName()) return true;
+	if (a->getType() == b->getType() && a->toString() < b->toString()) return true;
 	return false;
 }
 
@@ -173,11 +173,11 @@ ItemSelection* ItemSelection::compile(int height)
 					pageStart.push_back(compiledStrings.size());
 				}
 				currentRow++;
-				compiledStrings.push_back(CompiledData(currentRow, '\0', util::plural((*it)->typeString()), true, -1));
+				compiledStrings.push_back(CompiledData(currentRow, '\0', util::capitalize(util::plural((*it)->typeString())), true, -1));
 				currentRow += 2;
 			}
 			/* Item */
-			compiledStrings.push_back(CompiledData(currentRow, currentLetter, (*it)->toString(), false, currentItem));
+			compiledStrings.push_back(CompiledData(currentRow, currentLetter, util::format(FORMAT_INDEF, (*it)->toString(), (*it)->getFormatFlags()), false, currentItem));
 
 			/* Advance */
 			currentRow++;
@@ -200,11 +200,11 @@ ItemSelection* ItemSelection::compile(int height)
 					pageStart.push_back(compiledStrings.size());
 				}
 				currentRow++;
-				compiledStrings.push_back(CompiledData(currentRow, '\0', util::plural(it->second->typeString()), true, -1));
+				compiledStrings.push_back(CompiledData(currentRow, '\0', util::capitalize(util::plural(it->second->typeString())), true, -1));
 				currentRow += 2;
 			}
 			/* Item */
-			compiledStrings.push_back(CompiledData(currentRow, it->first, it->second->toString(), false, currentItem));
+			compiledStrings.push_back(CompiledData(currentRow, it->first, util::format(FORMAT_INDEF, it->second->toString(), it->second->getFormatFlags()), false, currentItem));
 
 			/* Advance */
 			currentRow++;

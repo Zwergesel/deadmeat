@@ -53,7 +53,7 @@ namespace util
 	}
 
 	std::string format(FormatRequest req, const std::string& name, uint flags, bool capitalize = false);
-	std::string& capitalize(std::string& str);
+	std::string capitalize(std::string str);
 
 	std::string plural(std::string str);
 

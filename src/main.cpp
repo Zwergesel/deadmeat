@@ -14,6 +14,7 @@
 #include "level.hpp"
 #include "items/weapon.hpp"
 #include "items/food.hpp"
+#include "items/ammo.hpp"
 #include "monsterfactory.hpp"
 
 World world;
@@ -122,6 +123,7 @@ int main()
 		Armor* boots = new Armor("clown shoes", F_NEUTER | F_BOOTS, ')', TCODColor::black, -30, -1, 12, ARMOR_BOOTS, SKILL_CLOTH_ARMOR);
 		Food* food1 = new Food("beefsteak", F_NEUTER, '%', TCODColor::darkOrange, 1500);
 		Food* food2 = new Food("meat ball", F_NEUTER, '%', TCODColor::orange, 250);
+		Ammo* arrows = new Ammo("arrow", F_NEUTER, '!', TCODColor::cyan, 0, EFFECT_NONE);
 		std::string cr[7] = { "goblin","goblin","goblin","snake","snake","snake","red dragon" };
 		for (int i=0; i<7; i++)
 		{
@@ -144,6 +146,7 @@ int main()
 		world.levels[0]->addItem(food2->clone(), getRandomLocation(world.levels[0]));
 		world.levels[0]->addItem(food2->clone(), getRandomLocation(world.levels[0]));
 		world.levels[0]->addItem(food2->clone(), getRandomLocation(world.levels[0]));
+		world.levels[0]->addItem(arrows, world.player->getCreature()->getPos());
 	}
 	world.fovMap = new TCODMap(world.levels[0]->getWidth(), world.levels[0]->getHeight());
 	for (int x=0; x<world.levels[0]->getWidth(); x++)

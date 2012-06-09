@@ -82,8 +82,7 @@ int Weapon::getRange()
 std::string Weapon::toString()
 {
 	std::stringstream ss;
-	int e = getEnchantment();
-	ss << (e < 0 ? "" : "+") << e << " " << getName();
+	ss << (enchantment < 0 ? "" : "+") << enchantment << " " << name;
 	return ss.str();
 }
 
