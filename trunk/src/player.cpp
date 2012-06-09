@@ -420,7 +420,7 @@ int Player::actionCharInfo(TCOD_key_t key)
 int Player::action()
 {
 	// health regeneration
-	creature->regenerate(attributes[ATTR_CON]);
+	creature->regenerate(getRealSkillValue(SKILL_HEALTH));
 
 	int time = Player::processAction();
 
@@ -828,7 +828,6 @@ int Player::getNeededExp()
 void Player::levelUp()
 {
 	level++;
-	//TODO
 	attrPoints++;
 	skillPoints+=2;
 	std::stringstream msg;
@@ -849,6 +848,11 @@ int Player::getSkillPoints()
 std::string Player::getName()
 {
 	return name;
+}
+
+int Player::getRealSkillValue(SKILLS skill)
+{
+	return skills[skill].value + attributes[skills[skill].att];
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/
