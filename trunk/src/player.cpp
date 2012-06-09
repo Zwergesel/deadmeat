@@ -410,9 +410,13 @@ int Player::actionCharInfo(TCOD_key_t key)
 	}
 	if (skillPoints > 0)
 	{
-		skills[util::letterToInt(key.c)].maxValue += 1;
-		skillPoints--;
-		return 0;
+    int k = util::letterToInt(key.c);
+    if(k >= 0 && k < NUM_SKILL)
+    {
+		  skills[k].maxValue += 1;
+		  skillPoints--;
+      return 0;
+    }		
 	}
 	return 0;
 }
