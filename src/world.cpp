@@ -232,7 +232,6 @@ void World::drawCharInfo()
 	charInfo.printEx(4, 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s", player->getName().c_str());
 	charInfo.printEx(4, 6, TCOD_BKGND_DEFAULT, TCOD_LEFT, "PLAYERCLASS");
 	charInfo.printEx(4, 8, TCOD_BKGND_DEFAULT, TCOD_LEFT, "PLAYERRACE");
-	charInfo.printEx(4, 8, TCOD_BKGND_DEFAULT, TCOD_LEFT, "SOMETHING");
 	charInfo.printEx(4, 10, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Health: %d", player->getCreature()->getHealth().second);
 	charInfo.printEx(4, 12, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Mana: %d", player->getCreature()->getMana().second);
 
@@ -254,18 +253,19 @@ void World::drawCharInfo()
 
 	TCODConsole skillInfo(charInfo.getWidth() - 4, 38);
 	skillInfo.printFrame(0, 0, skillInfo.getWidth(), skillInfo.getHeight(), true, TCOD_BKGND_DEFAULT, "Skills");
+	skillInfo.printEx(8, 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "skill                 attribute       progress");
 	for (int i=0; i<NUM_SKILL; i++)
 	{
 		if (player->getSkillPoints() > 0)
 		{
-			skillInfo.printEx(2, 2 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[%c] - ", util::letters[i]);
+			skillInfo.printEx(2, 4 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[%c] - ", util::letters[i]);
 		}
 		SKILLS s = static_cast<SKILLS>(i);
 		std::string att = "STR";
 		if (player->getSkill(s).att == ATTR_DEX) att = "DEX";
 		if (player->getSkill(s).att == ATTR_CON) att = "CON";
 		if (player->getSkill(s).att == ATTR_INT) att = "INT";
-		skillInfo.printEx(8, 2 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s [%2d] = %s %2d + %2d",
+		skillInfo.printEx(8, 4 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s [%2d] = %s %2d + %2d",
 		                  player->getSkill(s).name.append(15 - player->getSkill(s).name.size(), ' ').c_str(),
 		                  player->getSkill(s).value + player->getAttribute(player->getSkill(s).att),
 		                  att.c_str(), player->getAttribute(player->getSkill(s).att), player->getSkill(s).value);
@@ -275,7 +275,7 @@ void World::drawCharInfo()
 			int p = (player->getSkill(s).exp - Skill::expNeeded(player->getSkill(s).value - 1)) * 100 / Skill::expNeeded(player->getSkill(s).value);
 			progress.replace(0, p/10, p/10, static_cast<unsigned char>(TCOD_CHAR_BLOCK2));
 			if (p/10 < 10 && p%10 > 0) progress.replace(p/10, 1, 1, '>');
-			skillInfo.printEx(43, 2 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s %2d", progress.c_str(), player->getSkill(s).maxValue);
+			skillInfo.printEx(43, 4 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s %2d", progress.c_str(), player->getSkill(s).maxValue);
 		}
 	}
 	if (player->getSkillPoints() > 0) skillInfo.printEx(1, 37, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Points left = %d", player->getSkillPoints());

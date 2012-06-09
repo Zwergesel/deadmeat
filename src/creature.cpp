@@ -225,9 +225,9 @@ void Creature::die(Creature* instigator)
 
 void Creature::regenerate(int speedup)
 {
-	if ((world.time - lastTimeRegen) > (50 - speedup))
+	if ((world.time - lastTimeRegen) > (70 - speedup))
 	{
-		health += (world.time - lastTimeRegen) / (50 - speedup);
+		health += (world.time - lastTimeRegen) / (70 - speedup);
 		health = std::min(maxHealth, health);
 		lastTimeRegen = world.time;
 	}

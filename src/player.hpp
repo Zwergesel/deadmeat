@@ -83,6 +83,7 @@ public:
 	void levelUp();
 	int getAttributePoints();
 	int getSkillPoints();
+	int getRealSkillValue(SKILLS skill);
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);
