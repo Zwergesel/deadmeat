@@ -37,7 +37,7 @@ walkingSpeed: 10
 lastTimeRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
-expValue: 100
+expValue: 1000
 #inventory: 0
 
 [[Weapon: 5]]
@@ -76,7 +76,7 @@ walkingSpeed: 30
 lastTimeRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
-expValue: 1000
+expValue: 10000
 #inventory: 0
 
 [[Weapon: 7]]
@@ -115,7 +115,7 @@ walkingSpeed: 3
 lastTimeRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
-expValue: 10
+expValue: 1000
 #inventory: 0
 
 [[MonsterFactory: 1]]

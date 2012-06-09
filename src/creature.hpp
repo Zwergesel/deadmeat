@@ -46,7 +46,7 @@ protected:
 	int lastTimeRegen;
 	Point lastPlayerPos;
 	bool seenPlayer;
-  int expValue;
+	int expValue;
 
 	void die(Creature* instigator);
 	Creature(const Creature& copy);
