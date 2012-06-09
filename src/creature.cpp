@@ -305,13 +305,12 @@ int Creature::attack(Creature* target)
 	// base attack speed
 	int speed = static_cast<int>(baseWeapon.getSpeed() + FACT_ATSPD * getHindrance());
 
-	if (inventory.count(mainWeapon) > 0)
+	if (mainWeapon > 0 && inventory.count(mainWeapon) > 0)
 	{
 		assert(inventory[mainWeapon]->getType() == ITEM_WEAPON);
 		Weapon* w = static_cast<Weapon*>(inventory[mainWeapon]);
 		// weapon to hit + weapon enchantment + fighting skill + weapon skill
 		attack = static_cast<int>(FACT_HIT * w->getHitBonus() + FACT_WENCH * w->getEnchantment() + FACT_ATSKL * attackSkill);
-		// damage = (weapon damage + weapon enchantment)
 		damage = w->rollDamage();
 		// weapon speed + armor hindrance
 		speed = static_cast<int>(w->getSpeed() + FACT_ATSPD * getHindrance());

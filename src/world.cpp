@@ -212,7 +212,7 @@ void World::drawWorld()
 	{
 		drawItemSelection(world.itemSelection);
 	}
-	else if (state == STATE_INSPECT)
+	else if (state == STATE_INSPECT || state == STATE_RANGED_ATTACK)
 	{
 		Point c = player->getCursor() + levelOffset;
 		TCODConsole::root->setCharBackground(viewLevel.x + c.x, viewLevel.y + c.y, TCODColor::yellow, TCOD_BKGND_ALPHA(0.7));

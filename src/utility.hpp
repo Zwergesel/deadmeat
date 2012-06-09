@@ -18,6 +18,7 @@ struct Point
 	Point& operator-=(const Point& p);
 	const Point operator+(const Point& p) const;
 	const Point operator-(const Point& p) const;
+	static int sqlen(Point p);
 };
 
 enum FormatFlags

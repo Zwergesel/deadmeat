@@ -16,6 +16,8 @@
 int Player::dx[] = {-1,0,1,-1,0,1,-1,0,1};
 int Player::dy[] = {1,1,1,0,0,0,-1,-1,-1};
 
+bool sortCreaturesByDistance(Creature* a, Creature* b);
+
 Player::Player()
 {
 	// TODO: remove and load in load(..);
@@ -74,7 +76,7 @@ Player::Player(std::string name):
 	experience = 0;
 	attrPoints = skillPoints = 0;
 	creature = new Creature(name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 250, 75,
-	                        Weapon("bare hands", F_NEUTER | F_PLURAL, '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, SKILL_UNARMED, 2, EFFECT_NONE), 0, 10, 0
+	                        Weapon("bare hands", F_NEUTER | F_PLURAL, '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, SKILL_UNARMED, 2, EFFECT_NONE, 1), 0, 10, 0
 	                       );
 	creature->setControlled(true);
 	creature->setAttackSkill(skills[SKILL_UNARMED].value);
@@ -313,7 +315,7 @@ int Player::actionWield(Item* itemObj)
 	else
 	{
 		creature->wieldMainWeapon(weapon, computeAttackBonus(weapon));
-		msg << "You are now wiedling " << util::format(FORMAT_INDEF, weapon->toString(), weapon->getFormatFlags()) << ".";
+		msg << "You are now wielding " << util::format(FORMAT_INDEF, weapon->toString(), weapon->getFormatFlags()) << ".";
 		world.addMessage(msg.str());
 		return 30;
 	}
@@ -487,15 +489,85 @@ int Player::processAction()
 			return 10;
 		}
 		// number pad cursor movement
-		else if (state == STATE_INSPECT && key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
+		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK) && key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
 		{
 			moveCursor(key.vk - TCODK_KP1);
 			return 0;
 		}
 		// number keys cursor movement
-		else if (state == STATE_INSPECT && key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.vk != TCODK_5)
+		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK) && key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.vk != TCODK_5)
 		{
 			moveCursor(key.vk - TCODK_1);
+			return 0;
+		}
+		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK) && key.vk == TCODK_ESCAPE)
+		{
+			state = STATE_DEFAULT;
+			return 0;
+		}
+		// Auto-targetting with ranged attack cursor
+		else if (state == STATE_RANGED_ATTACK && key.c == 'x')
+		{
+			bool advanceTarget = false;
+			for (auto it = targetList.begin(); it != targetList.end(); it++)
+			{
+				if ((*it)->getPos() == cursor)
+				{
+					it++;
+					if (it != targetList.end())
+					{
+						cursor = (*it)->getPos();
+						advanceTarget = true;
+					}
+					break;
+				}
+			}
+			if (!advanceTarget && targetList.size() > 0)
+			{
+				cursor = targetList.front()->getPos();
+			}
+			return 0;
+		}
+		// fire a ranged weapon
+		else if (state == STATE_RANGED_ATTACK && (key.c == '.' || key.vk == TCODK_ENTER))
+		{
+			Creature* target = world.levels[world.currentLevel]->creatureAt(cursor);
+			if (target == NULL || !world.fovMap->isInFov(cursor.x, cursor.y))
+			{
+				world.addMessage("You see nothing to shoot at here.");
+				return 0;
+			}
+			Weapon* w = creature->getMainWeapon();
+			if (w->getRange()*w->getRange() < Point::sqlen(creature->getPos() - cursor))
+			{
+				std::stringstream msg;
+				msg << "That target is out of range of " << util::format(FORMAT_YOUR, w->getName(), w->getFormatFlags()) << ".";
+				world.addMessage(msg.str());
+				return 0;
+			}
+			state = STATE_DEFAULT;
+			return creature->attack(target);
+		}
+		// initiate ranged attacking
+		else if (state == STATE_DEFAULT && key.c == 'f')
+		{
+			Weapon* w = creature->getMainWeapon();
+			if (w == NULL || w->getRange() <= 1)
+			{
+				world.addMessage("You are not wielding a ranged weapon.");
+				return 0; 
+			}
+			state = STATE_RANGED_ATTACK;
+			targetList = world.levels[world.currentLevel]->getVisibleCreatures();
+			if (targetList.size() > 0)
+			{
+				sort(targetList.begin(), targetList.end(), sortCreaturesByDistance);
+				cursor = targetList.front()->getPos();
+			}
+			else
+			{
+				cursor = creature->getPos();
+			}
 			return 0;
 		}
 		// look at a different position
@@ -505,7 +577,7 @@ int Player::processAction()
 			cursor = creature->getPos();
 			return 0;
 		}
-		else if (state == STATE_INSPECT && key.c == '.')
+		else if (state == STATE_INSPECT && (key.c == '.' || key.vk == TCODK_ENTER))
 		{
 			state = STATE_DEFAULT;
 			return actionLook(cursor);
@@ -857,6 +929,14 @@ std::string Player::getName()
 int Player::getRealSkillValue(SKILLS skill)
 {
 	return skills[skill].value + attributes[skills[skill].att];
+}
+
+bool sortCreaturesByDistance(Creature* a, Creature* b)
+{
+	Point ppos = world.player->getCreature()->getPos();
+	int da = Point::sqlen(a->getPos() - ppos);
+	int db = Point::sqlen(b->getPos() - ppos);
+	return da < db;
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/
