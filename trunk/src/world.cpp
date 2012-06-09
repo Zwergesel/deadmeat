@@ -138,14 +138,14 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 		{
 			TileInfo inf = tileSet->getInfo(level->getTile(Point(x, y)));
 			if (fovMap->isInFov(x,y))
-			{        
+			{
 				level->setSeen(Point(x,y), true);
 				TCODConsole::root->putCharEx(
 				  view.x + x + offset.x,
 				  view.y + y + offset.y,
 				  inf.sym,
-          inf.color,
-          inf.background
+				  inf.color,
+				  inf.background
 				);
 			}
 			else if (!fovMap->isInFov(x,y) && level->isSeen(Point(x,y)))
@@ -217,8 +217,73 @@ void World::drawWorld()
 		Point c = player->getCursor() + levelOffset;
 		TCODConsole::root->setCharBackground(viewLevel.x + c.x, viewLevel.y + c.y, TCODColor::yellow, TCOD_BKGND_ALPHA(0.7));
 	}
+	else if (state == STATE_CHARINFO)
+	{
+		drawCharInfo();
+	}
 	drawMessage();
 	drawInfo();
+}
+
+void World::drawCharInfo()
+{
+	TCODConsole charInfo(viewLevel.width, viewLevel.height);
+	charInfo.printFrame(0, 0, charInfo.getWidth(), charInfo.getHeight(), true, TCOD_BKGND_DEFAULT, "Character Information");
+	charInfo.printEx(4, 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s", player->getName().c_str());
+	charInfo.printEx(4, 6, TCOD_BKGND_DEFAULT, TCOD_LEFT, "PLAYERCLASS");
+	charInfo.printEx(4, 8, TCOD_BKGND_DEFAULT, TCOD_LEFT, "PLAYERRACE");
+	charInfo.printEx(4, 8, TCOD_BKGND_DEFAULT, TCOD_LEFT, "SOMETHING");
+	charInfo.printEx(4, 10, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Health: %d", player->getCreature()->getHealth().second);
+	charInfo.printEx(4, 12, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Mana: %d", player->getCreature()->getMana().second);
+
+	TCODConsole attributeInfo(36, 12);
+	attributeInfo.printFrame(0, 0, attributeInfo.getWidth(), attributeInfo.getHeight(), true, TCOD_BKGND_DEFAULT, "Attributes");
+	attributeInfo.printEx(attributeInfo.getWidth()/2, 3, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Strength        %2d", player->getAttribute(ATTR_STR));
+	attributeInfo.printEx(attributeInfo.getWidth()/2, 5, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Dexterity       %2d", player->getAttribute(ATTR_DEX));
+	attributeInfo.printEx(attributeInfo.getWidth()/2, 7, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Constitution    %2d", player->getAttribute(ATTR_CON));
+	attributeInfo.printEx(attributeInfo.getWidth()/2, 9, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Intelligence    %2d", player->getAttribute(ATTR_INT));
+	if (player->getAttributePoints() > 0)
+	{
+		attributeInfo.printEx(2, 3, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[S] - ");
+		attributeInfo.printEx(2, 5, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[D] - ");
+		attributeInfo.printEx(2, 7, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[C] - ");
+		attributeInfo.printEx(2, 9, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[I] - ");
+		attributeInfo.printEx(1, 11, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Points left = %d", player->getAttributePoints());
+	}
+	TCODConsole::blit(&attributeInfo, 0, 0, 0, 0, &charInfo, 22, 2, 1.f, 1.f);
+
+	TCODConsole skillInfo(charInfo.getWidth() - 4, 38);
+	skillInfo.printFrame(0, 0, skillInfo.getWidth(), skillInfo.getHeight(), true, TCOD_BKGND_DEFAULT, "Skills");
+	for (int i=0; i<NUM_SKILL; i++)
+	{
+		if (player->getSkillPoints() > 0)
+		{
+			skillInfo.printEx(2, 2 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[%c] - ", util::letters[i]);
+		}
+		SKILLS s = static_cast<SKILLS>(i);
+		std::string att = "STR";
+		if (player->getSkill(s).att == ATTR_DEX) att = "DEX";
+		if (player->getSkill(s).att == ATTR_CON) att = "CON";
+		if (player->getSkill(s).att == ATTR_INT) att = "INT";
+		skillInfo.printEx(8, 2 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s [%2d] = %s %2d + %2d",
+		                  player->getSkill(s).name.append(15 - player->getSkill(s).name.size(), ' ').c_str(),
+		                  player->getSkill(s).value + player->getAttribute(player->getSkill(s).att),
+		                  att.c_str(), player->getAttribute(player->getSkill(s).att), player->getSkill(s).value);
+		if (player->getSkill(s).value < player->getSkill(s).maxValue)
+		{
+			std::string progress = "----------";
+			int p = (player->getSkill(s).exp - Skill::expNeeded(player->getSkill(s).value - 1)) * 100 / Skill::expNeeded(player->getSkill(s).value);
+			progress.replace(0, p/10, p/10, static_cast<unsigned char>(TCOD_CHAR_BLOCK2));
+			if (p/10 < 10 && p%10 > 0) progress.replace(p/10, 1, 1, '>');
+			skillInfo.printEx(43, 2 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s %2d", progress.c_str(), player->getSkill(s).maxValue);
+		}
+	}
+	if (player->getSkillPoints() > 0) skillInfo.printEx(1, 37, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Points left = %d", player->getSkillPoints());
+
+	TCODConsole::blit(&skillInfo, 0, 0, 0, 0, &charInfo, 2, 16, 1.f, 1.f);
+
+	TCODConsole::blit(&charInfo, 0, 0, 0, 0, TCODConsole::root, viewLevel.x, viewLevel.y, 1.f, 0.9f);
+	TCODConsole::root->flush();
 }
 
 void World::drawInfo()
@@ -243,33 +308,33 @@ void World::drawInfo()
 	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 7, TCOD_BKGND_NONE, TCOD_LEFT, "CON %2d INT %2d", player->getAttribute(ATTR_CON), player->getAttribute(ATTR_INT));
 	// Attack value and Armor Class
 	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 10, TCOD_BKGND_NONE, TCOD_LEFT, "AT %3d AC %3d", player->getCreature()->getAttack(), player->getCreature()->getDefense());
-  // XP and level
+	// XP and level
 	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 13, TCOD_BKGND_NONE, TCOD_LEFT, "Level");
-  TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 13, TCOD_BKGND_NONE, TCOD_RIGHT, "%d", player->getLevel());
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 13, TCOD_BKGND_NONE, TCOD_RIGHT, "%d", player->getLevel());
 	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 14, TCOD_BKGND_NONE, TCOD_LEFT, "Experience");
-  TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 15, TCOD_BKGND_NONE, TCOD_RIGHT, "%d/%d", player->getExperience(), player->getNeededExp());
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 15, TCOD_BKGND_NONE, TCOD_RIGHT, "%d/%d", player->getExperience(), player->getNeededExp());
 	// Time
 	int sec = (time/10) % 60;
 	int min = (time/600) % 60;
 	int hour = (time/36000) % 24;
 	int days = (time/864000);
-	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 17, TCOD_BKGND_NONE, TCOD_LEFT, "TIME PASSED");
-	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 19, TCOD_BKGND_NONE, TCOD_RIGHT, "%d DAY%s   ", days, days == 1 ? " " : "S");
-	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 20, TCOD_BKGND_NONE, TCOD_RIGHT, "%d HOUR%s  ", hour, hour == 1 ? " " : "S");
-	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 21, TCOD_BKGND_NONE, TCOD_RIGHT, "%d MINUTE%s", min, min == 1 ? " " : "S");
-	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 22, TCOD_BKGND_NONE, TCOD_RIGHT, "%d SECOND%s", sec, sec == 1 ? " " : "S");	
+	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 18, TCOD_BKGND_NONE, TCOD_LEFT, "TIME PASSED");
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 20, TCOD_BKGND_NONE, TCOD_RIGHT, "%d DAY%s   ", days, days == 1 ? " " : "S");
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 21, TCOD_BKGND_NONE, TCOD_RIGHT, "%d HOUR%s  ", hour, hour == 1 ? " " : "S");
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 22, TCOD_BKGND_NONE, TCOD_RIGHT, "%d MINUTE%s", min, min == 1 ? " " : "S");
+	TCODConsole::root->printEx(viewInfo.x + viewInfo.width - 1, viewInfo.y + 23, TCOD_BKGND_NONE, TCOD_RIGHT, "%d SECOND%s", sec, sec == 1 ? " " : "S");
 	// Status
 	TCODConsole::root->setColorControl(TCOD_COLCTRL_3, TCODColor::orange, TCODColor::black);
 	TCODConsole::root->setColorControl(TCOD_COLCTRL_4, TCODColor::red, TCODColor::black);
-	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 25, TCOD_BKGND_NONE, TCOD_LEFT, "STATUS");
-	int row = viewInfo.y + 27;
+	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 26, TCOD_BKGND_NONE, TCOD_LEFT, "STATUS");
+	int row = viewInfo.y + 28;
 	if (world.player->getNutrition() < 300)
 	{
 		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cWeak%c", TCOD_COLCTRL_4, TCOD_COLCTRL_STOP);
 	}
 	else if (world.player->getNutrition() < 800)
 	{
-		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cHungry%c", TCOD_COLCTRL_3, TCOD_COLCTRL_STOP);	
+		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cHungry%c", TCOD_COLCTRL_3, TCOD_COLCTRL_STOP);
 	}
 }
 
@@ -317,7 +382,7 @@ unsigned char World::drawBlockingWindow(const std::string& title, const std::str
 	}
 	else
 	{
-		window.printRectEx(2, 2, w - 4, h - 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, text.c_str());	
+		window.printRectEx(2, 2, w - 4, h - 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, text.c_str());
 	}
 	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, viewItemList.x, viewLevel.y + viewLevel.height/2 - h/2, 1.f, 0.9f);
 	TCODConsole::root->flush();

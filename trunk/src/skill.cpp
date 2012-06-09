@@ -4,16 +4,16 @@ Skill::Skill()
 {
 }
 
-Skill::Skill(std::string name, int value, ATTRIBUTE att)
+Skill::Skill(std::string name, int maxValue, ATTRIBUTE att)
 {
 	this->name = name;
-	this->value = value;
+	this->value = 0;
+	this->maxValue = maxValue;
 	this->att = att;
 	this->exp = 0;
-	this->used = 0;
 }
 
 int Skill::expNeeded(int currentValue)
 {
-  return 250 * (currentValue+2) * (currentValue+1);
+	return 250 * (currentValue+2) * (currentValue+1);
 }

@@ -70,8 +70,9 @@ Player::Player(std::string name):
 	attributes[ATTR_DEX] = rng->getInt(5,20);
 	attributes[ATTR_CON] = rng->getInt(5,20);
 	attributes[ATTR_INT] = rng->getInt(5,20);
-  level = 1;
-  experience = 0;
+	level = 1;
+	experience = 0;
+	attrPoints = skillPoints = 0;
 	creature = new Creature(name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 250, 75,
 	                        Weapon("bare hands", F_NEUTER | F_PLURAL, '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, SKILL_UNARMED, 2, EFFECT_NONE), 0, 10, 0
 	                       );
@@ -216,7 +217,9 @@ int Player::actionLook(Point pos)
 		{
 			world.addMessage("You don't see anything interesting here.");
 		}
-	} else {
+	}
+	else
+	{
 		world.addMessage("You cannot see this spot.");
 	}
 	return 0;
@@ -376,16 +379,54 @@ int Player::actionTakeoff(Item* item)
 	return 50;
 }
 
+int Player::actionCharInfo(TCOD_key_t key)
+{
+	if (key.vk == TCODK_ESCAPE || key.vk == TCODK_SPACE)
+	{
+		state = STATE_DEFAULT;
+		return 0;
+	}
+	if (attrPoints > 0)
+	{
+		switch (key.c)
+		{
+		case 'S':
+			attributes[ATTR_STR]++;
+			attrPoints--;
+			return 0;
+		case 'D':
+			attributes[ATTR_DEX]++;
+			attrPoints--;
+			return 0;
+		case 'C':
+			attributes[ATTR_CON]++;
+			attrPoints--;
+			return 0;
+		case 'I':
+			attributes[ATTR_INT]++;
+			attrPoints--;
+			return 0;
+		}
+	}
+	if (skillPoints > 0)
+	{
+		skills[util::letterToInt(key.c)].maxValue += 1;
+		skillPoints--;
+		return 0;
+	}
+	return 0;
+}
+
 int Player::action()
 {
 	// health regeneration
 	creature->regenerate(attributes[ATTR_CON]);
-	
+
 	int time = Player::processAction();
-	
+
 	// hunger
 	addNutrition(-time);
-	
+
 	return time;
 }
 
@@ -516,20 +557,16 @@ int Player::processAction()
 			}
 			return 0;
 		}
-    // charater screen
-    else if (state == STATE_DEFAULT && key.c == 'C')
-    {      
-      std::stringstream msg;
-      for(int i=0;i<NUM_SKILL;i++)
-      {
-        int percent = (skills[i].exp * 100) / Skill::expNeeded(skills[i].value);
-        std::string name = skills[i].name;
-        name.append(20 - skills[i].name.size(), ' ');
-        msg << name << "   " << std::setw(3) << skills[i].value << "    " << std::setw(3) << percent << "%%\n";
-      }
-      world.drawBlockingWindow("Character Information", msg.str(), " ", TCODColor::blue, true);
-      return 0;
-    }
+		// charater screen
+		else if (state == STATE_DEFAULT && key.c == 'C')
+		{
+			state = STATE_CHARINFO;
+			return 0;
+		}
+		else if (state == STATE_CHARINFO)
+		{
+			return actionCharInfo(key);
+		}
 		// open inventory screen
 		else if (state == STATE_DEFAULT && key.c == 'i')
 		{
@@ -711,6 +748,11 @@ int Player::getAttribute(ATTRIBUTE attr)
 	return attributes[attr];
 }
 
+Skill Player::getSkill(SKILLS skill)
+{
+	return skills[skill];
+}
+
 int Player::computeAttackBonus(Weapon* w)
 {
 	return (skills[w->getSkill()].value + skills[SKILL_MELEE_COMBAT].value) / 2;
@@ -726,60 +768,87 @@ void Player::moveCursor(int dir)
 	Point cnew = Point(cursor.x + dx[dir], cursor.y + dy[dir]);
 	Level* lev = world.levels[world.currentLevel];
 	if (cnew.x >= 0 && cnew.y >= 0 && cnew.x < lev->getWidth() && cnew.y < lev->getHeight()
-		&& cnew.x >= -world.levelOffset.x && cnew.y >= -world.levelOffset.y
-		&& cnew.x < world.viewLevel.width - world.levelOffset.x
-		&& cnew.y < world.viewLevel.height - world.levelOffset.y)
+	    && cnew.x >= -world.levelOffset.x && cnew.y >= -world.levelOffset.y
+	    && cnew.x < world.viewLevel.width - world.levelOffset.x
+	    && cnew.y < world.viewLevel.height - world.levelOffset.y)
 	{
 		cursor = cnew;
 	}
 }
 
-void Player::useSkill(SKILLS skill)
-{
-  skills[skill].used++;
-}
-
 void Player::incExperience(int exp)
 {
-  experience += exp;
-  while(experience >= getNeededExp())
-  {
-    levelUp();
-  }
-  int sumSkillsUsed = 0;
-  for(int i=0;i<NUM_SKILL;i++) sumSkillsUsed += skills[i].used;
-  for(int i=0;i<NUM_SKILL;i++)
-  {
-    float factor = static_cast<float>(skills[i].used) / static_cast<float>(sumSkillsUsed);
-    skills[i].exp += static_cast<int>(static_cast<float>(exp) * factor);
-    while(skills[i].exp >= Skill::expNeeded(skills[i].value))
-    {
-      skills[i].exp -= Skill::expNeeded(skills[i].value);
-      skills[i].value++;      
-    }
-  }
+	experience += exp;
+	while (experience >= getNeededExp())
+	{
+		levelUp();
+	}
+	int numSkillsInTraining = 0;
+	for (int i=0; i<NUM_SKILL; i++) if (skills[i].value < skills[i].maxValue) numSkillsInTraining++;
+	while (exp >= numSkillsInTraining && numSkillsInTraining > 0)
+	{
+		// some xp points could get lost here
+		int inc = exp / numSkillsInTraining;
+		for (int i=0; i<NUM_SKILL; i++)
+		{
+			if (skills[i].value < skills[i].maxValue)
+			{
+				int actualInc = std::min(inc, Skill::expNeeded(skills[i].maxValue - 1) - skills[i].exp);
+				skills[i].exp += actualInc;
+				while (skills[i].exp  >= Skill::expNeeded(skills[i].value))
+				{
+					skills[i].value++;
+					std::stringstream msg;
+					msg << "You feel more skilled in " << skills[i].name << ".";
+					world.addMessage(msg.str());
+				}
+				if (skills[i].value == skills[i].maxValue) numSkillsInTraining--;
+				assert(skills[i].value <= skills[i].maxValue);
+				exp -= actualInc;
+			}
+		}
+	}
 }
 
 int Player::getLevel()
 {
-  return level;
+	return level;
 }
 
 int Player::getExperience()
 {
-  return experience;
+	return experience;
 }
 
 int Player::getNeededExp()
 {
-  return 500 * (level+1) * level;
+	return 500 * (level+1) * level;
 }
 
 void Player::levelUp()
 {
-  level++;
-  //TODO
-  world.drawBlockingWindow("Level Up!", "Select an Attribute to boost:\n\n[S]trength [D]exterity\n[C]onsitution [I]ntelligence", "SDCI", TCODColor::green, true);
+	level++;
+	//TODO
+	attrPoints++;
+	skillPoints+=2;
+	std::stringstream msg;
+	msg << "You are now level " << level << "!";
+	world.addMessage(msg.str(), true);
+}
+
+int Player::getAttributePoints()
+{
+	return attrPoints;
+}
+
+int Player::getSkillPoints()
+{
+	return skillPoints;
+}
+
+std::string Player::getName()
+{
+	return name;
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/
@@ -796,7 +865,8 @@ unsigned int Player::save(Savegame& sg)
 	store ("state", (int) state) ("nutrition", nutrition);
 	store ("strength", attributes[ATTR_STR]) ("dexterity", attributes[ATTR_DEX]);
 	store ("intelligence", attributes[ATTR_INT]) ("constitution", attributes[ATTR_CON]);
-  store ("level", level) ("experiene", experience);
+	store ("level", level) ("experiene", experience);
+	store ("attrPoints", attrPoints) ("skillPoints", skillPoints);
 	sg << store;
 	return id;
 }
@@ -811,5 +881,6 @@ void Player::load(LoadBlock& load)
 	state = static_cast<STATE>(s);
 	load ("strength", attributes[ATTR_STR]) ("dexterity", attributes[ATTR_DEX]);
 	load ("intelligence", attributes[ATTR_INT]) ("constitution", attributes[ATTR_CON]);
-  load ("level", level) ("experiene", experience);
+	load ("level", level) ("experiene", experience);
+	load ("attrPoints", attrPoints) ("skillPoints", skillPoints);
 }

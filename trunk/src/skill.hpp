@@ -40,13 +40,13 @@ enum SKILLS
 struct Skill
 {
 	Skill();
-	Skill(std::string name, int value, ATTRIBUTE att);
+	Skill(std::string name, int maxValue, ATTRIBUTE att);
 	std::string name;
 	int value;
+	int maxValue;
 	int exp;
 	ATTRIBUTE att;
-	int used;
-  static int expNeeded(int currentValue);
+	static int expNeeded(int currentValue);
 };
 
 #endif

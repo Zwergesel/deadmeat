@@ -61,6 +61,7 @@ public:
 	void drawWorld();
 	void drawInfo();
 	void drawItemSelection(ItemSelection& sel);
+	void drawCharInfo();
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);

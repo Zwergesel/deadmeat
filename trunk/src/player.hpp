@@ -27,6 +27,7 @@ enum STATE
   STATE_DRESSING,
   STATE_TAKEOFF,
   STATE_INSPECT,
+  STATE_CHARINFO,
   NUM_STATE
 };
 
@@ -41,9 +42,11 @@ private:
 	static int dy[9];
 	STATE state;
 	Point cursor;
-  int level;
+	int level;
 	int nutrition;
-  int experience;
+	int experience;
+	int attrPoints;
+	int skillPoints;
 	int actionMove(int direction);
 	int actionLook(Point p);
 	int actionPickup();
@@ -53,6 +56,7 @@ private:
 	int actionTakeoff(Item*);
 	int actionDrop();
 	int actionDrop(Item*);
+	int actionCharInfo(TCOD_key_t key);
 	int computeAttackBonus(Weapon* w);
 	int computeArmorBonus(Armor* a);
 	void moveCursor(int dir);
@@ -71,12 +75,14 @@ public:
 	TCOD_key_t waitForKeypress(bool clBuf);
 	STATE getState();
 	int getAttribute(ATTRIBUTE attr);
-  void useSkill(SKILLS skill);
-  void incExperience(int exp);
-  int getLevel();
-  int getExperience();
-  int getNeededExp();
-  void levelUp();
+	Skill getSkill(SKILLS skill);
+	void incExperience(int exp);
+	int getLevel();
+	int getExperience();
+	int getNeededExp();
+	void levelUp();
+	int getAttributePoints();
+	int getSkillPoints();
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);
