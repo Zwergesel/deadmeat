@@ -13,6 +13,7 @@ enum ITEM_TYPE
 {
   ITEM_DEFAULT,
   ITEM_WEAPON,
+  ITEM_AMMO,
   ITEM_ARMOR,
   ITEM_FOOD,
   NUM_ITEM_TYPE
@@ -39,7 +40,7 @@ public:
 	TCODColor getColor();
 	std::string getName();
 	uint getFormatFlags();
-	std::string toString();
+	virtual std::string toString();
 	std::string typeString();
 
 	virtual unsigned int save(Savegame& sg);

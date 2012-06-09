@@ -29,6 +29,7 @@ enum STATE
   STATE_INSPECT,
   STATE_CHARINFO,
   STATE_RANGED_ATTACK,
+  STATE_EAT,
   NUM_STATE
 };
 
@@ -57,6 +58,7 @@ private:
 	int actionWield(Item*);
 	int actionWear(Item*);
 	int actionTakeoff(Item*);
+	int actionEat(Item*);
 	int actionDrop();
 	int actionDrop(Item*);
 	int actionCharInfo(TCOD_key_t key);

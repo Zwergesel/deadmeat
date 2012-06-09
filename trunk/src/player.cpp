@@ -185,7 +185,7 @@ int Player::actionLook(Point pos)
 		else if (items.size() == 1)
 		{
 			// ...or the items if there is no creature
-			msg << "You see " << util::format(FORMAT_INDEF, items[0]->getName(), items[0]->getFormatFlags()) << " here.";
+			msg << "You see " << util::format(FORMAT_INDEF, items[0]->toString(), items[0]->getFormatFlags()) << " here.";
 			world.addMessage(msg.str());
 		}
 		else if (items.size() >= 1)
@@ -195,7 +195,7 @@ int Player::actionLook(Point pos)
 			for (std::vector<Item*>::iterator it=items.begin(); it != items.end();)
 			{
 				std::stringstream strlist;
-				strlist << util::format(FORMAT_INDEF, (*it)->getName(), (*it)->getFormatFlags());
+				strlist << util::format(FORMAT_INDEF, (*it)->toString(), (*it)->getFormatFlags());
 				it++;
 				if (it != items.end()) strlist << ",";
 				world.addMessage(strlist.str());
@@ -257,7 +257,7 @@ int Player::actionPickup(Item* item)
 	if (creature->addItem(item))
 	{
 		std::stringstream msg;
-		msg << "You pick up " << util::format(FORMAT_INDEF, item->getName(), item->getFormatFlags()) << ".";
+		msg << "You pick up " << util::format(FORMAT_INDEF, item->toString(), item->getFormatFlags()) << ".";
 		world.addMessage(msg.str());
 		level->removeItem(item, false);
 		return 10;
@@ -293,7 +293,7 @@ int Player::actionDrop(Item* item)
 		creature->wieldMainWeapon(NULL, skills[SKILL_UNARMED].value);
 	}
 	creature->removeItem(item, false);
-	msg << "You drop " << util::format(FORMAT_INDEF, item->getName(), item->getFormatFlags()) << ".";
+	msg << "You drop " << util::format(FORMAT_INDEF, item->toString(), item->getFormatFlags()) << ".";
 	world.addMessage(msg.str());
 	level->addItem(item, creature->getPos());
 	return 10;
@@ -362,11 +362,7 @@ int Player::actionWear(Item* itemObj)
 
 int Player::actionTakeoff(Item* item)
 {
-	if (item == NULL)
-	{
-		// Selection was cancelled
-		return 0;
-	}
+	if (item == NULL) return 0;
 
 	assert(item->getType() == ITEM_ARMOR);
 	Armor* armor = static_cast<Armor*>(item);
@@ -379,6 +375,23 @@ int Player::actionTakeoff(Item* item)
 	world.addMessage(msg.str());
 
 	return 50;
+}
+
+int Player::actionEat(Item* item)
+{
+	if (item == NULL) return 0;
+	assert(item->getType() == ITEM_FOOD);
+	
+	Food* f = static_cast<Food*>(item);
+	addNutrition(f->getNutrition());
+	
+	std::stringstream msg;
+	msg << "You eat " << util::format(FORMAT_INDEF, f->toString(), f->getFormatFlags()) << ".";
+	world.addMessage(msg.str());
+	
+	creature->removeItem(item, true);
+	
+	return 10; // TODO: how long?
 }
 
 int Player::actionCharInfo(TCOD_key_t key)
@@ -535,6 +548,11 @@ int Player::processAction()
 			if (target == NULL || !world.fovMap->isInFov(cursor.x, cursor.y))
 			{
 				world.addMessage("You see nothing to shoot at here.");
+				return 0;
+			}
+			else if (target == creature)
+			{
+				world.addMessage("After a moment of hesitation you decide not to shoot yourself in the foot.");
 				return 0;
 			}
 			Weapon* w = creature->getMainWeapon();
@@ -699,6 +717,22 @@ int Player::processAction()
 			}
 			return 0;
 		}
+		// open eat screen
+		else if (state == STATE_DEFAULT && key.c == 'e')
+		{
+			world.itemSelection = ItemSelection(creature->getInventory(), "What do you want to eat?", false);
+			world.itemSelection.filterType(ITEM_FOOD)->runFilter();
+			if (world.itemSelection.getNumChoices() > 0)
+			{
+				world.itemSelection.compile(world.viewItemList.height);
+				state = STATE_EAT;
+			}
+			else
+			{
+				world.addMessage("You aren't carrying any food.");
+			}
+			return 0;
+		}
 		// handle wield window
 		else if (state == STATE_WIELD)
 		{
@@ -728,6 +762,16 @@ int Player::processAction()
 			}
 			return 0;
 		}
+		// handle eat window
+		else if (state == STATE_EAT)
+		{
+			if (world.itemSelection.keyInput(key))
+			{
+				state = STATE_DEFAULT;
+				return actionEat(world.itemSelection.getItem());
+			}
+			return 0;
+		}
 		// handle inventory
 		else if (state == STATE_INVENTORY)
 		{
@@ -741,7 +785,7 @@ int Player::processAction()
 				}
 				std::string options = "dtX";
 				std::string request = "Examining a ";
-				request.append(item->getName());
+				request.append(item->toString());
 				request.append(":");
 				request.append("\n\nd - drop");
 				if (item->getType() == ITEM_FOOD)
@@ -794,15 +838,8 @@ int Player::processAction()
 				}
 				else if (reply == 'e')
 				{
-					assert(item->getType() == ITEM_FOOD);
-					Food* f = static_cast<Food*>(item);
-					addNutrition(f->getNutrition());
-					std::stringstream msg;
-					msg << "You eat " << util::format(FORMAT_INDEF, f->getName(), f->getFormatFlags()) << ".";
-					world.addMessage(msg.str());
-					creature->removeItem(item, true);
 					state = STATE_DEFAULT;
-					return 10; // TODO: how long?
+					return actionEat(item);
 				}
 			}
 			return 0;

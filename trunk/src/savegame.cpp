@@ -15,6 +15,7 @@
 #include "items/weapon.hpp"
 #include "items/armor.hpp"
 #include "items/food.hpp"
+#include "items/ammo.hpp"
 #include "monsterfactory.hpp"
 
 std::string Savegame::version = "0.10";
@@ -304,6 +305,12 @@ void Savegame::loadObject()
 		objects[id] = static_cast<void*>(obj);
 		obj->load(load);
 	}
+	else if (objClass == "Ammo")
+	{
+		Ammo* obj = new Ammo();
+		objects[id] = static_cast<void*>(obj);
+		obj->load(load);
+	}	
 	else if (objClass == "Goblin")
 	{
 		Goblin* obj = new Goblin();
