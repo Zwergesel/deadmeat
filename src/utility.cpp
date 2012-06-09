@@ -60,7 +60,7 @@ int util::letterToInt(char c)
 {
 	if (isupper(c)) return (c + 26 - 'A');
 	else if (islower(c)) return (c - 'a');
-	return 0;
+	return -1;
 }
 
 bool Point::operator==(const Point p) const
