@@ -47,6 +47,7 @@ public:
 	std::vector<TimelineAction> getCreatures();
 	void addCreature(Creature* c, int time);
 	void removeCreature(Creature* c, bool del);
+	std::vector<Creature*> getVisibleCreatures();
 	std::vector<Item*> itemsAt(Point pos);
 	std::vector<std::pair<Point, Item*> > getItems();
 	void addItem(Item* i, Point pos);

@@ -96,3 +96,8 @@ const Point Point::operator-(const Point& p) const
 {
 	return (Point(*this) -= p);
 }
+
+int Point::sqlen(Point p)
+{
+	return p.x*p.x + p.y*p.y;
+}

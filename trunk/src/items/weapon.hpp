@@ -3,7 +3,6 @@
 
 #include "../player.hpp"
 #include "../item.hpp"
-#include <sstream>
 
 class Savegame;
 class LoadBlock;
@@ -28,10 +27,11 @@ private:
 	SKILLS skill;
 	int hands;
 	WeaponEffect effect;
+	int range;
 
 public:
 	Weapon();
-	Weapon(std::string name, uint format, symbol sym, TCODColor color, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands, WeaponEffect effect);
+	Weapon(std::string name, uint format, symbol sym, TCODColor color, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands, WeaponEffect effect, int range);
 	~Weapon();
 	Item* clone();
 
@@ -43,6 +43,7 @@ public:
 	int getEnchantment();
 	int getHandsUsed();
 	SKILLS getSkill();
+	int getRange();
 	std::string toString();
 
 	unsigned int save(Savegame& sg);

@@ -28,6 +28,7 @@ enum STATE
   STATE_TAKEOFF,
   STATE_INSPECT,
   STATE_CHARINFO,
+  STATE_RANGED_ATTACK,
   NUM_STATE
 };
 
@@ -47,6 +48,8 @@ private:
 	int experience;
 	int attrPoints;
 	int skillPoints;
+	std::vector<Creature*> targetList;
+	
 	int actionMove(int direction);
 	int actionLook(Point p);
 	int actionPickup();

@@ -57,7 +57,7 @@ int corruptSave(const std::string& fileName)
 int main()
 {
 	TCODConsole::setCustomFont("Md_curses_16x16.png",TCOD_FONT_LAYOUT_ASCII_INROW);
-	TCODConsole::initRoot(80,64,"deadmeat",false);
+	TCODConsole::initRoot(80,50,"deadmeat",false);
 	TCODSystem::setFps(30);
 
 	// Init hardcoded world
@@ -82,15 +82,15 @@ int main()
 	{
 		// Add/edit/remove creature templates here
 		Goblin goblin("goblin", F_MALE, 'g', TCODColor::green, 35, 0,
-		              Weapon("claws", F_DEFAULT, '#', TCODColor::pink, 11, 0, 4, 1, 3, 0, SKILL_UNARMED, 2, EFFECT_NONE), 15, 10, 1000
+		              Weapon("claws", F_DEFAULT, '#', TCODColor::pink, 11, 0, 4, 1, 3, 0, SKILL_UNARMED, 2, EFFECT_NONE, 1), 15, 10, 1000
 		             );
 		monsterfactory.setTemplate("goblin", &goblin);
 		Goblin snake("snake", F_MALE , 's', TCODColor::darkChartreuse, 20, 0,
-		             Weapon("teeth", F_DEFAULT, '#', TCODColor::pink, 25, 0, 11, 2, 6, 0, SKILL_UNARMED, 0, EFFECT_NONE), 0, 3, 1000
+		             Weapon("teeth", F_DEFAULT, '#', TCODColor::pink, 25, 0, 11, 2, 6, 0, SKILL_UNARMED, 0, EFFECT_NONE, 1), 0, 3, 1000
 		            );
 		monsterfactory.setTemplate("snake", &snake);
 		Goblin dragon("Smaug", F_PROPER | F_MALE, 'D', TCODColor::red, 300, 100,
-		              Weapon("fangs", F_DEFAULT, '#', TCODColor::pink, 15, 50, 19, 3, 7, 0, SKILL_UNARMED, 2, EFFECT_NONE), 75, 30, 10000
+		              Weapon("fangs", F_DEFAULT, '#', TCODColor::pink, 15, 50, 19, 3, 7, 0, SKILL_UNARMED, 2, EFFECT_NONE, 1), 75, 30, 10000
 		             );
 		monsterfactory.setTemplate("red dragon", &dragon);
 		Savegame save;
@@ -112,11 +112,11 @@ int main()
 		world.player->getCreature()->moveTo(newPos);
 		world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - world.levels[0]->getWidth(), 0);
 		world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - world.levels[0]->getHeight(), 0);
-		Weapon* sword = new Weapon("sword", F_NEUTER, '(', TCODColor::red, 10, 30, 1, 10, 20, 30, SKILL_SWORD, 1, EFFECT_NONE);
-		Weapon* dagger = new Weapon("dagger", F_NEUTER, '(', TCODColor::red, 4, 10, 8, 1, 4, 12, SKILL_DAGGER, 1, EFFECT_NONE);
+		Weapon* sword = new Weapon("sword", F_NEUTER, '(', TCODColor::red, 10, 30, 1, 10, 20, 30, SKILL_SWORD, 1, EFFECT_NONE, 1);
+		Weapon* dagger = new Weapon("dagger", F_NEUTER, '(', TCODColor::red, 4, 10, 8, 1, 4, 12, SKILL_DAGGER, 1, EFFECT_NONE, 1);
 		Item* item1 = new Item("item1", F_NEUTER | F_AN, '1', TCODColor::blue);
 		Item* item2 = new Item("item2", F_NEUTER | F_AN, '2', TCODColor::green);
-		Weapon* mace = new Weapon("cursed mace", F_NEUTER, '(', TCODColor::red, 15, -60, 4, 1, 1, -60, SKILL_MACEFLAIL, 1, EFFECT_NONE);
+		Weapon* bow = new Weapon("longbow", F_NEUTER, '(', TCODColor::cyan, 25, 25, 30, 2, 10, 0, SKILL_BOW, 1, EFFECT_NONE, 10);
 		Armor* uber = new Armor("uber armor", F_NEUTER | F_AN, ')', TCODColor::black, 150, 2, 10, ARMOR_BODY, SKILL_PLATE_ARMOR);
 		Armor* crap = new Armor("prussian pickelhaube", F_NEUTER, ')', TCODColor::black, 50, 1, 0, ARMOR_HAT, SKILL_PLATE_ARMOR);
 		Armor* boots = new Armor("clown shoes", F_NEUTER | F_BOOTS, ')', TCODColor::black, -30, -1, 12, ARMOR_BOOTS, SKILL_CLOTH_ARMOR);
@@ -134,7 +134,7 @@ int main()
 		world.levels[0]->addItem(item1, getRandomLocation(world.levels[0]));
 		world.levels[0]->addItem(item2, getRandomLocation(world.levels[0]));
 		world.levels[0]->addItem(sword, getRandomLocation(world.levels[0]));
-		world.levels[0]->addItem(mace, getRandomLocation(world.levels[0]));
+		world.levels[0]->addItem(bow, world.player->getCreature()->getPos());
 		world.levels[0]->addItem(uber, getRandomLocation(world.levels[0]));
 		world.levels[0]->addItem(crap, getRandomLocation(world.levels[0]));
 		world.levels[0]->addItem(boots, getRandomLocation(world.levels[0]));

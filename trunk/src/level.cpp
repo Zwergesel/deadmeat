@@ -107,6 +107,20 @@ std::vector<TimelineAction> Level::getCreatures()
 	return creatures;
 }
 
+std::vector<Creature*> Level::getVisibleCreatures()
+{
+	std::vector<Creature*> visible;
+	for (auto it = creatures.begin(); it != creatures.end(); it++)
+	{
+		Point pos = it->actor->getPos();
+		if (world.fovMap->isInFov(pos.x, pos.y) && it->actor != world.player->getCreature())
+		{
+			visible.push_back(it->actor);
+		}
+	}
+	return visible;
+}
+
 void Level::addCreature(Creature* c, int time)
 {
 	creatures.push_back(TimelineAction(c, time));
