@@ -504,7 +504,7 @@ int Player::actionRangedAttack(Point pos)
 		}
 	}
 	// Shoot
-	return creature->attack(target);
+	return creature->rangedAttack(target, w);
 }
 
 int Player::action()
@@ -1020,7 +1020,7 @@ const std::string Player::HELP_TEXT =
 "1-9 - Walk / Move cursor\n"
 "5 - Wait for a second\n"
 ": - Look at items at your location\n"
-"; - Look at item/monsters somewhere else\n"
+"; - Look at items/monsters somewhere else\n"
 ", - Pick up item\n"
 ". - Confirm Location\n"
 "d - Drop items\n"
@@ -1030,7 +1030,7 @@ const std::string Player::HELP_TEXT =
 "w - Wield a weapon\n"
 "W - Wear armor\n"
 "T - Take off armor\n"
-"x - Cycle targets (after using 'f')\n\n"
+"x - Cycle targets (when using 'f')\n\n"
 "C - Character info\n"
 "S - Save and quit the game\n"
 "Q - Quit and abandon the game\n"
