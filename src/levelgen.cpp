@@ -211,7 +211,7 @@ Level* LevelGen::generateRoomLevel(int width, int height, float roomDensity)
 					}
 					else if (i >= sizeY + sizeX + 1)
 					{
-						if (dr == sizeY  || dl == sizeY + 1) swap1[x+i+(y+j)*width] = 3;
+						if (dr == sizeY  || dr == sizeY + 1) swap1[x+i+(y+j)*width] = 3;
 						if (dr < sizeY) swap1[x+i+(y+j)*width] = 1;
 					}
 					else
