@@ -62,6 +62,19 @@ Level* LevelGen::generateCaveLevel(int width, int height, float density)
 	return m;
 }
 
+class RoomLevelCorridorsPathfinding : public ITCODPathCallback {
+    public: virtual float getWalkCost( int xFrom, int yFrom, int xTo, int yTo, void *userData) const
+	{
+		std::vector<int>* dat = static_cast<std::vector<int>*>(userData);
+		int width = dat->back();
+		int from = yFrom*width+xFrom;
+		int to = yTo*width+xTo;
+		if ((*dat)[from] == 3 || (*dat)[to] == 3) return 0.0f;
+		if ((*dat)[to] == 1) return 0.5f;
+		return 1.0f;
+	}
+};
+
 Level* LevelGen::generateRoomLevel(int width, int height, float roomDensity)
 {
 	if (width <= 2 || height <= 2) return NULL;
@@ -259,19 +272,25 @@ Level* LevelGen::generateRoomLevel(int width, int height, float roomDensity)
 			map.setProperties(x,y,false,false);
 			if (swap1[x+y*width] == 0 || swap1[x+y*width] == 2) map.setProperties(x,y,false,true);
 		}
-	for (int c=0; c<(int)doors.size()/2; c++)
+	for (int c=0; c<(int)doors.size(); c++)
 	{
 		int a = rng.getInt(0, doors.size() - 1);
 		int b = rng.getInt(0, doors.size() - 1);
 		if (a == b) continue;
-		TCODDijkstra path(&map, 0.f);
-		path.compute(doors[a].x, doors[a].y);
-		path.setPath(doors[b].x, doors[b].y);
-		while (!path.isEmpty())
+		std::vector<int> vec;
+		for (int y=0; y<height; y++) for (int x=0; x<width; x++) vec.push_back(swap1[x+y*width]);
+		vec.push_back(width);
+		TCODDijkstra* path = new TCODDijkstra(width,height,new RoomLevelCorridorsPathfinding(),&vec,0.0f);
+		path->compute(doors[a].x, doors[a].y);
+		path->setPath(doors[b].x, doors[b].y);
+		while (!path->isEmpty())
 		{
 			int x,y;
-			path.walk(&x,&y);
-			if (swap1[x+y*width] == 0) swap1[x+y*width] = 1;
+			path->walk(&x,&y);
+			if (swap1[x+y*width] == 0)
+			{
+				swap1[x+y*width] = 1;
+			}
 		}
 	}
 
