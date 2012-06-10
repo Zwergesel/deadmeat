@@ -17,14 +17,6 @@ class LoadBlock;
 class Creature
 {
 protected:
-	static const double FACT_ATSKL;		// attack skill -> attack bonus
-	static const double FACT_DEFSKL;	// defense skill -> defense bonus
-	static const double FACT_DEF;		// defense bonus scaling
-	static const double FACT_HIT;		// hitbonus scaling
-	static const double FACT_WENCH;		// weapon enchantment -> attack bonus
-	static const double FACT_AENCH;		// armor enchantment -> defense bonus
-	static const double FACT_ATSPD;		// hindrance -> attack speed
-	static const double FACT_WALKSPD;	// hindrance -> walk speed
 
 	std::string name;
 	uint formatFlags; // combination of FormatFlag
@@ -86,7 +78,7 @@ public:
 	void wearArmor(Armor* armor, int defenseSkill);
 	void takeOffArmor(Armor* armor);
 
-	bool addItem(Item* item);
+	symbol addItem(Item* item);
 	void removeItem(Item* item, bool del);
 
 	int attack(Creature* c);
@@ -100,6 +92,15 @@ public:
 
 	virtual unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);
+	
+	static const double FACT_ATSKL;		// attack skill -> attack bonus
+	static const double FACT_DEFSKL;	// defense skill -> defense bonus
+	static const double FACT_DEF;		// defense bonus scaling
+	static const double FACT_HIT;		// hitbonus scaling
+	static const double FACT_WENCH;		// weapon enchantment -> attack bonus
+	static const double FACT_AENCH;		// armor enchantment -> defense bonus
+	static const double FACT_ATSPD;		// hindrance -> attack speed
+	static const double FACT_WALKSPD;	// hindrance -> walk speed
 };
 
 class Goblin: public Creature
