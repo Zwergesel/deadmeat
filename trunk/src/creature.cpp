@@ -309,11 +309,15 @@ int Creature::attack(Creature* target)
 	{
 		assert(inventory[mainWeapon]->getType() == ITEM_WEAPON);
 		Weapon* w = static_cast<Weapon*>(inventory[mainWeapon]);
-		// weapon to hit + weapon enchantment + fighting skill + weapon skill
-		attack = static_cast<int>(FACT_HIT * w->getHitBonus() + FACT_WENCH * w->getEnchantment() + FACT_ATSKL * attackSkill);
-		damage = w->rollDamage();
-		// weapon speed + armor hindrance
-		speed = static_cast<int>(w->getSpeed() + FACT_ATSPD * getHindrance());
+		// Ranged weapons are not used in close combat
+		if (w->getRange() <= 1)
+		{
+			// weapon to hit + weapon enchantment + fighting skill + weapon skill
+			attack = static_cast<int>(FACT_HIT * w->getHitBonus() + FACT_WENCH * w->getEnchantment() + FACT_ATSKL * attackSkill);
+			damage = w->rollDamage();
+			// weapon speed + armor hindrance
+			speed = static_cast<int>(w->getSpeed() + FACT_ATSPD * getHindrance());
+		}
 	}
 	int defense = target->getDefense();
 	TCODRandom rngGauss;
@@ -329,6 +333,50 @@ int Creature::attack(Creature* target)
 		std::stringstream msg;
 		controlled ? (msg << "You hit ") :
 		(msg << util::format(FORMAT_DEF, name, formatFlags, true) << " hits ");
+		target->isControlled() ? (msg << "you for ") :
+		(msg << util::format(FORMAT_DEF, target->getName(), target->getFormatFlags()) << " for ");
+		msg << damage << " damage.";
+		world.addMessage(msg.str());
+		target->hurt(damage, this);
+	}
+	else
+	{
+		std::stringstream msg;
+		controlled ? (msg << "You miss ") :
+		(msg << util::format(FORMAT_DEF, name, formatFlags, true) << " misses ");
+		target->isControlled() ? (msg << "you.") :
+		(msg << util::format(FORMAT_DEF, target->getName(), target->getFormatFlags()) << ".");
+		world.addMessage(msg.str());
+	}
+
+	return speed;
+}
+
+int Creature::rangedAttack(Creature* target, Weapon* w)
+{
+	assert(w->getType() == ITEM_WEAPON);
+	assert(w->getRange() > 1);
+	// weapon to hit + weapon enchantment + fighting skill + weapon skill
+	int attack = static_cast<int>(FACT_HIT * w->getHitBonus() + FACT_WENCH * w->getEnchantment() + FACT_ATSKL * attackSkill);
+	int damage = w->rollDamage();
+	// weapon speed + armor hindrance
+	int speed = static_cast<int>(w->getSpeed() + FACT_ATSPD * getHindrance());
+	// TODO: scale attack difficulty with distance
+
+	int defense = target->getDefense();
+	TCODRandom rngGauss;
+	rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
+	int mean = attack - defense;
+	int hit = 0;
+	if (mean >= 0) hit = rngGauss.getInt(-300, 300, mean);
+	if (mean < 0) hit = -rngGauss.getInt(-300, 300, -mean);
+	if (hit >= -70)
+	{
+		if (hit <= 0) damage /= 2;
+		if (hit > 175) damage *= 2;
+		std::stringstream msg;
+		controlled ? (msg << "You shoot ") :
+		(msg << util::format(FORMAT_DEF, name, formatFlags, true) << " shoots ");
 		target->isControlled() ? (msg << "you for ") :
 		(msg << util::format(FORMAT_DEF, target->getName(), target->getFormatFlags()) << " for ");
 		msg << damage << " damage.";

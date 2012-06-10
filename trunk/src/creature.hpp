@@ -81,7 +81,8 @@ public:
 	symbol addItem(Item* item);
 	void removeItem(Item* item, bool del);
 
-	int attack(Creature* c);
+	int attack(Creature* target);
+	int rangedAttack(Creature* target, Weapon* weapon);
 	void move(Point pos);
 	void moveTo(Point pos);
 
