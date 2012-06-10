@@ -93,7 +93,7 @@ public:
 
 	virtual unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);
-	
+
 	static const double FACT_ATSKL;		// attack skill -> attack bonus
 	static const double FACT_DEFSKL;	// defense skill -> defense bonus
 	static const double FACT_DEF;		// defense bonus scaling

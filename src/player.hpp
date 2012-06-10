@@ -51,7 +51,7 @@ private:
 	int skillPoints;
 	std::vector<Creature*> targetList;
 	static const std::string HELP_TEXT;
-	
+
 	int actionMove(int direction);
 	int actionLook(Point p);
 	int actionPickup();
