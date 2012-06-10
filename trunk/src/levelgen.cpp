@@ -70,7 +70,8 @@ class RoomLevelCorridorsPathfinding : public ITCODPathCallback {
 		int from = yFrom*width+xFrom;
 		int to = yTo*width+xTo;
 		if ((*dat)[from] == 3 || (*dat)[to] == 3) return 0.0f;
-		if ((*dat)[to] == 1) return 0.5f;
+		if ((*dat)[to] == 1) return 0.3f;
+		if ((*dat)[to] == 2) return 5.0f;
 		return 1.0f;
 	}
 };
@@ -272,7 +273,7 @@ Level* LevelGen::generateRoomLevel(int width, int height, float roomDensity)
 			map.setProperties(x,y,false,false);
 			if (swap1[x+y*width] == 0 || swap1[x+y*width] == 2) map.setProperties(x,y,false,true);
 		}
-	for (int c=0; c<(int)doors.size(); c++)
+	for (int c=0; c<(int)doors.size()*10; c++)
 	{
 		int a = rng.getInt(0, doors.size() - 1);
 		int b = rng.getInt(0, doors.size() - 1);
