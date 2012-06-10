@@ -107,7 +107,7 @@ int main()
 	}
 	else
 	{
-		world.levels[0] = level_generator.generateCaveLevel(80, 50, 40.f);
+    world.levels[0] = level_generator.generateRoomLevel(80,50);// level_generator.generateCaveLevel(80, 50, 40.f);
 		world.currentLevel = 0;
 		Point newPos = getRandomLocation(world.levels[0]);
 		world.player->getCreature()->moveTo(newPos);

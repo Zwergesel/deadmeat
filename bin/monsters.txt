@@ -15,6 +15,7 @@ enchantment: 0
 skill: 9
 hands: 2
 effect: 0
+range: 1
 
 [[Goblin: 2]]
 name: goblin
@@ -54,6 +55,7 @@ enchantment: 0
 skill: 9
 hands: 2
 effect: 0
+range: 1
 
 [[Goblin: 4]]
 name: Smaug
@@ -93,6 +95,7 @@ enchantment: 0
 skill: 9
 hands: 0
 effect: 0
+range: 1
 
 [[Goblin: 6]]
 name: snake
