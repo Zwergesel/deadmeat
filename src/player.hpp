@@ -50,6 +50,7 @@ private:
 	int attrPoints;
 	int skillPoints;
 	std::vector<Creature*> targetList;
+	static const std::string HELP_TEXT;
 	
 	int actionMove(int direction);
 	int actionLook(Point p);
@@ -61,6 +62,8 @@ private:
 	int actionEat(Item*);
 	int actionDrop();
 	int actionDrop(Item*);
+	int actionRangedAttack(Point p);
+	void actionAutoTargetting();
 	int actionCharInfo(TCOD_key_t key);
 	int computeAttackBonus(Weapon* w);
 	int computeArmorBonus(Armor* a);

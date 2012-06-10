@@ -254,10 +254,11 @@ int Player::actionPickup()
 int Player::actionPickup(Item* item)
 {
 	Level* level = world.levels[world.currentLevel];
-	if (creature->addItem(item))
+	symbol s = creature->addItem(item);
+	if (s != 0)
 	{
 		std::stringstream msg;
-		msg << "You pick up " << util::format(FORMAT_INDEF, item->toString(), item->getFormatFlags()) << ".";
+		msg << "You pick up [" << s << "] " << util::format(FORMAT_INDEF, item->toString(), item->getFormatFlags()) << ".";
 		world.addMessage(msg.str());
 		level->removeItem(item, false);
 		return 10;
@@ -436,6 +437,76 @@ int Player::actionCharInfo(TCOD_key_t key)
 	return 0;
 }
 
+void Player::actionAutoTargetting()
+{
+	bool advanceTarget = false;
+	for (auto it = targetList.begin(); it != targetList.end(); it++)
+	{
+		if ((*it)->getPos() == cursor)
+		{
+			it++;
+			if (it != targetList.end())
+			{
+				cursor = (*it)->getPos();
+				advanceTarget = true;
+			}
+			break;
+		}
+	}
+	if (!advanceTarget && targetList.size() > 0)
+	{
+		cursor = targetList.front()->getPos();
+	}
+}
+
+int Player::actionRangedAttack(Point pos)
+{
+	Level* level = world.levels[world.currentLevel];
+	// Check for valid target
+	Creature* target = level->creatureAt(pos);
+	if (target == NULL || !world.fovMap->isInFov(pos.x, pos.y))
+	{
+		world.addMessage("You see nothing to shoot at here.");
+		return 0;
+	}
+	else if (target == creature)
+	{
+		world.addMessage("After a moment of hesitation you decide not to shoot yourself in the foot.");
+		return 0;
+	}
+	// Check weapon range
+	Weapon* w = creature->getMainWeapon();
+	if (w->getRange()*w->getRange() < Point::sqlen(creature->getPos() - pos))
+	{
+		std::stringstream msg;
+		msg << "That target is out of range of " << util::format(FORMAT_YOUR, w->getName(), w->getFormatFlags()) << ".";
+		world.addMessage(msg.str());
+		return 0;
+	}
+	state = STATE_DEFAULT;
+	// Disruption by creatures standing next to the player
+	TCODRandom* rng = TCODRandom::getInstance();
+	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
+	for (int i=0; i<9; i++)
+	{
+		if (i == 4) i++;
+		Creature* c = level->creatureAt(creature->getPos() + Point(dx[i], dy[i]));
+		if (c != NULL /* TODO: && c->isHostile() && !c->isParalyzed() */)
+		{
+			if (rng->getInt(0,99) < 50)
+			{
+				std::stringstream msg;
+				msg << util::format(FORMAT_DEF, c->getName(), c->getFormatFlags(), true) << " interrupts your shot.";
+				world.addMessage(msg.str());
+				// Half shot time when interrupted
+				return static_cast<int>(w->getSpeed() + Creature::FACT_ATSPD * creature->getHindrance()) / 2;
+			}
+		}
+	}
+	// Shoot
+	return creature->attack(target);
+}
+
 int Player::action()
 {
 	// health regeneration
@@ -486,6 +557,12 @@ int Player::processAction()
 			world.drawMessageLog();
 			return 0;
 		}
+		// help screen
+		else if (state == STATE_DEFAULT && key.c == 'H')
+		{
+			world.drawBlockingWindow("Help", HELP_TEXT, " ", TCODColor::blue, false);
+			return 0;
+		}
 		// numpad player movement
 		else if (state == STATE_DEFAULT && key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
 		{
@@ -521,50 +598,13 @@ int Player::processAction()
 		// Auto-targetting with ranged attack cursor
 		else if (state == STATE_RANGED_ATTACK && key.c == 'x')
 		{
-			bool advanceTarget = false;
-			for (auto it = targetList.begin(); it != targetList.end(); it++)
-			{
-				if ((*it)->getPos() == cursor)
-				{
-					it++;
-					if (it != targetList.end())
-					{
-						cursor = (*it)->getPos();
-						advanceTarget = true;
-					}
-					break;
-				}
-			}
-			if (!advanceTarget && targetList.size() > 0)
-			{
-				cursor = targetList.front()->getPos();
-			}
+			actionAutoTargetting();
 			return 0;
 		}
 		// fire a ranged weapon
 		else if (state == STATE_RANGED_ATTACK && (key.c == '.' || key.vk == TCODK_ENTER))
 		{
-			Creature* target = world.levels[world.currentLevel]->creatureAt(cursor);
-			if (target == NULL || !world.fovMap->isInFov(cursor.x, cursor.y))
-			{
-				world.addMessage("You see nothing to shoot at here.");
-				return 0;
-			}
-			else if (target == creature)
-			{
-				world.addMessage("After a moment of hesitation you decide not to shoot yourself in the foot.");
-				return 0;
-			}
-			Weapon* w = creature->getMainWeapon();
-			if (w->getRange()*w->getRange() < Point::sqlen(creature->getPos() - cursor))
-			{
-				std::stringstream msg;
-				msg << "That target is out of range of " << util::format(FORMAT_YOUR, w->getName(), w->getFormatFlags()) << ".";
-				world.addMessage(msg.str());
-				return 0;
-			}
-			state = STATE_DEFAULT;
-			return creature->attack(target);
+			return actionRangedAttack(cursor);
 		}
 		// initiate ranged attacking
 		else if (state == STATE_DEFAULT && key.c == 'f')
@@ -975,6 +1015,26 @@ bool sortCreaturesByDistance(Creature* a, Creature* b)
 	int db = Point::sqlen(b->getPos() - ppos);
 	return da < db;
 }
+
+const std::string Player::HELP_TEXT =
+"1-9 - Walk / Move cursor\n"
+"5 - Wait for a second\n"
+": - Look at items at your location\n"
+"; - Look at item/monsters somewhere else\n"
+", - Pick up item\n"
+". - Confirm Location\n"
+"d - Drop items\n"
+"e - Eat\n"
+"f - Fire a ranged weapon\n"
+"i - Open inventory\n"
+"w - Wield a weapon\n"
+"W - Wear armor\n"
+"T - Take off armor\n"
+"x - Cycle targets (after using 'f')\n\n"
+"C - Character info\n"
+"S - Save and quit the game\n"
+"Q - Quit and abandon the game\n"
+"Space - Continue\nEsc - Cancel";
 
 /*--------------------- SAVING AND LOADING ---------------------*/
 

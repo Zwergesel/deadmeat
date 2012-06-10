@@ -363,18 +363,16 @@ void Creature::setBaseWeapon(Weapon base)
 	baseWeapon = base;
 }
 
-bool Creature::addItem(Item* item)
+symbol Creature::addItem(Item* item)
 {
-	bool erg = false;
 	for (int i=0; i<util::numLetters; i++)
 	{
 		if (inventory.insert(std::pair<symbol, Item*>(util::letters[i], item)).second)
 		{
-			erg = true;
-			break;
+			return util::letters[i];
 		}
 	}
-	return erg;
+	return 0;
 }
 
 void Creature::removeItem(Item* item, bool del)
