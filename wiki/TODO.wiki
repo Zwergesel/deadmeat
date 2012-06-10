@@ -3,21 +3,14 @@
 = TODO-List =
 
 == Test ==
-  * Implement creature (default and calculated) walk speed and armor hindrance (can be speed bonus? boots of speed?)
-  * Hit point regeneration
-  * Line of sight for monsters
-  * Make sure defense and attack calculation in creature work correctly (especially armorSkill, fightingskill)  
-  * message log should be saved
-  * message log should make sure that it's height does not get too big
-  * Looking at things that are not at the player's location
+  * Make 'e' eating
+  * character information scree (levelup?)
 
 == Small improvements ==
   * Variable "cursed" in Item
   * Creature::die should work without an instigator
   * Food should rot
   * Time to eat should depend on the food
-  * Make 'e' eating
-  * character information scree (levelup?)
 
 == Major improvements ==
   * stacking of items
