@@ -137,7 +137,7 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 		for (int x=startX; x<rangeX; x++)
 		{
 			TileInfo inf = tileSet->getInfo(level->getTile(Point(x, y)));
-			if (fovMap->isInFov(x,y))
+			if (true || fovMap->isInFov(x,y))
 			{
 				level->setSeen(Point(x,y), true);
 				TCODConsole::root->putCharEx(
