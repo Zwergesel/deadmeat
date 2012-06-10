@@ -13,10 +13,9 @@ enum Tile
   TILE_CAVE_WALL,
   TILE_STONE_FLOOR,
   TILE_MEADOW,
+  TILE_DOOR,
   TILES_LENGTH
 };
-
-#define TILESET_LENGTH 4
 
 struct TileInfo
 {
