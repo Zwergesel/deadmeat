@@ -382,16 +382,16 @@ int Player::actionEat(Item* item)
 {
 	if (item == NULL) return 0;
 	assert(item->getType() == ITEM_FOOD);
-	
+
 	Food* f = static_cast<Food*>(item);
 	addNutrition(f->getNutrition());
-	
+
 	std::stringstream msg;
 	msg << "You eat " << util::format(FORMAT_INDEF, f->toString(), f->getFormatFlags()) << ".";
 	world.addMessage(msg.str());
-	
+
 	creature->removeItem(item, true);
-	
+
 	return 10; // TODO: how long?
 }
 
@@ -426,13 +426,13 @@ int Player::actionCharInfo(TCOD_key_t key)
 	}
 	if (skillPoints > 0)
 	{
-    int k = util::letterToInt(key.c);
-    if(k >= 0 && k < NUM_SKILL)
-    {
-		  skills[k].maxValue += 1;
-		  skillPoints--;
-      return 0;
-    }		
+		int k = util::letterToInt(key.c);
+		if (k >= 0 && k < NUM_SKILL)
+		{
+			skills[k].maxValue += 1;
+			skillPoints--;
+			return 0;
+		}
 	}
 	return 0;
 }
@@ -613,7 +613,7 @@ int Player::processAction()
 			if (w == NULL || w->getRange() <= 1)
 			{
 				world.addMessage("You are not wielding a ranged weapon.");
-				return 0; 
+				return 0;
 			}
 			state = STATE_RANGED_ATTACK;
 			targetList = world.levels[world.currentLevel]->getVisibleCreatures();
@@ -1017,24 +1017,24 @@ bool sortCreaturesByDistance(Creature* a, Creature* b)
 }
 
 const std::string Player::HELP_TEXT =
-"1-9 - Walk / Move cursor\n"
-"5 - Wait for a second\n"
-": - Look at items at your location\n"
-"; - Look at items/monsters somewhere else\n"
-", - Pick up item\n"
-". - Confirm Location\n"
-"d - Drop items\n"
-"e - Eat\n"
-"f - Fire a ranged weapon\n"
-"i - Open inventory\n"
-"w - Wield a weapon\n"
-"W - Wear armor\n"
-"T - Take off armor\n"
-"x - Cycle targets (when using 'f')\n\n"
-"C - Character info\n"
-"S - Save and quit the game\n"
-"Q - Quit and abandon the game\n"
-"Space - Continue\nEsc - Cancel";
+  "1-9 - Walk / Move cursor\n"
+  "5 - Wait for a second\n"
+  ": - Look at items at your location\n"
+  "; - Look at items/monsters somewhere else\n"
+  ", - Pick up item\n"
+  ". - Confirm Location\n"
+  "d - Drop items\n"
+  "e - Eat\n"
+  "f - Fire a ranged weapon\n"
+  "i - Open inventory\n"
+  "w - Wield a weapon\n"
+  "W - Wear armor\n"
+  "T - Take off armor\n"
+  "x - Cycle targets (when using 'f')\n\n"
+  "C - Character info\n"
+  "S - Save and quit the game\n"
+  "Q - Quit and abandon the game\n"
+  "Space - Continue\nEsc - Cancel";
 
 /*--------------------- SAVING AND LOADING ---------------------*/
 

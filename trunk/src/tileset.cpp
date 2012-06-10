@@ -10,7 +10,7 @@ TileSet::TileSet()
 	info[TILE_CAVE_WALL]	= TileInfo(false, TCOD_CHAR_BLOCK1, TCODColor::grey, TCODColor(125,95,64));
 	info[TILE_STONE_FLOOR]	= TileInfo(true, '.', TCODColor::grey, TCODColor::white);
 	info[TILE_MEADOW]		= TileInfo(true, '.', TCODColor::green, TCODColor::white);
-  info[TILE_DOOR]		= TileInfo(true, '+', TCODColor::yellow, TCODColor::white);
+	info[TILE_DOOR]		= TileInfo(true, '+', TCODColor::yellow, TCODColor::white);
 }
 
 TileSet::~TileSet()

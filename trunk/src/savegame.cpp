@@ -310,7 +310,7 @@ void Savegame::loadObject()
 		Ammo* obj = new Ammo();
 		objects[id] = static_cast<void*>(obj);
 		obj->load(load);
-	}	
+	}
 	else if (objClass == "Goblin")
 	{
 		Goblin* obj = new Goblin();
