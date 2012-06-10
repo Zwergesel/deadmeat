@@ -87,3 +87,25 @@ alt
   * unknown armor
   * known weapon
   * unknown weapon
+
+
+
+proposal #3
+
+  * Swiftness [DEX] (Increases attack speed)
+  * Accuracy [DEX] (Increases hit bonus)
+  * Power [STR] (Increases weapon and unarmed damage)
+  * Evasion [DEX] (Increases defense bonus)
+  * Armor [STR] (Decreases armor hindrance)
+  * Running [CON] (Increases movement speed)
+  * Aiming [INT] (Increases ranged attack bonus)
+  * Endurance [CON] (Increases max. health)
+  * Arcana [STR] (Increases max. mana)
+  * Channeling [INT] (Increases mana regeneration)
+  * Toughness [CON] (Reduces effect of hunger/weakness/burdened)
+  * Stealth [DEX]
+  * Identification [INT]
+  * Alchemy [INT]
+  * Cooking [DEX]
+  * Blacksmithing [STR]
+  * ....
