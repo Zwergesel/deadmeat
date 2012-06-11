@@ -17,7 +17,6 @@
   * stacking of items
   * Fully implement attributes
   * Implement weapon and fighting skill training
-  * Implement ranged attacking (targetting system to allow more than 8 directions?)
   * Changing levels
   * Display unseen items where the player has last seen them even if a monster picked them up
   * Generate monsters with items
