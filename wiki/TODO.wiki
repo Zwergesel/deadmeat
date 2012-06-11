@@ -3,7 +3,6 @@
 = TODO-List =
 
 == Test ==
-  * Make 'e' eating
   * character information scree (levelup?)
 
 ==Bugs/Issues==
@@ -12,7 +11,6 @@
 == Small improvements ==
   * Variable "cursed" in Item
   * Creature::die should work without an instigator
-  * Food should rot
   * Time to eat should depend on the food
 
 == Major improvements ==
