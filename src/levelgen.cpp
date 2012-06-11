@@ -281,13 +281,14 @@ Level* LevelGen::generateRoomLevel(int width, int height, float roomDensity)
 		std::vector<int> vec;
 		for (int y=0; y<height; y++) for (int x=0; x<width; x++) vec.push_back(swap1[x+y*width]);
 		vec.push_back(width);
-		TCODDijkstra* path = new TCODDijkstra(width,height,new RoomLevelCorridorsPathfinding(),&vec,0.0f);
-		path->compute(doors[a].x, doors[a].y);
-		path->setPath(doors[b].x, doors[b].y);
-		while (!path->isEmpty())
+    RoomLevelCorridorsPathfinding pathFinding;
+		TCODDijkstra path(width,height,&pathFinding,&vec,0.0f);
+		path.compute(doors[a].x, doors[a].y);
+		path.setPath(doors[b].x, doors[b].y);
+		while (!path.isEmpty())
 		{
 			int x,y;
-			path->walk(&x,&y);
+			path.walk(&x,&y);
 			if (swap1[x+y*width] == 0)
 			{
 				swap1[x+y*width] = 1;
@@ -297,11 +298,60 @@ Level* LevelGen::generateRoomLevel(int width, int height, float roomDensity)
 
 	Level* m = new Level(width,height);
 	for (int x=0; x<width; x++) for (int y=0; y<height; y++)
-		{
-			if (swap1[x + y * width] == 0 || swap1[x + y *width] == 3) m->setTile(Point(x, y), TILE_CAVE_WALL);
-			else if (swap1[x + y * width] == 1) m->setTile(Point(x, y), TILE_CAVE_FLOOR);
-			else if (swap1[x + y * width] == 2) m->setTile(Point(x, y), TILE_DOOR);
-		}
+	{
+		if (swap1[x + y * width] == 0 || swap1[x + y *width] == 3) m->setTile(Point(x, y), TILE_CAVE_WALL);
+		else if (swap1[x + y * width] == 1) m->setTile(Point(x, y), TILE_CAVE_FLOOR);
+		else if (swap1[x + y * width] == 2) m->setTile(Point(x, y), TILE_DOOR);
+	}
 
 	return m;
+}
+
+class BSPLevelTraversing : public ITCODBspCallback
+{
+public:
+  bool visitNode(TCODBsp* node, void* userData)
+  {
+    Level* m = static_cast<Level*>(userData);
+    if(!node->isLeaf())
+    {
+      if(node->horizontal)
+      {
+        m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y - 2), TILE_CAVE_FLOOR);
+        m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y - 1), TILE_CAVE_FLOOR);
+        m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y), TILE_DOOR);
+        m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y + 1), TILE_CAVE_FLOOR);
+      }
+      else
+      {
+        m->setTile(Point(node->getRight()->x - 2, node->getRight()->y + node->getRight()->h / 2), TILE_CAVE_FLOOR);
+        m->setTile(Point(node->getRight()->x - 1, node->getRight()->y + node->getRight()->h / 2), TILE_CAVE_FLOOR);
+        m->setTile(Point(node->getRight()->x, node->getRight()->y + node->getRight()->h / 2), TILE_DOOR);
+        m->setTile(Point(node->getRight()->x + 1, node->getRight()->y + node->getRight()->h / 2), TILE_CAVE_FLOOR);
+      }
+    }
+    else
+    {      
+      for(int x=1;x<node->w - 1;x++) for(int y=1;y<node->h - 1;y++)
+      {
+        m->setTile(Point(node->x + x, node->y + y), TILE_CAVE_FLOOR);
+      }
+    }
+    return true;
+  }
+};
+
+Level* LevelGen::generateBSPLevel(int width, int height, int numSplits, float squareness)
+{
+  Level* m = new Level(width, height);
+  for (int x=0; x<width; x++) for (int y=0; y<height; y++)
+	{
+    m->setTile(Point(x,y), TILE_CAVE_WALL);
+  }
+  TCODBsp bsp(0, 0, width, height);
+  if(numSplits < 0) numSplits = 8;
+  bsp.splitRecursive(NULL, numSplits, 7, 7, squareness, squareness);
+  BSPLevelTraversing traverse;
+  bsp.traverseInvertedLevelOrder(&traverse, static_cast<void*>(m));
+  return m;
 }

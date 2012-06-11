@@ -9,6 +9,7 @@ public:
 	// level generation functions, returns NULL on invalid parameters
 	Level* generateCaveLevel(int width, int height, float density = 40.f);
 	Level* generateRoomLevel(int width, int height, float roomDensity = 30.f);
+  Level* generateBSPLevel(int width, int height, int numSplits = 6, float squareness = 1.5f);
 };
 
 #endif
