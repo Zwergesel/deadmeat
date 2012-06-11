@@ -327,15 +327,20 @@ void World::drawInfo()
 	// Status
 	TCODConsole::root->setColorControl(TCOD_COLCTRL_3, TCODColor::orange, TCODColor::black);
 	TCODConsole::root->setColorControl(TCOD_COLCTRL_4, TCODColor::red, TCODColor::black);
+	TCODConsole::root->setColorControl(TCOD_COLCTRL_5, TCODColor::yellow, TCODColor::black);	
 	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 26, TCOD_BKGND_NONE, TCOD_LEFT, "STATUS");
 	int row = viewInfo.y + 28;
-	if (world.player->getNutrition() < 300)
+	if (world.player->getNutrition() < HUNGER_WEAK)
 	{
 		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cWeak%c", TCOD_COLCTRL_4, TCOD_COLCTRL_STOP);
 	}
-	else if (world.player->getNutrition() < 800)
+	else if (world.player->getNutrition() < HUNGER_HUNGRY)
 	{
 		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cHungry%c", TCOD_COLCTRL_3, TCOD_COLCTRL_STOP);
+	}
+	else if (world.player->getNutrition() >= HUNGER_NORMAL)
+	{
+		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cSatiated%c", TCOD_COLCTRL_5, TCOD_COLCTRL_STOP);
 	}
 }
 

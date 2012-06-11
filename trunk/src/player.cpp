@@ -100,10 +100,31 @@ Point Player::getCursor()
 
 void Player::addNutrition(int delta)
 {
-	if (nutrition >= 800 && nutrition + delta < 800) world.addMessage("You are beginning to feel hungry.");
-	if (nutrition >= 300 && nutrition + delta < 300) world.addMessage("You are beginning to feel weak.");
+	if (nutrition > HUNGER_NORMAL && nutrition + delta > HUNGER_SATIATED && delta > 0)
+	{
+		world.addMessage("You feel bloated...");
+		world.addMessage("You vomit!", true);
+		nutrition = (nutrition + delta) / 2;
+		return;
+	}
+	else if (nutrition < HUNGER_NORMAL && nutrition + delta >= HUNGER_NORMAL)
+	{
+		world.addMessage("You have a hard time getting it all down.");
+	}
+	else if (nutrition < HUNGER_WEAK && nutrition + delta >= HUNGER_WEAK && nutrition + delta < HUNGER_NORMAL)
+	{
+		world.addMessage("You only feel hungry now.");
+	}
+	else if (nutrition >= HUNGER_HUNGRY && nutrition + delta < HUNGER_HUNGRY)
+	{
+		world.addMessage("You are beginning to feel hungry.");
+	}
+	else if (nutrition >= HUNGER_WEAK && nutrition + delta < HUNGER_WEAK)
+	{
+		world.addMessage("You are beginning to feel weak.");
+	}
 	nutrition += delta;
-	if (nutrition < 0)
+	if (nutrition <= HUNGER_STARVING)
 	{
 		world.addMessage("You are starving...");
 		creature->kill();
@@ -384,11 +405,12 @@ int Player::actionEat(Item* item)
 	assert(item->getType() == ITEM_FOOD);
 
 	Food* f = static_cast<Food*>(item);
-	addNutrition(f->getNutrition());
 
 	std::stringstream msg;
 	msg << "You eat " << util::format(FORMAT_INDEF, f->toString(), f->getFormatFlags()) << ".";
 	world.addMessage(msg.str());
+	
+	addNutrition(f->getNutrition());
 
 	creature->removeItem(item, true);
 
