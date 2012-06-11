@@ -1054,6 +1054,7 @@ const std::string Player::HELP_TEXT =
   "T - Take off armor\n"
   "x - Cycle targets (when using 'f')\n\n"
   "C - Character info\n"
+  "L - Message Log\n"
   "S - Save and quit the game\n"
   "Q - Quit and abandon the game\n"
   "Space - Continue\nEsc - Cancel";
