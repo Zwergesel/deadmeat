@@ -121,8 +121,8 @@ int main()
 		Armor* uber = new Armor("uber armor", F_NEUTER | F_AN, ')', TCODColor::black, 150, 2, 10, ARMOR_BODY, SKILL_PLATE_ARMOR);
 		Armor* crap = new Armor("prussian pickelhaube", F_NEUTER, ')', TCODColor::black, 50, 1, 0, ARMOR_HAT, SKILL_PLATE_ARMOR);
 		Armor* boots = new Armor("clown shoes", F_NEUTER | F_BOOTS, ')', TCODColor::black, -30, -1, 12, ARMOR_BOOTS, SKILL_CLOTH_ARMOR);
-		Food* food1 = new Food("beefsteak", F_NEUTER, '%', TCODColor::darkOrange, 1500);
-		Food* food2 = new Food("meat ball", F_NEUTER, '%', TCODColor::orange, 250);
+		Food* food1 = new Food("beefsteak", F_NEUTER, '%', TCODColor::darkOrange, 2500);
+		Food* food2 = new Food("meat ball", F_NEUTER, '%', TCODColor::orange, 1000);
 		Ammo* arrows = new Ammo("arrow", F_NEUTER, '!', TCODColor::cyan, 0, EFFECT_NONE);
 		std::string cr[7] = { "goblin","goblin","goblin","snake","snake","snake","red dragon" };
 		for (int i=0; i<7; i++)
