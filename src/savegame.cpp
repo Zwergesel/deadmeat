@@ -163,6 +163,12 @@ SaveBlock& SaveBlock::ptr(const std::string& name, unsigned int voidPtrId)
 	return *this;
 }
 
+SaveBlock& SaveBlock::operator()(const std::string& name, int a, int b, int c)
+{
+	data << name << ": " << a << ", " << b << ", " << c << std::endl;
+	return *this;
+}
+
 SaveBlock& SaveBlock::operator()(const std::string& name, Tile* map, int width, int height, bool* seen)
 {
 	data << name << ":";
@@ -435,6 +441,20 @@ LoadBlock& LoadBlock::operator()(const std::string& name, symbol& output)
 	int result;
 	(*this) (name, result);
 	output = static_cast<symbol>(result);
+	return *this;
+}
+
+LoadBlock& LoadBlock::operator()(const std::string& name, int& a, int& b, int& c)
+{
+	std::stringstream ss(parseLine(name));
+	int x,y,z;
+	char c1,c2;
+	if ((ss >> x >> c1 >> y >> c2 >> z).fail()
+	    || c1 != ',' || c2 != ',')
+	{
+		throw SavegameFormatException("loadColor _ conversion: " + ss.str());
+	}
+	a = x; b = y; c = z;
 	return *this;
 }
 

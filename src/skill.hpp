@@ -46,6 +46,7 @@ public:
 	Skill();
 	Skill(std::string name, int value, int maxVal, int maxLevel, int exp);
 	static int expNeeded(int currentValue);
+	static void setDefaults(Skill* skills);
 };
 
 #endif
