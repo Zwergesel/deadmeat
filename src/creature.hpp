@@ -74,8 +74,8 @@ public:
 	void setDefenseSkill(int defenseSkill);
 	void setBaseWeapon(Weapon base);
 
-	void wieldMainWeapon(Weapon* wpn, int attackSkill);
-	void wearArmor(Armor* armor, int defenseSkill);
+	void wieldMainWeapon(Weapon* wpn);
+	void wearArmor(Armor* armor);
 	void takeOffArmor(Armor* armor);
 
 	symbol addItem(Item* item);

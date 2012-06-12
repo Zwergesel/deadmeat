@@ -4,13 +4,10 @@ Skill::Skill()
 {
 }
 
-Skill::Skill(std::string name, int maxValue, ATTRIBUTE att)
+Skill::Skill(std::string n, int v, int mv, int ml, int e):
+	name(n),value(v),maxValue(mv),maxLevel(ml),exp(e)
 {
-	this->name = name;
-	this->value = 0;
-	this->maxValue = maxValue;
-	this->att = att;
-	this->exp = 0;
+	req.resize(maxLevel);
 }
 
 int Skill::expNeeded(int currentValue)

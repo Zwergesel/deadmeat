@@ -129,7 +129,7 @@ std::map<symbol,Item*> Creature::getArmor()
 	return worn;
 }
 
-void Creature::wieldMainWeapon(Weapon* wpn, int skill)
+void Creature::wieldMainWeapon(Weapon* wpn)
 {
 	mainWeapon = 0;
 	for (std::map<symbol, Item*>::iterator it=inventory.begin(); it!=inventory.end(); it++)
@@ -139,10 +139,9 @@ void Creature::wieldMainWeapon(Weapon* wpn, int skill)
 			mainWeapon = (*it).first;
 		}
 	}
-	attackSkill = skill;
 }
 
-void Creature::wearArmor(Armor* a, int skill)
+void Creature::wearArmor(Armor* a)
 {
 	armor[a->getSlot()] = 0;
 	for (std::map<symbol, Item*>::iterator it=inventory.begin(); it!=inventory.end(); it++)
@@ -152,7 +151,6 @@ void Creature::wearArmor(Armor* a, int skill)
 			armor[a->getSlot()] = (*it).first;
 		}
 	}
-	defenseSkill = skill;
 }
 
 void Creature::takeOffArmor(Armor* a)

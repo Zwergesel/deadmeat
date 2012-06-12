@@ -2,6 +2,7 @@
 #define _SKILL_HPP
 
 #include <string>
+#include <vector>
 
 enum ATTRIBUTE
 {
@@ -14,39 +15,46 @@ enum ATTRIBUTE
 
 enum SKILLS
 {
-  SKILL_MELEE_COMBAT = 0,
-  SKILL_RANGED_COMBAT,
-  SKILL_HEALTH,
-  SKILL_UNARMORED,
-  SKILL_CLOTH_ARMOR,
-  SKILL_LEATHER_ARMOR,
-  SKILL_RING_ARMOR,
-  SKILL_SCALE_ARMOR,
-  SKILL_PLATE_ARMOR,
-  SKILL_UNARMED,
-  SKILL_AXE,
-  SKILL_SWORD,
-  SKILL_MACEFLAIL,
-  SKILL_STAFF,
-  SKILL_DAGGER,
-  SKILL_WHIP,
-  SKILL_PIKE,
-  SKILL_BOW,
-  SKILL_CROSSBOW,
-  SKILL_SLING,
-  NUM_SKILL
+	SKILL_WEAPON_SPEED,
+	SKILL_ATTACK,
+	SKILL_DAMAGE,
+	SKILL_DEFENSE,
+	SKILL_ARMOR,
+	SKILL_MOVE_SPEED,
+	SKILL_RANGED_ATTACK,
+	SKILL_HEALTH,
+	SKILL_MANA,
+	SKILL_MANA_REGEN,
+	SKILL_NEG_EFFECT,
+	SKILL_TRAPS,
+	SKILL_ALCHEMY,
+	SKILL_COOKING,
+	SKILL_BLACKSMITH,
+	NUM_SKILL
 };
 
-struct Skill
+struct Requirement
 {
-	Skill();
-	Skill(std::string name, int maxValue, ATTRIBUTE att);
+	int st,de,co,in;
+	Requirement():st(0),de(0),co(0),in(0){};
+	Requirement(int s, int d, int c, int i):st(s),de(d),co(c),in(i){};
+};
+
+class Skill
+{
+public:
 	std::string name;
 	int value;
 	int maxValue;
+	int maxLevel;
 	int exp;
-	ATTRIBUTE att;
+	std::vector<Requirement> req;
+	Skill();
+	Skill(std::string name, int value, int maxVal, int maxLevel, int exp);
 	static int expNeeded(int currentValue);
+	static std::string getName(SKILLS s);
+	static int getMaxValue(SKILLS s);
+	static Requirement getRequire(SKILLS s, int level);
 };
 
 #endif

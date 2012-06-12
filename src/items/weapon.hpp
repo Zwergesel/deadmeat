@@ -24,14 +24,13 @@ private:
 	int numDice;
 	int diceMax; // dice go from 0 to diceMax
 	int enchantment;
-	SKILLS skill;
 	int hands;
 	WeaponEffect effect;
 	int range;
 
 public:
 	Weapon();
-	Weapon(std::string name, uint format, symbol sym, TCODColor color, int spd, int hit, int dmg, int dice, int dmax, int ench, SKILLS skl, int hands, WeaponEffect effect, int range);
+	Weapon(std::string name, uint format, symbol sym, TCODColor color, int spd, int hit, int dmg, int dice, int dmax, int ench, int hands, WeaponEffect effect, int range);
 	~Weapon();
 	Item* clone();
 
@@ -42,7 +41,6 @@ public:
 	int getHitBonus();
 	int getEnchantment();
 	int getHandsUsed();
-	SKILLS getSkill();
 	int getRange();
 	std::string toString();
 

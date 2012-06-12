@@ -75,8 +75,6 @@ private:
 	int actionRangedAttack(Point p);
 	void actionAutoTargetting();
 	int actionCharInfo(TCOD_key_t key);
-	int computeAttackBonus(Weapon* w);
-	int computeArmorBonus(Armor* a);
 	void moveCursor(int dir);
 
 public:
@@ -101,7 +99,6 @@ public:
 	void levelUp();
 	int getAttributePoints();
 	int getSkillPoints();
-	int getRealSkillValue(SKILLS skill);
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);
