@@ -30,14 +30,15 @@ Player::Player(std::string name):
 {
 	Skill::setDefaults(skills);
 	TCODRandom* rng = TCODRandom::getInstance();
-	attributes[ATTR_STR] = rng->getInt(1,9);
-	attributes[ATTR_DEX] = rng->getInt(1,9);
-	attributes[ATTR_CON] = rng->getInt(1,9);
-	attributes[ATTR_INT] = rng->getInt(1,9);
+	attributes[ATTR_STR] = rng->getInt(2,8);
+	attributes[ATTR_DEX] = rng->getInt(2,8);
+	attributes[ATTR_CON] = rng->getInt(2,8);
+	attributes[ATTR_INT] = rng->getInt(2,8);
 	level = 1;
 	experience = 0;
-	attrPoints = skillPoints = 0;
-	creature = new Creature(name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 250, 75,
+	attrPoints = 0;
+	skillPoints = 3; // TODO: this is for debug
+	creature = new Creature(name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 200, 75,
 	                        Weapon("bare hands", F_NEUTER | F_PLURAL, '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, 2, EFFECT_NONE, 1), 0, 10, 0
 	                       );
 	creature->setControlled(true);
@@ -73,7 +74,7 @@ void Player::addNutrition(int delta)
 	{
 		world.addMessage("You have a hard time getting it all down.");
 	}
-	else if (nutrition < HUNGER_WEAK && nutrition + delta >= HUNGER_WEAK && nutrition + delta < HUNGER_NORMAL)
+	else if (nutrition < HUNGER_WEAK && nutrition + delta >= HUNGER_WEAK && nutrition + delta < HUNGER_HUNGRY)
 	{
 		world.addMessage("You only feel hungry now.");
 	}
@@ -275,6 +276,7 @@ int Player::actionDrop(Item* item)
 	if (creature->getMainWeapon() == item)
 	{
 		creature->wieldMainWeapon(NULL);
+		creature->setAttackSkill(skills[SKILL_ATTACK].value);
 	}
 	creature->removeItem(item, false);
 	msg << "You drop " << util::format(FORMAT_INDEF, item->toString(), item->getFormatFlags()) << ".";
@@ -299,6 +301,7 @@ int Player::actionWield(Item* itemObj)
 	else
 	{
 		creature->wieldMainWeapon(weapon);
+		creature->setAttackSkill(weapon->getRange() > 1 ? skills[SKILL_ATTACK].value : skills[SKILL_RANGED_ATTACK].value);		
 		msg << "You are now wielding " << util::format(FORMAT_INDEF, weapon->toString(), weapon->getFormatFlags()) << ".";
 		world.addMessage(msg.str());
 		return 30;
@@ -938,6 +941,7 @@ void Player::incExperience(int exp)
 					// Update attack and defense skill in creature
 					if (i == SKILL_ATTACK) creature->setAttackSkill(skills[i].value);
 					if (i == SKILL_DEFENSE) creature->setDefenseSkill(skills[i].value);
+					if (i == SKILL_HEALTH) creature->addMaxHealth(10);
 				}
 				if (skills[i].value == skills[i].maxValue) numSkillsInTraining--;
 				assert(skills[i].value <= skills[i].maxValue);
@@ -985,6 +989,18 @@ int Player::getSkillPoints()
 std::string Player::getName()
 {
 	return name;
+}
+
+int Player::rollBonusDamage()
+{
+	TCODRandom* rng = TCODRandom::getInstance();
+	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
+	return 2*skills[SKILL_DAMAGE].value + rng->getInt(0,skills[SKILL_DAMAGE].value);
+}
+
+float Player::getWeaponSpeedBonus()
+{
+	return 1.0f - 0.05f * skills[SKILL_WEAPON_SPEED].value;
 }
 
 bool sortCreaturesByDistance(Creature* a, Creature* b)

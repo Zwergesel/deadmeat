@@ -208,7 +208,7 @@ void Creature::die(Creature* instigator)
 		world.addMessage("", true);
 		world.gameover = true;
 	}
-	else
+	else if (instigator != NULL)
 	{
 		std::stringstream msg;
 		instigator->isControlled() ?
@@ -217,6 +217,13 @@ void Creature::die(Creature* instigator)
 		msg << util::format(FORMAT_DEF, name, formatFlags) << ".";
 		world.addMessage(msg.str());
 		if (instigator->isControlled()) world.player->incExperience(expValue);
+		level->removeCreature(this, true);
+	}
+	else
+	{
+		std::stringstream msg;
+		msg << util::format(FORMAT_DEF, name, formatFlags, true) << " dies.";
+		world.addMessage(msg.str());
 		level->removeCreature(this, true);
 	}
 }
@@ -258,7 +265,6 @@ int Creature::getDefense()
 	{
 		Armor* ar = getArmor(static_cast<ArmorSlot>(slot));
 		if (ar != NULL) defense += FACT_DEF * ar->getDefense() + FACT_AENCH * ar->getEnchantment();
-		// TODO: body armor uses it's own skill
 	}
 	return static_cast<int>(defense);
 }
@@ -294,6 +300,16 @@ void Creature::setLevel(Level* l)
 	level = l;
 }
 
+void Creature::addMaxHealth(int delta)
+{
+	maxHealth += delta;
+	if (maxHealth < 1)
+	{
+		if (controlled) world.addMessage("You feel your remaining life force getting sucked out of you.");
+		die(NULL);
+	}
+}
+
 int Creature::attack(Creature* target)
 {
 	// base attack (hands, claws, etc.)
@@ -317,6 +333,14 @@ int Creature::attack(Creature* target)
 			speed = static_cast<int>(w->getSpeed() + FACT_ATSPD * getHindrance());
 		}
 	}
+	
+	// skill boni
+	if (controlled)
+	{
+		speed = std::max(1, static_cast<int>(speed * world.player->getWeaponSpeedBonus()));
+		damage += world.player->rollBonusDamage();
+	}
+	
 	int defense = target->getDefense();
 	TCODRandom rngGauss;
 	rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
