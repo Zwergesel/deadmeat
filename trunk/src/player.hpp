@@ -99,6 +99,8 @@ public:
 	void levelUp();
 	int getAttributePoints();
 	int getSkillPoints();
+	int rollBonusDamage();
+	float getWeaponSpeedBonus();
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);
