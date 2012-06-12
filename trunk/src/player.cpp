@@ -21,46 +21,14 @@ bool sortCreaturesByDistance(Creature* a, Creature* b);
 Player::Player()
 {
 	// TODO: skills saving & loading
-	skills[SKILL_WEAPON_SPEED] = Skill("Swiftness", 0, 0, 20, 0);
-	skills[SKILL_ATTACK] = Skill("Accuracy", 0, 0, 20, 0);
-	skills[SKILL_DAMAGE] = Skill("Power", 0, 0, 20, 0);
-	skills[SKILL_DEFENSE] = Skill("Evasion", 0, 0, 20, 0);
-	skills[SKILL_ARMOR] = Skill("Armor", 0, 0, 20, 0);
-	skills[SKILL_MOVE_SPEED] = Skill("Running", 0, 0, 20, 0);
-	skills[SKILL_RANGED_ATTACK] = Skill("Aiming", 0, 0, 20, 0);
-	skills[SKILL_HEALTH] = Skill("Endurance", 0, 0, 20, 0);
-	skills[SKILL_MANA] = Skill("Arcana", 0, 0, 20, 0);
-	skills[SKILL_MANA_REGEN] = Skill("Channeling", 0, 0, 20, 0);
-	skills[SKILL_NEG_EFFECT] = Skill("Toughness", 0, 0, 20, 0);
-	skills[SKILL_TRAPS] = Skill("Caution", 0, 0, 20, 0);
-	skills[SKILL_ALCHEMY] = Skill("Alchemy", 0, 0, 20, 0);
-	skills[SKILL_COOKING] = Skill("Cooking", 0, 0, 20, 0);
-	skills[SKILL_BLACKSMITH] = Skill("Blacksmithing", 0, 0, 20, 0);
-	skills[SKILL_ATTACK].req[1].push_back(std::make_pair(0,14));
-	skills[SKILL_ATTACK].req[1].push_back(std::make_pair(1,2));
+	Skill::setDefaults(skills);
 }
 
 Player::Player(std::string name):
 	name(name),
 	state(STATE_DEFAULT)
 {
-	skills[SKILL_WEAPON_SPEED] = Skill("Swiftness", 0, 0, 20, 0);
-	skills[SKILL_ATTACK] = Skill("Accuracy", 0, 0, 20, 0);
-	skills[SKILL_DAMAGE] = Skill("Power", 0, 0, 20, 0);
-	skills[SKILL_DEFENSE] = Skill("Evasion", 0, 0, 20, 0);
-	skills[SKILL_ARMOR] = Skill("Armor", 0, 0, 20, 0);
-	skills[SKILL_MOVE_SPEED] = Skill("Running", 0, 0, 20, 0);
-	skills[SKILL_RANGED_ATTACK] = Skill("Aiming", 0, 0, 20, 0);
-	skills[SKILL_HEALTH] = Skill("Endurance", 0, 0, 20, 0);
-	skills[SKILL_MANA] = Skill("Arcana", 0, 0, 20, 0);
-	skills[SKILL_MANA_REGEN] = Skill("Channeling", 0, 0, 20, 0);
-	skills[SKILL_NEG_EFFECT] = Skill("Toughness", 0, 0, 20, 0);
-	skills[SKILL_TRAPS] = Skill("Caution", 0, 0, 20, 0);
-	skills[SKILL_ALCHEMY] = Skill("Alchemy", 0, 0, 20, 0);
-	skills[SKILL_COOKING] = Skill("Cooking", 0, 0, 20, 0);
-	skills[SKILL_BLACKSMITH] = Skill("Blacksmithing", 0, 0, 20, 0);
-	skills[SKILL_ATTACK].req[1].push_back(std::make_pair(0,14));
-	skills[SKILL_ATTACK].req[1].push_back(std::make_pair(1,2));
+	Skill::setDefaults(skills);
 	TCODRandom* rng = TCODRandom::getInstance();
 	attributes[ATTR_STR] = rng->getInt(1,9);
 	attributes[ATTR_DEX] = rng->getInt(1,9);
@@ -445,6 +413,7 @@ int Player::actionCharInfo(TCOD_key_t key)
 		if (k >= 0 && k < NUM_SKILL)
 		{
 			// Check whether requirements are met
+			if (skills[k].maxValue >= skills[k].maxLevel) return 0;
 			std::vector<std::pair<int,int>> r = skills[k].req[skills[k].maxValue + 1];
 			for (auto it = r.begin(); it != r.end(); it++)
 			{
@@ -1056,13 +1025,18 @@ unsigned int Player::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Player", id);
-	// TODO : skills
 	store ("name", name) .ptr("creature", creature->save(sg));
 	store ("state", (int) state) ("nutrition", nutrition);
 	store ("strength", attributes[ATTR_STR]) ("dexterity", attributes[ATTR_DEX]);
 	store ("intelligence", attributes[ATTR_INT]) ("constitution", attributes[ATTR_CON]);
-	store ("level", level) ("experiene", experience);
+	store ("level", level) ("experience", experience);
 	store ("attrPoints", attrPoints) ("skillPoints", skillPoints);
+	for (int i=0; i<NUM_SKILL; i++)
+	{
+		std::stringstream ss;
+		ss << "skill" << i;
+		store (ss.str(), skills[i].value, skills[i].maxValue, skills[i].exp);
+	}
 	sg << store;
 	return id;
 }
@@ -1077,6 +1051,12 @@ void Player::load(LoadBlock& load)
 	state = static_cast<STATE>(s);
 	load ("strength", attributes[ATTR_STR]) ("dexterity", attributes[ATTR_DEX]);
 	load ("intelligence", attributes[ATTR_INT]) ("constitution", attributes[ATTR_CON]);
-	load ("level", level) ("experiene", experience);
+	load ("level", level) ("experience", experience);
 	load ("attrPoints", attrPoints) ("skillPoints", skillPoints);
+	for (int i=0; i<NUM_SKILL; i++)
+	{
+		std::stringstream ss;
+		ss << "skill" << i;
+		load (ss.str(), skills[i].value, skills[i].maxValue, skills[i].exp);
+	}
 }

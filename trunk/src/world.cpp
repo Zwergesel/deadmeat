@@ -260,7 +260,7 @@ void World::drawCharInfo()
 		Skill sk = player->getSkill(static_cast<SKILLS>(i));
 		std::vector<std::pair<int,int>> r = sk.req[sk.maxValue+1];
 		std::string attrShort[4] = { "STR", "DEX", "CON", "INT" };
-		bool allowTrain = true;
+		bool allowTrain = sk.maxValue < sk.maxLevel;
 		
 		for (unsigned int d=0; d<r.size(); d++)
 		{
@@ -268,7 +268,7 @@ void World::drawCharInfo()
 			int val = r[d].second;
 			if (attr < val) allowTrain = false;
 			skillInfo.setColorControl(TCOD_COLCTRL_1, (attr < val ? TCODColor::red : TCODColor::green), TCODColor::black);
-			skillInfo.printEx(44+d*7, 4+i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%c%s %2d%c",
+			skillInfo.printEx(44+d*7, 4+i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%c%s %-2d%c",
 				TCOD_COLCTRL_1, attrShort[r[d].first].c_str(), val, TCOD_COLCTRL_STOP);
 		}
 		
@@ -281,13 +281,14 @@ void World::drawCharInfo()
 		
 		if (sk.value < sk.maxValue)
 		{
-			std::string progress = "----------";
 			int currentExp = sk.exp - Skill::expNeeded(sk.value - 1);
 			int neededExp = Skill::expNeeded(sk.value) - Skill::expNeeded(sk.value - 1);
-			int p = 100 * currentExp / neededExp;
-			progress.replace(0, p/10, p/10, '#');
-			if (p/10 < 10 && p%10 > 0) progress.replace(p/10, 1, 1, '>');
-			skillInfo.printEx(28, 4 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s %2d", progress.c_str(), sk.maxValue);
+			int p = static_cast<int>(10.0 * currentExp / neededExp);
+			for (int j=0; j<10; j++)
+			{
+				skillInfo.putCharEx(28+j, 4+i, 219, j < p ? TCODColor::green : TCODColor::white, TCODColor::black);
+			}
+			skillInfo.printEx(40, 4 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%-2d", sk.maxValue);
 		}
 	}
 	if (player->getSkillPoints() > 0) skillInfo.printEx(1, 37, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Points left = %d", player->getSkillPoints());
