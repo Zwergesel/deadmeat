@@ -242,11 +242,11 @@ int Creature::getAttack()
 	{
 		assert(inventory[mainWeapon]->getType() == ITEM_WEAPON);
 		Weapon* w = static_cast<Weapon*>(inventory[mainWeapon]);
-		return w->getHitBonus() + w->getEnchantment() + attackSkill;
+		return static_cast<int>(FACT_HIT * w->getHitBonus() + FACT_WENCH * w->getEnchantment() + FACT_ATSKL * attackSkill);
 	}
 	else
 	{
-		return baseWeapon.getHitBonus() + baseWeapon.getEnchantment() + attackSkill;
+		return static_cast<int>(FACT_HIT * baseWeapon.getHitBonus() + FACT_WENCH * baseWeapon.getEnchantment() + FACT_ATSKL * attackSkill);
 	}
 }
 
