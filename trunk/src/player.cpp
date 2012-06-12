@@ -20,53 +20,43 @@ bool sortCreaturesByDistance(Creature* a, Creature* b);
 
 Player::Player()
 {
-	// TODO: remove and load in load(..);
-	skills[SKILL_MELEE_COMBAT] = Skill("melee combat", 0, ATTR_STR);
-	skills[SKILL_RANGED_COMBAT] = Skill("ranged combat", 0, ATTR_DEX);
-	skills[SKILL_HEALTH] = Skill("health", 0, ATTR_CON);
-	skills[SKILL_UNARMORED] = Skill("unarmored", 0, ATTR_DEX);
-	skills[SKILL_LEATHER_ARMOR] = Skill("leather armor", 0, ATTR_DEX);
-	skills[SKILL_SCALE_ARMOR] = Skill("scale armor", 0, ATTR_DEX);
-	skills[SKILL_RING_ARMOR] = Skill("ring armor", 0, ATTR_DEX);
-	skills[SKILL_CLOTH_ARMOR] = Skill("cloth armor", 0, ATTR_DEX);
-	skills[SKILL_PLATE_ARMOR] = Skill("plate armor", 0, ATTR_DEX);
-	skills[SKILL_UNARMED] = Skill("unarmed", 0, ATTR_STR);
-	skills[SKILL_AXE] = Skill("axe", 0, ATTR_STR);
-	skills[SKILL_SWORD] = Skill("sword", 0, ATTR_STR);
-	skills[SKILL_MACEFLAIL] = Skill("mace & flail", 0, ATTR_STR);
-	skills[SKILL_STAFF] = Skill("staff", 0, ATTR_STR);
-	skills[SKILL_DAGGER] = Skill("dagger", 0, ATTR_DEX);
-	skills[SKILL_WHIP] = Skill("whip", 0, ATTR_DEX);
-	skills[SKILL_PIKE] = Skill("pike", 0, ATTR_STR);
-	skills[SKILL_BOW] = Skill("bow", 0, ATTR_DEX);
-	skills[SKILL_CROSSBOW] = Skill("crossbow", 0, ATTR_DEX);
-	skills[SKILL_SLING] = Skill("sling", 0, ATTR_DEX);
+	// TODO: skills saving & loading
+	skills[SKILL_WEAPON_SPEED] = Skill("Swiftness", 0, 0, 20, 0);
+	skills[SKILL_ATTACK] = Skill("Accuracy", 0, 0, 20, 0);
+	skills[SKILL_DAMAGE] = Skill("Power", 0, 0, 20, 0);
+	skills[SKILL_DEFENSE] = Skill("Evasion", 0, 0, 20, 0);
+	skills[SKILL_ARMOR] = Skill("Armor", 0, 0, 20, 0);
+	skills[SKILL_MOVE_SPEED] = Skill("Running", 0, 0, 20, 0);
+	skills[SKILL_RANGED_ATTACK] = Skill("Aiming", 0, 0, 20, 0);
+	skills[SKILL_HEALTH] = Skill("Endurance", 0, 0, 20, 0);
+	skills[SKILL_MANA] = Skill("Arcana", 0, 0, 20, 0);
+	skills[SKILL_MANA_REGEN] = Skill("Channeling", 0, 0, 20, 0);
+	skills[SKILL_NEG_EFFECT] = Skill("Toughness", 0, 0, 20, 0);
+	skills[SKILL_TRAPS] = Skill("Caution", 0, 0, 20, 0);
+	skills[SKILL_ALCHEMY] = Skill("Alchemy", 0, 0, 20, 0);
+	skills[SKILL_COOKING] = Skill("Cooking", 0, 0, 20, 0);
+	skills[SKILL_BLACKSMITH] = Skill("Blacksmithing", 0, 0, 20, 0);
 }
 
 Player::Player(std::string name):
 	name(name),
 	state(STATE_DEFAULT)
 {
-	skills[SKILL_MELEE_COMBAT] = Skill("melee combat", 0, ATTR_STR);
-	skills[SKILL_RANGED_COMBAT] = Skill("ranged combat", 0, ATTR_DEX);
-	skills[SKILL_HEALTH] = Skill("health", 0, ATTR_CON);
-	skills[SKILL_UNARMORED] = Skill("unarmored", 0, ATTR_DEX);
-	skills[SKILL_LEATHER_ARMOR] = Skill("leather armor", 0, ATTR_DEX);
-	skills[SKILL_SCALE_ARMOR] = Skill("scale armor", 0, ATTR_DEX);
-	skills[SKILL_RING_ARMOR] = Skill("ring armor", 0, ATTR_DEX);
-	skills[SKILL_CLOTH_ARMOR] = Skill("cloth armor", 0, ATTR_DEX);
-	skills[SKILL_PLATE_ARMOR] = Skill("plate armor", 0, ATTR_DEX);
-	skills[SKILL_UNARMED] = Skill("unarmed", 0, ATTR_STR);
-	skills[SKILL_AXE] = Skill("axe", 0, ATTR_STR);
-	skills[SKILL_SWORD] = Skill("sword", 0, ATTR_STR);
-	skills[SKILL_MACEFLAIL] = Skill("mace & flail", 0, ATTR_STR);
-	skills[SKILL_STAFF] = Skill("staff", 0, ATTR_STR);
-	skills[SKILL_DAGGER] = Skill("dagger", 0, ATTR_DEX);
-	skills[SKILL_WHIP] = Skill("whip", 0, ATTR_DEX);
-	skills[SKILL_PIKE] = Skill("pike", 0, ATTR_STR);
-	skills[SKILL_BOW] = Skill("bow", 0, ATTR_DEX);
-	skills[SKILL_CROSSBOW] = Skill("crossbow", 0, ATTR_DEX);
-	skills[SKILL_SLING] = Skill("sling", 0, ATTR_DEX);
+	skills[SKILL_WEAPON_SPEED] = Skill("Swiftness", 0, 0, 20, 0);
+	skills[SKILL_ATTACK] = Skill("Accuracy", 0, 0, 20, 0);
+	skills[SKILL_DAMAGE] = Skill("Power", 0, 0, 20, 0);
+	skills[SKILL_DEFENSE] = Skill("Evasion", 0, 0, 20, 0);
+	skills[SKILL_ARMOR] = Skill("Armor", 0, 0, 20, 0);
+	skills[SKILL_MOVE_SPEED] = Skill("Running", 0, 0, 20, 0);
+	skills[SKILL_RANGED_ATTACK] = Skill("Aiming", 0, 0, 20, 0);
+	skills[SKILL_HEALTH] = Skill("Endurance", 0, 0, 20, 0);
+	skills[SKILL_MANA] = Skill("Arcana", 0, 0, 20, 0);
+	skills[SKILL_MANA_REGEN] = Skill("Channeling", 0, 0, 20, 0);
+	skills[SKILL_NEG_EFFECT] = Skill("Toughness", 0, 0, 20, 0);
+	skills[SKILL_TRAPS] = Skill("Caution", 0, 0, 20, 0);
+	skills[SKILL_ALCHEMY] = Skill("Alchemy", 0, 0, 20, 0);
+	skills[SKILL_COOKING] = Skill("Cooking", 0, 0, 20, 0);
+	skills[SKILL_BLACKSMITH] = Skill("Blacksmithing", 0, 0, 20, 0);
 	TCODRandom* rng = TCODRandom::getInstance();
 	attributes[ATTR_STR] = rng->getInt(5,20);
 	attributes[ATTR_DEX] = rng->getInt(5,20);
@@ -76,12 +66,12 @@ Player::Player(std::string name):
 	experience = 0;
 	attrPoints = skillPoints = 0;
 	creature = new Creature(name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 250, 75,
-	                        Weapon("bare hands", F_NEUTER | F_PLURAL, '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, SKILL_UNARMED, 2, EFFECT_NONE, 1), 0, 10, 0
+	                        Weapon("bare hands", F_NEUTER | F_PLURAL, '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, 2, EFFECT_NONE, 1), 0, 10, 0
 	                       );
 	creature->setControlled(true);
-	creature->setAttackSkill(skills[SKILL_UNARMED].value);
-	creature->setDefenseSkill(skills[SKILL_UNARMORED].value);
-	nutrition = 2000;
+	creature->setAttackSkill(/* TODO: Something */0);
+	creature->setDefenseSkill(/* TODO: Something */0);
+	nutrition = 2500;
 }
 
 Player::~Player()
@@ -312,7 +302,7 @@ int Player::actionDrop(Item* item)
 	}
 	if (creature->getMainWeapon() == item)
 	{
-		creature->wieldMainWeapon(NULL, skills[SKILL_UNARMED].value);
+		creature->wieldMainWeapon(NULL);
 	}
 	creature->removeItem(item, false);
 	msg << "You drop " << util::format(FORMAT_INDEF, item->toString(), item->getFormatFlags()) << ".";
@@ -336,7 +326,7 @@ int Player::actionWield(Item* itemObj)
 	}
 	else
 	{
-		creature->wieldMainWeapon(weapon, computeAttackBonus(weapon));
+		creature->wieldMainWeapon(weapon);
 		msg << "You are now wielding " << util::format(FORMAT_INDEF, weapon->toString(), weapon->getFormatFlags()) << ".";
 		world.addMessage(msg.str());
 		return 30;
@@ -371,7 +361,7 @@ int Player::actionWear(Item* itemObj)
 		}
 		else if (state == STATE_DRESSING)
 		{
-			creature->wearArmor(armor, computeArmorBonus(armor));
+			creature->wearArmor(armor);
 			state = STATE_DEFAULT;
 			msg << "You finish putting on " << util::format(FORMAT_INDEF, armor->toString(), armor->getFormatFlags()) << ".";
 			world.addMessage(msg.str());
@@ -390,7 +380,6 @@ int Player::actionTakeoff(Item* item)
 	Armor* armor = static_cast<Armor*>(item);
 
 	creature->takeOffArmor(armor);
-	if (armor->getSlot() == ARMOR_BODY) creature->setDefenseSkill(skills[SKILL_UNARMORED].value);
 
 	std::stringstream msg;
 	msg << "You take off " << util::format(FORMAT_YOUR, armor->toString(), armor->getFormatFlags()) << ".";
@@ -532,7 +521,7 @@ int Player::actionRangedAttack(Point pos)
 int Player::action()
 {
 	// health regeneration
-	creature->regenerate(getRealSkillValue(SKILL_HEALTH));
+	creature->regenerate(skills[SKILL_HEALTH].value);
 
 	int time = Player::processAction();
 
@@ -928,16 +917,6 @@ Skill Player::getSkill(SKILLS skill)
 	return skills[skill];
 }
 
-int Player::computeAttackBonus(Weapon* w)
-{
-	return (skills[w->getSkill()].value + skills[SKILL_MELEE_COMBAT].value) / 2;
-}
-
-int Player::computeArmorBonus(Armor* a)
-{
-	return (skills[a->getSkill()].value + skills[SKILL_MELEE_COMBAT].value) / 2;
-}
-
 void Player::moveCursor(int dir)
 {
 	Point cnew = Point(cursor.x + dx[dir], cursor.y + dy[dir]);
@@ -976,6 +955,9 @@ void Player::incExperience(int exp)
 					std::stringstream msg;
 					msg << "You feel more skilled in " << skills[i].name << ".";
 					world.addMessage(msg.str());
+					// Update attack and defense skill in creature
+					if (i == SKILL_ATTACK) creature->setAttackSkill(skills[i].value);
+					if (i == SKILL_DEFENSE) creature->setDefenseSkill(skills[i].value);
 				}
 				if (skills[i].value == skills[i].maxValue) numSkillsInTraining--;
 				assert(skills[i].value <= skills[i].maxValue);
@@ -1023,11 +1005,6 @@ int Player::getSkillPoints()
 std::string Player::getName()
 {
 	return name;
-}
-
-int Player::getRealSkillValue(SKILLS skill)
-{
-	return skills[skill].value + attributes[skills[skill].att];
 }
 
 bool sortCreaturesByDistance(Creature* a, Creature* b)

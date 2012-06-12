@@ -2,7 +2,6 @@
 #define _ARMOR_HPP
 
 #include "../item.hpp"
-#include "../skill.hpp"
 
 class Savegame;
 class LoadBlock;
@@ -23,11 +22,10 @@ private:
 	int enchantment;
 	int hindrance;
 	ArmorSlot slot;
-	SKILLS skill;
 
 public:
 	Armor();
-	Armor(std::string name, uint format, symbol sym, TCODColor color, int defense, int enchantment, int hindrance, ArmorSlot as, SKILLS skill);
+	Armor(std::string name, uint format, symbol sym, TCODColor color, int defense, int enchantment, int hindrance, ArmorSlot as);
 	~Armor();
 	Item* clone();
 
@@ -35,7 +33,6 @@ public:
 	int getEnchantment();
 	int getHindrance();
 	ArmorSlot getSlot();
-	SKILLS getSkill();
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);

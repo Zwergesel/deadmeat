@@ -8,8 +8,8 @@ Armor::Armor()
 	strType = "armor";
 }
 
-Armor::Armor(std::string n, uint f, symbol s, TCODColor c, int d, int e, int h, ArmorSlot as, SKILLS k):
-	Item(n, f, s, c), defense(d), enchantment(e), hindrance(h), slot(as), skill(k)
+Armor::Armor(std::string n, uint f, symbol s, TCODColor c, int d, int e, int h, ArmorSlot as):
+	Item(n, f, s, c), defense(d), enchantment(e), hindrance(h), slot(as)
 {
 	type = ITEM_ARMOR;
 	strType = "armor";
@@ -19,7 +19,7 @@ Armor::~Armor() {}
 
 Item* Armor::clone()
 {
-	Armor* copy = new Armor(name, formatFlags, sym, color, defense, enchantment, hindrance, slot, skill);
+	Armor* copy = new Armor(name, formatFlags, sym, color, defense, enchantment, hindrance, slot);
 	return copy;
 }
 
@@ -43,11 +43,6 @@ ArmorSlot Armor::getSlot()
 	return slot;
 }
 
-SKILLS Armor::getSkill()
-{
-	return skill;
-}
-
 /*--------------------- SAVING AND LOADING ---------------------*/
 
 unsigned int Armor::save(Savegame& sg)
@@ -57,19 +52,17 @@ unsigned int Armor::save(Savegame& sg)
 	SaveBlock store("Armor", id);
 	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color);
 	store ("defense", defense) ("hindrance", hindrance) ("slot", (int)slot);
-	store ("skill", (int)skill) ("enchantment", enchantment);
+	store ("enchantment", enchantment);
 	sg << store;
 	return id;
 }
 
 void Armor::load(LoadBlock& load)
 {
-	int s1, s2;
+	int s;
 	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color);
-	load ("defense", defense) ("hindrance", hindrance) ("slot", s1) ("skill", s2);
+	load ("defense", defense) ("hindrance", hindrance) ("slot", s);
 	load ("enchantment", enchantment);
-	if (s1 < 0 || s1 >= NUM_ARMOR_SLOTS) throw SavegameFormatException("Armor::load _ slot out of range");
-	if (s2 < 0 || s2 >= NUM_SKILL) throw SavegameFormatException("Armor::load _ skill out of range");
-	slot = static_cast<ArmorSlot>(s1);
-	skill = static_cast<SKILLS>(s2);
+	if (s < 0 || s >= NUM_ARMOR_SLOTS) throw SavegameFormatException("Armor::load _ slot out of range");
+	slot = static_cast<ArmorSlot>(s);
 }
