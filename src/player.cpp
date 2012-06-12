@@ -36,6 +36,8 @@ Player::Player()
 	skills[SKILL_ALCHEMY] = Skill("Alchemy", 0, 0, 20, 0);
 	skills[SKILL_COOKING] = Skill("Cooking", 0, 0, 20, 0);
 	skills[SKILL_BLACKSMITH] = Skill("Blacksmithing", 0, 0, 20, 0);
+	skills[SKILL_ATTACK].req[1].push_back(std::make_pair(0,14));
+	skills[SKILL_ATTACK].req[1].push_back(std::make_pair(1,2));
 }
 
 Player::Player(std::string name):
@@ -57,11 +59,13 @@ Player::Player(std::string name):
 	skills[SKILL_ALCHEMY] = Skill("Alchemy", 0, 0, 20, 0);
 	skills[SKILL_COOKING] = Skill("Cooking", 0, 0, 20, 0);
 	skills[SKILL_BLACKSMITH] = Skill("Blacksmithing", 0, 0, 20, 0);
+	skills[SKILL_ATTACK].req[1].push_back(std::make_pair(0,14));
+	skills[SKILL_ATTACK].req[1].push_back(std::make_pair(1,2));
 	TCODRandom* rng = TCODRandom::getInstance();
-	attributes[ATTR_STR] = rng->getInt(5,20);
-	attributes[ATTR_DEX] = rng->getInt(5,20);
-	attributes[ATTR_CON] = rng->getInt(5,20);
-	attributes[ATTR_INT] = rng->getInt(5,20);
+	attributes[ATTR_STR] = rng->getInt(1,9);
+	attributes[ATTR_DEX] = rng->getInt(1,9);
+	attributes[ATTR_CON] = rng->getInt(1,9);
+	attributes[ATTR_INT] = rng->getInt(1,9);
 	level = 1;
 	experience = 0;
 	attrPoints = skillPoints = 0;
@@ -440,6 +444,13 @@ int Player::actionCharInfo(TCOD_key_t key)
 		int k = util::letterToInt(key.c);
 		if (k >= 0 && k < NUM_SKILL)
 		{
+			// Check whether requirements are met
+			std::vector<std::pair<int,int>> r = skills[k].req[skills[k].maxValue + 1];
+			for (auto it = r.begin(); it != r.end(); it++)
+			{
+				if (attributes[it->first] < it->second) return 0;
+			}
+			// Increase skill
 			skills[k].maxValue += 1;
 			skillPoints--;
 			return 0;
