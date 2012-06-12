@@ -966,7 +966,7 @@ void Player::levelUp()
 {
 	level++;
 	attrPoints++;
-	skillPoints+=2;
+	skillPoints+=3;
 	std::stringstream msg;
 	msg << "You are now level " << level << "!";
 	world.addMessage(msg.str(), true);
