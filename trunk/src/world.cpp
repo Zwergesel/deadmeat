@@ -254,22 +254,40 @@ void World::drawCharInfo()
 
 	TCODConsole skillInfo(charInfo.getWidth() - 4, 38);
 	skillInfo.printFrame(0, 0, skillInfo.getWidth(), skillInfo.getHeight(), true, TCOD_BKGND_DEFAULT, "Skills");
-	skillInfo.printEx(8, 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "skill          value       progress");
+	skillInfo.printEx(8, 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "skill         value  progress      requires");
 	for (int i=0; i<NUM_SKILL; i++)
 	{
-		if (player->getSkillPoints() > 0)
+		Skill sk = player->getSkill(static_cast<SKILLS>(i));
+		std::vector<std::pair<int,int>> r = sk.req[sk.maxValue+1];
+		std::string attrShort[4] = { "STR", "DEX", "CON", "INT" };
+		bool allowTrain = true;
+		
+		for (unsigned int d=0; d<r.size(); d++)
+		{
+			int attr = player->getAttribute(static_cast<ATTRIBUTE>(r[d].first));
+			int val = r[d].second;
+			if (attr < val) allowTrain = false;
+			skillInfo.setColorControl(TCOD_COLCTRL_1, (attr < val ? TCODColor::red : TCODColor::green), TCODColor::black);
+			skillInfo.printEx(44+d*7, 4+i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%c%s %2d%c",
+				TCOD_COLCTRL_1, attrShort[r[d].first].c_str(), val, TCOD_COLCTRL_STOP);
+		}
+		
+		if (player->getSkillPoints() > 0 && allowTrain)
 		{
 			skillInfo.printEx(2, 4 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[%c] - ", util::letters[i]);
 		}
-		SKILLS s = static_cast<SKILLS>(i);
-		skillInfo.printEx(8, 4 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%-15s %2d", player->getSkill(s).name.c_str(), player->getSkill(s).value);
-		if (player->getSkill(s).value < player->getSkill(s).maxValue)
+		
+		skillInfo.printEx(8, 4 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%-15s %2d", sk.name.c_str(), sk.value);
+		
+		if (sk.value < sk.maxValue)
 		{
 			std::string progress = "----------";
-			int p = (player->getSkill(s).exp - Skill::expNeeded(player->getSkill(s).value - 1)) * 100 / Skill::expNeeded(player->getSkill(s).value);
+			int currentExp = sk.exp - Skill::expNeeded(sk.value - 1);
+			int neededExp = Skill::expNeeded(sk.value) - Skill::expNeeded(sk.value - 1);
+			int p = 100 * currentExp / neededExp;
 			progress.replace(0, p/10, p/10, '#');
 			if (p/10 < 10 && p%10 > 0) progress.replace(p/10, 1, 1, '>');
-			skillInfo.printEx(43, 4 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s %2d", progress.c_str(), player->getSkill(s).maxValue);
+			skillInfo.printEx(28, 4 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s %2d", progress.c_str(), sk.maxValue);
 		}
 	}
 	if (player->getSkillPoints() > 0) skillInfo.printEx(1, 37, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Points left = %d", player->getSkillPoints());

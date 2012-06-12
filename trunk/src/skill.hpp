@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 enum ATTRIBUTE
 {
@@ -33,13 +34,6 @@ enum SKILLS
 	NUM_SKILL
 };
 
-struct Requirement
-{
-	int st,de,co,in;
-	Requirement():st(0),de(0),co(0),in(0){};
-	Requirement(int s, int d, int c, int i):st(s),de(d),co(c),in(i){};
-};
-
 class Skill
 {
 public:
@@ -48,13 +42,10 @@ public:
 	int maxValue;
 	int maxLevel;
 	int exp;
-	std::vector<Requirement> req;
+	std::vector<std::vector<std::pair<int,int>>> req;
 	Skill();
 	Skill(std::string name, int value, int maxVal, int maxLevel, int exp);
 	static int expNeeded(int currentValue);
-	static std::string getName(SKILLS s);
-	static int getMaxValue(SKILLS s);
-	static Requirement getRequire(SKILLS s, int level);
 };
 
 #endif
