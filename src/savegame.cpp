@@ -454,7 +454,9 @@ LoadBlock& LoadBlock::operator()(const std::string& name, int& a, int& b, int& c
 	{
 		throw SavegameFormatException("loadColor _ conversion: " + ss.str());
 	}
-	a = x; b = y; c = z;
+	a = x;
+	b = y;
+	c = z;
 	return *this;
 }
 

@@ -213,9 +213,13 @@ void Level::performCreatureTurn()
 		// creatures should never use zero time
 		assert(time > 0);
 	}
-	// update heap
-	creatures.back().time += time;
-	push_heap(creatures.begin(), creatures.end());
+	// creatures might be empty now because the player left the level
+	if (creatures.size() > 0)
+	{
+		// update heap
+		creatures.back().time += time;
+		push_heap(creatures.begin(), creatures.end());
+	}
 }
 
 bool operator<(TimelineAction a, TimelineAction b)

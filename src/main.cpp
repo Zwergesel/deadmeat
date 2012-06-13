@@ -62,7 +62,6 @@ int main()
 	TCODSystem::setFps(30);
 
 	// Init hardcoded world
-	LevelGen level_generator;
 	world.viewLevel = Viewport(1, 1, TCODConsole::root->getWidth() - 16, TCODConsole::root->getHeight() - 5);
 	world.viewMsg = Viewport(2, TCODConsole::root->getHeight() - 3, TCODConsole::root->getWidth() - 4, 2);
 	world.viewInfo = Viewport(TCODConsole::root->getWidth() - 14, 3, 13, TCODConsole::root->getHeight() - 7);
@@ -107,8 +106,8 @@ int main()
 	}
 	else
 	{
-    world.levels[0] = level_generator.generateBSPLevel(40,40, 6, 2.f); // level_generator.generateRoomLevel(80,50);// level_generator.generateCaveLevel(80, 50, 40.f);
-		world.currentLevel = 0;
+		LevelGen::generateWorld();
+		world.levels[0] = LevelGen::generateLevel(0, LEVELTYPE_PLAIN);
 		Point newPos = getRandomLocation(world.levels[0]);
 		world.player->getCreature()->moveTo(newPos);
 		world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - world.levels[0]->getWidth(), 0);

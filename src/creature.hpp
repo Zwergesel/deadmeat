@@ -53,6 +53,7 @@ public:
 	std::string getName();
 	uint getFormatFlags();
 	Point getPos();
+	void setPos(Point p);
 	symbol getSymbol();
 	TCODColor getColor();
 	int getDefense();
