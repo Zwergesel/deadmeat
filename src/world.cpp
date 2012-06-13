@@ -205,13 +205,7 @@ void World::drawCreature(Creature* c, Point offset, Viewport view)
 void World::drawWorld()
 {
 	// fov
-	if (fovMap == NULL)
-	{
-		fovMap = new TCODMap(levels[currentLevel]->getWidth(), levels[currentLevel]->getHeight());
-		for (int x=0; x<levels[currentLevel]->getWidth(); x++)
-			for (int y=0; y<levels[currentLevel]->getHeight(); y++)
-				world.fovMap->setProperties(x,y,world.tileSet->isPassable(world.levels[currentLevel]->getTile(Point(x,y))),world.tileSet->isPassable(world.levels[currentLevel]->getTile(Point(x,y))));
-	}
+	buildFovMap();
 	fovMap->computeFov(player->getCreature()->getPos().x, player->getCreature()->getPos().y, 0, true, FOV_BASIC);
 
 	TCODConsole::root->clear();
@@ -448,13 +442,24 @@ void World::travel()
 			levels[currentLevel]->addCreature(world.player->getCreature(), world.time + 10);
 			levels[currentLevel]->buildTimeline();
 
-			if (fovMap != NULL) delete fovMap;
-			fovMap = NULL;
+			buildFovMap();
 
 			world.levelOffset.x = util::clamp(world.viewLevel.width/2 - player->getCreature()->getPos().x, world.viewLevel.width - world.levels[currentLevel]->getWidth(), 0);
 			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - player->getCreature()->getPos().y, world.viewLevel.height - world.levels[currentLevel]->getHeight(), 0);
 			return;
 		}
+	}
+}
+
+void World::buildFovMap()
+{
+	if (fovMap != NULL) delete fovMap;
+	if (fovMap == NULL)
+	{
+		fovMap = new TCODMap(levels[currentLevel]->getWidth(), levels[currentLevel]->getHeight());
+		for (int x=0; x<levels[currentLevel]->getWidth(); x++)
+			for (int y=0; y<levels[currentLevel]->getHeight(); y++)
+				world.fovMap->setProperties(x,y,world.tileSet->isPassable(world.levels[currentLevel]->getTile(Point(x,y))),world.tileSet->isPassable(world.levels[currentLevel]->getTile(Point(x,y))));
 	}
 }
 
@@ -533,4 +538,5 @@ void World::load(LoadBlock& load)
 		load ("_log", m);
 		messageLog.push_back(m);
 	}
+	buildFovMap();
 }
