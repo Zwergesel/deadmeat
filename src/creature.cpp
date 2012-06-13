@@ -277,12 +277,13 @@ int Creature::getHindrance()
 		Armor* ar = getArmor(static_cast<ArmorSlot>(slot));
 		if (ar != NULL) hindrance += ar->getHindrance();
 	}
-	return hindrance;
+	return controlled ? world.player->getArmorHindranceReduction() * hindrance : hindrance;
 }
 
 int Creature::getWalkingSpeed()
 {
-	return static_cast<int>(walkingSpeed + FACT_WALKSPD * getHindrance());
+	float reduction = controlled ? world.player->getMoveSpeedBonus() : 1.0f;
+	return std::max(1, static_cast<int>((walkingSpeed + FACT_WALKSPD * getHindrance()) * reduction));
 }
 
 bool Creature::isControlled()
@@ -307,12 +308,17 @@ void Creature::setLevel(Level* l)
 
 void Creature::addMaxHealth(int delta)
 {
-	maxHealth += delta;
+	maxHealth = std::min(maxHealth + delta, 9999);
 	if (maxHealth < 1)
 	{
 		if (controlled) world.addMessage("You feel your remaining life force getting sucked out of you.");
 		die(NULL);
 	}
+}
+
+void Creature::addMaxMana(int delta)
+{
+	maxMana = util::clamp(maxMana + delta, 0, 9999);
 }
 
 int Creature::attack(Creature* target)
@@ -481,7 +487,7 @@ unsigned int Creature::save(Savegame& sg)
 	SaveBlock store("Creature", id);
 	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("position", position);
 	store ("color", color) ("health", health) ("maxHealth", maxHealth);
-	store ("controlled", controlled);
+	store ("mana", mana) ("maxMana", maxMana) ("controlled", controlled);
 	store ("mainWeapon", (int) mainWeapon);
 	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
 	{
@@ -508,7 +514,7 @@ void Creature::load(LoadBlock& load)
 {
 	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("position", position);
 	load ("color", color) ("health", health) ("maxHealth", maxHealth);
-	load ("controlled", controlled);
+	load ("mana", mana) ("maxMana", maxMana) ("controlled", controlled);
 	load ("mainWeapon", mainWeapon);
 	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
 	{

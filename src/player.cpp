@@ -957,12 +957,14 @@ void Player::incExperience(int exp)
 					std::stringstream msg;
 					msg << "You feel more skilled in " << skills[i].name << ".";
 					world.addMessage(msg.str());
-					// Update attack and defense skill in creature
+					
+					// Update creature
 					Weapon* w = creature->getMainWeapon();
 					if (i == SKILL_ATTACK && (w == NULL || w->getRange() <= 1)) creature->setAttackSkill(skills[i].value);
 					if (i == SKILL_RANGED_ATTACK && w != NULL && w->getRange() > 1) creature->setAttackSkill(skills[i].value);
 					if (i == SKILL_DEFENSE) creature->setDefenseSkill(skills[i].value);
 					if (i == SKILL_HEALTH) creature->addMaxHealth(10);
+					if (i == SKILL_MANA) creature->addMaxMana(10);
 				}
 				if (skills[i].value == skills[i].maxValue) numSkillsInTraining--;
 				assert(skills[i].value <= skills[i].maxValue);
@@ -1021,7 +1023,17 @@ int Player::rollBonusDamage()
 
 float Player::getWeaponSpeedBonus()
 {
-	return 1.0f - 0.05f * skills[SKILL_WEAPON_SPEED].value;
+	return (100 - 5 * skills[SKILL_WEAPON_SPEED].value) / 100.0f;
+}
+
+float Player::getMoveSpeedBonus()
+{
+	return (100 - 5 * skills[SKILL_MOVE_SPEED].value) / 100.0f;
+}
+
+float Player::getArmorHindranceReduction()
+{
+	return (10 - skills[SKILL_ARMOR].value) / 10.0f;
 }
 
 bool sortCreaturesByDistance(Creature* a, Creature* b)
@@ -1046,7 +1058,10 @@ const std::string Player::HELP_TEXT =
   "w - Wield a weapon\n"
   "W - Wear armor\n"
   "T - Take off armor\n"
-  "x - Cycle targets (when using 'f')\n\n"
+  "x - Cycle targets (when using 'f')\n"
+  "> - Go up stairs\n"
+  "< - Go down stairs\n"
+  "\n"
   "C - Character info\n"
   "L - Message Log\n"
   "S - Save and quit the game\n"

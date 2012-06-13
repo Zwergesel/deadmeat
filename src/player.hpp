@@ -101,6 +101,8 @@ public:
 	int getSkillPoints();
 	int rollBonusDamage();
 	float getWeaponSpeedBonus();
+	float getMoveSpeedBonus();
+	float getArmorHindranceReduction();
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);
