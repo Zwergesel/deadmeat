@@ -454,13 +454,10 @@ void World::travel()
 void World::buildFovMap()
 {
 	if (fovMap != NULL) delete fovMap;
-	if (fovMap == NULL)
-	{
-		fovMap = new TCODMap(levels[currentLevel]->getWidth(), levels[currentLevel]->getHeight());
-		for (int x=0; x<levels[currentLevel]->getWidth(); x++)
-			for (int y=0; y<levels[currentLevel]->getHeight(); y++)
-				world.fovMap->setProperties(x,y,world.tileSet->isPassable(world.levels[currentLevel]->getTile(Point(x,y))),world.tileSet->isPassable(world.levels[currentLevel]->getTile(Point(x,y))));
-	}
+	fovMap = new TCODMap(levels[currentLevel]->getWidth(), levels[currentLevel]->getHeight());
+	for (int x=0; x<levels[currentLevel]->getWidth(); x++)
+		for (int y=0; y<levels[currentLevel]->getHeight(); y++)
+			world.fovMap->setProperties(x,y,world.tileSet->isPassable(world.levels[currentLevel]->getTile(Point(x,y))),world.tileSet->isPassable(world.levels[currentLevel]->getTile(Point(x,y))));
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/
@@ -538,5 +535,6 @@ void World::load(LoadBlock& load)
 		load ("_log", m);
 		messageLog.push_back(m);
 	}
+	fovMap = NULL;
 	buildFovMap();
 }
