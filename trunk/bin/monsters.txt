@@ -12,7 +12,6 @@ baseDamage: 4
 numDice: 1
 diceMax: 3
 enchantment: 0
-skill: 9
 hands: 2
 effect: 0
 range: 1
@@ -52,7 +51,6 @@ baseDamage: 19
 numDice: 3
 diceMax: 7
 enchantment: 0
-skill: 9
 hands: 2
 effect: 0
 range: 1
@@ -92,7 +90,6 @@ baseDamage: 11
 numDice: 2
 diceMax: 6
 enchantment: 0
-skill: 9
 hands: 0
 effect: 0
 range: 1

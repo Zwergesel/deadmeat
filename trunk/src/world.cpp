@@ -15,7 +15,8 @@ World::World()
 {
 	player = new Player("PlayerName");
 	tileSet = new TileSet();
-	levels = new Level*[10];
+	levels = new Level*[256];
+	for (int i=0; i<256; i++) levels[i] = NULL;
 	fovMap = NULL;
 	currentLevel = 0;
 	levelOffset = Point(0,0);
@@ -137,7 +138,7 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 		for (int x=startX; x<rangeX; x++)
 		{
 			TileInfo inf = tileSet->getInfo(level->getTile(Point(x, y)));
-			if (fovMap->isInFov(x,y))
+			if (true||fovMap->isInFov(x,y))
 			{
 				level->setSeen(Point(x,y), true);
 				TCODConsole::root->putCharEx(
@@ -261,7 +262,7 @@ void World::drawCharInfo()
 		std::vector<std::pair<int,int>> r = sk.req[sk.maxValue+1];
 		std::string attrShort[4] = { "STR", "DEX", "CON", "INT" };
 		bool allowTrain = sk.maxValue < sk.maxLevel;
-		
+
 		for (unsigned int d=0; d<r.size(); d++)
 		{
 			int attr = player->getAttribute(static_cast<ATTRIBUTE>(r[d].first));
@@ -269,16 +270,16 @@ void World::drawCharInfo()
 			if (attr < val) allowTrain = false;
 			skillInfo.setColorControl(TCOD_COLCTRL_1, (attr < val ? TCODColor::red : TCODColor::green), TCODColor::black);
 			skillInfo.printEx(44+d*7, 4+i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%c%s %-2d%c",
-				TCOD_COLCTRL_1, attrShort[r[d].first].c_str(), val, TCOD_COLCTRL_STOP);
+			                  TCOD_COLCTRL_1, attrShort[r[d].first].c_str(), val, TCOD_COLCTRL_STOP);
 		}
-		
+
 		if (player->getSkillPoints() > 0 && allowTrain)
 		{
 			skillInfo.printEx(2, 4 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[%c] - ", util::letters[i]);
 		}
-		
+
 		skillInfo.printEx(8, 4 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%-15s %2d", sk.name.c_str(), sk.value);
-		
+
 		if (sk.value < sk.maxValue)
 		{
 			int currentExp = sk.exp - Skill::expNeeded(sk.value - 1);
@@ -339,7 +340,7 @@ void World::drawInfo()
 	// Status
 	TCODConsole::root->setColorControl(TCOD_COLCTRL_3, TCODColor::orange, TCODColor::black);
 	TCODConsole::root->setColorControl(TCOD_COLCTRL_4, TCODColor::red, TCODColor::black);
-	TCODConsole::root->setColorControl(TCOD_COLCTRL_5, TCODColor::yellow, TCODColor::black);	
+	TCODConsole::root->setColorControl(TCOD_COLCTRL_5, TCODColor::yellow, TCODColor::black);
 	TCODConsole::root->printEx(viewInfo.x, viewInfo.y + 26, TCOD_BKGND_NONE, TCOD_LEFT, "STATUS");
 	int row = viewInfo.y + 28;
 	if (world.player->getNutrition() < HUNGER_WEAK)
@@ -453,5 +454,41 @@ void World::load(LoadBlock& load)
 		std::string m;
 		load ("_log", m);
 		messageLog.push_back(m);
+	}
+}
+
+void World::travel()
+{
+	Point ppos = player->getCreature()->getPos();
+	// find the right entrance
+	for (auto it = worldNodes[currentLevel].link.begin(); it<worldNodes[currentLevel].link.end(); it++)
+	{
+		if ((*it).pos == ppos)
+		{
+			levels[currentLevel]->removeCreature(player->getCreature(), false);
+			// set new level and recompute whats needed
+			currentLevel = (*it).to;
+			while (levels[currentLevel] == NULL) levels[currentLevel] = LevelGen::generateLevel(currentLevel, worldNodes[currentLevel].type);
+
+			// reset timeline
+			player->getCreature()->setPos(worldNodes[currentLevel].link[(*it).exitId].pos);
+			auto timeline = levels[currentLevel]->getCreatures();
+			if (timeline.size() > 0)
+			{
+				for (auto i=timeline.begin(); i<timeline.end(); i++)
+					(*i).time = world.time;
+			}
+			levels[currentLevel]->addCreature(world.player->getCreature(), world.time + 10);
+			levels[currentLevel]->buildTimeline();
+
+			if (fovMap != NULL) delete fovMap;
+			fovMap = new TCODMap(levels[currentLevel]->getWidth(), levels[currentLevel]->getHeight());
+			for (int x=0; x<levels[currentLevel]->getWidth(); x++)
+				for (int y=0; y<levels[currentLevel]->getHeight(); y++)
+					world.fovMap->setProperties(x,y,world.tileSet->isPassable(world.levels[currentLevel]->getTile(Point(x,y))),world.tileSet->isPassable(world.levels[currentLevel]->getTile(Point(x,y))));
+			world.levelOffset.x = util::clamp(world.viewLevel.width/2 - player->getCreature()->getPos().x, world.viewLevel.width - world.levels[currentLevel]->getWidth(), 0);
+			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - player->getCreature()->getPos().y, world.viewLevel.height - world.levels[currentLevel]->getHeight(), 0);
+			return;
+		}
 	}
 }

@@ -1,7 +1,100 @@
 #include "levelgen.hpp"
 #include "level.hpp"
+#include "world.hpp"
+#include <assert.h>
 
-Level* LevelGen::generateCaveLevel(int width, int height, float density)
+void LevelGen::generateWorld()
+{
+	// hardcoded world for now
+	WorldNode over[4];
+	over[0].type = LEVELTYPE_PLAIN;
+	over[1].type = LEVELTYPE_PLAIN;
+	over[2].type = LEVELTYPE_PLAIN;
+	over[3].type = LEVELTYPE_PLAIN;
+	WorldNode mountain;
+	mountain.type = LEVELTYPE_CAVE;
+	WorldNode secret;
+	secret.type = LEVELTYPE_ROOM;
+	WorldNode house;
+	house.type = LEVELTYPE_BSP;
+	WorldNode* dungeon = new WorldNode[3];
+	dungeon[0].type = LEVELTYPE_CAVE;
+	dungeon[1].type = LEVELTYPE_CAVE;
+	dungeon[2].type = LEVELTYPE_CAVE;
+	WorldNode boss;
+	boss.type = LEVELTYPE_CAVE;
+	WorldLink in1 = {TILE_STEPSAME, Point(), 1, 0, 0};
+	WorldLink out1 = {TILE_STEPSAME, Point(), 0, 0, 0};
+	over[0].link.push_back(in1);
+	over[1].link.push_back(out1);
+	WorldLink in2 = {TILE_STEPSAME, Point(), 2, 1, 0};
+	WorldLink out2 = {TILE_STEPSAME, Point(), 1, 0, 1};
+	over[1].link.push_back(in2);
+	over[2].link.push_back(out2);
+	WorldLink in3 = {TILE_STEPSAME, Point(), 3, 1, 0};
+	WorldLink out3 = {TILE_STEPSAME, Point(), 2, 0, 1};
+	over[2].link.push_back(in3);
+	over[3].link.push_back(out3);
+	WorldLink inM = {TILE_STEPUP, Point(), 4, 2, 0};
+	WorldLink outM = {TILE_STEPDOWN, Point(), 2, 0, 2};
+	over[2].link.push_back(inM);
+	mountain.link.push_back(outM);
+	WorldLink inS = {TILE_STEPDOWN, Point(), 5, 1, 0};
+	WorldLink outS = {TILE_STEPUP, Point(), 3, 0, 1};
+	over[3].link.push_back(inS);
+	secret.link.push_back(outS);
+	WorldLink inH = {TILE_STEPSAME, Point(), 6, 2, 0};
+	WorldLink outH = {TILE_STEPSAME, Point(), 1, 0, 2};
+	over[1].link.push_back(inH);
+	house.link.push_back(outH);
+	WorldLink inD1 = {TILE_STEPDOWN, Point(), 7, 3, 0};
+	WorldLink outD1 = {TILE_STEPUP, Point(), 1, 0, 3};
+	over[1].link.push_back(inD1);
+	dungeon[0].link.push_back(outD1);
+	WorldLink inD2 = {TILE_STEPDOWN, Point(), 8, 1, 0};
+	WorldLink outD2 = {TILE_STEPUP, Point(), 7, 0, 1};
+	dungeon[0].link.push_back(inD2);
+	dungeon[1].link.push_back(outD2);
+	WorldLink inD3 = {TILE_STEPDOWN, Point(), 9, 1, 0};
+	WorldLink outD3 = {TILE_STEPUP, Point(), 8, 0, 1};
+	dungeon[1].link.push_back(inD3);
+	dungeon[2].link.push_back(outD3);
+	WorldLink inB = {TILE_STEPDOWN, Point(), 10, 2, 0};
+	WorldLink outB = {TILE_STEPUP, Point(), 8, 0, 2};
+	dungeon[1].link.push_back(inB);
+	boss.link.push_back(outB);
+
+	world.worldNodes.push_back(over[0]);
+	world.worldNodes.push_back(over[1]);
+	world.worldNodes.push_back(over[2]);
+	world.worldNodes.push_back(over[3]);
+	world.worldNodes.push_back(mountain);
+	world.worldNodes.push_back(secret);
+	world.worldNodes.push_back(house);
+	world.worldNodes.push_back(dungeon[0]);
+	world.worldNodes.push_back(dungeon[1]);
+	world.worldNodes.push_back(dungeon[2]);
+	world.worldNodes.push_back(boss);
+}
+
+Level* LevelGen::generateLevel(int levelId, LEVELTYPE type)
+{
+	TCODRandom rng;
+	switch (type)
+	{
+	case LEVELTYPE_CAVE:
+		return generateCaveLevel(levelId, rng.getInt(40, 100), rng.getInt(20, 80));
+	case LEVELTYPE_ROOM:
+		return generateRoomLevel(levelId, rng.getInt(40, 100), rng.getInt(20, 80));
+	case LEVELTYPE_BSP:
+		return generateBSPLevel(levelId, rng.getInt(20, 50), rng.getInt(20, 40));
+	case LEVELTYPE_PLAIN:
+		return generatePlainLevel(levelId, rng.getInt(10,100), rng.getInt(10,100));
+	}
+	return NULL;
+}
+
+Level* LevelGen::generateCaveLevel(int levelId, int width, int height, float density)
 {
 	if (width <= 2 || height <= 2) return NULL;
 	Level* m = new Level(width,height);
@@ -59,11 +152,15 @@ Level* LevelGen::generateCaveLevel(int width, int height, float density)
 	delete[] swap1;
 	delete[] swap2;
 
+	if (!placeEntrances(levelId, m)) return NULL;
+
 	return m;
 }
 
-class RoomLevelCorridorsPathfinding : public ITCODPathCallback {
-    public: virtual float getWalkCost( int xFrom, int yFrom, int xTo, int yTo, void *userData) const
+class RoomLevelCorridorsPathfinding : public ITCODPathCallback
+{
+public:
+	virtual float getWalkCost( int xFrom, int yFrom, int xTo, int yTo, void *userData) const
 	{
 		std::vector<int>* dat = static_cast<std::vector<int>*>(userData);
 		int width = dat->back();
@@ -76,7 +173,7 @@ class RoomLevelCorridorsPathfinding : public ITCODPathCallback {
 	}
 };
 
-Level* LevelGen::generateRoomLevel(int width, int height, float roomDensity)
+Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roomDensity)
 {
 	if (width <= 2 || height <= 2) return NULL;
 	TCODRandom rng;
@@ -281,7 +378,7 @@ Level* LevelGen::generateRoomLevel(int width, int height, float roomDensity)
 		std::vector<int> vec;
 		for (int y=0; y<height; y++) for (int x=0; x<width; x++) vec.push_back(swap1[x+y*width]);
 		vec.push_back(width);
-    RoomLevelCorridorsPathfinding pathFinding;
+		RoomLevelCorridorsPathfinding pathFinding;
 		TCODDijkstra path(width,height,&pathFinding,&vec,0.0f);
 		path.compute(doors[a].x, doors[a].y);
 		path.setPath(doors[b].x, doors[b].y);
@@ -298,11 +395,13 @@ Level* LevelGen::generateRoomLevel(int width, int height, float roomDensity)
 
 	Level* m = new Level(width,height);
 	for (int x=0; x<width; x++) for (int y=0; y<height; y++)
-	{
-		if (swap1[x + y * width] == 0 || swap1[x + y *width] == 3) m->setTile(Point(x, y), TILE_CAVE_WALL);
-		else if (swap1[x + y * width] == 1) m->setTile(Point(x, y), TILE_CAVE_FLOOR);
-		else if (swap1[x + y * width] == 2) m->setTile(Point(x, y), TILE_DOOR);
-	}
+		{
+			if (swap1[x + y * width] == 0 || swap1[x + y *width] == 3) m->setTile(Point(x, y), TILE_CAVE_WALL);
+			else if (swap1[x + y * width] == 1) m->setTile(Point(x, y), TILE_CAVE_FLOOR);
+			else if (swap1[x + y * width] == 2) m->setTile(Point(x, y), TILE_DOOR);
+		}
+
+	if (!placeEntrances(levelId, m)) return NULL;
 
 	return m;
 }
@@ -310,48 +409,106 @@ Level* LevelGen::generateRoomLevel(int width, int height, float roomDensity)
 class BSPLevelTraversing : public ITCODBspCallback
 {
 public:
-  bool visitNode(TCODBsp* node, void* userData)
-  {
-    Level* m = static_cast<Level*>(userData);
-    if(!node->isLeaf())
-    {
-      if(node->horizontal)
-      {
-        m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y - 2), TILE_CAVE_FLOOR);
-        m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y - 1), TILE_CAVE_FLOOR);
-        m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y), TILE_DOOR);
-        m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y + 1), TILE_CAVE_FLOOR);
-      }
-      else
-      {
-        m->setTile(Point(node->getRight()->x - 2, node->getRight()->y + node->getRight()->h / 2), TILE_CAVE_FLOOR);
-        m->setTile(Point(node->getRight()->x - 1, node->getRight()->y + node->getRight()->h / 2), TILE_CAVE_FLOOR);
-        m->setTile(Point(node->getRight()->x, node->getRight()->y + node->getRight()->h / 2), TILE_DOOR);
-        m->setTile(Point(node->getRight()->x + 1, node->getRight()->y + node->getRight()->h / 2), TILE_CAVE_FLOOR);
-      }
-    }
-    else
-    {      
-      for(int x=1;x<node->w - 1;x++) for(int y=1;y<node->h - 1;y++)
-      {
-        m->setTile(Point(node->x + x, node->y + y), TILE_CAVE_FLOOR);
-      }
-    }
-    return true;
-  }
+	bool visitNode(TCODBsp* node, void* userData)
+	{
+		Level* m = static_cast<Level*>(userData);
+		if (!node->isLeaf())
+		{
+			if (node->horizontal)
+			{
+				m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y - 2), TILE_CAVE_FLOOR);
+				m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y - 1), TILE_CAVE_FLOOR);
+				m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y), TILE_DOOR);
+				m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y + 1), TILE_CAVE_FLOOR);
+			}
+			else
+			{
+				m->setTile(Point(node->getRight()->x - 2, node->getRight()->y + node->getRight()->h / 2), TILE_CAVE_FLOOR);
+				m->setTile(Point(node->getRight()->x - 1, node->getRight()->y + node->getRight()->h / 2), TILE_CAVE_FLOOR);
+				m->setTile(Point(node->getRight()->x, node->getRight()->y + node->getRight()->h / 2), TILE_DOOR);
+				m->setTile(Point(node->getRight()->x + 1, node->getRight()->y + node->getRight()->h / 2), TILE_CAVE_FLOOR);
+			}
+		}
+		else
+		{
+			for (int x=1; x<node->w - 1; x++) for (int y=1; y<node->h - 1; y++)
+				{
+					m->setTile(Point(node->x + x, node->y + y), TILE_CAVE_FLOOR);
+				}
+		}
+		return true;
+	}
 };
 
-Level* LevelGen::generateBSPLevel(int width, int height, int numSplits, float squareness)
+Level* LevelGen::generateBSPLevel(int levelId, int width, int height, int numSplits, float squareness)
 {
-  Level* m = new Level(width, height);
-  for (int x=0; x<width; x++) for (int y=0; y<height; y++)
+	Level* m = new Level(width, height);
+	for (int x=0; x<width; x++) for (int y=0; y<height; y++)
+		{
+			m->setTile(Point(x,y), TILE_CAVE_WALL);
+		}
+	TCODBsp bsp(0, 0, width, height);
+	if (numSplits < 0) numSplits = 8;
+	bsp.splitRecursive(NULL, numSplits, 7, 7, squareness, squareness);
+	BSPLevelTraversing traverse;
+	bsp.traverseInvertedLevelOrder(&traverse, static_cast<void*>(m));
+
+	if (!placeEntrances(levelId, m)) return NULL;
+
+	return m;
+}
+
+bool LevelGen::placeEntrances(int levelId, Level* l)
+{
+	assert((int)world.worldNodes.size() > levelId);
+	if (l == NULL || world.worldNodes[levelId].link.size() <= 0) return true;
+	TCODRandom rng;
+	// place first entrance
+	std::vector<Point> list;
+	for (int x=0; x<l->getWidth(); x++) for (int y=0; y<l->getHeight(); y++)
+		{
+			if (l->getTile(Point(x,y)) == TILE_CAVE_FLOOR || l->getTile(Point(x,y)) == TILE_GRASS) list.push_back(Point(x,y));
+		}
+	if (list.size() < 1) return false;
+	Point first = list[rng.getInt(0, list.size() - 1)];
+	l->setTile(first, world.worldNodes[levelId].link[0].tile);
+	world.worldNodes[levelId].link[0].pos = first;
+	// build distance tree from first entrance
+	TCODMap map(l->getWidth(), l->getHeight());
+	for (int x=0; x<l->getWidth(); x++) for (int y=0; y<l->getHeight(); y++)
+		{
+			map.setProperties(x, y, false, world.tileSet->getInfo(l->getTile(Point(x,y))).passable);
+		}
+	TCODDijkstra dtree(&map);
+	dtree.compute(first.x, first.y);
+	list.clear();
+	for (int x=0; x<l->getWidth(); x++) for (int y=0; y<l->getHeight(); y++)
+		{
+			if ((l->getTile(Point(x,y)) == TILE_CAVE_FLOOR || l->getTile(Point(x,y)) == TILE_GRASS) && dtree.getDistance(x,y) > 0.f) list.push_back(Point(x,y));
+		}
+	if (list.size() < world.worldNodes[levelId].link.size() - 1) return false;
+	// place remaining entrances
+	for (int i=1; i<(int)world.worldNodes[levelId].link.size(); i++)
 	{
-    m->setTile(Point(x,y), TILE_CAVE_WALL);
-  }
-  TCODBsp bsp(0, 0, width, height);
-  if(numSplits < 0) numSplits = 8;
-  bsp.splitRecursive(NULL, numSplits, 7, 7, squareness, squareness);
-  BSPLevelTraversing traverse;
-  bsp.traverseInvertedLevelOrder(&traverse, static_cast<void*>(m));
-  return m;
+		int id = rng.getInt(0, list.size() - i);
+		Point p = list[id];
+		world.worldNodes[levelId].link[i].pos = p;
+		l->setTile(p, world.worldNodes[levelId].link[i].tile);
+		list.erase(list.begin() + id);
+	}
+
+	return true;
+}
+
+Level* LevelGen::generatePlainLevel(int levelId, int width, int height)
+{
+	Level* m = new Level(width, height);
+	for (int x=0; x<m->getWidth(); x++) for (int y=0; y<m->getHeight(); y++)
+		{
+			m->setTile(Point(x,y), TILE_GRASS);
+		}
+
+	placeEntrances(levelId, m);
+
+	return m;
 }

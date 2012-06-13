@@ -140,6 +140,7 @@ int Player::actionMove(int direction)
 			creature->moveTo(newPos);
 			world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - level->getWidth(), 0);
 			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
+			if (level->getTile(newPos) == TILE_STEPSAME) world.travel();
 			return static_cast<int>(static_cast<float>(creature->getWalkingSpeed()) * diagonal);
 		}
 		else
@@ -373,7 +374,7 @@ int Player::actionEat(Item* item)
 	std::stringstream msg;
 	msg << "You eat " << util::format(FORMAT_INDEF, f->toString(), f->getFormatFlags()) << ".";
 	world.addMessage(msg.str());
-	
+
 	addNutrition(f->getNutrition());
 
 	creature->removeItem(item, true);
@@ -566,6 +567,25 @@ int Player::processAction()
 		else if (state == STATE_DEFAULT && key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.vk != TCODK_5)
 		{
 			return actionMove(key.vk - TCODK_1);
+		}
+		// up/down player movement
+		else if (state == STATE_DEFAULT && key.c == '<')
+		{
+			if (world.levels[world.currentLevel]->getTile(creature->getPos()) == TILE_STEPUP)
+			{
+				world.travel();
+				return 10;
+			}
+			return 0;
+		}
+		else if (state == STATE_DEFAULT && key.c == '>')
+		{
+			if (world.levels[world.currentLevel]->getTile(creature->getPos()) == TILE_STEPDOWN)
+			{
+				world.travel();
+				return 10;
+			}
+			return 0;
 		}
 		// wait/search
 		else if (state == STATE_DEFAULT && (key.vk == TCODK_5 || key.vk == TCODK_KP5))

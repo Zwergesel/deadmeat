@@ -295,6 +295,11 @@ void Creature::setControlled(bool c)
 	controlled = c;
 }
 
+void Creature::setPos(Point p)
+{
+	position = p;
+}
+
 void Creature::setLevel(Level* l)
 {
 	level = l;

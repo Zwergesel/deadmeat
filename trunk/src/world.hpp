@@ -7,6 +7,7 @@
 #include "utility.hpp"
 #include "item.hpp"
 #include "itemselection.hpp"
+#include "levelgen.hpp"
 
 class Player;
 class Creature;
@@ -42,6 +43,7 @@ public:
 	bool gameover;
 	int time;
 	bool clearMessage;
+	std::vector<WorldNode> worldNodes;
 
 	World();
 	~World();
@@ -62,6 +64,8 @@ public:
 	void drawInfo();
 	void drawItemSelection(ItemSelection& sel);
 	void drawCharInfo();
+
+	void travel();
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);

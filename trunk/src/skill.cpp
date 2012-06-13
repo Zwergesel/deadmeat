@@ -32,7 +32,7 @@ void Skill::setDefaults(Skill* skills)
 	skills[SKILL_ALCHEMY] = Skill("Alchemy", 0, 0, 15, 0);
 	skills[SKILL_COOKING] = Skill("Cooking", 0, 0, 15, 0);
 	skills[SKILL_BLACKSMITH] = Skill("Blacksmithing", 0, 0, 15, 0);
-	
+
 	// Requirements
 	for (int i=1; i<=20; i++)
 	{

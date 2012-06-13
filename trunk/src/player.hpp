@@ -35,11 +35,11 @@ enum STATE
 
 enum HungerLevel
 {
-	HUNGER_STARVING = 0,
-	HUNGER_WEAK = 600,
-	HUNGER_HUNGRY = 1500,
-	HUNGER_NORMAL = 3500,
-	HUNGER_SATIATED = 4500
+  HUNGER_STARVING = 0,
+  HUNGER_WEAK = 600,
+  HUNGER_HUNGRY = 1500,
+  HUNGER_NORMAL = 3500,
+  HUNGER_SATIATED = 4500
 };
 
 class Player
@@ -57,7 +57,7 @@ private:
 	int attrPoints;
 	int skillPoints;
 	std::vector<Creature*> targetList;
-	
+
 	static const std::string HELP_TEXT;
 	static int dx[9];
 	static int dy[9];
