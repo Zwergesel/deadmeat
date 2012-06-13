@@ -302,7 +302,7 @@ int Player::actionWield(Item* itemObj)
 	else
 	{
 		creature->wieldMainWeapon(weapon);
-		creature->setAttackSkill(weapon->getRange() > 1 ? skills[SKILL_ATTACK].value : skills[SKILL_RANGED_ATTACK].value);		
+		creature->setAttackSkill(weapon->getRange() > 1 ? skills[SKILL_ATTACK].value : skills[SKILL_RANGED_ATTACK].value);
 		msg << "You are now wielding " << util::format(FORMAT_INDEF, weapon->toString(), weapon->getFormatFlags()) << ".";
 		world.addMessage(msg.str());
 		return 30;
