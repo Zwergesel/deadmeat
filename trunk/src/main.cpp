@@ -147,10 +147,6 @@ int main()
 		world.levels[0]->addItem(food2->clone(), getRandomLocation(world.levels[0]));
 		world.levels[0]->addItem(arrows, world.player->getCreature()->getPos());
 	}
-	world.fovMap = new TCODMap(world.levels[0]->getWidth(), world.levels[0]->getHeight());
-	for (int x=0; x<world.levels[0]->getWidth(); x++)
-		for (int y=0; y<world.levels[0]->getHeight(); y++)
-			world.fovMap->setProperties(x,y,world.tileSet->isPassable(world.levels[0]->getTile(Point(x,y))),world.tileSet->isPassable(world.levels[0]->getTile(Point(x,y))));
 
 	while (!world.requestQuit)
 	{
