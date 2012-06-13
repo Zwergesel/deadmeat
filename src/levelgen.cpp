@@ -88,6 +88,7 @@ Level* LevelGen::generateLevel(int levelId, LEVELTYPE type)
 		return generateRoomLevel(levelId, rng.getInt(40, 100), rng.getInt(20, 80));
 	case LEVELTYPE_BSP:
 		return generateBSPLevel(levelId, rng.getInt(20, 50), rng.getInt(20, 40));
+	default:
 	case LEVELTYPE_PLAIN:
 		return generatePlainLevel(levelId, rng.getInt(10,100), rng.getInt(10,100));
 	}

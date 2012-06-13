@@ -415,47 +415,6 @@ unsigned char World::drawBlockingWindow(const std::string& title, const std::str
 	return '\0';
 }
 
-/*--------------------- SAVING AND LOADING ---------------------*/
-
-unsigned int World::save(Savegame& sg)
-{
-	unsigned int id;
-	if (sg.saved(this,&id)) return id;
-	SaveBlock store("World", id);
-	store ("currentLevel", currentLevel) ("levelOffset", levelOffset) ("time", time);
-	// TODO : all levels
-	store.ptr("player", player->save(sg)) ("#levels", 1) .ptr("_level", levels[0]->save(sg));
-	store ("#messageLog", (int) messageLog.size());
-	for (auto it = messageLog.begin(); it != messageLog.end(); it++)
-	{
-		store ("_log", *it);
-	}
-	sg << store;
-	return id;
-}
-
-void World::load(LoadBlock& load)
-{
-	// Clean
-	messageLog.clear();
-	// TODO: delete player and levels [MEMORY LEAK]
-	// Load
-	load ("currentLevel", currentLevel) ("levelOffset", levelOffset) ("time", time);
-	player = static_cast<Player*>(load.ptr("player"));
-	int n;
-	load ("#levels", n);
-	for (int i=0; i<n; i++)
-	{
-		levels[i] = static_cast<Level*>(load.ptr("_level"));
-	}
-	load ("#messageLog", n);
-	while (n-->0)
-	{
-		std::string m;
-		load ("_log", m);
-		messageLog.push_back(m);
-	}
-}
 
 void World::travel()
 {
@@ -490,5 +449,82 @@ void World::travel()
 			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - player->getCreature()->getPos().y, world.viewLevel.height - world.levels[currentLevel]->getHeight(), 0);
 			return;
 		}
+	}
+}
+
+/*--------------------- SAVING AND LOADING ---------------------*/
+
+unsigned int World::save(Savegame& sg)
+{
+	unsigned int id;
+	if (sg.saved(this,&id)) return id;
+	SaveBlock store("World", id);
+	store ("currentLevel", currentLevel) ("levelOffset", levelOffset) ("time", time);
+	store.ptr("player", player->save(sg)) ("#levels", 256);
+	for (int i=0; i<256; i++)
+	{
+		store.ptr("_level", levels[i] == NULL ? 0 : levels[i]->save(sg));
+	}
+	store ("#worldNodes", (unsigned int) worldNodes.size());
+	for (unsigned int d=0; d<worldNodes.size(); d++)
+	{
+		store ("_type", worldNodes[d].type) ("_#links", (unsigned int) worldNodes[d].link.size());
+		for (unsigned int e=0; e<worldNodes[d].link.size(); e++)
+		{
+			store("__tile", worldNodes[d].link[e].tile);
+			store("__pos", worldNodes[d].link[e].pos);
+			store("__to", worldNodes[d].link[e].to);
+			store("__entranceId", worldNodes[d].link[e].entranceId);
+			store("__exitId", worldNodes[d].link[e].exitId);
+		}
+	}
+	store ("#messageLog", (int) messageLog.size());
+	for (auto it = messageLog.begin(); it != messageLog.end(); it++)
+	{
+		store ("_log", *it);
+	}
+	sg << store;
+	return id;
+}
+
+void World::load(LoadBlock& load)
+{
+	// Clean
+	messageLog.clear();
+	// TODO: delete player and levels [MEMORY LEAK]
+	// Load
+	load ("currentLevel", currentLevel) ("levelOffset", levelOffset) ("time", time);
+	player = static_cast<Player*>(load.ptr("player"));
+	int n;
+	load ("#levels", n);
+	for (int i=0; i<n; i++)
+	{
+		levels[i] = static_cast<Level*>(load.ptr("_level"));
+	}
+	load ("#worldNodes", n);
+	while (n-->0)
+	{
+		int m,l;
+		worldNodes.push_back(WorldNode());
+		load ("_type", l) ("_#links", m);
+		if (l < 0 || l >= NUM_LEVELTYPE) throw SavegameFormatException("World::load _ leveltype out of range");
+		worldNodes.back().type = static_cast<LEVELTYPE>(l);
+		while (m-->0)
+		{
+			int t;
+			worldNodes.back().link.push_back(WorldLink());
+			load ("__tile", t) ("__pos", worldNodes.back().link.back().pos);
+			load ("__to", worldNodes.back().link.back().to) ("__entranceId", worldNodes.back().link.back().entranceId);
+			load ("__exitId", worldNodes.back().link.back().exitId);
+			if (t < 0 || t >= TILES_LENGTH) throw SavegameFormatException("World::load _ tile out of range");
+			worldNodes.back().link.back().tile = static_cast<Tile>(t);
+		}
+	}
+	load ("#messageLog", n);
+	while (n-->0)
+	{
+		std::string m;
+		load ("_log", m);
+		messageLog.push_back(m);
 	}
 }
