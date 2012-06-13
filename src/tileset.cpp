@@ -14,7 +14,7 @@ TileSet::TileSet()
 	info[TILE_STEPUP]		= TileInfo(true, '<', TCODColor::brass, TCODColor::white);
 	info[TILE_STEPDOWN]		= TileInfo(true, '>', TCODColor::brass, TCODColor::white);
 	info[TILE_STEPSAME]		= TileInfo(true, '=', TCODColor::brass, TCODColor::white);
-	info[TILE_GRASS] = TileInfo(true, '.', TCODColor::lightGreen, TCODColor::lightGreen * TCODColor::white);
+	info[TILE_GRASS] = TileInfo(true, '.', TCODColor::lightGreen, TCODColor::lerp(TCODColor::lightGreen, TCODColor::white, 0.7f));
 }
 
 TileSet::~TileSet()
