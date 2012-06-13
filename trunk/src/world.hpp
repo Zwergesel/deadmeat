@@ -65,6 +65,7 @@ public:
 	void drawItemSelection(ItemSelection& sel);
 	void drawCharInfo();
 
+	void buildFovMap();
 	void travel();
 
 	unsigned int save(Savegame& sg);
