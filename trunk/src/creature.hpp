@@ -75,6 +75,7 @@ public:
 	void setDefenseSkill(int defenseSkill);
 	void setBaseWeapon(Weapon base);
 	void addMaxHealth(int delta);
+	void addMaxMana(int delta);
 
 	void wieldMainWeapon(Weapon* wpn);
 	void wearArmor(Armor* armor);

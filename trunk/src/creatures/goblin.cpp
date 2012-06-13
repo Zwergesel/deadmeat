@@ -121,7 +121,7 @@ unsigned int Goblin::save(Savegame& sg)
 	SaveBlock store("Goblin", id);
 	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("position", position);
 	store ("color", color) ("health", health) ("maxHealth", maxHealth);
-	store ("controlled", controlled);
+	store ("mana", mana) ("maxMana", maxMana) ("controlled", controlled);
 	store ("mainWeapon", (int) mainWeapon);
 	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
 	{
