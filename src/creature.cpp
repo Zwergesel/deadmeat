@@ -338,14 +338,14 @@ int Creature::attack(Creature* target)
 			speed = static_cast<int>(w->getSpeed() + FACT_ATSPD * getHindrance());
 		}
 	}
-	
+
 	// skill boni
 	if (controlled)
 	{
 		speed = std::max(1, static_cast<int>(speed * world.player->getWeaponSpeedBonus()));
 		damage += world.player->rollBonusDamage();
 	}
-	
+
 	int defense = target->getDefense();
 	TCODRandom rngGauss;
 	rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
