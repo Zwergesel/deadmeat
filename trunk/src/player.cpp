@@ -20,7 +20,6 @@ bool sortCreaturesByDistance(Creature* a, Creature* b);
 
 Player::Player()
 {
-	// TODO: skills saving & loading
 	Skill::setDefaults(skills);
 }
 
@@ -302,7 +301,7 @@ int Player::actionWield(Item* itemObj)
 	else
 	{
 		creature->wieldMainWeapon(weapon);
-		creature->setAttackSkill(weapon->getRange() > 1 ? skills[SKILL_ATTACK].value : skills[SKILL_RANGED_ATTACK].value);
+		creature->setAttackSkill(weapon->getRange() > 1 ? skills[SKILL_RANGED_ATTACK].value : skills[SKILL_ATTACK].value);
 		msg << "You are now wielding " << util::format(FORMAT_INDEF, weapon->toString(), weapon->getFormatFlags()) << ".";
 		world.addMessage(msg.str());
 		return 30;
@@ -959,7 +958,9 @@ void Player::incExperience(int exp)
 					msg << "You feel more skilled in " << skills[i].name << ".";
 					world.addMessage(msg.str());
 					// Update attack and defense skill in creature
-					if (i == SKILL_ATTACK) creature->setAttackSkill(skills[i].value);
+					Weapon* w = creature->getMainWeapon();
+					if (i == SKILL_ATTACK && (w == NULL || w->getRange() <= 1)) creature->setAttackSkill(skills[i].value);
+					if (i == SKILL_RANGED_ATTACK && w != NULL && w->getRange() > 1) creature->setAttackSkill(skills[i].value);
 					if (i == SKILL_DEFENSE) creature->setDefenseSkill(skills[i].value);
 					if (i == SKILL_HEALTH) creature->addMaxHealth(10);
 				}
