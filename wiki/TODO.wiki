@@ -3,22 +3,20 @@
 = TODO-List =
 
 == Test ==
-  * character information scree (levelup?)
-
-==Bugs/Issues==
-  * There's a bug sometimes when opening the character info screen. The game crashes because of a failed assertion in libtcod, where a character is out of range (< 0 or > max_chars).
+  * Changing levels
 
 == Small improvements ==
+  * Stairs should be objects, so that they can lie on different grounds (grass, cave, ...)
+  * Ranged attacks should be able to hit creatures in their path, not just the target
   * Variable "cursed" in Item
   * Creature::die should work without an instigator
   * Time to eat should depend on the food
 
 == Major improvements ==
-  * stacking of items
+  * Stacking of items
   * Fully implement attributes
-  * Implement weapon and fighting skill training
-  * Changing levels
-  * Display unseen items where the player has last seen them even if a monster picked them up
+  * Support all skills
+  * Item identification
   * Generate monsters with items
   * Let monsters drop their items when they die
   * Load level data from save files (possible monsters, possible loot, ...)
@@ -29,3 +27,4 @@
   * Magic system
   * Character creation
   * Random level generation
+  * Display unseen items where the player has last seen them even if a monster picked them up
