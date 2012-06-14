@@ -23,11 +23,11 @@ void LevelGen::generateWorld()
 	dungeon[2].type = LEVELTYPE_CAVE;
 	WorldNode boss;
 	boss.type = LEVELTYPE_CAVE;
-	WorldLink in1 = {TILE_STEPSAME, Point(), 1, 0, 0};
-	WorldLink out1 = {TILE_STEPSAME, Point(), 0, 0, 0};
+	WorldLink in1 = {OBJECTTYPE_STAIRSSAME, Point(), 1, 0, 0};
+	WorldLink out1 = {OBJECTTYPE_STAIRSSAME, Point(), 0, 0, 0};
 	over[0].link.push_back(in1);
 	over[1].link.push_back(out1);
-	WorldLink in2 = {TILE_STEPSAME, Point(), 2, 1, 0};
+	/*WorldLink in2 = {TILE_STEPSAME, Point(), 2, 1, 0};
 	WorldLink out2 = {TILE_STEPSAME, Point(), 1, 0, 1};
 	over[1].link.push_back(in2);
 	over[2].link.push_back(out2);
@@ -62,7 +62,7 @@ void LevelGen::generateWorld()
 	WorldLink inB = {TILE_STEPDOWN, Point(), 10, 2, 0};
 	WorldLink outB = {TILE_STEPUP, Point(), 8, 0, 2};
 	dungeon[1].link.push_back(inB);
-	boss.link.push_back(outB);
+	boss.link.push_back(outB);*/
 
 	world.worldNodes.push_back(over[0]);
 	world.worldNodes.push_back(over[1]);
@@ -472,7 +472,8 @@ bool LevelGen::placeEntrances(int levelId, Level* l)
 		}
 	if (list.size() < 1) return false;
 	Point first = list[rng.getInt(0, list.size() - 1)];
-	l->setTile(first, world.worldNodes[levelId].link[0].tile);
+	Object firstEntrance(world.worldNodes[levelId].link[0].type);
+	l->addObject(firstEntrance, first);
 	world.worldNodes[levelId].link[0].pos = first;
 	// build distance tree from first entrance
 	TCODMap map(l->getWidth(), l->getHeight());
@@ -494,7 +495,8 @@ bool LevelGen::placeEntrances(int levelId, Level* l)
 		int id = rng.getInt(0, list.size() - i);
 		Point p = list[id];
 		world.worldNodes[levelId].link[i].pos = p;
-		l->setTile(p, world.worldNodes[levelId].link[i].tile);
+		Object entrance(world.worldNodes[levelId].link[i].type);
+		l->addObject(entrance, p);
 		list.erase(list.begin() + id);
 	}
 

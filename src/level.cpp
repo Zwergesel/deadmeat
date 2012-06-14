@@ -21,6 +21,7 @@ Level::Level(int w, int h):
 	seen = new bool[w*h];
 	creatures.clear();
 	items.clear();
+	objects.clear();
 	std::fill(map, map+w*h, TILE_CAVE_FLOOR);
 	std::fill(seen, seen+w*h, false);
 }
@@ -161,6 +162,24 @@ std::vector<Item*> Level::itemsAt(Point pos)
 std::vector<std::pair<Point, Item*> > Level::getItems()
 {
 	return items;
+}
+
+void Level::addObject(Object obj, Point p)
+{
+	objects.push_back(std::pair<Point, Object>(p, obj));
+}
+
+bool Level::objectAt(Point p, Object& obj)
+{
+	for (auto it=objects.begin(); it<objects.end(); it++)
+	{
+		if (p == (*it).first)
+		{
+			obj = (*it).second;
+			return true;
+		}
+	}
+	return false;
 }
 
 void Level::addItem(Item* i, Point pos)

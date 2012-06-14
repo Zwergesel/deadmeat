@@ -277,7 +277,7 @@ int Creature::getHindrance()
 		Armor* ar = getArmor(static_cast<ArmorSlot>(slot));
 		if (ar != NULL) hindrance += ar->getHindrance();
 	}
-	return controlled ? world.player->getArmorHindranceReduction() * hindrance : hindrance;
+	return controlled ? static_cast<int>(world.player->getArmorHindranceReduction() * hindrance) : hindrance;
 }
 
 int Creature::getWalkingSpeed()

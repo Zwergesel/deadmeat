@@ -138,6 +138,13 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 		for (int x=startX; x<rangeX; x++)
 		{
 			TileInfo inf = tileSet->getInfo(level->getTile(Point(x, y)));
+			// check for object
+			Object obj;
+			if (level->objectAt(Point(x,y), obj))
+			{
+				inf.color = obj.getColor();
+				inf.sym = obj.getSymbol();
+			}
 			if (true||fovMap->isInFov(x,y))
 			{
 				level->setSeen(Point(x,y), true);
@@ -480,7 +487,7 @@ unsigned int World::save(Savegame& sg)
 		store ("_type", worldNodes[d].type) ("_#links", (unsigned int) worldNodes[d].link.size());
 		for (unsigned int e=0; e<worldNodes[d].link.size(); e++)
 		{
-			store("__tile", worldNodes[d].link[e].tile);
+			store("__type", worldNodes[d].link[e].type);
 			store("__pos", worldNodes[d].link[e].pos);
 			store("__to", worldNodes[d].link[e].to);
 			store("__entranceId", worldNodes[d].link[e].entranceId);
@@ -522,11 +529,11 @@ void World::load(LoadBlock& load)
 		{
 			int t;
 			worldNodes.back().link.push_back(WorldLink());
-			load ("__tile", t) ("__pos", worldNodes.back().link.back().pos);
+			load ("__type", t) ("__pos", worldNodes.back().link.back().pos);
 			load ("__to", worldNodes.back().link.back().to) ("__entranceId", worldNodes.back().link.back().entranceId);
 			load ("__exitId", worldNodes.back().link.back().exitId);
 			if (t < 0 || t >= TILES_LENGTH) throw SavegameFormatException("World::load _ tile out of range");
-			worldNodes.back().link.back().tile = static_cast<Tile>(t);
+			worldNodes.back().link.back().type = static_cast<OBJECTTYPE>(t);
 		}
 	}
 	load ("#messageLog", n);
