@@ -204,6 +204,46 @@ void Level::removeItem(Item* i, bool del)
 	}
 }
 
+Point Level::getRandomLocation(uint flags)
+{
+	std::vector<Point> list;
+	for (int y=0; y<height; y++) for (int x=0; x<width; x++)
+	{
+		if ((flags & WALKABLE) && !world.tileSet->isPassable(map[coord(Point(x,y))])) continue;
+		else if ((flags & NO_CREATURE) && creatureAt(Point(x,y)) != NULL) continue;
+		else if (flags & NO_ITEM)
+		{
+			bool hasItems = false;
+			for (auto it = items.begin(); it != items.end(); it++)
+			{
+				if (it->first.x == x && it->first.y == y)
+				{
+					hasItems = true;
+					break;
+				}
+			}
+			if (hasItems) continue;
+		}
+		list.push_back(Point(x,y));
+	}
+	
+	if (list.size() == 0) return Point(-1, -1);
+	
+	TCODRandom* rng = TCODRandom::getInstance();
+	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
+	return list[rng->getInt(0,list.size()-1)];
+}
+
+void Level::populate(const SpawnList& spawns, int numCreatures)
+{
+	while (numCreatures-->0)
+	{
+		Creature* c = factory.spawnCreature(spawns.getRandom());
+		c->moveTo(getRandomLocation(WALKABLE | NO_CREATURE));
+		addCreature(c, world.time);
+	}
+}
+
 void Level::buildTimeline()
 {
 	std::make_heap(creatures.begin(), creatures.end());

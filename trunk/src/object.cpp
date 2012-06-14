@@ -21,6 +21,7 @@ Object::Object(OBJECTTYPE t)
 		name = "stairs leading up";
 		formatFlags=F_PLURAL;
 		break;
+	default:
 	case OBJECTTYPE_STAIRSSAME:
 		sym = '=';
 		color = TCODColor::brass;

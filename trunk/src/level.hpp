@@ -8,9 +8,18 @@
 #include "item.hpp"
 #include "savegame.hpp"
 #include "object.hpp"
+#include "factory.hpp"
 
 class Creature;
 enum Tile;
+
+enum RANDOM_LOCATION_FLAGS
+{
+	ANY_SPACE = 0,
+	WALKABLE = 1,
+	NO_CREATURE = 2,
+	NO_ITEM = 4
+};
 
 struct TimelineAction
 {
@@ -57,6 +66,9 @@ public:
 	bool objectAt(Point p, Object& obj);
 	void addItem(Item* i, Point pos);
 	void removeItem(Item* i, bool del);
+
+	void populate(const SpawnList& spawns, int numCreatures);
+	Point getRandomLocation(uint flags);
 
 	void buildTimeline();
 	bool isPlayerTurn();

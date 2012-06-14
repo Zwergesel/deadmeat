@@ -16,7 +16,7 @@
 #include "items/armor.hpp"
 #include "items/food.hpp"
 #include "items/ammo.hpp"
-#include "monsterfactory.hpp"
+#include "factory.hpp"
 
 std::string Savegame::version = "0.10";
 
@@ -263,11 +263,11 @@ void Savegame::loadObject()
 		objects[id] = static_cast<void*>(&world);
 		world.load(load);
 	}
-	else if (objClass == "MonsterFactory")
+	else if (objClass == "Factory")
 	{
-		// No new MonsterFactory object. Global MonsterFactory loads this
-		objects[id] = static_cast<void*>(&monsterfactory);
-		monsterfactory.load(load);
+		// No new Factory object. Global Factory loads this
+		objects[id] = static_cast<void*>(&factory);
+		factory.load(load);
 	}
 	else if (objClass == "Creature")
 	{

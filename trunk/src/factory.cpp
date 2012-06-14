@@ -1,19 +1,46 @@
-#include "monsterfactory.hpp"
+#include <cassert>
+#include "factory.hpp"
 #include "creature.hpp"
 #include "savegame.hpp"
 
-MonsterFactory::MonsterFactory()
+SpawnList::SpawnList():
+	probTotal(0)
 {
 }
 
-Creature* MonsterFactory::spawnCreature(std::string monsterclass)
+void SpawnList::add(std::string monsterclass, int prob)
+{
+	if (prob <= 0) return;
+	probTotal += prob;
+	monsters.push_back(std::pair<std::string,int>(monsterclass,prob));
+}
+
+std::string SpawnList::getRandom() const
+{
+	TCODRandom* rng = TCODRandom::getInstance();
+	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
+	int roll = rng->getInt(1,probTotal);
+	for (auto it=monsters.begin(); it!=monsters.end(); it++)
+	{
+		roll -= it->second;
+		if (roll <= 0) return it->first;
+	}
+	assert(false);
+	return "";
+}
+
+Factory::Factory()
+{
+}
+
+Creature* Factory::spawnCreature(std::string monsterclass)
 {
 	std::map<std::string, Creature*>::iterator it = templates.find(monsterclass);
 	if (it == templates.end()) return NULL;
 	return it->second->clone();
 }
 
-void MonsterFactory::setTemplate(std::string monsterclass, Creature* c)
+void Factory::setTemplate(std::string monsterclass, Creature* c)
 {
 	Creature* nc = c->clone();
 	std::map<std::string, Creature*>::iterator it = templates.find(monsterclass);
@@ -30,11 +57,11 @@ void MonsterFactory::setTemplate(std::string monsterclass, Creature* c)
 
 /*--------------------- SAVING AND LOADING ---------------------*/
 
-unsigned int MonsterFactory::save(Savegame& sg)
+unsigned int Factory::save(Savegame& sg)
 {
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
-	SaveBlock store("MonsterFactory", id);
+	SaveBlock store("Factory", id);
 	store ("#templates", (int) templates.size());
 	for (std::map<std::string, Creature*>::iterator it = templates.begin(); it != templates.end(); it++)
 	{
@@ -44,7 +71,7 @@ unsigned int MonsterFactory::save(Savegame& sg)
 	return id;
 }
 
-void MonsterFactory::load(LoadBlock& load)
+void Factory::load(LoadBlock& load)
 {
 	// Delete previous templates
 	for (std::map<std::string, Creature*>::iterator it = templates.begin(); it != templates.end(); it++)
