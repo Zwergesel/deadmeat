@@ -11,9 +11,6 @@ TileSet::TileSet()
 	info[TILE_STONE_FLOOR]	= TileInfo(true, '.', TCODColor::grey, TCODColor::white);
 	info[TILE_MEADOW]		= TileInfo(true, '.', TCODColor::green, TCODColor::white);
 	info[TILE_DOOR]		= TileInfo(true, '+', TCODColor::yellow, TCODColor::white);
-	info[TILE_STEPUP]		= TileInfo(true, '<', TCODColor::brass, TCODColor::white);
-	info[TILE_STEPDOWN]		= TileInfo(true, '>', TCODColor::brass, TCODColor::white);
-	info[TILE_STEPSAME]		= TileInfo(true, '=', TCODColor::brass, TCODColor::white);
 	info[TILE_GRASS] = TileInfo(true, '.', TCODColor::lightGreen, TCODColor::lerp(TCODColor::lightGreen, TCODColor::white, 0.7f));
 }
 

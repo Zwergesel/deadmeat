@@ -139,7 +139,8 @@ int Player::actionMove(int direction)
 			creature->moveTo(newPos);
 			world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - level->getWidth(), 0);
 			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
-			if (level->getTile(newPos) == TILE_STEPSAME) world.travel();
+			Object obj;
+			if (level->objectAt(newPos, obj) && obj.getType() == OBJECTTYPE_STAIRSSAME) world.travel();
 			return static_cast<int>(static_cast<float>(creature->getWalkingSpeed()) * diagonal);
 		}
 		else
@@ -160,6 +161,7 @@ int Player::actionLook(Point pos)
 		// If square is visible...
 		Creature* c = level->creatureAt(pos);
 		std::vector<Item*> items = level->itemsAt(pos);
+		Object obj;
 		if (c != NULL && c != creature)
 		{
 			// ...see the creature there...
@@ -184,6 +186,11 @@ int Player::actionLook(Point pos)
 				if (it != items.end()) strlist << ",";
 				world.addMessage(strlist.str());
 			}
+		}
+		else if (level->objectAt(pos, obj))
+		{
+			msg << "You see " << util::format(FORMAT_INDEF, obj.toString(), obj.getFormatFlags()) << " here.";
+			world.addMessage(msg.str());
 		}
 		else if (c != NULL && c == creature)
 		{
@@ -570,7 +577,8 @@ int Player::processAction()
 		// up/down player movement
 		else if (state == STATE_DEFAULT && key.c == '<')
 		{
-			if (world.levels[world.currentLevel]->getTile(creature->getPos()) == TILE_STEPUP)
+			Object obj;
+			if (world.levels[world.currentLevel]->objectAt(creature->getPos(), obj) && obj.getType() == OBJECTTYPE_STAIRSUP)
 			{
 				world.travel();
 				return 10;
@@ -579,7 +587,8 @@ int Player::processAction()
 		}
 		else if (state == STATE_DEFAULT && key.c == '>')
 		{
-			if (world.levels[world.currentLevel]->getTile(creature->getPos()) == TILE_STEPDOWN)
+			Object obj;
+			if (world.levels[world.currentLevel]->objectAt(creature->getPos(), obj) && obj.getType() == OBJECTTYPE_STAIRSDOWN)
 			{
 				world.travel();
 				return 10;
@@ -957,7 +966,7 @@ void Player::incExperience(int exp)
 					std::stringstream msg;
 					msg << "You feel more skilled in " << skills[i].name << ".";
 					world.addMessage(msg.str());
-					
+
 					// Update creature
 					Weapon* w = creature->getMainWeapon();
 					if (i == SKILL_ATTACK && (w == NULL || w->getRange() <= 1)) creature->setAttackSkill(skills[i].value);

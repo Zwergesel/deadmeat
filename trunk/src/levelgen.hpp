@@ -2,7 +2,7 @@
 #define _LEVELGEN_HPP
 
 #include "utility.hpp"
-#include "tileset.hpp"
+#include "object.hpp"
 #include <vector>
 
 class Level;
@@ -18,7 +18,7 @@ enum LEVELTYPE
 
 struct WorldLink
 {
-	Tile tile;
+	OBJECTTYPE type;
 	Point pos;
 	int to;
 	int entranceId;

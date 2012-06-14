@@ -7,6 +7,7 @@
 #include "utility.hpp"
 #include "item.hpp"
 #include "savegame.hpp"
+#include "object.hpp"
 
 class Creature;
 enum Tile;
@@ -28,6 +29,8 @@ private:
 	bool* seen;
 	std::vector<TimelineAction> creatures;
 	std::vector<std::pair<Point, Item*> > items;
+	// one object per position
+	std::vector<std::pair<Point, Object> > objects;
 	inline int coord(Point pos);
 
 	Level(); // for savegames only
@@ -50,6 +53,8 @@ public:
 	std::vector<Creature*> getVisibleCreatures();
 	std::vector<Item*> itemsAt(Point pos);
 	std::vector<std::pair<Point, Item*> > getItems();
+	void addObject(Object obj, Point pos);
+	bool objectAt(Point p, Object& obj);
 	void addItem(Item* i, Point pos);
 	void removeItem(Item* i, bool del);
 
