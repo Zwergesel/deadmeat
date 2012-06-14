@@ -15,10 +15,10 @@
 #include "items/weapon.hpp"
 #include "items/food.hpp"
 #include "items/ammo.hpp"
-#include "monsterfactory.hpp"
+#include "factory.hpp"
 
 World world;
-MonsterFactory monsterfactory;
+Factory factory;
 
 Point getRandomLocation(Level* lev)
 {
@@ -84,18 +84,18 @@ int main()
 		Goblin goblin("goblin", F_MALE, 'g', TCODColor::green, 35, 0,
 		              Weapon("claws", F_DEFAULT, '#', TCODColor::pink, 11, 0, 4, 1, 3, 0, 2, EFFECT_NONE, 1), 15, 10, 1000
 		             );
-		monsterfactory.setTemplate("goblin", &goblin);
+		factory.setTemplate("goblin", &goblin);
 		Goblin snake("snake", F_MALE , 's', TCODColor::darkChartreuse, 20, 0,
 		             Weapon("teeth", F_DEFAULT, '#', TCODColor::pink, 25, 0, 11, 2, 6, 0, 0, EFFECT_NONE, 1), 0, 3, 1000
 		            );
-		monsterfactory.setTemplate("snake", &snake);
+		factory.setTemplate("snake", &snake);
 		Goblin dragon("Smaug", F_PROPER | F_MALE, 'D', TCODColor::red, 300, 100,
 		              Weapon("fangs", F_DEFAULT, '#', TCODColor::pink, 15, 50, 19, 3, 7, 0, 2, EFFECT_NONE, 1), 75, 30, 10000
 		             );
-		monsterfactory.setTemplate("red dragon", &dragon);
+		factory.setTemplate("red dragon", &dragon);
 		Savegame save;
 		save.beginSave("monsters.txt");
-		monsterfactory.save(save);
+		factory.save(save);
 		save.endSave();
 	}
 
@@ -123,13 +123,10 @@ int main()
 		Food* food1 = new Food("beefsteak", F_NEUTER, '%', TCODColor::darkOrange, 2500);
 		Food* food2 = new Food("meat ball", F_NEUTER, '%', TCODColor::orange, 1000);
 		Ammo* arrows = new Ammo("arrow", F_NEUTER, '!', TCODColor::cyan, 0, EFFECT_NONE);
-		std::string cr[7] = { "goblin","goblin","goblin","snake","snake","snake","red dragon" };
-		for (int i=0; i<7; i++)
-		{
-			Creature* c = monsterfactory.spawnCreature(cr[i]);
-			c->moveTo(getRandomLocation(world.levels[0]));
-			world.levels[0]->addCreature(c, 0);
-		}
+		SpawnList cave;
+		cave.add("goblin", 50);
+		cave.add("snake", 25);
+		world.levels[0]->populate(cave, 5);
 		world.levels[0]->addCreature(world.player->getCreature(), 0);
 		world.levels[0]->addItem(dagger, getRandomLocation(world.levels[0]));
 		world.levels[0]->addItem(item1, getRandomLocation(world.levels[0]));

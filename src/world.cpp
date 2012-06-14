@@ -447,7 +447,7 @@ void World::travel()
 				for (auto i=timeline.begin(); i<timeline.end(); i++)
 					(*i).time = world.time;
 			}
-			levels[currentLevel]->addCreature(world.player->getCreature(), world.time + 10);
+			levels[currentLevel]->addCreature(world.player->getCreature(), world.time + 10); //TODO: why 10?
 			levels[currentLevel]->buildTimeline();
 
 			buildFovMap();
