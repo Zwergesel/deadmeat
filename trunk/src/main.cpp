@@ -123,7 +123,7 @@ int main()
 		Food* food1 = new Food("beefsteak", F_NEUTER, '%', TCODColor::darkOrange, 2500);
 		Food* food2 = new Food("meat ball", F_NEUTER, '%', TCODColor::orange, 1000);
 		Ammo* arrows = new Ammo("arrow", F_NEUTER, '!', TCODColor::cyan, 0, EFFECT_NONE);
-		SpawnList cave;
+		RandomTable cave;
 		cave.add("goblin", 50);
 		cave.add("snake", 25);
 		world.levels[0]->populate(cave, 5);

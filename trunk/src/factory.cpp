@@ -1,31 +1,31 @@
 #include <cassert>
 #include "factory.hpp"
 #include "creature.hpp"
+#include "item.hpp"
 #include "savegame.hpp"
 
-SpawnList::SpawnList():
+RandomTable::RandomTable():
 	probTotal(0)
 {
 }
 
-void SpawnList::add(std::string monsterclass, int prob)
+void RandomTable::add(std::string option, int prob)
 {
 	if (prob <= 0) return;
 	probTotal += prob;
-	monsters.push_back(std::pair<std::string,int>(monsterclass,prob));
+	options.push_back(std::pair<std::string,int>(option,prob));
 }
 
-std::string SpawnList::getRandom() const
+std::string RandomTable::getRandom() const
 {
 	TCODRandom* rng = TCODRandom::getInstance();
 	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
 	int roll = rng->getInt(1,probTotal);
-	for (auto it=monsters.begin(); it!=monsters.end(); it++)
+	for (auto it=options.begin(); it!=options.end(); it++)
 	{
 		roll -= it->second;
 		if (roll <= 0) return it->first;
 	}
-	assert(false);
 	return "";
 }
 
@@ -35,23 +35,45 @@ Factory::Factory()
 
 Creature* Factory::spawnCreature(std::string monsterclass)
 {
-	std::map<std::string, Creature*>::iterator it = templates.find(monsterclass);
-	if (it == templates.end()) return NULL;
+	auto it = creatures.find(monsterclass);
+	if (it == creatures.end()) return NULL;
 	return it->second->clone();
 }
 
 void Factory::setTemplate(std::string monsterclass, Creature* c)
 {
 	Creature* nc = c->clone();
-	std::map<std::string, Creature*>::iterator it = templates.find(monsterclass);
-	if (it != templates.end())
+	auto it = creatures.find(monsterclass);
+	if (it != creatures.end())
 	{
 		delete it->second;
 		it->second = nc;
 	}
 	else
 	{
-		templates.insert(it, std::make_pair(monsterclass, nc));
+		creatures.insert(it, std::make_pair(monsterclass, nc));
+	}
+}
+
+Item* Factory::spawnItem(std::string itemclass)
+{
+	auto it = items.find(itemclass);
+	if (it == items.end()) return NULL;
+	return it->second->clone();
+}
+
+void Factory::setTemplate(std::string itemclass, Item* i)
+{
+	Item* ni = i->clone();
+	auto it = items.find(itemclass);
+	if (it != items.end())
+	{
+		delete it->second;
+		it->second = ni;
+	}
+	else
+	{
+		items.insert(it, std::make_pair(itemclass, ni));
 	}
 }
 
@@ -62,10 +84,15 @@ unsigned int Factory::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Factory", id);
-	store ("#templates", (int) templates.size());
-	for (std::map<std::string, Creature*>::iterator it = templates.begin(); it != templates.end(); it++)
+	store ("#creatures", (int) creatures.size());
+	for (auto it = creatures.begin(); it != creatures.end(); it++)
 	{
 		store("_spawnName", it->first).ptr("_creature", it->second->save(sg));
+	}
+	store ("#items", (int) items.size());
+	for (auto it = items.begin(); it != items.end(); it++)
+	{
+		store("_spawnName", it->first).ptr("_item", it->second->save(sg));
 	}
 	sg << store;
 	return id;
@@ -74,21 +101,37 @@ unsigned int Factory::save(Savegame& sg)
 void Factory::load(LoadBlock& load)
 {
 	// Delete previous templates
-	for (std::map<std::string, Creature*>::iterator it = templates.begin(); it != templates.end(); it++)
+	for (auto it = creatures.begin(); it != creatures.end(); it++)
 	{
 		if (it->second != NULL)
 		{
 			delete it->second;
 		}
 	}
-	templates.clear();
+	for (auto it = items.begin(); it != items.end(); it++)
+	{
+		if (it->second != NULL)
+		{
+			delete it->second;
+		}
+	}
+	creatures.clear();
+	items.clear();
+	
 	// Load new templates
 	int n;
-	load ("#templates", n);
+	load ("#creatures", n);
 	while (n-->0)
 	{
 		std::string name;
 		load("_spawnName", name);
-		templates[name] = static_cast<Creature*>(load.ptr("_creature"));
+		creatures[name] = static_cast<Creature*>(load.ptr("_creature"));
+	}
+	load ("#items", n);
+	while (n-->0)
+	{
+		std::string name;
+		load("_spawnName", name);
+		items[name] = static_cast<Item*>(load.ptr("_item"));
 	}
 }

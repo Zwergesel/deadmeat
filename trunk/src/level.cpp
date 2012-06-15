@@ -204,7 +204,7 @@ void Level::removeItem(Item* i, bool del)
 	}
 }
 
-Point Level::getRandomLocation(uint flags)
+std::vector<Point> Level::getMatchingLocations(uint flags)
 {
 	std::vector<Point> list;
 	for (int y=0; y<height; y++) for (int x=0; x<width; x++)
@@ -226,20 +226,32 @@ Point Level::getRandomLocation(uint flags)
 		}
 		list.push_back(Point(x,y));
 	}
-	
-	if (list.size() == 0) return Point(-1, -1);
-	
-	TCODRandom* rng = TCODRandom::getInstance();
-	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
-	return list[rng->getInt(0,list.size()-1)];
+	return list;
 }
 
-void Level::populate(const SpawnList& spawns, int numCreatures)
+Point Level::chooseRandomPoint(std::vector<Point>& list, bool erase)
 {
+	assert(list.size() > 0);
+	TCODRandom* rng = TCODRandom::getInstance();
+	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
+	int index = rng->getInt(0,list.size()-1);
+	if (erase)
+	{
+		std::swap(list[index], list.back());
+		Point result = list.back();
+		list.pop_back();
+		return result;
+	}
+	return list[index];
+}
+
+void Level::populate(const RandomTable& spawns, int numCreatures)
+{
+	auto list = getMatchingLocations(WALKABLE | NO_CREATURE);
 	while (numCreatures-->0)
 	{
 		Creature* c = factory.spawnCreature(spawns.getRandom());
-		c->moveTo(getRandomLocation(WALKABLE | NO_CREATURE));
+		c->moveTo(chooseRandomPoint(list,true));
 		addCreature(c, world.time);
 	}
 }
