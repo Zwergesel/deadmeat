@@ -245,6 +245,12 @@ Point Level::chooseRandomPoint(std::vector<Point>& list, bool erase)
 	return list[index];
 }
 
+Point Level::getRandomLocation(uint flags)
+{
+	auto list = getMatchingLocations(flags);
+	return chooseRandomPoint(list);
+}
+
 void Level::populate(const RandomTable& spawns, int numCreatures)
 {
 	auto list = getMatchingLocations(WALKABLE | NO_CREATURE);
@@ -253,6 +259,16 @@ void Level::populate(const RandomTable& spawns, int numCreatures)
 		Creature* c = factory.spawnCreature(spawns.getRandom());
 		c->moveTo(chooseRandomPoint(list,true));
 		addCreature(c, world.time);
+	}
+}
+
+void Level::placeItems(const RandomTable& items, int numItems)
+{
+	auto list = getMatchingLocations(WALKABLE);
+	while (numItems-->0)
+	{
+		Item* i = factory.spawnItem(items.getRandom());
+		addItem(i, chooseRandomPoint(list));
 	}
 }
 

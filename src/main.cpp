@@ -19,19 +19,7 @@
 
 World world;
 Factory factory;
-
-Point getRandomLocation(Level* lev)
-{
-	TCODRandom* rng = TCODRandom::getInstance();
-	Point p;
-	do
-	{
-		p.x = rng->getInt(0, lev->getWidth()-1);
-		p.y = rng->getInt(0, lev->getHeight()-1);
-	}
-	while (!world.tileSet->isPassable(lev->getTile(p)));
-	return p;
-}
+void fillFactoryTemplates();
 
 int corruptSave(const std::string& fileName)
 {
@@ -80,19 +68,8 @@ int main()
 
 	if (true)
 	{
-		// Add/edit/remove creature templates here
-		Goblin goblin("goblin", F_MALE, 'g', TCODColor::green, 35, 0,
-		              Weapon("claws", F_DEFAULT, '#', TCODColor::pink, 11, 0, 4, 1, 3, 0, 2, EFFECT_NONE, 1), 15, 10, 1000
-		             );
-		factory.setTemplate("goblin", &goblin);
-		Goblin snake("snake", F_MALE , 's', TCODColor::darkChartreuse, 20, 0,
-		             Weapon("teeth", F_DEFAULT, '#', TCODColor::pink, 25, 0, 11, 2, 6, 0, 0, EFFECT_NONE, 1), 0, 3, 1000
-		            );
-		factory.setTemplate("snake", &snake);
-		Goblin dragon("Smaug", F_PROPER | F_MALE, 'D', TCODColor::red, 300, 100,
-		              Weapon("fangs", F_DEFAULT, '#', TCODColor::pink, 15, 50, 19, 3, 7, 0, 2, EFFECT_NONE, 1), 75, 30, 10000
-		             );
-		factory.setTemplate("red dragon", &dragon);
+		// TODO: this code should not be necessary once all data is stored in a savegame
+		fillFactoryTemplates();
 		Savegame save;
 		save.beginSave("monsters.txt");
 		factory.save(save);
@@ -108,41 +85,32 @@ int main()
 	{
 		LevelGen::generateWorld();
 		world.levels[0] = LevelGen::generateLevel(0, LEVELTYPE_PLAIN);
-		Point newPos = getRandomLocation(world.levels[0]);
+		// Add player creature
+		Point newPos = world.levels[0]->getRandomLocation(WALKABLE);
 		world.player->getCreature()->moveTo(newPos);
+		world.levels[0]->addCreature(world.player->getCreature(), 0);
 		world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - world.levels[0]->getWidth(), 0);
 		world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - world.levels[0]->getHeight(), 0);
-		Weapon* sword = new Weapon("sword", F_NEUTER, '(', TCODColor::red, 10, 30, 1, 10, 20, 30, 1, EFFECT_NONE, 1);
-		Weapon* dagger = new Weapon("dagger", F_NEUTER, '(', TCODColor::red, 4, 10, 8, 1, 4, 12, 1, EFFECT_NONE, 1);
-		Item* item1 = new Item("item1", F_NEUTER | F_AN, '1', TCODColor::blue);
-		Item* item2 = new Item("item2", F_NEUTER | F_AN, '2', TCODColor::green);
-		Weapon* bow = new Weapon("longbow", F_NEUTER, '(', TCODColor::cyan, 25, 25, 30, 2, 10, 0, 1, EFFECT_NONE, 10);
-		Armor* uber = new Armor("uber armor", F_NEUTER | F_AN, ')', TCODColor::black, 150, 2, 10, ARMOR_BODY);
-		Armor* crap = new Armor("prussian pickelhaube", F_NEUTER, ')', TCODColor::black, 50, 1, 0, ARMOR_HAT);
-		Armor* boots = new Armor("clown shoes", F_NEUTER | F_BOOTS, ')', TCODColor::black, -30, -1, 12, ARMOR_BOOTS);
-		Food* food1 = new Food("beefsteak", F_NEUTER, '%', TCODColor::darkOrange, 2500);
-		Food* food2 = new Food("meat ball", F_NEUTER, '%', TCODColor::orange, 1000);
-		Ammo* arrows = new Ammo("arrow", F_NEUTER, '!', TCODColor::cyan, 0, EFFECT_NONE);
+		// Populate world with monsters
 		RandomTable cave;
 		cave.add("goblin", 50);
 		cave.add("snake", 25);
+		cave.add("troll", 10);
 		world.levels[0]->populate(cave, 5);
-		world.levels[0]->addCreature(world.player->getCreature(), 0);
-		world.levels[0]->addItem(dagger, getRandomLocation(world.levels[0]));
-		world.levels[0]->addItem(item1, getRandomLocation(world.levels[0]));
-		world.levels[0]->addItem(item2, getRandomLocation(world.levels[0]));
-		world.levels[0]->addItem(sword, getRandomLocation(world.levels[0]));
-		world.levels[0]->addItem(bow, world.player->getCreature()->getPos());
-		world.levels[0]->addItem(uber, getRandomLocation(world.levels[0]));
-		world.levels[0]->addItem(crap, getRandomLocation(world.levels[0]));
-		world.levels[0]->addItem(boots, getRandomLocation(world.levels[0]));
-		world.levels[0]->addItem(food1, getRandomLocation(world.levels[0]));
-		world.levels[0]->addItem(food2, getRandomLocation(world.levels[0]));
-		world.levels[0]->addItem(food2->clone(), getRandomLocation(world.levels[0]));
-		world.levels[0]->addItem(food2->clone(), getRandomLocation(world.levels[0]));
-		world.levels[0]->addItem(food2->clone(), getRandomLocation(world.levels[0]));
-		world.levels[0]->addItem(food2->clone(), getRandomLocation(world.levels[0]));
-		world.levels[0]->addItem(arrows, world.player->getCreature()->getPos());
+		// Throw items into the level
+		RandomTable loot;
+		loot.add("sword", 50);
+		loot.add("dagger", 150);
+		loot.add("item1", 10);
+		loot.add("item2", 10);
+		loot.add("longbow", 80);
+		loot.add("uber armor", 50);
+		loot.add("pickelhaube", 100);
+		loot.add("clown shoes", 110);
+		loot.add("beefsteak", 140);
+		loot.add("meatball", 300);
+		loot.add("arrows", 160);
+		world.levels[0]->placeItems(loot, 12);
 	}
 
 	while (!world.requestQuit)

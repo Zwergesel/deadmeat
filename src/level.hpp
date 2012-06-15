@@ -67,10 +67,11 @@ public:
 	void addItem(Item* i, Point pos);
 	void removeItem(Item* i, bool del);
 
-	void populate(const RandomTable& spawns, int numCreatures);
 	Point chooseRandomPoint(std::vector<Point>& list, bool erase = false);
 	std::vector<Point> getMatchingLocations(uint flags);
 	Point getRandomLocation(uint flags);
+	void populate(const RandomTable& spawns, int numCreatures);
+	void placeItems(const RandomTable& items, int numItems);
 
 	void buildTimeline();
 	bool isPlayerTurn();
