@@ -33,17 +33,19 @@ private:
 	struct ChoiceList
 	{
 		int permill;
-		int choose;
+		int chooseMin;
+		int chooseMax;
 		std::vector<std::string> items;
+		ChoiceList(int p, int lo, int hi):permill(p),chooseMin(lo),chooseMax(hi){};
 	};
 	std::vector<ChoiceList> options;
 	
 public:
 	InventoryTable();
-	void add(std::string option, int permill);
-	void add(const std::vector<std::string>& list, int choose, int permill);
+	void add(const std::string& option, int permill);
+	void add(const std::vector<std::string>& list, int permill, int min=0, int max=-1);
 	std::vector<std::string> getRandom();
-	std::map<symbol,Item*> getRandomInventory();
+	//std::map<symbol,Item*> getRandomInventory();
 };
 
 struct CreatureTemplate

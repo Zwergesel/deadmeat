@@ -29,6 +29,43 @@ std::string RandomTable::getRandom() const
 	return "";
 }
 
+void InventoryTable::add(const std::string& option, int permill)
+{
+	assert(0 < permill && permill <= 1000);
+	ChoiceList in(permill, 1, 1);
+	in.items.push_back(option);
+	options.push_back(in);
+}
+
+void InventoryTable::add(const std::vector<std::string>& list, int permill, int min, int max)
+{
+	if (max < 0) max = list.size();
+	assert(min >= 0);
+	assert(min < max);
+	assert((uint) max <= list.size());
+	assert(0 < permill && permill <= 1000);
+	ChoiceList in(permill, min, max);
+	in.items.insert(in.items.begin(), list.begin(), list.end());
+	options.push_back(in);
+}
+
+std::vector<std::string> InventoryTable::getRandom()
+{
+	std::vector<std::string> result;
+	TCODRandom* rng = TCODRandom::getInstance();
+	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
+	for (auto it = options.begin(); it != options.end(); it++)
+	{
+		int count = it->chooseMin == it->chooseMax ? it->chooseMin : rng->getInt(it->chooseMin, it->chooseMax);
+		for (int i=1; i<=count; i++)
+		{
+			swap(it->items.at(rng->getInt(0, it->items.size()-count)), it->items.back());
+			result.push_back(it->items.back());
+		}
+	}
+	return result;
+}
+
 Factory::Factory()
 {
 }
