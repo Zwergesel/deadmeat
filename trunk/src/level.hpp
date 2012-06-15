@@ -73,7 +73,7 @@ public:
 	void populate(const RandomTable& spawns, int numCreatures);
 	void placeItems(const RandomTable& items, int numItems);
 
-	void buildTimeline();
+	void buildTimeline(int time = -1);
 	bool isPlayerTurn();
 	void performCreatureTurn();
 
