@@ -441,14 +441,8 @@ void World::travel()
 
 			// reset timeline
 			player->getCreature()->setPos(worldNodes[currentLevel].link[(*it).exitId].pos);
-			auto timeline = levels[currentLevel]->getCreatures();
-			if (timeline.size() > 0)
-			{
-				for (auto i=timeline.begin(); i<timeline.end(); i++)
-					(*i).time = world.time;
-			}
+			levels[currentLevel]->buildTimeline(world.time);
 			levels[currentLevel]->addCreature(world.player->getCreature(), world.time + 10); //TODO: why 10?
-			levels[currentLevel]->buildTimeline();
 
 			buildFovMap();
 

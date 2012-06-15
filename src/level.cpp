@@ -272,8 +272,12 @@ void Level::placeItems(const RandomTable& items, int numItems)
 	}
 }
 
-void Level::buildTimeline()
+void Level::buildTimeline(int reset)
 {
+	if (reset >= 0)
+	{
+		for (auto it=creatures.begin(); it!=creatures.end(); it++) it->time = reset;
+	}
 	std::make_heap(creatures.begin(), creatures.end());
 }
 
