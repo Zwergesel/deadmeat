@@ -92,6 +92,8 @@ int main()
 		world.levels[0]->addCreature(world.player->getCreature(), 0);
 		world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - world.levels[0]->getWidth(), 0);
 		world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - world.levels[0]->getHeight(), 0);
+		
+		world.player->getCreature()->addItem(factory.spawnItem("lightsaber"));
 	}
 
 	while (!world.requestQuit)

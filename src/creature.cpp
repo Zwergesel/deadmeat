@@ -216,14 +216,24 @@ void Creature::die(Creature* instigator)
 		(msg << util::format(FORMAT_DEF, instigator->getName(), instigator->getFormatFlags(), true) << " kills");
 		msg << util::format(FORMAT_DEF, name, formatFlags) << ".";
 		world.addMessage(msg.str());
+		// Experience for player
 		if (instigator->isControlled()) world.player->incExperience(expValue);
-		level->removeCreature(this, true);
 	}
 	else
 	{
 		std::stringstream msg;
 		msg << util::format(FORMAT_DEF, name, formatFlags, true) << " dies.";
 		world.addMessage(msg.str());
+	}
+	
+	if (!controlled)
+	{
+		// Drop all items and remove creature from level
+		for (auto it=inventory.begin(); it!=inventory.end(); it++)
+		{
+			level->addItem(it->second, position);
+		}
+		inventory.clear();
 		level->removeCreature(this, true);
 	}
 }

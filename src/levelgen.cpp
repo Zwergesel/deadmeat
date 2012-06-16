@@ -80,6 +80,8 @@ void LevelGen::generateWorld()
 	
 	loot.add("sword", 50);
 	loot.add("dagger", 150);
+	loot.add("halberd", 80);
+	loot.add("lightsaber", 5);
 	loot.add("item1", 10);
 	loot.add("item2", 10);
 	loot.add("longbow", 80);

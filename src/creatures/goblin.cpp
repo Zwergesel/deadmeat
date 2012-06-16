@@ -54,6 +54,22 @@ Creature* Goblin::clone()
 int Goblin::action()
 {
 	regenerate(0);
+	
+	// pick best weapon
+	symbol choice = '0';
+	float value = baseWeapon.getDPS();
+	for (auto it=inventory.begin(); it!=inventory.end(); it++)
+	{
+		if (it->second->getType() != ITEM_WEAPON) continue;
+		Weapon* w = static_cast<Weapon*>(it->second);
+		if (w->getRange() > 1) continue; // TODO: use ranged weapons against the player too
+		if (w->getDPS() > value)
+		{
+			choice = it->first;
+			value = w->getDPS();
+		}
+	}
+	mainWeapon = choice;
 
 	Point ppos = world.player->getCreature()->getPos();
 	// can the goblin see the player?

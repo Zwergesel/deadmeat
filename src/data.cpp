@@ -20,19 +20,28 @@ void fillFactoryTemplates()
 	Goblin medic("medic", F_FEMALE, '@', TCODColor::pink, 180, 0, Weapon(25, 0, 0, 0, 0, EFFECT_NONE, 1), 0, 12, 10);
 	Goblin dragon("Smaug", F_PROPER | F_MALE, 'D', TCODColor::red, 300, 100, Weapon(15, 50, 19, 3, 7, EFFECT_NONE, 1), 75, 30, 2500);
 	
+	InventoryTable fighter_weapons;
+	std::vector<std::string> wpns;
+	wpns.push_back("halberd");
+	wpns.push_back("sword");
+	wpns.push_back("dagger");
+	fighter_weapons.add(wpns, 850, 1, 1);
+	
 	factory.setTemplate("goblin", &goblin);
 	factory.setTemplate("snake", &snake);
 	factory.setTemplate("troll", &troll);
 	factory.setTemplate("spider", &spider);
 	factory.setTemplate("rat", &rat);
 	factory.setTemplate("soldier ant", &ant);
-	factory.setTemplate("soldier", &soldier);
-	factory.setTemplate("sergeant", &sergeant);
+	factory.setTemplate("soldier", &soldier, fighter_weapons);
+	factory.setTemplate("sergeant", &sergeant, fighter_weapons);
 	factory.setTemplate("medic", &medic);
 	factory.setTemplate("Smaug", &dragon);
 
-	Weapon sword("sword", F_NEUTER, '(', TCODColor::red, 10, 30, 1, 10, 20, 30, 1, EFFECT_NONE, 1);
-	Weapon dagger("dagger", F_NEUTER, '(', TCODColor::red, 4, 10, 8, 1, 4, 12, 1, EFFECT_NONE, 1);
+	Weapon lightsaber("lightsaber", F_NEUTER, '(', TCODColor::red, 8, 30, 1, 10, 20, 30, 1, EFFECT_NONE, 1);
+	Weapon sword("long sword", F_NEUTER, '(', TCODColor::red, 15, 20, 12, 2, 8, 0, 1, EFFECT_NONE, 1);
+	Weapon dagger("dagger", F_NEUTER, '(', TCODColor::red, 7, 10, 8, 1, 4, 0, 1, EFFECT_NONE, 1);
+	Weapon halberd("halberd", F_NEUTER, '(', TCODColor::red, 22, 40, 15, 2, 10, 0, 2, EFFECT_NONE, 1);
 	Item item1("item1", F_NEUTER | F_AN, '1', TCODColor::blue);
 	Item item2("item2", F_NEUTER | F_AN, '2', TCODColor::green);
 	Weapon bow("longbow", F_NEUTER, '(', TCODColor::cyan, 25, 25, 30, 2, 10, 0, 1, EFFECT_NONE, 20);
@@ -43,8 +52,10 @@ void fillFactoryTemplates()
 	Food food2("meat ball", F_NEUTER, '%', TCODColor::orange, 1000, 15);
 	Ammo arrow("arrow", F_NEUTER, '!', TCODColor::cyan, 0, EFFECT_NONE);
 	
+	factory.setTemplate("lightsaber", &lightsaber);
 	factory.setTemplate("sword", &sword);
 	factory.setTemplate("dagger", &dagger);
+	factory.setTemplate("halberd", &halberd);
 	factory.setTemplate("item1", &item1);
 	factory.setTemplate("item2", &item2);
 	factory.setTemplate("longbow", &bow);

@@ -57,7 +57,7 @@ class Factory
 {
 
 private:
-	std::map<std::string, Creature*> creatures;
+	std::map<std::string, std::pair<Creature*, InventoryTable>> creatures;
 	std::map<std::string, Item*> items;
 
 public:
@@ -65,7 +65,7 @@ public:
 	Creature* spawnCreature(std::string monsterclass);
 	Item* spawnItem(std::string itemclass);
 	
-	void setTemplate(std::string monsterclass, Creature* c);
+	void setTemplate(std::string monsterclass, Creature* c, const InventoryTable& inv = InventoryTable());
 	void setTemplate(std::string itemclass, Item* i);
 
 	unsigned int save(Savegame& sg);

@@ -43,6 +43,7 @@ public:
 	int getEnchantment();
 	int getHandsUsed();
 	int getRange();
+	float getDPS();
 	std::string toString();
 
 	unsigned int save(Savegame& sg);

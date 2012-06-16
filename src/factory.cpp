@@ -47,7 +47,7 @@ InventoryTable& InventoryTable::add(const std::vector<std::string>& list, int pe
 {
 	if (max < 0) max = list.size();
 	assert(min >= 0);
-	assert(min < max);
+	assert(min <= max);
 	assert((uint) max <= list.size());
 	assert(0 < permill && permill <= 1000);
 	ChoiceList in(permill, min, max);
@@ -84,21 +84,28 @@ Creature* Factory::spawnCreature(std::string monsterclass)
 {
 	auto it = creatures.find(monsterclass);
 	if (it == creatures.end()) return NULL;
-	return it->second->clone();
+	Creature* spawned = it->second.first->clone();
+	std::vector<std::string> items = it->second.second.getRandom();
+	for (auto it=items.begin(); it!=items.end(); it++)
+	{
+		spawned->addItem(spawnItem(*it));
+	}
+	return spawned;
 }
 
-void Factory::setTemplate(std::string monsterclass, Creature* c)
+void Factory::setTemplate(std::string monsterclass, Creature* c, const InventoryTable& inv)
 {
 	Creature* nc = c->clone();
 	auto it = creatures.find(monsterclass);
 	if (it != creatures.end())
 	{
-		delete it->second;
-		it->second = nc;
+		delete it->second.first;
+		it->second.first = nc;
+		it->second.second = inv;
 	}
 	else
 	{
-		creatures.insert(it, std::make_pair(monsterclass, nc));
+		creatures.insert(it, std::make_pair(monsterclass, std::make_pair(nc, inv)));
 	}
 }
 
@@ -134,7 +141,7 @@ unsigned int Factory::save(Savegame& sg)
 	store ("#creatures", (int) creatures.size());
 	for (auto it = creatures.begin(); it != creatures.end(); it++)
 	{
-		store("_spawnName", it->first).ptr("_creature", it->second->save(sg));
+		store("_spawnName", it->first).ptr("_creature", it->second.first->save(sg));
 	}
 	store ("#items", (int) items.size());
 	for (auto it = items.begin(); it != items.end(); it++)
@@ -150,9 +157,9 @@ void Factory::load(LoadBlock& load)
 	// Delete previous templates
 	for (auto it = creatures.begin(); it != creatures.end(); it++)
 	{
-		if (it->second != NULL)
+		if (it->second.first != NULL)
 		{
-			delete it->second;
+			delete it->second.first;
 		}
 	}
 	for (auto it = items.begin(); it != items.end(); it++)
@@ -172,7 +179,7 @@ void Factory::load(LoadBlock& load)
 	{
 		std::string name;
 		load("_spawnName", name);
-		creatures[name] = static_cast<Creature*>(load.ptr("_creature"));
+		creatures[name] = std::make_pair(static_cast<Creature*>(load.ptr("_creature")), InventoryTable());
 	}
 	load ("#items", n);
 	while (n-->0)
