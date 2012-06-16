@@ -29,6 +29,10 @@ std::string RandomTable::getRandom() const
 	return "";
 }
 
+InventoryTable::InventoryTable()
+{
+}
+
 void InventoryTable::add(const std::string& option, int permill)
 {
 	assert(0 < permill && permill <= 1000);
@@ -45,7 +49,7 @@ void InventoryTable::add(const std::vector<std::string>& list, int permill, int 
 	assert((uint) max <= list.size());
 	assert(0 < permill && permill <= 1000);
 	ChoiceList in(permill, min, max);
-	in.items.insert(in.items.begin(), list.begin(), list.end());
+	in.items.assign(list.begin(), list.end());
 	options.push_back(in);
 }
 
@@ -56,11 +60,14 @@ std::vector<std::string> InventoryTable::getRandom()
 	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
 	for (auto it = options.begin(); it != options.end(); it++)
 	{
-		int count = it->chooseMin == it->chooseMax ? it->chooseMin : rng->getInt(it->chooseMin, it->chooseMax);
-		for (int i=1; i<=count; i++)
+		if (it->permill == 1000 || rng->getInt(0,999) < it->permill)
 		{
-			swap(it->items.at(rng->getInt(0, it->items.size()-count)), it->items.back());
-			result.push_back(it->items.back());
+			int count = it->chooseMin == it->chooseMax ? it->chooseMin : rng->getInt(it->chooseMin, it->chooseMax);
+			for (int i=1; i<=count; i++)
+			{
+				swap(it->items.at(rng->getInt(0, it->items.size()-count)), it->items.back());
+				result.push_back(it->items.back());
+			}
 		}
 	}
 	return result;

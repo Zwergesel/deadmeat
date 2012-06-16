@@ -403,6 +403,23 @@ int Creature::rangedAttack(Creature* target, Weapon* w)
 	int hit = 0;
 	if (mean >= 0) hit = rngGauss.getInt(-300, 300, mean);
 	if (mean < 0) hit = -rngGauss.getInt(-300, 300, -mean);
+	
+	// Traverse the line of the shot
+	TCODRandom* rng = TCODRandom::getInstance();
+	Point destination = target->getPos();
+	TCODLine flightpath;
+	flightpath.init(position.x, position.y, destination.x, destination.y);
+	Point current;
+	while (!flightpath.step(&current.x, &current.y))
+	{
+		Creature* between = level->creatureAt(current);
+		if (between != NULL && rng->getInt(-150,300) > std::abs(hit)) // TODO: find a good value here
+		{
+			target = between;
+			break;
+		}
+	}
+	
 	if (hit >= -70)
 	{
 		if (hit <= 0) damage /= 2;

@@ -19,6 +19,14 @@ Weapon::Weapon(std::string n, uint f, symbol s, TCODColor c, int spd, int hit, i
 	strType = "weapon";
 }
 
+Weapon::Weapon(int spd, int hit, int dmg, int dice, int dmax, WeaponEffect e, int r):
+	Item("x", F_DEFAULT, '#', TCODColor::pink), speed(spd), hitBonus(hit), baseDamage(dmg),
+	numDice(dice), diceMax(dmax), enchantment(0), hands(0), effect(e), range(r)
+{
+	type = ITEM_WEAPON;
+	strType = "weapon";
+}
+
 Weapon::~Weapon() {}
 
 Item* Weapon::clone()

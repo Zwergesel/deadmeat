@@ -145,7 +145,7 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 				inf.color = obj.getColor();
 				inf.sym = obj.getSymbol();
 			}
-			if (true||fovMap->isInFov(x,y))
+			if (fovMap->isInFov(x,y))
 			{
 				level->setSeen(Point(x,y), true);
 				TCODConsole::root->putCharEx(

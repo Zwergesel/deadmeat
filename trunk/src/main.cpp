@@ -45,6 +45,14 @@ int corruptSave(const std::string& fileName)
 
 int main()
 {
+	InventoryTable test;
+	test.add("sword", 500);
+	test.add("bow", 1000);
+	std::vector<std::string> pot = {"healing potion", "mana potion", "reskill potion"};
+	test.add(pot, 500, 1, 2);
+	pot = test.getRandom();
+	for (auto it=pot.begin(); it!=pot.end(); it++) std::cerr << (*it) << std::endl;
+
 	TCODConsole::setCustomFont("Alloy_curses_12x12.png",TCOD_FONT_LAYOUT_ASCII_INROW);
 	TCODConsole::initRoot(80,60,"deadmeat",false);
 	TCODSystem::setFps(30);
@@ -85,18 +93,14 @@ int main()
 	{
 		LevelGen::generateWorld();
 		world.levels[0] = LevelGen::generateLevel(0, LEVELTYPE_PLAIN);
+		
 		// Add player creature
 		Point newPos = world.levels[0]->getRandomLocation(WALKABLE);
 		world.player->getCreature()->moveTo(newPos);
 		world.levels[0]->addCreature(world.player->getCreature(), 0);
 		world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - world.levels[0]->getWidth(), 0);
 		world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - world.levels[0]->getHeight(), 0);
-		// Populate world with monsters
-		RandomTable cave;
-		cave.add("goblin", 50);
-		cave.add("snake", 25);
-		cave.add("troll", 10);
-		world.levels[0]->populate(cave, 5);
+
 		// Throw items into the level
 		RandomTable loot;
 		loot.add("sword", 50);
