@@ -412,6 +412,15 @@ Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roo
 
 	if (!placeEntrances(levelId, m)) return NULL;
 
+	// RoomLevel monsters
+	RandomTable room;
+	room.add("goblin", 300);
+	room.add("troll", 120);
+	room.add("rat", 400);
+	room.add("soldier ant", 220);
+	room.add("soldier", 100);
+	m->populate(room, width*height/250);
+
 	return m;
 }
 
@@ -463,6 +472,13 @@ Level* LevelGen::generateBSPLevel(int levelId, int width, int height, int numSpl
 	bsp.traverseInvertedLevelOrder(&traverse, static_cast<void*>(m));
 
 	if (!placeEntrances(levelId, m)) return NULL;
+
+	// BSP monsters
+	RandomTable bspm;
+	bspm.add("soldier", 500);
+	bspm.add("sergeant", 80);
+	bspm.add("medic", 200);
+	m->populate(bspm, width*height/150);
 
 	return m;
 }
