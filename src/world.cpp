@@ -238,33 +238,36 @@ void World::drawWorld()
 
 void World::drawCharInfo()
 {
-	TCODConsole charInfo(viewLevel.width, viewLevel.height);
+	TCODConsole frame(viewLevel.width, viewLevel.height);
+	
+	TCODConsole charInfo(viewLevel.width / 2, 15);
 	charInfo.printFrame(0, 0, charInfo.getWidth(), charInfo.getHeight(), true, TCOD_BKGND_DEFAULT, "Character Information");
-	charInfo.printEx(4, 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s", player->getName().c_str());
-	charInfo.printEx(4, 6, TCOD_BKGND_DEFAULT, TCOD_LEFT, "PLAYERCLASS");
-	charInfo.printEx(4, 8, TCOD_BKGND_DEFAULT, TCOD_LEFT, "PLAYERRACE");
-	charInfo.printEx(4, 10, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Health: %d", player->getCreature()->getHealth().second);
-	charInfo.printEx(4, 12, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Mana: %d", player->getCreature()->getMana().second);
+	charInfo.printEx(2, 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s", player->getName().c_str());
+	charInfo.printEx(2, 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, "PLAYERCLASS");
+	charInfo.printEx(2, 6, TCOD_BKGND_DEFAULT, TCOD_LEFT, "PLAYERRACE");
+	charInfo.printEx(2, 8, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Health: %d", player->getCreature()->getHealth().second);
+	charInfo.printEx(2, 10, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Mana: %d", player->getCreature()->getMana().second);
+	TCODConsole::blit(&charInfo, 0, 0, 0, 0, &frame, 0, 0, 1.f, 1.f);
 
-	TCODConsole attributeInfo(36, 12);
+	TCODConsole attributeInfo((viewLevel.width + 3) / 2, 15);
 	attributeInfo.printFrame(0, 0, attributeInfo.getWidth(), attributeInfo.getHeight(), true, TCOD_BKGND_DEFAULT, "Attributes");
-	attributeInfo.printEx(attributeInfo.getWidth()/2, 3, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Strength        %2d", player->getAttribute(ATTR_STR));
-	attributeInfo.printEx(attributeInfo.getWidth()/2, 5, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Dexterity       %2d", player->getAttribute(ATTR_DEX));
-	attributeInfo.printEx(attributeInfo.getWidth()/2, 7, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Constitution    %2d", player->getAttribute(ATTR_CON));
-	attributeInfo.printEx(attributeInfo.getWidth()/2, 9, TCOD_BKGND_DEFAULT, TCOD_CENTER, "Intelligence    %2d", player->getAttribute(ATTR_INT));
+	attributeInfo.printEx(8, 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Strength        %2d", player->getAttribute(ATTR_STR));
+	attributeInfo.printEx(8, 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Dexterity       %2d", player->getAttribute(ATTR_DEX));
+	attributeInfo.printEx(8, 6, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Constitution    %2d", player->getAttribute(ATTR_CON));
+	attributeInfo.printEx(8, 8, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Intelligence    %2d", player->getAttribute(ATTR_INT));
 	if (player->getAttributePoints() > 0)
 	{
-		attributeInfo.printEx(2, 3, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[S] - ");
-		attributeInfo.printEx(2, 5, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[D] - ");
-		attributeInfo.printEx(2, 7, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[C] - ");
-		attributeInfo.printEx(2, 9, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[I] - ");
-		attributeInfo.printEx(1, 11, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Points left = %d", player->getAttributePoints());
+		attributeInfo.printEx(2, 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[S] - ");
+		attributeInfo.printEx(2, 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[D] - ");
+		attributeInfo.printEx(2, 6, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[C] - ");
+		attributeInfo.printEx(2, 8, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[I] - ");
+		attributeInfo.printEx(attributeInfo.getWidth()-3, attributeInfo.getHeight() - 3, TCOD_BKGND_DEFAULT, TCOD_RIGHT, "Points left = %-2d", player->getAttributePoints());
 	}
-	TCODConsole::blit(&attributeInfo, 0, 0, 0, 0, &charInfo, 22, 2, 1.f, 1.f);
+	TCODConsole::blit(&attributeInfo, 0, 0, 0, 0, &frame, charInfo.getWidth() - 1, 0, 1.f, 1.f);
 
-	TCODConsole skillInfo(charInfo.getWidth() - 4, 38);
+	TCODConsole skillInfo(frame.getWidth(), frame.getHeight() - charInfo.getHeight() + 1);
 	skillInfo.printFrame(0, 0, skillInfo.getWidth(), skillInfo.getHeight(), true, TCOD_BKGND_DEFAULT, "Skills");
-	skillInfo.printEx(8, 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "skill         value  progress      requires");
+	skillInfo.printEx(8, 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "SKILL         VALUE  PROGRESS      REQUIREMENT");
 	for (int i=0; i<NUM_SKILL; i++)
 	{
 		Skill sk = player->getSkill(static_cast<SKILLS>(i));
@@ -301,11 +304,16 @@ void World::drawCharInfo()
 			skillInfo.printEx(40, 4 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%-2d", sk.maxValue);
 		}
 	}
-	if (player->getSkillPoints() > 0) skillInfo.printEx(1, 37, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Points left = %d", player->getSkillPoints());
+	if (player->getSkillPoints() > 0) skillInfo.printEx(skillInfo.getWidth()-3, skillInfo.getHeight()-3, TCOD_BKGND_DEFAULT, TCOD_RIGHT, "Points left = %-2d", player->getSkillPoints());
 
-	TCODConsole::blit(&skillInfo, 0, 0, 0, 0, &charInfo, 2, 16, 1.f, 1.f);
+	TCODConsole::blit(&skillInfo, 0, 0, 0, 0, &frame, 0, charInfo.getHeight() - 1, 1.f, 1.f);
+	
+	// Correct corners
+	frame.putChar(charInfo.getWidth()-1, 0, TCOD_CHAR_TEES);
+	frame.putChar(0, charInfo.getHeight()-1, TCOD_CHAR_TEEE);
+	frame.putChar(frame.getWidth()-1, attributeInfo.getHeight()-1, TCOD_CHAR_TEEW);
 
-	TCODConsole::blit(&charInfo, 0, 0, 0, 0, TCODConsole::root, viewLevel.x, viewLevel.y, 1.f, 0.9f);
+	TCODConsole::blit(&frame, 0, 0, 0, 0, TCODConsole::root, viewLevel.x, viewLevel.y, 1.f, 0.9f);
 	TCODConsole::root->flush();
 }
 

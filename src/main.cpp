@@ -45,16 +45,8 @@ int corruptSave(const std::string& fileName)
 
 int main()
 {
-	InventoryTable test;
-	test.add("sword", 500);
-	test.add("bow", 1000);
-	std::vector<std::string> pot = {"healing potion", "mana potion", "reskill potion"};
-	test.add(pot, 500, 1, 2);
-	pot = test.getRandom();
-	for (auto it=pot.begin(); it!=pot.end(); it++) std::cerr << (*it) << std::endl;
-
 	TCODConsole::setCustomFont("Alloy_curses_12x12.png",TCOD_FONT_LAYOUT_ASCII_INROW);
-	TCODConsole::initRoot(80,60,"deadmeat",false);
+	TCODConsole::initRoot(80,50,"deadmeat",false);
 	TCODSystem::setFps(30);
 
 	// Init hardcoded world
