@@ -7,9 +7,9 @@
   * Stairs should be objects, so that they can lie on different grounds (grass, cave, ...)
   * Time to eat should depend on the food
   * Creature::die should work without an instigator
+  * Ranged attacks should be able to hit creatures in their path, not just the target
 
 == Small improvements ==
-  * Ranged attacks should be able to hit creatures in their path, not just the target
   * Variable "cursed" in Item
 
 == Major improvements ==
