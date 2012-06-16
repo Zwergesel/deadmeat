@@ -4,13 +4,13 @@
 
 == Test ==
   * Changing levels
+  * Stairs should be objects, so that they can lie on different grounds (grass, cave, ...)
+  * Time to eat should depend on the food
+  * Creature::die should work without an instigator
 
 == Small improvements ==
-  * Stairs should be objects, so that they can lie on different grounds (grass, cave, ...)
   * Ranged attacks should be able to hit creatures in their path, not just the target
   * Variable "cursed" in Item
-  * Creature::die should work without an instigator
-  * Time to eat should depend on the food
 
 == Major improvements ==
   * Stacking of items
