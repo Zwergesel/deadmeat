@@ -3,6 +3,8 @@
 #include "world.hpp"
 #include <assert.h>
 
+RandomTable loot;
+
 void LevelGen::generateWorld()
 {
 	// hardcoded world for now
@@ -75,6 +77,18 @@ void LevelGen::generateWorld()
 	world.worldNodes.push_back(dungeon[1]);
 	world.worldNodes.push_back(dungeon[2]);
 	world.worldNodes.push_back(boss);
+	
+	loot.add("sword", 50);
+	loot.add("dagger", 150);
+	loot.add("item1", 10);
+	loot.add("item2", 10);
+	loot.add("longbow", 80);
+	loot.add("uber armor", 50);
+	loot.add("pickelhaube", 100);
+	loot.add("clown shoes", 110);
+	loot.add("beefsteak", 140);
+	loot.add("meatball", 300);
+	loot.add("arrows", 160);
 }
 
 Level* LevelGen::generateLevel(int levelId, LEVELTYPE type)
@@ -157,11 +171,9 @@ Level* LevelGen::generateCaveLevel(int levelId, int width, int height, float den
 
 	// Cave monsters
 	RandomTable cave;
-	cave.add("goblin", 180);
-	cave.add("spider", 400);
-	cave.add("rat", 250);
-	cave.add("troll", 80);
+	cave.add("goblin", 180).add("spider", 400).add("rat", 250).add("troll", 80);
 	m->populate(cave, width*height/250);
+	m->placeItems(loot, width*height/350);
 
 	return m;
 }
@@ -414,12 +426,9 @@ Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roo
 
 	// RoomLevel monsters
 	RandomTable room;
-	room.add("goblin", 300);
-	room.add("troll", 120);
-	room.add("rat", 400);
-	room.add("soldier ant", 220);
-	room.add("soldier", 100);
+	room.add("goblin", 300).add("troll", 120).add("rat", 400).add("soldier ant", 220).add("soldier", 100);
 	m->populate(room, width*height/250);
+	m->placeItems(loot, width*height/350);
 
 	return m;
 }
@@ -475,10 +484,9 @@ Level* LevelGen::generateBSPLevel(int levelId, int width, int height, int numSpl
 
 	// BSP monsters
 	RandomTable bspm;
-	bspm.add("soldier", 500);
-	bspm.add("sergeant", 80);
-	bspm.add("medic", 200);
+	bspm.add("soldier", 500).add("sergeant", 80).add("medic", 200);
 	m->populate(bspm, width*height/150);
+	m->placeItems(loot, width*height/350);
 
 	return m;
 }
@@ -539,10 +547,9 @@ Level* LevelGen::generatePlainLevel(int levelId, int width, int height)
 	
 	// Meadow monsters
 	RandomTable meadow;
-	meadow.add("goblin", 50);
-	meadow.add("snake", 400);
-	meadow.add("soldier ant", 200);
+	meadow.add("goblin", 50).add("snake", 400).add("soldier ant", 200);
 	m->populate(meadow, width*height/800 + 2);
+	m->placeItems(loot, width*height/800 + 1);
 
 	return m;
 }

@@ -9,11 +9,12 @@ RandomTable::RandomTable():
 {
 }
 
-void RandomTable::add(std::string option, int prob)
+RandomTable& RandomTable::add(std::string option, int prob)
 {
-	if (prob <= 0) return;
+	if (prob <= 0) return *this;
 	probTotal += prob;
 	options.push_back(std::pair<std::string,int>(option,prob));
+	return *this;
 }
 
 std::string RandomTable::getRandom() const
@@ -33,15 +34,16 @@ InventoryTable::InventoryTable()
 {
 }
 
-void InventoryTable::add(const std::string& option, int permill)
+InventoryTable& InventoryTable::add(const std::string& option, int permill)
 {
 	assert(0 < permill && permill <= 1000);
 	ChoiceList in(permill, 1, 1);
 	in.items.push_back(option);
 	options.push_back(in);
+	return *this;
 }
 
-void InventoryTable::add(const std::vector<std::string>& list, int permill, int min, int max)
+InventoryTable& InventoryTable::add(const std::vector<std::string>& list, int permill, int min, int max)
 {
 	if (max < 0) max = list.size();
 	assert(min >= 0);
@@ -51,6 +53,7 @@ void InventoryTable::add(const std::vector<std::string>& list, int permill, int 
 	ChoiceList in(permill, min, max);
 	in.items.assign(list.begin(), list.end());
 	options.push_back(in);
+	return *this;
 }
 
 std::vector<std::string> InventoryTable::getRandom()

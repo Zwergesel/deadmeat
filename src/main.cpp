@@ -100,21 +100,6 @@ int main()
 		world.levels[0]->addCreature(world.player->getCreature(), 0);
 		world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - world.levels[0]->getWidth(), 0);
 		world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - world.levels[0]->getHeight(), 0);
-
-		// Throw items into the level
-		RandomTable loot;
-		loot.add("sword", 50);
-		loot.add("dagger", 150);
-		loot.add("item1", 10);
-		loot.add("item2", 10);
-		loot.add("longbow", 80);
-		loot.add("uber armor", 50);
-		loot.add("pickelhaube", 100);
-		loot.add("clown shoes", 110);
-		loot.add("beefsteak", 140);
-		loot.add("meatball", 300);
-		loot.add("arrows", 160);
-		world.levels[0]->placeItems(loot, 12);
 	}
 
 	while (!world.requestQuit)
