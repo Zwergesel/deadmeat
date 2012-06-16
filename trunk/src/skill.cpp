@@ -12,7 +12,7 @@ Skill::Skill(std::string n, int v, int mv, int ml, int e):
 
 int Skill::expNeeded(int currentValue)
 {
-	return 250 * (currentValue+2) * (currentValue+1);
+	return 125 * (currentValue+2) * (currentValue+1);
 }
 
 void Skill::setDefaults(Skill* skills)

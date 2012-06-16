@@ -162,10 +162,10 @@ ItemSelection* ItemSelection::compile(int height)
 		symbol currentLetter = 'a';
 		for (std::vector<Item*>::iterator it = anonChoices.begin(); it != anonChoices.end(); it++)
 		{
-			if (currentRow == 2 || (*it)->getType() != prevType || currentRow >= pageHeight)
+			if (currentRow == 2 || (*it)->getType() != prevType || currentRow >= pageHeight - 3)
 			{
 				/* Category */
-				if (pageHeight - currentRow <= 2)
+				if (currentRow >= pageHeight - 5)
 				{
 					currentPage++;
 					currentRow = 3;
@@ -190,10 +190,10 @@ ItemSelection* ItemSelection::compile(int height)
 	{
 		for (std::vector<std::pair<symbol,Item*> >::iterator it = namedChoices.begin(); it != namedChoices.end(); it++)
 		{
-			if (currentRow == 2 || it->second->getType() != prevType || currentRow >= pageHeight)
+			if (currentRow == 2 || it->second->getType() != prevType || currentRow >= pageHeight - 3)
 			{
 				/* Category */
-				if (pageHeight - currentRow <= 2)
+				if (currentRow >= pageHeight - 5)
 				{
 					currentPage++;
 					currentRow = 2;

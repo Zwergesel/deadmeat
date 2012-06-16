@@ -23,7 +23,7 @@ struct RandomTable
 	int probTotal;
 	std::vector<std::pair<std::string,int>> options;
 	RandomTable();
-	void add(std::string option, int relative_probability);
+	RandomTable& add(std::string option, int relative_probability);
 	std::string getRandom() const;
 };
 
@@ -42,8 +42,8 @@ private:
 	
 public:
 	InventoryTable();
-	void add(const std::string& option, int permill);
-	void add(const std::vector<std::string>& list, int permill, int min=0, int max=-1);
+	InventoryTable& add(const std::string& option, int permill);
+	InventoryTable& add(const std::vector<std::string>& list, int permill, int min=0, int max=-1);
 	std::vector<std::string> getRandom();
 	//std::map<symbol,Item*> getRandomInventory();
 };
