@@ -8,8 +8,8 @@ Food::Food()
 	strType = "food";
 }
 
-Food::Food(std::string n, uint f, symbol s, TCODColor c, int u):
-	Item(n, f, s, c), nutrition(u)
+Food::Food(std::string n, uint f, symbol s, TCODColor c, int u, int t):
+	Item(n, f, s, c), nutrition(u), eatTime(t)
 {
 	type = ITEM_FOOD;
 	strType = "food";
@@ -19,13 +19,18 @@ Food::~Food() {}
 
 Item* Food::clone()
 {
-	Food* copy = new Food(name, formatFlags, sym, color, nutrition);
+	Food* copy = new Food(name, formatFlags, sym, color, nutrition, eatTime);
 	return copy;
 }
 
 int Food::getNutrition()
 {
 	return nutrition;
+}
+
+int Food::getEatTime()
+{
+	return eatTime;
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/

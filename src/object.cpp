@@ -9,20 +9,20 @@ Object::Object(OBJECTTYPE t)
 	type = t;
 	switch (t)
 	{
-	case OBJECTTYPE_STAIRSDOWN:
+	case OBJ_STAIRSDOWN:
 		sym = '>';
 		color = TCODColor::brass;
 		name = "stairs leading down";
 		formatFlags=F_PLURAL;
 		break;
-	case OBJECTTYPE_STAIRSUP:
+	case OBJ_STAIRSUP:
 		sym = '<';
 		color = TCODColor::brass;
 		name = "stairs leading up";
 		formatFlags=F_PLURAL;
 		break;
 	default:
-	case OBJECTTYPE_STAIRSSAME:
+	case OBJ_STAIRSSAME:
 		sym = '=';
 		color = TCODColor::brass;
 		name = "passage";

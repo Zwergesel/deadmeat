@@ -140,7 +140,7 @@ int Player::actionMove(int direction)
 			world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - level->getWidth(), 0);
 			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
 			Object obj;
-			if (level->objectAt(newPos, obj) && obj.getType() == OBJECTTYPE_STAIRSSAME) world.travel();
+			if (level->objectAt(newPos, obj) && obj.getType() == OBJ_STAIRSSAME) world.travel();
 			return static_cast<int>(static_cast<float>(creature->getWalkingSpeed()) * diagonal);
 		}
 		else
@@ -382,10 +382,11 @@ int Player::actionEat(Item* item)
 	world.addMessage(msg.str());
 
 	addNutrition(f->getNutrition());
+	int time = f->getEatTime();
 
 	creature->removeItem(item, true);
 
-	return 10; // TODO: how long?
+	return time;
 }
 
 int Player::actionCharInfo(TCOD_key_t key)
@@ -578,7 +579,7 @@ int Player::processAction()
 		else if (state == STATE_DEFAULT && key.c == '<')
 		{
 			Object obj;
-			if (world.levels[world.currentLevel]->objectAt(creature->getPos(), obj) && obj.getType() == OBJECTTYPE_STAIRSUP)
+			if (world.levels[world.currentLevel]->objectAt(creature->getPos(), obj) && obj.getType() == OBJ_STAIRSUP)
 			{
 				world.travel();
 				return 10;
@@ -588,7 +589,7 @@ int Player::processAction()
 		else if (state == STATE_DEFAULT && key.c == '>')
 		{
 			Object obj;
-			if (world.levels[world.currentLevel]->objectAt(creature->getPos(), obj) && obj.getType() == OBJECTTYPE_STAIRSDOWN)
+			if (world.levels[world.currentLevel]->objectAt(creature->getPos(), obj) && obj.getType() == OBJ_STAIRSDOWN)
 			{
 				world.travel();
 				return 10;

@@ -23,46 +23,46 @@ void LevelGen::generateWorld()
 	dungeon[2].type = LEVELTYPE_CAVE;
 	WorldNode boss;
 	boss.type = LEVELTYPE_CAVE;
-	WorldLink in1 = {OBJECTTYPE_STAIRSSAME, Point(), 1, 0, 0};
-	WorldLink out1 = {OBJECTTYPE_STAIRSSAME, Point(), 0, 0, 0};
+	WorldLink in1 = {OBJ_STAIRSSAME, Point(), 1, 0, 0};
+	WorldLink out1 = {OBJ_STAIRSSAME, Point(), 0, 0, 0};
 	over[0].link.push_back(in1);
 	over[1].link.push_back(out1);
-	/*WorldLink in2 = {TILE_STEPSAME, Point(), 2, 1, 0};
-	WorldLink out2 = {TILE_STEPSAME, Point(), 1, 0, 1};
+	WorldLink in2 = {OBJ_STAIRSSAME, Point(), 2, 1, 0};
+	WorldLink out2 = {OBJ_STAIRSSAME, Point(), 1, 0, 1};
 	over[1].link.push_back(in2);
 	over[2].link.push_back(out2);
-	WorldLink in3 = {TILE_STEPSAME, Point(), 3, 1, 0};
-	WorldLink out3 = {TILE_STEPSAME, Point(), 2, 0, 1};
+	WorldLink in3 = {OBJ_STAIRSSAME, Point(), 3, 1, 0};
+	WorldLink out3 = {OBJ_STAIRSSAME, Point(), 2, 0, 1};
 	over[2].link.push_back(in3);
 	over[3].link.push_back(out3);
-	WorldLink inM = {TILE_STEPUP, Point(), 4, 2, 0};
-	WorldLink outM = {TILE_STEPDOWN, Point(), 2, 0, 2};
+	WorldLink inM = {OBJ_STAIRSUP, Point(), 4, 2, 0};
+	WorldLink outM = {OBJ_STAIRSDOWN, Point(), 2, 0, 2};
 	over[2].link.push_back(inM);
 	mountain.link.push_back(outM);
-	WorldLink inS = {TILE_STEPDOWN, Point(), 5, 1, 0};
-	WorldLink outS = {TILE_STEPUP, Point(), 3, 0, 1};
+	WorldLink inS = {OBJ_STAIRSDOWN, Point(), 5, 1, 0};
+	WorldLink outS = {OBJ_STAIRSUP, Point(), 3, 0, 1};
 	over[3].link.push_back(inS);
 	secret.link.push_back(outS);
-	WorldLink inH = {TILE_STEPSAME, Point(), 6, 2, 0};
-	WorldLink outH = {TILE_STEPSAME, Point(), 1, 0, 2};
+	WorldLink inH = {OBJ_STAIRSSAME, Point(), 6, 2, 0};
+	WorldLink outH = {OBJ_STAIRSSAME, Point(), 1, 0, 2};
 	over[1].link.push_back(inH);
 	house.link.push_back(outH);
-	WorldLink inD1 = {TILE_STEPDOWN, Point(), 7, 3, 0};
-	WorldLink outD1 = {TILE_STEPUP, Point(), 1, 0, 3};
+	WorldLink inD1 = {OBJ_STAIRSDOWN, Point(), 7, 3, 0};
+	WorldLink outD1 = {OBJ_STAIRSUP, Point(), 1, 0, 3};
 	over[1].link.push_back(inD1);
 	dungeon[0].link.push_back(outD1);
-	WorldLink inD2 = {TILE_STEPDOWN, Point(), 8, 1, 0};
-	WorldLink outD2 = {TILE_STEPUP, Point(), 7, 0, 1};
+	WorldLink inD2 = {OBJ_STAIRSDOWN, Point(), 8, 1, 0};
+	WorldLink outD2 = {OBJ_STAIRSUP, Point(), 7, 0, 1};
 	dungeon[0].link.push_back(inD2);
 	dungeon[1].link.push_back(outD2);
-	WorldLink inD3 = {TILE_STEPDOWN, Point(), 9, 1, 0};
-	WorldLink outD3 = {TILE_STEPUP, Point(), 8, 0, 1};
+	WorldLink inD3 = {OBJ_STAIRSDOWN, Point(), 9, 1, 0};
+	WorldLink outD3 = {OBJ_STAIRSUP, Point(), 8, 0, 1};
 	dungeon[1].link.push_back(inD3);
 	dungeon[2].link.push_back(outD3);
-	WorldLink inB = {TILE_STEPDOWN, Point(), 10, 2, 0};
-	WorldLink outB = {TILE_STEPUP, Point(), 8, 0, 2};
+	WorldLink inB = {OBJ_STAIRSDOWN, Point(), 10, 2, 0};
+	WorldLink outB = {OBJ_STAIRSUP, Point(), 8, 0, 2};
 	dungeon[1].link.push_back(inB);
-	boss.link.push_back(outB);*/
+	boss.link.push_back(outB);
 
 	world.worldNodes.push_back(over[0]);
 	world.worldNodes.push_back(over[1]);
@@ -154,6 +154,14 @@ Level* LevelGen::generateCaveLevel(int levelId, int width, int height, float den
 	delete[] swap2;
 
 	if (!placeEntrances(levelId, m)) return NULL;
+
+	// Cave monsters
+	RandomTable cave;
+	cave.add("goblin", 180);
+	cave.add("spider", 400);
+	cave.add("rat", 250);
+	cave.add("troll", 80);
+	m->populate(cave, width*height/250);
 
 	return m;
 }
@@ -512,6 +520,13 @@ Level* LevelGen::generatePlainLevel(int levelId, int width, int height)
 		}
 
 	placeEntrances(levelId, m);
+	
+	// Meadow monsters
+	RandomTable meadow;
+	meadow.add("goblin", 50);
+	meadow.add("snake", 400);
+	meadow.add("soldier ant", 200);
+	m->populate(meadow, width*height/800 + 2);
 
 	return m;
 }
