@@ -28,3 +28,5 @@
   * Character creation
   * Random level generation
   * Display unseen items where the player has last seen them even if a monster picked them up
+  * Quests
+  * Story
