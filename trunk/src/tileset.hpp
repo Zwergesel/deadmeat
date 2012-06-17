@@ -40,11 +40,12 @@ struct TileInfo
 	TerrainType type;
 	symbol sym;
 	TCODColor color, background;
+	std::string description;
 
 	TileInfo():
 		type(TT_WALL), sym('?'), color(TCODColor::black), background(TCODColor::white) {};
-	TileInfo(TerrainType p, int s, TCODColor c, TCODColor b):
-		type(p), sym(s), color(c), background(b) {};
+	TileInfo(TerrainType p, int s, TCODColor c, TCODColor b, std::string d):
+		type(p), sym(s), color(c), background(b), description(d) {};
 };
 
 class TileSet
@@ -62,6 +63,7 @@ public:
 	bool isBlocking(Tile t);
 	bool isWater(Tile t);
 	bool isPit(Tile t);
+	const std::string& getDescription(Tile t);
 };
 
 #endif

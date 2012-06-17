@@ -208,7 +208,8 @@ int Player::actionLook(Point pos)
 		}
 		else
 		{
-			world.addMessage("You don't see anything interesting here.");
+			msg << "You see " << world.tileSet->getDescription(level->getTile(pos)) << " here.";
+			world.addMessage(msg.str());
 		}
 	}
 	else
