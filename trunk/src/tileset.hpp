@@ -26,23 +26,25 @@ enum Tile
 
 enum TerrainType
 {
-	TT_WALL,
-	TT_WATER,
-	TT_GROUND,
-	TT_PIT,
+	TT_GROUND,	// walkable, transparent, !blocking
+	TT_CURTAIN, // walkable, !transparent, !blocking
+	TT_WALL,	// !walkable, !transparent, blocking
+	TT_WINDOW,	// !walkable, transparent, blocking
+	TT_WATER,	// !walkable, transparent, !blocking
+	TT_PIT,		// !walkable, transparent, !blocking
 	NUM_TERRAINTYPE
 };
 
 struct TileInfo
 {
-	bool passable;
+	TerrainType type;
 	symbol sym;
 	TCODColor color, background;
 
 	TileInfo():
-		passable(false), sym('?'), color(TCODColor::black), background(TCODColor::white) {};
-	TileInfo(bool p, int s, TCODColor c, TCODColor b):
-		passable(p), sym(s), color(c), background(b) {};
+		type(TT_WALL), sym('?'), color(TCODColor::black), background(TCODColor::white) {};
+	TileInfo(TerrainType p, int s, TCODColor c, TCODColor b):
+		type(p), sym(s), color(c), background(b) {};
 };
 
 class TileSet
@@ -55,7 +57,11 @@ public:
 	~TileSet();
 	void setInfo(Tile t, TileInfo inf);
 	TileInfo getInfo(Tile t);
-	bool isPassable(Tile t);
+	bool isWalkable(Tile t);
+	bool isTransparent(Tile t);
+	bool isBlocking(Tile t);
+	bool isWater(Tile t);
+	bool isPit(Tile t);
 };
 
 #endif

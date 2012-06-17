@@ -133,7 +133,7 @@ int Player::actionMove(int direction)
 		{
 			return creature->attack(c);
 		}
-		else if (world.tileSet->isPassable(level->getTile(newPos)))
+		else if (world.tileSet->isWalkable(level->getTile(newPos)))
 		{
 			float diagonal = ((newPos - ppos).x != 0 && (newPos - ppos).y != 0)?(std::sqrt(2.f)):(1.f);
 			creature->moveTo(newPos);
