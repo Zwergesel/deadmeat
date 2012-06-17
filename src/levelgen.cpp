@@ -1,8 +1,11 @@
 #include "levelgen.hpp"
 #include "level.hpp"
 #include "world.hpp"
+#include "creature.hpp"
 #include <cassert>
 #include <iostream>
+#include <cstring>
+#include <deque>
 
 RandomTable loot;
 
@@ -25,7 +28,7 @@ void LevelGen::generateWorld()
 	dungeon[1].type = LEVELTYPE_CAVE;
 	dungeon[2].type = LEVELTYPE_CAVE;
 	WorldNode boss;
-	boss.type = LEVELTYPE_CAVE;
+	boss.type = LEVELTYPE_SMAUGS_LAIR;
 	WorldLink in1 = {OBJ_STAIRSSAME, Point(), 1, 0, 0};
 	WorldLink out1 = {OBJ_STAIRSSAME, Point(), 0, 0, 0};
 	over[0].link.push_back(in1);
@@ -64,7 +67,7 @@ void LevelGen::generateWorld()
 	dungeon[2].link.push_back(outD3);
 	WorldLink inB = {OBJ_STAIRSDOWN, Point(), 10, 2, 0};
 	WorldLink outB = {OBJ_STAIRSUP, Point(), 8, 0, 2};
-	dungeon[1].link.push_back(inB);
+	dungeon[2].link.push_back(inB);
 	boss.link.push_back(outB);
 
 	world.worldNodes.push_back(over[0]);
@@ -79,19 +82,19 @@ void LevelGen::generateWorld()
 	world.worldNodes.push_back(dungeon[2]);
 	world.worldNodes.push_back(boss);
 
-	loot.add("sword", 50);
+	loot.add("sword", 30);
 	loot.add("dagger", 150);
-	loot.add("halberd", 80);
+	loot.add("halberd", 30);
 	loot.add("lightsaber", 5);
 	loot.add("item1", 10);
 	loot.add("item2", 10);
-	loot.add("longbow", 80);
+	loot.add("longbow", 30);
 	loot.add("uber armor", 50);
-	loot.add("pickelhaube", 100);
-	loot.add("clown shoes", 110);
-	loot.add("beefsteak", 140);
-	loot.add("meatball", 300);
-	loot.add("arrows", 160);
+	loot.add("pickelhaube", 80);
+	loot.add("clown shoes", 70);
+	loot.add("beefsteak", 125);
+	loot.add("meatball", 250);
+	loot.add("arrows", 100);
 }
 
 Level* LevelGen::generateLevel(int levelId, LEVELTYPE type)
@@ -99,6 +102,17 @@ Level* LevelGen::generateLevel(int levelId, LEVELTYPE type)
 	TCODRandom rng;
 	switch (type)
 	{
+	case LEVELTYPE_SMAUGS_LAIR:
+		{
+			Level* l = generateCaveLevel(levelId, 100, 80);
+			RandomTable lair;
+			lair.add("red baby dragon", 100).add("purple baby dragon", 200).add("blue baby dragon", 100);
+			l->populate(lair, 12);
+			Creature* smaug = factory.spawnCreature("Smaug");
+			smaug->moveTo(l->getRandomLocation(WALKABLE | NO_CREATURE));
+			l->addCreature(smaug, world.time);
+			return l;
+		}
 	case LEVELTYPE_CAVE:
 		return generateCaveLevel(levelId, rng.getInt(40, 100), rng.getInt(20, 80));
 	case LEVELTYPE_ROOM:
@@ -106,7 +120,7 @@ Level* LevelGen::generateLevel(int levelId, LEVELTYPE type)
 	case LEVELTYPE_BSP:
 		return generateBSPLevel(levelId, rng.getInt(20, 50), rng.getInt(20, 40));
 	case LEVELTYPE_FOREST:
-		return generateForestLevel(levelId, rng.getInt(20, 50), rng.getInt(20, 50));
+		return generateForestLevel(levelId, rng.getInt(30, 90), rng.getInt(25, 60));
 	default:
 	case LEVELTYPE_PLAIN:
 		return generatePlainLevel(levelId, rng.getInt(10,100), rng.getInt(10,100));
@@ -559,50 +573,33 @@ Level* LevelGen::generatePlainLevel(int levelId, int width, int height)
 	return m;
 }
 
+class ForestPathFinding : public ITCODPathCallback
+{
+public:
+	virtual float getWalkCost( int xFrom, int yFrom, int xTo, int yTo, void *userData) const
+	{
+		Level* dat = static_cast<Level*>(userData);
+		if (dat->getTile(Point(xTo,yTo)) == TILE_DARK_GRASS) return 1.0f;
+		return 5000.0f;
+	}
+};
 
 Level* LevelGen::generateForestLevel(int levelId, int width, int height)
 {
 	TCODRandom* rng = TCODRandom::getInstance();
 	Level* m = new Level(width, height);
 
-	int map[width][height];
-	for (int x=0; x<width; x++) for (int y=0; y<height; y++) map[x][y] = 0;
-	for (int i=0; i<width*height*5; i++)
-	{
-		int x = rng->getInt(0,width-1);
-		int y = rng->getInt(0,height-1);
-		map[x][y]++;
-		bool dropped = false;
-		do
-		{
-			dropped = false;
-			int minx(0), miny(0);
-			for (int dx = -1; dx <= 1; dx++) for (int dy = -1; dy <= 1; dy++)
-				{
-					if (x+dx < 0 || y+dy < 0 || x+dx >= width || y+dy >= height) continue;
-					if (map[x+dx][y+dy] < map[minx][miny])
-					{
-						minx = x+dx;
-						miny = y+dy;
-					}
-				}
-			if (map[minx][miny] + 1 < map[x][y])
-			{
-				dropped = true;
-				x = minx;
-				y = miny;
-			}
-			else
-			{
-				map[x][y]++;
-			}
-		}
-		while (dropped);
-	}
+	// Heightmap
+	TCODHeightMap map(width, height);
+	TCODNoise noise(2);
+	map.addFbm(&noise, width / 6.0, height / 6.0, 0, 0, 20, 0, 0.7);
+	map.addFbm(&noise, width / 2.0, height / 2.0, 0, 0, 20, 0, 0.3);
 
+	// Fill level
 	for (int x=0; x<width; x++) for (int y=0; y<height; y++)
 		{
-			if (map[x][y] > 11 || rng->getInt(6,14) < map[x][y])
+			if (map.getValue(x,y) > std::min(0.1, -1.0 + std::min(std::min(x,width-x-1),std::min(y,height-y-1)) * 0.25)
+				|| rng->getInt(0,99) < 8)
 			{
 				m->setTile(Point(x,y), rng->getInt(0,2) == 0 ? TILE_TREE2 : TILE_TREE1);
 			}
@@ -611,6 +608,58 @@ Level* LevelGen::generateForestLevel(int levelId, int width, int height)
 				m->setTile(Point(x,y), TILE_DARK_GRASS);
 			}
 		}
+	
+	bool bfs[width][height];
+	std::memset(bfs, sizeof(bfs), 0);
+	Point start = m->getRandomLocation(WALKABLE);
+	bool complete;
+	
+	do
+	{
+		std::deque<Point> deq;
+		deq.push_back(start);
+		bfs[start.x][start.y] = true;
+	
+		// Flood fill level
+		while (!deq.empty())
+		{
+			Point p = deq.front(); deq.pop_front();
+			Point t = p + Point(-1,0);
+			if (p.x > 0 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x][t.y]) { bfs[t.x][t.y] = true; deq.push_back(t); }
+			t = p + Point(+1,0);
+			if (p.x < width-1 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x][t.y]) { bfs[t.x][t.y] = true; deq.push_back(t); }
+			t = p + Point(0,-1);
+			if (p.y > 0 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x][t.y]) { bfs[t.x][t.y] = true; deq.push_back(t); }
+			t = p + Point(0,+1);
+			if (p.y < height-1 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x][t.y]) { bfs[t.x][t.y] = true; deq.push_back(t); }
+		}
+		
+		// Check whether whole level is filled
+		complete = true;
+		Point end;
+		
+		for (int x=0; x<width; x++) for (int y=0; y<height; y++)
+		{
+			if (m->getTile(Point(x,y)) == TILE_DARK_GRASS && !bfs[x][y]) { end = Point(x,y); complete = false; break; }
+		}
+		
+		if (complete) break;
+		
+		
+		// Build a path between disconnected areas
+		ForestPathFinding pathFinding;
+		TCODDijkstra path(width,height,&pathFinding,m,0.0f);
+		path.compute(start.x, start.y);
+		path.setPath(end.x, end.y);
+		while (!path.isEmpty())
+		{
+			Point p;
+			path.walk(&p.x,&p.y);
+			m->setTile(p, TILE_DARK_GRASS);
+		}
+		
+		start = end;
+	} while (true);
 
 	placeEntrances(levelId, m);
 
