@@ -83,7 +83,7 @@ Factory::Factory()
 Creature* Factory::spawnCreature(std::string monsterclass)
 {
 	auto it = creatures.find(monsterclass);
-	if (it == creatures.end()) return NULL;
+	assert(it != creatures.end());
 	Creature* spawned = it->second.first->clone();
 	std::vector<std::string> items = it->second.second.getRandom();
 	for (auto it=items.begin(); it!=items.end(); it++)
@@ -112,7 +112,7 @@ void Factory::setTemplate(std::string monsterclass, Creature* c, const Inventory
 Item* Factory::spawnItem(std::string itemclass)
 {
 	auto it = items.find(itemclass);
-	if (it == items.end()) return NULL;
+	assert(it != items.end());
 	return it->second->clone();
 }
 

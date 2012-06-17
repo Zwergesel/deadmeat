@@ -14,6 +14,7 @@ enum LEVELTYPE
   LEVELTYPE_BSP,
   LEVELTYPE_PLAIN,
   LEVELTYPE_FOREST,
+  LEVELTYPE_SMAUGS_LAIR, // TODO: this is a temporary type for testing =)
   NUM_LEVELTYPE
 };
 
