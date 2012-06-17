@@ -36,10 +36,10 @@ private:
 		int chooseMin;
 		int chooseMax;
 		std::vector<std::string> items;
-		ChoiceList(int p, int lo, int hi):permill(p),chooseMin(lo),chooseMax(hi){};
+		ChoiceList(int p, int lo, int hi):permill(p),chooseMin(lo),chooseMax(hi) {};
 	};
 	std::vector<ChoiceList> options;
-	
+
 public:
 	InventoryTable();
 	InventoryTable& add(const std::string& option, int permill);
@@ -64,7 +64,7 @@ public:
 	Factory();
 	Creature* spawnCreature(std::string monsterclass);
 	Item* spawnItem(std::string itemclass);
-	
+
 	void setTemplate(std::string monsterclass, Creature* c, const InventoryTable& inv = InventoryTable());
 	void setTemplate(std::string itemclass, Item* i);
 

@@ -208,24 +208,24 @@ std::vector<Point> Level::getMatchingLocations(uint flags)
 {
 	std::vector<Point> list;
 	for (int y=0; y<height; y++) for (int x=0; x<width; x++)
-	{
-		if ((flags & WALKABLE) && !world.tileSet->isPassable(map[coord(Point(x,y))])) continue;
-		else if ((flags & NO_CREATURE) && creatureAt(Point(x,y)) != NULL) continue;
-		else if (flags & NO_ITEM)
 		{
-			bool hasItems = false;
-			for (auto it = items.begin(); it != items.end(); it++)
+			if ((flags & WALKABLE) && !world.tileSet->isPassable(map[coord(Point(x,y))])) continue;
+			else if ((flags & NO_CREATURE) && creatureAt(Point(x,y)) != NULL) continue;
+			else if (flags & NO_ITEM)
 			{
-				if (it->first.x == x && it->first.y == y)
+				bool hasItems = false;
+				for (auto it = items.begin(); it != items.end(); it++)
 				{
-					hasItems = true;
-					break;
+					if (it->first.x == x && it->first.y == y)
+					{
+						hasItems = true;
+						break;
+					}
 				}
+				if (hasItems) continue;
 			}
-			if (hasItems) continue;
+			list.push_back(Point(x,y));
 		}
-		list.push_back(Point(x,y));
-	}
 	return list;
 }
 

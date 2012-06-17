@@ -19,14 +19,14 @@ void fillFactoryTemplates()
 	Goblin sergeant("sergeant", F_MALE, '@', TCODColor::red, 180, 0, Weapon(13, 0, 3, 1, 2, EFFECT_NONE, 1), 90, 14, 1000);
 	Goblin medic("medic", F_FEMALE, '@', TCODColor::pink, 180, 0, Weapon(25, 0, 0, 0, 0, EFFECT_NONE, 1), 0, 12, 10);
 	Goblin dragon("Smaug", F_PROPER | F_MALE, 'D', TCODColor::red, 300, 100, Weapon(15, 50, 19, 3, 7, EFFECT_NONE, 1), 75, 30, 2500);
-	
+
 	InventoryTable fighter_weapons;
 	std::vector<std::string> wpns;
 	wpns.push_back("halberd");
 	wpns.push_back("sword");
 	wpns.push_back("dagger");
 	fighter_weapons.add(wpns, 850, 1, 1);
-	
+
 	factory.setTemplate("goblin", &goblin);
 	factory.setTemplate("snake", &snake);
 	factory.setTemplate("troll", &troll);
@@ -51,7 +51,7 @@ void fillFactoryTemplates()
 	Food food1("beefsteak", F_NEUTER, '%', TCODColor::darkOrange, 2500, 100);
 	Food food2("meat ball", F_NEUTER, '%', TCODColor::orange, 1000, 15);
 	Ammo arrow("arrow", F_NEUTER, '!', TCODColor::cyan, 0, EFFECT_NONE);
-	
+
 	factory.setTemplate("lightsaber", &lightsaber);
 	factory.setTemplate("sword", &sword);
 	factory.setTemplate("dagger", &dagger);

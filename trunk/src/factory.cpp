@@ -171,7 +171,7 @@ void Factory::load(LoadBlock& load)
 	}
 	creatures.clear();
 	items.clear();
-	
+
 	// Load new templates
 	int n;
 	load ("#creatures", n);

@@ -54,7 +54,7 @@ Creature* Goblin::clone()
 int Goblin::action()
 {
 	regenerate(0);
-	
+
 	// pick best weapon
 	symbol choice = '0';
 	float value = baseWeapon.getDPS();
