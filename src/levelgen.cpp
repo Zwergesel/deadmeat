@@ -584,8 +584,8 @@ Level* LevelGen::generateForestLevel(int levelId, int width, int height)
 	// Heightmap
 	TCODHeightMap map(width, height);
 	TCODNoise noise(2);
-	map.addFbm(&noise, width / 6.0, height / 6.0, 0, 0, 20, 0, 0.7);
-	map.addFbm(&noise, width / 2.0, height / 2.0, 0, 0, 20, 0, 0.3);
+	map.addFbm(&noise, width / 6.f, height / 6.f, 0.f, 0.f, 20.f, 0.f, 0.7f);
+	map.addFbm(&noise, width / 2.f, height / 2.f, 0.f, 0.f, 20.f, 0.f, 0.3f);
 
 	// Fill level
 	for (int x=0; x<width; x++) for (int y=0; y<height; y++)
