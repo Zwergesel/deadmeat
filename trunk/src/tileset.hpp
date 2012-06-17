@@ -20,7 +20,17 @@ enum Tile
   TILE_DARK_GRASS,
   TILE_WATER1,
   TILE_WATER2,
+  TILE_BRIDGE,
   TILES_LENGTH
+};
+
+enum TerrainType
+{
+	TT_WALL,
+	TT_WATER,
+	TT_GROUND,
+	TT_PIT,
+	NUM_TERRAINTYPE
 };
 
 struct TileInfo

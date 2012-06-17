@@ -5,7 +5,7 @@ TileSet::TileSet()
 	info = new TileInfo[TILES_LENGTH];
 
 	// TODO: Hard-coded for now, load from file later
-	// Parameters: passable (bool), symbol (int / char), foregroundcolor, backgroundcolor
+	// Parameters: walkable, transparent, symbol, foregroundcolor, backgroundcolor
 	info[TILE_CAVE_FLOOR]   = TileInfo(true, '.', TCODColor::grey, TCODColor::white);
 	info[TILE_CAVE_WALL]    = TileInfo(false, TCOD_CHAR_BLOCK1, TCODColor::grey, TCODColor(125,95,64));
 	info[TILE_STONE_FLOOR]  = TileInfo(true, '.', TCODColor::grey, TCODColor::white);
@@ -17,6 +17,7 @@ TileSet::TileSet()
 	info[TILE_TREE2]        = TileInfo(false, TCOD_CHAR_SPADE, TCODColor(48, 79, 53), TCODColor(123, 160, 126));
 	info[TILE_WATER1]       = TileInfo(true, 247, TCODColor(75, 170, 230), TCODColor(70, 150, 210));
 	info[TILE_WATER2]       = TileInfo(true, 247, TCODColor(60, 140, 230), TCODColor(50, 120, 195));
+	info[TILE_BRIDGE]       = TileInfo(true, TCOD_CHAR_BLOCK3, TCODColor(125,95,64), TCODColor(90, 60, 30));
 }
 
 TileSet::~TileSet()
