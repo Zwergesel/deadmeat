@@ -16,15 +16,12 @@ void LevelGen::generateWorld()
 	over[0].type = LEVELTYPE_FOREST;
 	over[1].type = LEVELTYPE_FOREST;
 	over[2].type = LEVELTYPE_FOREST;
-	over[3].type = LEVELTYPE_FOREST;
-	WorldNode mountain;
-	mountain.type = LEVELTYPE_CAVE;
 	WorldNode secret;
 	secret.type = LEVELTYPE_ROOM;
 	WorldNode house;
 	house.type = LEVELTYPE_BSP;
 	WorldNode* dungeon = new WorldNode[3];
-	dungeon[0].type = LEVELTYPE_CAVE;
+	dungeon[0].type = LEVELTYPE_ROOM;
 	dungeon[1].type = LEVELTYPE_CAVE;
 	dungeon[2].type = LEVELTYPE_CAVE;
 	WorldNode boss;
@@ -34,47 +31,41 @@ void LevelGen::generateWorld()
 	over[0].link.push_back(in1);
 	over[1].link.push_back(out1);
 	WorldLink in2 = {OBJ_STAIRSSAME, Point(), 2, 1, 0};
-	WorldLink out2 = {OBJ_STAIRSSAME, Point(), 1, 0, 1};
-	over[1].link.push_back(in2);
+	WorldLink out2 = {OBJ_STAIRSSAME, Point(), 0, 0, 1};
+	over[0].link.push_back(in2);
 	over[2].link.push_back(out2);
-	WorldLink in3 = {OBJ_STAIRSSAME, Point(), 3, 1, 0};
-	WorldLink out3 = {OBJ_STAIRSSAME, Point(), 2, 0, 1};
-	over[2].link.push_back(in3);
-	over[3].link.push_back(out3);
-	WorldLink inM = {OBJ_STAIRSUP, Point(), 4, 2, 0};
-	WorldLink outM = {OBJ_STAIRSDOWN, Point(), 2, 0, 2};
-	over[2].link.push_back(inM);
-	mountain.link.push_back(outM);
-	WorldLink inS = {OBJ_STAIRSDOWN, Point(), 5, 1, 0};
-	WorldLink outS = {OBJ_STAIRSUP, Point(), 3, 0, 1};
-	over[3].link.push_back(inS);
+	WorldLink in3 = {OBJ_STAIRSSAME, Point(), 2, 1, 1};
+	WorldLink out3 = {OBJ_STAIRSSAME, Point(), 1, 1, 1};
+	over[1].link.push_back(in3);
+	over[2].link.push_back(out3);
+	WorldLink inS = {OBJ_STAIRSDOWN, Point(), 3, 2, 0};
+	WorldLink outS = {OBJ_STAIRSUP, Point(), 1, 0, 2};
+	over[1].link.push_back(inS);
 	secret.link.push_back(outS);
-	WorldLink inH = {OBJ_STAIRSSAME, Point(), 6, 2, 0};
-	WorldLink outH = {OBJ_STAIRSSAME, Point(), 1, 0, 2};
-	over[1].link.push_back(inH);
+	WorldLink inH = {OBJ_STAIRSSAME, Point(), 4, 2, 0};
+	WorldLink outH = {OBJ_STAIRSSAME, Point(), 0, 0, 2};
+	over[0].link.push_back(inH);
 	house.link.push_back(outH);
-	WorldLink inD1 = {OBJ_STAIRSDOWN, Point(), 7, 3, 0};
-	WorldLink outD1 = {OBJ_STAIRSUP, Point(), 1, 0, 3};
-	over[1].link.push_back(inD1);
+	WorldLink inD1 = {OBJ_STAIRSDOWN, Point(), 5, 2, 0};
+	WorldLink outD1 = {OBJ_STAIRSUP, Point(), 2, 0, 2};
+	over[2].link.push_back(inD1);
 	dungeon[0].link.push_back(outD1);
-	WorldLink inD2 = {OBJ_STAIRSDOWN, Point(), 8, 1, 0};
-	WorldLink outD2 = {OBJ_STAIRSUP, Point(), 7, 0, 1};
+	WorldLink inD2 = {OBJ_STAIRSDOWN, Point(), 6, 1, 0};
+	WorldLink outD2 = {OBJ_STAIRSUP, Point(), 5, 0, 1};
 	dungeon[0].link.push_back(inD2);
 	dungeon[1].link.push_back(outD2);
-	WorldLink inD3 = {OBJ_STAIRSDOWN, Point(), 9, 1, 0};
-	WorldLink outD3 = {OBJ_STAIRSUP, Point(), 8, 0, 1};
+	WorldLink inD3 = {OBJ_STAIRSDOWN, Point(), 7, 1, 0};
+	WorldLink outD3 = {OBJ_STAIRSUP, Point(), 6, 0, 1};
 	dungeon[1].link.push_back(inD3);
 	dungeon[2].link.push_back(outD3);
-	WorldLink inB = {OBJ_STAIRSDOWN, Point(), 10, 2, 0};
-	WorldLink outB = {OBJ_STAIRSUP, Point(), 8, 0, 2};
+	WorldLink inB = {OBJ_STAIRSDOWN, Point(), 8, 1, 0};
+	WorldLink outB = {OBJ_STAIRSUP, Point(), 7, 0, 1};
 	dungeon[2].link.push_back(inB);
 	boss.link.push_back(outB);
 
 	world.worldNodes.push_back(over[0]);
 	world.worldNodes.push_back(over[1]);
 	world.worldNodes.push_back(over[2]);
-	world.worldNodes.push_back(over[3]);
-	world.worldNodes.push_back(mountain);
 	world.worldNodes.push_back(secret);
 	world.worldNodes.push_back(house);
 	world.worldNodes.push_back(dungeon[0]);
@@ -579,7 +570,8 @@ public:
 	virtual float getWalkCost( int xFrom, int yFrom, int xTo, int yTo, void *userData) const
 	{
 		Level* dat = static_cast<Level*>(userData);
-		if (dat->getTile(Point(xTo,yTo)) == TILE_DARK_GRASS) return 1.0f;
+		Tile tile = dat->getTile(Point(xTo,yTo));
+		if (tile == TILE_DARK_GRASS) return 1.0f;
 		return 5000.0f;
 	}
 };
@@ -609,7 +601,7 @@ Level* LevelGen::generateForestLevel(int levelId, int width, int height)
 			}
 		}
 	
-	bool bfs[width][height];
+	bool* bfs = new bool[width*height];
 	std::memset(bfs, sizeof(bfs), 0);
 	Point start = m->getRandomLocation(WALKABLE);
 	bool complete;
@@ -618,20 +610,20 @@ Level* LevelGen::generateForestLevel(int levelId, int width, int height)
 	{
 		std::deque<Point> deq;
 		deq.push_back(start);
-		bfs[start.x][start.y] = true;
+		bfs[start.x+width*start.y] = true;
 	
 		// Flood fill level
 		while (!deq.empty())
 		{
 			Point p = deq.front(); deq.pop_front();
 			Point t = p + Point(-1,0);
-			if (p.x > 0 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x][t.y]) { bfs[t.x][t.y] = true; deq.push_back(t); }
+			if (p.x > 0 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x+width*t.y]) { bfs[t.x+width*t.y] = true; deq.push_back(t); }
 			t = p + Point(+1,0);
-			if (p.x < width-1 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x][t.y]) { bfs[t.x][t.y] = true; deq.push_back(t); }
+			if (p.x < width-1 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x+width*t.y]) { bfs[t.x+width*t.y] = true; deq.push_back(t); }
 			t = p + Point(0,-1);
-			if (p.y > 0 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x][t.y]) { bfs[t.x][t.y] = true; deq.push_back(t); }
+			if (p.y > 0 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x+width*t.y]) { bfs[t.x+width*t.y] = true; deq.push_back(t); }
 			t = p + Point(0,+1);
-			if (p.y < height-1 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x][t.y]) { bfs[t.x][t.y] = true; deq.push_back(t); }
+			if (p.y < height-1 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x+width*t.y]) { bfs[t.x+width*t.y] = true; deq.push_back(t); }
 		}
 		
 		// Check whether whole level is filled
@@ -640,11 +632,10 @@ Level* LevelGen::generateForestLevel(int levelId, int width, int height)
 		
 		for (int x=0; x<width; x++) for (int y=0; y<height; y++)
 		{
-			if (m->getTile(Point(x,y)) == TILE_DARK_GRASS && !bfs[x][y]) { end = Point(x,y); complete = false; break; }
+			if (m->getTile(Point(x,y)) == TILE_DARK_GRASS && !bfs[x+width*y]) { end = Point(x,y); complete = false; break; }
 		}
 		
 		if (complete) break;
-		
 		
 		// Build a path between disconnected areas
 		ForestPathFinding pathFinding;
@@ -660,6 +651,8 @@ Level* LevelGen::generateForestLevel(int levelId, int width, int height)
 		
 		start = end;
 	} while (true);
+	
+	delete[] bfs;
 
 	placeEntrances(levelId, m);
 
