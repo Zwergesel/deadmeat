@@ -225,7 +225,7 @@ void Creature::die(Creature* instigator)
 		msg << util::format(FORMAT_DEF, name, formatFlags, true) << " dies.";
 		world.addMessage(msg.str());
 	}
-	
+
 	if (!controlled)
 	{
 		// Drop all items and remove creature from level
@@ -240,11 +240,11 @@ void Creature::die(Creature* instigator)
 
 void Creature::regenerate(int speedup)
 {
-	if ((world.time - lastTimeRegen) > (70 - speedup))
+	if ((world.time - lastTimeRegen) > (30 - speedup))
 	{
-		health += (world.time - lastTimeRegen) / (70 - speedup);
-		health = std::min(maxHealth, health);
-		lastTimeRegen = world.time;
+		int bonus = (world.time - lastTimeRegen) / (30 - speedup);
+		health = std::min(maxHealth, health + bonus);
+		lastTimeRegen += (30 - speedup) * bonus;
 	}
 }
 
@@ -413,7 +413,7 @@ int Creature::rangedAttack(Creature* target, Weapon* w)
 	int hit = 0;
 	if (mean >= 0) hit = rngGauss.getInt(-300, 300, mean);
 	if (mean < 0) hit = -rngGauss.getInt(-300, 300, -mean);
-	
+
 	// Traverse the line of the shot
 	TCODRandom* rng = TCODRandom::getInstance();
 	Point destination = target->getPos();
@@ -429,7 +429,7 @@ int Creature::rangedAttack(Creature* target, Weapon* w)
 			break;
 		}
 	}
-	
+
 	if (hit >= -70)
 	{
 		if (hit <= 0) damage /= 2;

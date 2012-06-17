@@ -239,7 +239,7 @@ void World::drawWorld()
 void World::drawCharInfo()
 {
 	TCODConsole frame(viewLevel.width, viewLevel.height);
-	
+
 	TCODConsole charInfo(viewLevel.width / 2, 15);
 	charInfo.printFrame(0, 0, charInfo.getWidth(), charInfo.getHeight(), true, TCOD_BKGND_DEFAULT, "Character Information");
 	charInfo.printEx(2, 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s", player->getName().c_str());
@@ -307,7 +307,7 @@ void World::drawCharInfo()
 	if (player->getSkillPoints() > 0) skillInfo.printEx(skillInfo.getWidth()-3, skillInfo.getHeight()-3, TCOD_BKGND_DEFAULT, TCOD_RIGHT, "Points left = %-2d", player->getSkillPoints());
 
 	TCODConsole::blit(&skillInfo, 0, 0, 0, 0, &frame, 0, charInfo.getHeight() - 1, 1.f, 1.f);
-	
+
 	// Correct corners
 	frame.putChar(charInfo.getWidth()-1, 0, TCOD_CHAR_TEES);
 	frame.putChar(0, charInfo.getHeight()-1, TCOD_CHAR_TEEE);

@@ -15,10 +15,10 @@ enum Tile;
 
 enum RANDOM_LOCATION_FLAGS
 {
-	ANY_SPACE = 0,
-	WALKABLE = 1,
-	NO_CREATURE = 2,
-	NO_ITEM = 4
+  ANY_SPACE = 0,
+  WALKABLE = 1,
+  NO_CREATURE = 2,
+  NO_ITEM = 4
 };
 
 struct TimelineAction

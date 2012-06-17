@@ -13,6 +13,7 @@ enum LEVELTYPE
   LEVELTYPE_ROOM,
   LEVELTYPE_BSP,
   LEVELTYPE_PLAIN,
+  LEVELTYPE_FOREST,
   NUM_LEVELTYPE
 };
 
@@ -41,6 +42,7 @@ public:
 	static Level* generateRoomLevel(int levelId, int width, int height, float roomDensity = 30.f);
 	static Level* generateBSPLevel(int levelId, int width, int height, int numSplits = 6, float squareness = 1.5f);
 	static Level* generatePlainLevel(int levelId, int width, int height);
+	static Level* generateForestLevel(int levelId, int width, int height);
 private:
 	static bool placeEntrances(int levelId, Level* l);
 };

@@ -1,7 +1,8 @@
 #include "levelgen.hpp"
 #include "level.hpp"
 #include "world.hpp"
-#include <assert.h>
+#include <cassert>
+#include <iostream>
 
 RandomTable loot;
 
@@ -9,10 +10,10 @@ void LevelGen::generateWorld()
 {
 	// hardcoded world for now
 	WorldNode over[4];
-	over[0].type = LEVELTYPE_PLAIN;
-	over[1].type = LEVELTYPE_PLAIN;
-	over[2].type = LEVELTYPE_PLAIN;
-	over[3].type = LEVELTYPE_PLAIN;
+	over[0].type = LEVELTYPE_FOREST;
+	over[1].type = LEVELTYPE_FOREST;
+	over[2].type = LEVELTYPE_FOREST;
+	over[3].type = LEVELTYPE_FOREST;
 	WorldNode mountain;
 	mountain.type = LEVELTYPE_CAVE;
 	WorldNode secret;
@@ -77,7 +78,7 @@ void LevelGen::generateWorld()
 	world.worldNodes.push_back(dungeon[1]);
 	world.worldNodes.push_back(dungeon[2]);
 	world.worldNodes.push_back(boss);
-	
+
 	loot.add("sword", 50);
 	loot.add("dagger", 150);
 	loot.add("halberd", 80);
@@ -104,6 +105,8 @@ Level* LevelGen::generateLevel(int levelId, LEVELTYPE type)
 		return generateRoomLevel(levelId, rng.getInt(40, 100), rng.getInt(20, 80));
 	case LEVELTYPE_BSP:
 		return generateBSPLevel(levelId, rng.getInt(20, 50), rng.getInt(20, 40));
+	case LEVELTYPE_FOREST:
+		return generateForestLevel(levelId, rng.getInt(20, 50), rng.getInt(20, 50));
 	default:
 	case LEVELTYPE_PLAIN:
 		return generatePlainLevel(levelId, rng.getInt(10,100), rng.getInt(10,100));
@@ -502,7 +505,7 @@ bool LevelGen::placeEntrances(int levelId, Level* l)
 	std::vector<Point> list;
 	for (int x=0; x<l->getWidth(); x++) for (int y=0; y<l->getHeight(); y++)
 		{
-			if (l->getTile(Point(x,y)) == TILE_CAVE_FLOOR || l->getTile(Point(x,y)) == TILE_GRASS) list.push_back(Point(x,y));
+			if (world.tileSet->isPassable(l->getTile(Point(x,y)))) list.push_back(Point(x,y));
 		}
 	if (list.size() < 1) return false;
 	Point first = list[rng.getInt(0, list.size() - 1)];
@@ -520,7 +523,7 @@ bool LevelGen::placeEntrances(int levelId, Level* l)
 	list.clear();
 	for (int x=0; x<l->getWidth(); x++) for (int y=0; y<l->getHeight(); y++)
 		{
-			if ((l->getTile(Point(x,y)) == TILE_CAVE_FLOOR || l->getTile(Point(x,y)) == TILE_GRASS) && dtree.getDistance(x,y) > 0.f) list.push_back(Point(x,y));
+			if (world.tileSet->isPassable(l->getTile(Point(x,y))) && dtree.getDistance(x,y) > 0.f) list.push_back(Point(x,y));
 		}
 	if (list.size() < world.worldNodes[levelId].link.size() - 1) return false;
 	// place remaining entrances
@@ -546,12 +549,76 @@ Level* LevelGen::generatePlainLevel(int levelId, int width, int height)
 		}
 
 	placeEntrances(levelId, m);
-	
+
 	// Meadow monsters
 	RandomTable meadow;
 	meadow.add("goblin", 50).add("snake", 400).add("soldier ant", 200);
 	m->populate(meadow, width*height/800 + 2);
 	m->placeItems(loot, width*height/800 + 1);
+
+	return m;
+}
+
+
+Level* LevelGen::generateForestLevel(int levelId, int width, int height)
+{
+	TCODRandom* rng = TCODRandom::getInstance();
+	Level* m = new Level(width, height);
+
+	int map[width][height];
+	for (int x=0; x<width; x++) for (int y=0; y<height; y++) map[x][y] = 0;
+	for (int i=0; i<width*height*5; i++)
+	{
+		int x = rng->getInt(0,width-1);
+		int y = rng->getInt(0,height-1);
+		map[x][y]++;
+		bool dropped = false;
+		do
+		{
+			dropped = false;
+			int minx(0), miny(0);
+			for (int dx = -1; dx <= 1; dx++) for (int dy = -1; dy <= 1; dy++)
+				{
+					if (x+dx < 0 || y+dy < 0 || x+dx >= width || y+dy >= height) continue;
+					if (map[x+dx][y+dy] < map[minx][miny])
+					{
+						minx = x+dx;
+						miny = y+dy;
+					}
+				}
+			if (map[minx][miny] + 1 < map[x][y])
+			{
+				dropped = true;
+				x = minx;
+				y = miny;
+			}
+			else
+			{
+				map[x][y]++;
+			}
+		}
+		while (dropped);
+	}
+
+	for (int x=0; x<width; x++) for (int y=0; y<height; y++)
+		{
+			if (map[x][y] > 11 || rng->getInt(6,14) < map[x][y])
+			{
+				m->setTile(Point(x,y), rng->getInt(0,2) == 0 ? TILE_TREE2 : TILE_TREE1);
+			}
+			else
+			{
+				m->setTile(Point(x,y), TILE_DARK_GRASS);
+			}
+		}
+
+	placeEntrances(levelId, m);
+
+	// Meadow monsters
+	RandomTable forest;
+	forest.add("goblin", 50).add("snake", 400).add("soldier ant", 200);
+	m->populate(forest, width*height/250 + 1);
+	m->placeItems(loot, width*height/250 + 1);
 
 	return m;
 }

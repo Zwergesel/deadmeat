@@ -45,7 +45,7 @@ int corruptSave(const std::string& fileName)
 
 int main()
 {
-	TCODConsole::setCustomFont("Alloy_curses_12x12.png",TCOD_FONT_LAYOUT_ASCII_INROW);
+	TCODConsole::setCustomFont("Md_curses_16x16.png",TCOD_FONT_LAYOUT_ASCII_INROW);
 	TCODConsole::initRoot(80,50,"deadmeat",false);
 	TCODSystem::setFps(30);
 
@@ -84,15 +84,15 @@ int main()
 	else
 	{
 		LevelGen::generateWorld();
-		world.levels[0] = LevelGen::generateLevel(0, LEVELTYPE_PLAIN);
-		
+		world.levels[0] = LevelGen::generateLevel(0, LEVELTYPE_FOREST);
+
 		// Add player creature
 		Point newPos = world.levels[0]->getRandomLocation(WALKABLE);
 		world.player->getCreature()->moveTo(newPos);
 		world.levels[0]->addCreature(world.player->getCreature(), 0);
 		world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - world.levels[0]->getWidth(), 0);
 		world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - world.levels[0]->getHeight(), 0);
-		
+
 		world.player->getCreature()->addItem(factory.spawnItem("lightsaber"));
 	}
 
