@@ -510,7 +510,7 @@ bool LevelGen::placeEntrances(int levelId, Level* l)
 	std::vector<Point> list;
 	for (int x=0; x<l->getWidth(); x++) for (int y=0; y<l->getHeight(); y++)
 		{
-			if (world.tileSet->isPassable(l->getTile(Point(x,y)))) list.push_back(Point(x,y));
+			if (world.tileSet->isWalkable(l->getTile(Point(x,y)))) list.push_back(Point(x,y));
 		}
 	if (list.size() < 1) return false;
 	Point first = list[rng.getInt(0, list.size() - 1)];
@@ -521,14 +521,14 @@ bool LevelGen::placeEntrances(int levelId, Level* l)
 	TCODMap map(l->getWidth(), l->getHeight());
 	for (int x=0; x<l->getWidth(); x++) for (int y=0; y<l->getHeight(); y++)
 		{
-			map.setProperties(x, y, false, world.tileSet->getInfo(l->getTile(Point(x,y))).passable);
+			map.setProperties(x, y, false, world.tileSet->isWalkable(l->getTile(Point(x,y))));
 		}
 	TCODDijkstra dtree(&map);
 	dtree.compute(first.x, first.y);
 	list.clear();
 	for (int x=0; x<l->getWidth(); x++) for (int y=0; y<l->getHeight(); y++)
 		{
-			if (world.tileSet->isPassable(l->getTile(Point(x,y))) && dtree.getDistance(x,y) > 0.f) list.push_back(Point(x,y));
+			if (world.tileSet->isWalkable(l->getTile(Point(x,y))) && dtree.getDistance(x,y) > 0.f) list.push_back(Point(x,y));
 		}
 	if (list.size() < world.worldNodes[levelId].link.size() - 1) return false;
 	// place remaining entrances

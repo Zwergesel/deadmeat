@@ -209,7 +209,7 @@ std::vector<Point> Level::getMatchingLocations(uint flags)
 	std::vector<Point> list;
 	for (int y=0; y<height; y++) for (int x=0; x<width; x++)
 		{
-			if ((flags & WALKABLE) && !world.tileSet->isPassable(map[coord(Point(x,y))])) continue;
+			if ((flags & WALKABLE) && !world.tileSet->isWalkable(map[coord(Point(x,y))])) continue;
 			else if ((flags & NO_CREATURE) && creatureAt(Point(x,y)) != NULL) continue;
 			else if (flags & NO_ITEM)
 			{
