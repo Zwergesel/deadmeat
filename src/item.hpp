@@ -28,12 +28,10 @@ protected:
 	TCODColor color;
 	ITEM_TYPE type;
 	std::string strType;
-  int count;
-  bool stackable;
 
 public:
 	Item();
-	Item(std::string name, uint format, symbol sym, TCODColor color, bool stackable = false);
+	Item(std::string name, uint format, symbol sym, TCODColor color);
 	virtual ~Item();
 	virtual Item* clone();
 
@@ -43,11 +41,7 @@ public:
 	std::string getName();
 	uint getFormatFlags();
 	virtual std::string toString();
-	std::string typeString();  
-  bool isStackable();
-  int getCount();
-  void setCount(int count);
-  bool stacksWith(Item* item);
+	std::string typeString();
 
 	virtual unsigned int save(Savegame& sg);
 	virtual void load(LoadBlock& load);

@@ -8,22 +8,20 @@ Item::Item()
 	strType = "Item";
 }
 
-Item::Item(std::string n, uint f, symbol s, TCODColor c, bool stack):
-	name(n), formatFlags(f), sym(s), color(c), stackable(stack)
+Item::Item(std::string n, uint f, symbol s, TCODColor c):
+	name(n), formatFlags(f), sym(s), color(c)
 {
 	type = ITEM_DEFAULT;
 	strType = "Item";
-  count = 1;
 }
 
 Item::~Item() {}
 
 Item* Item::clone()
 {
-	Item* copy = new Item(name, formatFlags, sym, color, stackable);
+	Item* copy = new Item(name, formatFlags, sym, color);
 	copy->type = type;
 	copy->strType = strType;
-  copy->count = count;
 	return copy;
 }
 
@@ -62,28 +60,6 @@ std::string Item::typeString()
 	return strType;
 }
 
-bool Item::isStackable()
-{
-  return stackable;
-}
-
-int Item::getCount()
-{
-  return count;
-}
-
-void Item::setCount(int c)
-{
-  count = c;
-}
-
-bool Item::stacksWith(Item* item)
-{
-  // TODO
-  if(item->getType() == type && item->getName() == name) return true;
-  return false;
-}
-
 /*--------------------- SAVING AND LOADING ---------------------*/
 
 unsigned int Item::save(Savegame& sg)
@@ -91,12 +67,12 @@ unsigned int Item::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Item", id);
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("stackable", stackable) ("count", count);
+	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color);
 	sg << store;
 	return id;
 }
 
 void Item::load(LoadBlock& load)
 {
-	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("stackable", stackable) ("count", count);
+	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color);
 }
