@@ -9,7 +9,7 @@ Ammo::Ammo()
 }
 
 Ammo::Ammo(std::string n, uint f, symbol s, TCODColor c, int ench, WeaponEffect e):
-	Item(n,f,s,c),enchantment(ench),effect(e)
+	Item(n,f,s,c,1),enchantment(ench),effect(e)
 {
 	type = ITEM_AMMO;
 	strType = "ammunition";
@@ -38,7 +38,7 @@ WeaponEffect Ammo::getEffect()
 std::string Ammo::toString()
 {
 	std::stringstream ss;
-	ss << (enchantment < 0 ? "" : "+") << enchantment << " " << name;
+	ss << amount << " " << (enchantment < 0 ? "" : "+") << enchantment << " " << name;
 	return ss.str();
 }
 

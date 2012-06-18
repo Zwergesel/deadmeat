@@ -12,7 +12,7 @@ Weapon::Weapon()
 }
 
 Weapon::Weapon(std::string n, uint f, symbol s, TCODColor c, int spd, int hit, int dmg, int dice, int dmax, int ench, int h, WeaponEffect e, int r)
-	:Item(n, f, s, c), speed(spd), hitBonus(hit), baseDamage(dmg), numDice(dice)
+	:Item(n,f,s,c,1), speed(spd), hitBonus(hit), baseDamage(dmg), numDice(dice)
 	,diceMax(dmax), enchantment(ench), hands(h), effect(e), range(r)
 {
 	type = ITEM_WEAPON;
@@ -20,7 +20,7 @@ Weapon::Weapon(std::string n, uint f, symbol s, TCODColor c, int spd, int hit, i
 }
 
 Weapon::Weapon(int spd, int hit, int dmg, int dice, int dmax, WeaponEffect e, int r):
-	Item("x", F_DEFAULT, '#', TCODColor::pink), speed(spd), hitBonus(hit), baseDamage(dmg),
+	Item("x", F_DEFAULT, '#', TCODColor::pink, 1), speed(spd), hitBonus(hit), baseDamage(dmg),
 	numDice(dice), diceMax(dmax), enchantment(0), hands(0), effect(e), range(r)
 {
 	type = ITEM_WEAPON;

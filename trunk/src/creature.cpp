@@ -471,30 +471,57 @@ void Creature::setBaseWeapon(Weapon base)
 	baseWeapon = base;
 }
 
-symbol Creature::addItem(Item* item)
+Item* Creature::addItem(Item* item)
 {
-	for (int i=0; i<util::numLetters; i++)
+	// Try stacking the item
+	for (auto it = inventory.begin(); it != inventory.end(); it++)
 	{
-		if (inventory.insert(std::pair<symbol, Item*>(util::letters[i], item)).second)
+		if (item->canStackWith(it->second))
 		{
-			return util::letters[i];
+			assert(item != it->second);
+			it->second->changeAmount(item->getAmount());
+			delete item;
+			return it->second;
 		}
 	}
-	return 0;
+	// Insert the item in a new slot
+	for (int i=0; i<util::numLetters; i++)
+	{
+		auto it = inventory.find(util::letters[i]);
+		if (it == inventory.end())
+		{
+			std::pair<symbol,Item*> in(util::letters[i], item);
+			inventory.insert(it, in);
+			return item;
+		}
+	}
+	// It is the developer's responsibility to make sure there's room to insert
+	assert(false);
+	return item;
 }
 
-void Creature::removeItem(Item* item, bool del)
+void Creature::removeItem(Item* item, int num, bool del)
 {
-	for (std::map<symbol, Item*>::iterator it=inventory.begin(); it!=inventory.end(); it++)
+	for (auto it = inventory.begin(); it != inventory.end(); it++)
 	{
-		if (item == (*it).second)
+		if (item == it->second)
 		{
-			if (del && (*it).second != NULL)
+			assert(item->getAmount() >= num);
+			if (item->getAmount() == num)
 			{
-				delete (*it).second;
-				(*it).second = NULL;
+				if (del) delete item;
+				inventory.erase(it);
 			}
-			inventory.erase(it);
+			else if (!del)
+			{
+				item->changeAmount(-num);
+				it->second = item->clone();
+				item->setAmount(num);
+			}
+			else
+			{
+				item->changeAmount(-num);
+			}
 			break;
 		}
 	}

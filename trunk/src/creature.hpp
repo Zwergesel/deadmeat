@@ -81,8 +81,8 @@ public:
 	void wearArmor(Armor* armor);
 	void takeOffArmor(Armor* armor);
 
-	symbol addItem(Item* item);
-	void removeItem(Item* item, bool del);
+	Item* addItem(Item* item);
+	void removeItem(Item* item, int num, bool del);
 
 	int attack(Creature* target);
 	int rangedAttack(Creature* target, Weapon* weapon);

@@ -9,7 +9,7 @@ Armor::Armor()
 }
 
 Armor::Armor(std::string n, uint f, symbol s, TCODColor c, int d, int e, int h, ArmorSlot as):
-	Item(n, f, s, c), defense(d), enchantment(e), hindrance(h), slot(as)
+	Item(n,f,s,c,1), defense(d), enchantment(e), hindrance(h), slot(as)
 {
 	type = ITEM_ARMOR;
 	strType = "armor";

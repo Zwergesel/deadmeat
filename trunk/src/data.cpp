@@ -49,8 +49,8 @@ void fillFactoryTemplates()
 	Weapon sword("long sword", F_NEUTER, '(', TCODColor::red, 15, 20, 12, 2, 8, 0, 1, EFFECT_NONE, 1);
 	Weapon dagger("dagger", F_NEUTER, '(', TCODColor::red, 7, 10, 8, 1, 4, 0, 1, EFFECT_NONE, 1);
 	Weapon halberd("halberd", F_NEUTER, '(', TCODColor::red, 22, 40, 15, 2, 10, 0, 2, EFFECT_NONE, 1);
-	Item item1("item1", F_NEUTER | F_AN, '1', TCODColor::blue);
-	Item item2("item2", F_NEUTER | F_AN, '2', TCODColor::green);
+	Item item1("item1", F_NEUTER | F_AN, '1', TCODColor::blue, 1);
+	Item item2("item2", F_NEUTER | F_AN, '2', TCODColor::green, 1);
 	Weapon bow("longbow", F_NEUTER, '(', TCODColor::cyan, 25, 25, 30, 2, 10, 0, 1, EFFECT_NONE, 20);
 	Armor body("uber armor", F_NEUTER | F_AN, ')', TCODColor::black, 100, 2, 10, ARMOR_BODY);
 	Armor helmet("prussian pickelhaube", F_NEUTER, ')', TCODColor::black, 50, 1, 0, ARMOR_HAT);

@@ -182,25 +182,48 @@ bool Level::objectAt(Point p, Object& obj)
 	return false;
 }
 
-void Level::addItem(Item* i, Point pos)
+Item* Level::addItem(Item* item, Point pos)
 {
-	items.push_back(std::pair<Point, Item*>(pos, i));
-}
-
-void Level::removeItem(Item* i, bool del)
-{
-	for (std::vector<std::pair<Point, Item*> >::iterator it=items.begin(); it<items.end(); it++)
+	// Try stacking the item
+	for (auto it = items.begin(); it != items.end(); it++)
 	{
-		if ((*it).second == i)
+		if (it->first == pos && item->canStackWith(it->second))
 		{
-			items.erase(it);
-			break;
+			assert(it->second != item);
+			it->second->changeAmount(item->getAmount());
+			delete item;
+			return it->second;
 		}
 	}
-	if (del && i != NULL)
+	// Stacking is not possible
+	items.push_back(std::pair<Point, Item*>(pos, item));
+	return item;
+}
+
+void Level::removeItem(Item* item, int num, bool del)
+{
+	for (auto it = items.begin(); it != items.end(); it++)
 	{
-		delete i;
-		i = NULL;
+		if (item == it->second)
+		{
+			assert(item->getAmount() >= num);
+			if (item->getAmount() == num)
+			{
+				if (del) delete item;
+				items.erase(it);
+			}
+			else if (!del)
+			{
+				item->changeAmount(-num);
+				it->second = item->clone();
+				item->setAmount(num);
+			}
+			else
+			{
+				item->changeAmount(-num);
+			}
+			break;
+		}
 	}
 }
 
