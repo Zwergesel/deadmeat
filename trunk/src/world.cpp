@@ -467,10 +467,10 @@ void World::buildFovMap()
 	fovMap = new TCODMap(levels[currentLevel]->getWidth(), levels[currentLevel]->getHeight());
 	for (int x=0; x<levels[currentLevel]->getWidth(); x++)
 		for (int y=0; y<levels[currentLevel]->getHeight(); y++)
-			{
-				Tile t = world.levels[currentLevel]->getTile(Point(x,y));
-				world.fovMap->setProperties(x,y,world.tileSet->isTransparent(t),world.tileSet->isWalkable(t));
-			}
+		{
+			Tile t = world.levels[currentLevel]->getTile(Point(x,y));
+			world.fovMap->setProperties(x,y,world.tileSet->isTransparent(t),world.tileSet->isWalkable(t));
+		}
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/

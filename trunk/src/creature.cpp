@@ -473,17 +473,6 @@ void Creature::setBaseWeapon(Weapon base)
 
 symbol Creature::addItem(Item* item)
 {
-  if(item->isStackable())
-  {
-    for(auto it=inventory.begin(); it!=inventory.end(); it++)
-    {
-      if((*it).second->stacksWith(item))
-      {
-        (*it).second->setCount((*it).second->getCount() + item->getCount());
-        return (*it).first;
-      }
-    }
-  }
 	for (int i=0; i<util::numLetters; i++)
 	{
 		if (inventory.insert(std::pair<symbol, Item*>(util::letters[i], item)).second)
@@ -496,9 +485,9 @@ symbol Creature::addItem(Item* item)
 
 void Creature::removeItem(Item* item, bool del)
 {
-	for (auto it=inventory.begin(); it!=inventory.end(); it++)
+	for (std::map<symbol, Item*>::iterator it=inventory.begin(); it!=inventory.end(); it++)
 	{
-    if (!item->isStackable() && item == (*it).second)
+		if (item == (*it).second)
 		{
 			if (del && (*it).second != NULL)
 			{
@@ -506,22 +495,8 @@ void Creature::removeItem(Item* item, bool del)
 				(*it).second = NULL;
 			}
 			inventory.erase(it);
-			return;
+			break;
 		}
-    else if(item->isStackable() && item->stacksWith((*it).second))
-    {
-      (*it).second->setCount((*it).second->getCount() - 1);
-      if((*it).second->getCount() <= 0)
-      {
-        if (del && (*it).second != NULL)
-			  {
-				  delete (*it).second;
-				  (*it).second = NULL;
-			  }
-			  inventory.erase(it);
-			  return;
-      }
-    }
 	}
 }
 

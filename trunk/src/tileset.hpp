@@ -26,13 +26,13 @@ enum Tile
 
 enum TerrainType
 {
-	TT_GROUND,	// walkable, transparent, !blocking
-	TT_CURTAIN, // walkable, !transparent, !blocking
-	TT_WALL,	// !walkable, !transparent, blocking
-	TT_WINDOW,	// !walkable, transparent, blocking
-	TT_WATER,	// !walkable, transparent, !blocking
-	TT_PIT,		// !walkable, transparent, !blocking
-	NUM_TERRAINTYPE
+  TT_GROUND,	// walkable, transparent, !blocking
+  TT_CURTAIN, // walkable, !transparent, !blocking
+  TT_WALL,	// !walkable, !transparent, blocking
+  TT_WINDOW,	// !walkable, transparent, blocking
+  TT_WATER,	// !walkable, transparent, !blocking
+  TT_PIT,		// !walkable, transparent, !blocking
+  NUM_TERRAINTYPE
 };
 
 struct TileInfo

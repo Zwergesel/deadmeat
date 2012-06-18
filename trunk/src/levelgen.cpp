@@ -94,16 +94,16 @@ Level* LevelGen::generateLevel(int levelId, LEVELTYPE type)
 	switch (type)
 	{
 	case LEVELTYPE_SMAUGS_LAIR:
-		{
-			Level* l = generateCaveLevel(levelId, 100, 80);
-			RandomTable lair;
-			lair.add("red baby dragon", 100).add("purple baby dragon", 200).add("blue baby dragon", 100);
-			l->populate(lair, 12);
-			Creature* smaug = factory.spawnCreature("Smaug");
-			smaug->moveTo(l->getRandomLocation(WALKABLE | NO_CREATURE));
-			l->addCreature(smaug, world.time);
-			return l;
-		}
+	{
+		Level* l = generateCaveLevel(levelId, 100, 80);
+		RandomTable lair;
+		lair.add("red baby dragon", 100).add("purple baby dragon", 200).add("blue baby dragon", 100);
+		l->populate(lair, 12);
+		Creature* smaug = factory.spawnCreature("Smaug");
+		smaug->moveTo(l->getRandomLocation(WALKABLE | NO_CREATURE));
+		l->addCreature(smaug, world.time);
+		return l;
+	}
 	case LEVELTYPE_CAVE:
 		return generateCaveLevel(levelId, rng.getInt(40, 100), rng.getInt(20, 80));
 	case LEVELTYPE_ROOM:
@@ -591,7 +591,7 @@ Level* LevelGen::generateForestLevel(int levelId, int width, int height)
 	for (int x=0; x<width; x++) for (int y=0; y<height; y++)
 		{
 			if (map.getValue(x,y) > std::min(0.1, -1.0 + std::min(std::min(x,width-x-1),std::min(y,height-y-1)) * 0.25)
-				|| rng->getInt(0,99) < 8)
+			    || rng->getInt(0,99) < 8)
 			{
 				m->setTile(Point(x,y), rng->getInt(0,2) == 0 ? TILE_TREE2 : TILE_TREE1);
 			}
@@ -600,42 +600,65 @@ Level* LevelGen::generateForestLevel(int levelId, int width, int height)
 				m->setTile(Point(x,y), TILE_DARK_GRASS);
 			}
 		}
+
 	bool* bfs = new bool[width*height];
 	std::memset(bfs, sizeof(bfs), 0);
 	Point start = m->getRandomLocation(WALKABLE);
 	bool complete;
-	
+
 	do
 	{
 		std::deque<Point> deq;
 		deq.push_back(start);
 		bfs[start.x+width*start.y] = true;
-	
+
 		// Flood fill level
 		while (!deq.empty())
 		{
-			Point p = deq.front(); deq.pop_front();
+			Point p = deq.front();
+			deq.pop_front();
 			Point t = p + Point(-1,0);
-			if (p.x > 0 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x+width*t.y]) { bfs[t.x+width*t.y] = true; deq.push_back(t); }
+			if (p.x > 0 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x+width*t.y])
+			{
+				bfs[t.x+width*t.y] = true;
+				deq.push_back(t);
+			}
 			t = p + Point(+1,0);
-			if (p.x < width-1 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x+width*t.y]) { bfs[t.x+width*t.y] = true; deq.push_back(t); }
+			if (p.x < width-1 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x+width*t.y])
+			{
+				bfs[t.x+width*t.y] = true;
+				deq.push_back(t);
+			}
 			t = p + Point(0,-1);
-			if (p.y > 0 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x+width*t.y]) { bfs[t.x+width*t.y] = true; deq.push_back(t); }
+			if (p.y > 0 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x+width*t.y])
+			{
+				bfs[t.x+width*t.y] = true;
+				deq.push_back(t);
+			}
 			t = p + Point(0,+1);
-			if (p.y < height-1 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x+width*t.y]) { bfs[t.x+width*t.y] = true; deq.push_back(t); }
+			if (p.y < height-1 && m->getTile(t) == TILE_DARK_GRASS && !bfs[t.x+width*t.y])
+			{
+				bfs[t.x+width*t.y] = true;
+				deq.push_back(t);
+			}
 		}
-		
+
 		// Check whether whole level is filled
 		complete = true;
 		Point end;
-		
+
 		for (int x=0; x<width; x++) for (int y=0; y<height; y++)
-		{
-			if (m->getTile(Point(x,y)) == TILE_DARK_GRASS && !bfs[x+width*y]) { end = Point(x,y); complete = false; break; }
-		}
-		
+			{
+				if (m->getTile(Point(x,y)) == TILE_DARK_GRASS && !bfs[x+width*y])
+				{
+					end = Point(x,y);
+					complete = false;
+					break;
+				}
+			}
+
 		if (complete) break;
-		
+
 		// Build a path between disconnected areas
 		ForestPathFinding pathFinding;
 		TCODDijkstra path(width,height,&pathFinding,m,0.0f);
@@ -647,10 +670,11 @@ Level* LevelGen::generateForestLevel(int levelId, int width, int height)
 			path.walk(&p.x,&p.y);
 			m->setTile(p, TILE_DARK_GRASS);
 		}
-		
+
 		start = end;
-	} while (true);
-	
+	}
+	while (true);
+
 	delete[] bfs;
 
 	placeEntrances(levelId, m);
