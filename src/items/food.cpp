@@ -9,7 +9,7 @@ Food::Food()
 }
 
 Food::Food(std::string n, uint f, symbol s, TCODColor c, int u, int t):
-	Item(n, f, s, c), nutrition(u), eatTime(t)
+	Item(n,f,s,c,1), nutrition(u), eatTime(t)
 {
 	type = ITEM_FOOD;
 	strType = "food";

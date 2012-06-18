@@ -26,12 +26,13 @@ protected:
 	uint formatFlags;
 	symbol sym;
 	TCODColor color;
+	int amount;
 	ITEM_TYPE type;
 	std::string strType;
 
 public:
 	Item();
-	Item(std::string name, uint format, symbol sym, TCODColor color);
+	Item(std::string name, uint format, symbol sym, TCODColor color, int amount);
 	virtual ~Item();
 	virtual Item* clone();
 
@@ -42,6 +43,10 @@ public:
 	uint getFormatFlags();
 	virtual std::string toString();
 	std::string typeString();
+	int getAmount();
+	void setAmount(int n);
+	void changeAmount(int n);
+	bool canStackWith(Item* compare);
 
 	virtual unsigned int save(Savegame& sg);
 	virtual void load(LoadBlock& load);

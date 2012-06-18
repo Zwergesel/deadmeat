@@ -64,8 +64,8 @@ public:
 	std::vector<std::pair<Point, Item*> > getItems();
 	void addObject(Object obj, Point pos);
 	bool objectAt(Point p, Object& obj);
-	void addItem(Item* i, Point pos);
-	void removeItem(Item* i, bool del);
+	Item* addItem(Item* item, Point pos);
+	void removeItem(Item* item, int num, bool del);
 
 	Point chooseRandomPoint(std::vector<Point>& list, bool erase = false);
 	std::vector<Point> getMatchingLocations(uint flags);

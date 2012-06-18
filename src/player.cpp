@@ -246,16 +246,14 @@ int Player::actionPickup()
 int Player::actionPickup(Item* item)
 {
 	Level* level = world.levels[world.currentLevel];
-	symbol s = creature->addItem(item);
-	if (s != 0)
-	{
-		std::stringstream msg;
-		msg << "You pick up [" << s << "] " << util::format(FORMAT_INDEF, item->toString(), item->getFormatFlags()) << ".";
-		world.addMessage(msg.str());
-		level->removeItem(item, false);
-		return 10;
-	}
-	return 0;
+	symbol s;
+	// TODO: make sure there's room to pick it up
+	level->removeItem(item, item->getAmount(), false);
+	std::stringstream msg;
+	msg << "You pick up " << util::format(FORMAT_INDEF, item->toString(), item->getFormatFlags()) << ".";
+	world.addMessage(msg.str());
+	item = creature->addItem(item);
+	return 10;
 }
 
 int Player::actionDrop()
@@ -286,7 +284,7 @@ int Player::actionDrop(Item* item)
 		creature->wieldMainWeapon(NULL);
 		creature->setAttackSkill(skills[SKILL_ATTACK].value);
 	}
-	creature->removeItem(item, false);
+	creature->removeItem(item, item->getAmount(), false);
 	msg << "You drop " << util::format(FORMAT_INDEF, item->toString(), item->getFormatFlags()) << ".";
 	world.addMessage(msg.str());
 	level->addItem(item, creature->getPos());
@@ -385,7 +383,7 @@ int Player::actionEat(Item* item)
 	addNutrition(f->getNutrition());
 	int time = f->getEatTime();
 
-	creature->removeItem(item, true);
+	creature->removeItem(item, 1, true);
 
 	return time;
 }
