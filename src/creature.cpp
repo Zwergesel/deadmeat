@@ -213,8 +213,8 @@ void Creature::die(Creature* instigator)
 		std::stringstream msg;
 		instigator->isControlled() ?
 		(msg << "You kill ") :
-		(msg << util::format(FORMAT_DEF, instigator->getName(), instigator->getFormatFlags(), true) << " kills");
-		msg << util::format(FORMAT_DEF, name, formatFlags) << ".";
+		(msg << util::format(FORMAT_DEF, instigator, true) << " kills");
+		msg << util::format(FORMAT_DEF, this) << ".";
 		world.addMessage(msg.str());
 		// Experience for player
 		if (instigator->isControlled()) world.player->incExperience(expValue);
@@ -222,7 +222,7 @@ void Creature::die(Creature* instigator)
 	else
 	{
 		std::stringstream msg;
-		msg << util::format(FORMAT_DEF, name, formatFlags, true) << " dies.";
+		msg << util::format(FORMAT_DEF, this, true) << " dies.";
 		world.addMessage(msg.str());
 	}
 
@@ -375,9 +375,9 @@ int Creature::attack(Creature* target)
 		if (hit > 175) damage *= 2;
 		std::stringstream msg;
 		controlled ? (msg << "You hit ") :
-		(msg << util::format(FORMAT_DEF, name, formatFlags, true) << " hits ");
+		(msg << util::format(FORMAT_DEF, this, true) << " hits ");
 		target->isControlled() ? (msg << "you for ") :
-		(msg << util::format(FORMAT_DEF, target->getName(), target->getFormatFlags()) << " for ");
+		(msg << util::format(FORMAT_DEF, target) << " for ");
 		msg << damage << " damage.";
 		world.addMessage(msg.str());
 		target->hurt(damage, this);
@@ -386,9 +386,9 @@ int Creature::attack(Creature* target)
 	{
 		std::stringstream msg;
 		controlled ? (msg << "You miss ") :
-		(msg << util::format(FORMAT_DEF, name, formatFlags, true) << " misses ");
+		(msg << util::format(FORMAT_DEF, this, true) << " misses ");
 		target->isControlled() ? (msg << "you.") :
-		(msg << util::format(FORMAT_DEF, target->getName(), target->getFormatFlags()) << ".");
+		(msg << util::format(FORMAT_DEF, target) << ".");
 		world.addMessage(msg.str());
 	}
 
@@ -436,9 +436,9 @@ int Creature::rangedAttack(Creature* target, Weapon* w)
 		if (hit > 175) damage *= 2;
 		std::stringstream msg;
 		controlled ? (msg << "You shoot ") :
-		(msg << util::format(FORMAT_DEF, name, formatFlags, true) << " shoots ");
+		(msg << util::format(FORMAT_DEF, this, true) << " shoots ");
 		target->isControlled() ? (msg << "you for ") :
-		(msg << util::format(FORMAT_DEF, target->getName(), target->getFormatFlags()) << " for ");
+		(msg << util::format(FORMAT_DEF, target) << " for ");
 		msg << damage << " damage.";
 		world.addMessage(msg.str());
 		target->hurt(damage, this);
@@ -447,9 +447,9 @@ int Creature::rangedAttack(Creature* target, Weapon* w)
 	{
 		std::stringstream msg;
 		controlled ? (msg << "You miss ") :
-		(msg << util::format(FORMAT_DEF, name, formatFlags, true) << " misses ");
+		(msg << util::format(FORMAT_DEF, this, true) << " misses ");
 		target->isControlled() ? (msg << "you.") :
-		(msg << util::format(FORMAT_DEF, target->getName(), target->getFormatFlags()) << ".");
+		(msg << util::format(FORMAT_DEF, target) << ".");
 		world.addMessage(msg.str());
 	}
 
@@ -469,6 +469,21 @@ void Creature::setDefenseSkill(int value)
 void Creature::setBaseWeapon(Weapon base)
 {
 	baseWeapon = base;
+}
+
+symbol Creature::expectedInventoryLetter(Item* item)
+{
+	for (auto it = inventory.begin(); it != inventory.end(); it++)
+	{
+		if (item->canStackWith(it->second)) return it->first;
+	}
+	if ((int)inventory.size() == util::numLetters) return 0;
+	for (int i=0; i<util::numLetters; i++)
+	{
+		if (inventory.find(util::letters[i]) == inventory.end()) return util::letters[i];
+	}
+	assert(false);
+	return 0;
 }
 
 Item* Creature::addItem(Item* item)

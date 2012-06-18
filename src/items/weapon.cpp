@@ -101,7 +101,7 @@ unsigned int Weapon::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Weapon", id);
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("speed", speed);
+	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("amount", amount) ("speed", speed);
 	store ("hitBonus", hitBonus) ("baseDamage", baseDamage) ("numDice", numDice);
 	store ("diceMax", diceMax) ("enchantment", enchantment);
 	store ("hands", hands) ("effect", effect) ("range", range);
@@ -112,7 +112,7 @@ unsigned int Weapon::save(Savegame& sg)
 void Weapon::load(LoadBlock& load)
 {
 	int e;
-	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("speed", speed);
+	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("amount", amount) ("speed", speed);
 	load ("hitBonus", hitBonus) ("baseDamage", baseDamage) ("numDice", numDice);
 	load ("diceMax", diceMax) ("enchantment", enchantment) ("hands", hands) ("effect", e);
 	load ("range", range);

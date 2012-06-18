@@ -38,7 +38,7 @@ WeaponEffect Ammo::getEffect()
 std::string Ammo::toString()
 {
 	std::stringstream ss;
-	ss << amount << " " << (enchantment < 0 ? "" : "+") << enchantment << " " << name;
+	ss << (enchantment < 0 ? "" : "+") << enchantment << " " << name;
 	return ss.str();
 }
 
@@ -49,7 +49,7 @@ unsigned int Ammo::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Ammo", id);
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color);
+	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("amount", amount);
 	store ("enchantment", enchantment) ("effect", effect);
 	sg << store;
 	return id;
@@ -58,7 +58,7 @@ unsigned int Ammo::save(Savegame& sg)
 void Ammo::load(LoadBlock& load)
 {
 	int e;
-	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color);
+	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("amount", amount);
 	load ("enchantment", enchantment) ("effect", e);
 	if (e < 0 || e >= NUM_EFFECT) throw SavegameFormatException("Ammo::load _ effect out of range");
 	effect = static_cast<WeaponEffect>(e);
