@@ -1,0 +1,48 @@
+#summary Spells in Deadmeat
+
+=Spells=
+
+==Voodoo==
+  # Cripple - Slow Monster
+  # Frenzy - Puts the player into a killing frenzy that gradually reduces health
+  # Inner demons - Causes intelligent enemies to flee
+  # Feast - Convert a corpse into health points and mana
+  # Raise undead - Reanimates the corpse of a fallen enemy
+  # Trance - Teleports the player to the trance plane where he may find help
+  # Soul Switch - Change body with another creature
+
+==Elemental==
+  # Fire - Fireball that hits a single target
+  # Water - The player's body becomes liquid, allowing him to move through narrow spaces (keyholes)
+  # Ice - Freezes an enemy for some time
+  # Stone - Destroys a piece of wall
+  # Lightning - Targets all enemies in a line
+  # Wind - Allows the player to fly for a short time
+  # Earth - Creates an earthquake that damages creatures in a circle around the player
+
+==Clerical==
+  # Light - Lights up an area around the player, which also reveals invisible enemies
+  # Reveal Evil - Reveals all evil enemies in a large radius around the player
+  # Cure - Cures sickness and other ailments
+  # Remove Curse - Removes the curse from an item
+  # Turn Undead - Instantly kills undead foes
+  # Divine Protection - Reduces all damage taken by a large percentage
+  # Cancellation - Cancels the effects of magic and removes magical abilities
+
+==Nature==
+  # Falcon Eye - Reveals an area of the map
+  # Heal Wounds - Heals damage
+  # Growth - Instantly grow a bush of delicious berries on any suitable surface
+  # Summon Help - Calls an animal to the player's rescue
+  # Regeneration - Greatly increases health regeneration
+  # Spirit Form - Transforms the player into his spirit animal for a limited time
+  # Nature's Friend - Charms a monster to make it the player's pet
+
+==Psionic==
+  # Force Field - Blocks a single square for 15 seconds
+  # Guardian Shield - Surrounds the player with a shield that absorbs damage
+  # Blink - Teleport a short distance
+  # Force Cage - Blocks all empty squares around the player for 30 seconds
+  # Chrono Boost - Speeds everything the player does up for a short while
+  # Recall - Allows to teleport to a previously selected home destination
+  # Invisibility - Makes player invisible for a short time
