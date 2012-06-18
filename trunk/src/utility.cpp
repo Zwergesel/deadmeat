@@ -1,4 +1,7 @@
 #include "utility.hpp"
+#include "creature.hpp"
+#include "item.hpp"
+#include "object.hpp"
 #include <cctype>
 
 int util::sign(int x)
@@ -37,6 +40,32 @@ std::string util::format(FormatRequest req, const std::string& name, uint flags,
 		break;
 	}
 	return cap ? util::capitalize(result) : result;
+}
+
+std::string util::format(FormatRequest req, Creature* c, bool cap)
+{
+	return format(req, c->getName(), c->getFormatFlags(), cap);
+}
+
+std::string util::format(FormatRequest req, Item* i, bool cap)
+{
+	if (i->getAmount() > 1)
+	{
+		uint flags = i->getFormatFlags();
+		flags |= F_PLURAL;
+		std::stringstream ss;
+		ss << i->getAmount() << " " << plural(i->toString());
+		return format(req, ss.str(), flags, cap);
+	}
+	else
+	{
+		return format(req, i->toString(), i->getFormatFlags(), cap);
+	}
+}
+
+std::string util::format(FormatRequest req, Object* obj, bool cap)
+{
+	return format(req, obj->toString(), obj->getFormatFlags(), cap);
 }
 
 std::string util::capitalize(std::string str)

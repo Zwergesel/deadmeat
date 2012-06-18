@@ -165,13 +165,13 @@ int Player::actionLook(Point pos)
 		if (c != NULL && c != creature)
 		{
 			// ...see the creature there...
-			msg << "You see " << util::format(FORMAT_INDEF, c->getName(), c->getFormatFlags()) << " here.";
+			msg << "You see " << util::format(FORMAT_INDEF, c) << " here.";
 			world.addMessage(msg.str());
 		}
 		else if (items.size() == 1)
 		{
 			// ...or the items if there is no creature
-			msg << "You see " << util::format(FORMAT_INDEF, items[0]->toString(), items[0]->getFormatFlags()) << " here.";
+			msg << "You see " << util::format(FORMAT_INDEF, items[0]) << " here.";
 			world.addMessage(msg.str());
 		}
 		else if (items.size() >= 1)
@@ -181,7 +181,7 @@ int Player::actionLook(Point pos)
 			for (std::vector<Item*>::iterator it=items.begin(); it != items.end();)
 			{
 				std::stringstream strlist;
-				strlist << util::format(FORMAT_INDEF, (*it)->toString(), (*it)->getFormatFlags());
+				strlist << util::format(FORMAT_INDEF, *it);
 				it++;
 				if (it != items.end()) strlist << ",";
 				world.addMessage(strlist.str());
@@ -189,7 +189,7 @@ int Player::actionLook(Point pos)
 		}
 		else if (level->objectAt(pos, obj))
 		{
-			msg << "You see " << util::format(FORMAT_INDEF, obj.toString(), obj.getFormatFlags()) << " here.";
+			msg << "You see " << util::format(FORMAT_INDEF, &obj) << " here.";
 			world.addMessage(msg.str());
 		}
 		else if (c != NULL && c == creature)
@@ -202,7 +202,7 @@ int Player::actionLook(Point pos)
 			}
 			else
 			{
-				msg << "You think that you look sexy in " << util::format(FORMAT_YOUR, a->getName(), a->getFormatFlags()) << ".";
+				msg << "You think that you look sexy in " << util::format(FORMAT_YOUR, a) << ".";
 				world.addMessage(msg.str(), true);
 			}
 		}
@@ -246,14 +246,22 @@ int Player::actionPickup()
 int Player::actionPickup(Item* item)
 {
 	Level* level = world.levels[world.currentLevel];
-	symbol s;
-	// TODO: make sure there's room to pick it up
-	level->removeItem(item, item->getAmount(), false);
+	symbol s = creature->expectedInventoryLetter(item);
 	std::stringstream msg;
-	msg << "You pick up " << util::format(FORMAT_INDEF, item->toString(), item->getFormatFlags()) << ".";
-	world.addMessage(msg.str());
-	item = creature->addItem(item);
-	return 10;
+	if (s != 0)
+	{
+		level->removeItem(item, item->getAmount(), false);
+		msg << "You pick up [" << s << "] " << util::format(FORMAT_INDEF, item) << ".";
+		world.addMessage(msg.str());
+		item = creature->addItem(item);
+		return 10; // TODO: why 10?
+	}
+	else
+	{
+		msg << "You don't have enough space in your backpack for " << util::format(FORMAT_INDEF, item) << ".";
+		world.addMessage(msg.str());
+		return 0;
+	}
 }
 
 int Player::actionDrop()
@@ -285,7 +293,7 @@ int Player::actionDrop(Item* item)
 		creature->setAttackSkill(skills[SKILL_ATTACK].value);
 	}
 	creature->removeItem(item, item->getAmount(), false);
-	msg << "You drop " << util::format(FORMAT_INDEF, item->toString(), item->getFormatFlags()) << ".";
+	msg << "You drop " << util::format(FORMAT_INDEF, item) << ".";
 	world.addMessage(msg.str());
 	level->addItem(item, creature->getPos());
 	return 10;
@@ -300,7 +308,7 @@ int Player::actionWield(Item* itemObj)
 	Weapon* weapon = static_cast<Weapon*>(itemObj);
 	if (creature->getMainWeapon() == weapon)
 	{
-		msg << "You are already wielding " << util::format(FORMAT_DEF, weapon->toString(), weapon->getFormatFlags()) << ".";
+		msg << "You are already wielding " << util::format(FORMAT_DEF, weapon) << ".";
 		world.addMessage(msg.str());
 		return 0;
 	}
@@ -308,7 +316,7 @@ int Player::actionWield(Item* itemObj)
 	{
 		creature->wieldMainWeapon(weapon);
 		creature->setAttackSkill(weapon->getRange() > 1 ? skills[SKILL_RANGED_ATTACK].value : skills[SKILL_ATTACK].value);
-		msg << "You are now wielding " << util::format(FORMAT_INDEF, weapon->toString(), weapon->getFormatFlags()) << ".";
+		msg << "You are now wielding " << util::format(FORMAT_INDEF, weapon) << ".";
 		world.addMessage(msg.str());
 		return 30;
 	}
@@ -328,7 +336,7 @@ int Player::actionWear(Item* itemObj)
 	if (creature->getArmor(armor->getSlot()) == armor)
 	{
 		state = STATE_DEFAULT;
-		msg << "You are already wearing " << util::format(FORMAT_DEF, armor->toString(), armor->getFormatFlags()) << ".";
+		msg << "You are already wearing " << util::format(FORMAT_DEF, armor) << ".";
 		world.addMessage(msg.str(), true);
 		return 0;
 	}
@@ -344,7 +352,7 @@ int Player::actionWear(Item* itemObj)
 		{
 			creature->wearArmor(armor);
 			state = STATE_DEFAULT;
-			msg << "You finish putting on " << util::format(FORMAT_INDEF, armor->toString(), armor->getFormatFlags()) << ".";
+			msg << "You finish putting on " << util::format(FORMAT_INDEF, armor) << ".";
 			world.addMessage(msg.str());
 			return 0;
 		}
@@ -363,7 +371,7 @@ int Player::actionTakeoff(Item* item)
 	creature->takeOffArmor(armor);
 
 	std::stringstream msg;
-	msg << "You take off " << util::format(FORMAT_YOUR, armor->toString(), armor->getFormatFlags()) << ".";
+	msg << "You take off " << util::format(FORMAT_YOUR, armor) << ".";
 	world.addMessage(msg.str());
 
 	return 50;
@@ -480,7 +488,7 @@ int Player::actionRangedAttack(Point pos)
 	if (w->getRange()*w->getRange() < Point::sqlen(creature->getPos() - pos))
 	{
 		std::stringstream msg;
-		msg << "That target is out of range of " << util::format(FORMAT_YOUR, w->getName(), w->getFormatFlags()) << ".";
+		msg << "That target is out of range of " << util::format(FORMAT_YOUR, w) << ".";
 		world.addMessage(msg.str());
 		return 0;
 	}
@@ -497,7 +505,7 @@ int Player::actionRangedAttack(Point pos)
 			if (rng->getInt(0,99) < 50)
 			{
 				std::stringstream msg;
-				msg << util::format(FORMAT_DEF, c->getName(), c->getFormatFlags(), true) << " interrupts your shot.";
+				msg << util::format(FORMAT_DEF, c, true) << " interrupts your shot.";
 				world.addMessage(msg.str());
 				// Half shot time when interrupted
 				return static_cast<int>(w->getSpeed() + Creature::FACT_ATSPD * creature->getHindrance()) / 2;

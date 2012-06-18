@@ -81,6 +81,7 @@ public:
 	void wearArmor(Armor* armor);
 	void takeOffArmor(Armor* armor);
 
+	symbol expectedInventoryLetter(Item* item);
 	Item* addItem(Item* item);
 	void removeItem(Item* item, int num, bool del);
 

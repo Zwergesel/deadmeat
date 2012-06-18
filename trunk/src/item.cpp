@@ -53,9 +53,7 @@ uint Item::getFormatFlags()
 
 std::string Item::toString()
 {
-	std::stringstream ss;
-	ss << amount << " " << name;
-	return ss.str();
+	return name;
 }
 
 std::string Item::typeString()
@@ -96,12 +94,12 @@ unsigned int Item::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Item", id);
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color);
+	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("amount", amount);
 	sg << store;
 	return id;
 }
 
 void Item::load(LoadBlock& load)
 {
-	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color);
+	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("amount", amount);
 }

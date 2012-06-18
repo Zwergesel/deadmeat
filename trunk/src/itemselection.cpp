@@ -177,7 +177,7 @@ ItemSelection* ItemSelection::compile(int height)
 				currentRow += 2;
 			}
 			/* Item */
-			compiledStrings.push_back(CompiledData(currentRow, currentLetter, util::format(FORMAT_INDEF, (*it)->toString(), (*it)->getFormatFlags()), false, currentItem));
+			compiledStrings.push_back(CompiledData(currentRow, currentLetter, util::format(FORMAT_INDEF, *it), false, currentItem));
 
 			/* Advance */
 			currentRow++;
@@ -204,7 +204,7 @@ ItemSelection* ItemSelection::compile(int height)
 				currentRow += 2;
 			}
 			/* Item */
-			compiledStrings.push_back(CompiledData(currentRow, it->first, util::format(FORMAT_INDEF, it->second->toString(), it->second->getFormatFlags()), false, currentItem));
+			compiledStrings.push_back(CompiledData(currentRow, it->first, util::format(FORMAT_INDEF, it->second), false, currentItem));
 
 			/* Advance */
 			currentRow++;

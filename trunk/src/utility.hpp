@@ -4,6 +4,10 @@
 #include <algorithm>
 #include <string>
 
+class Creature;
+class Item;
+class Object;
+
 typedef unsigned char symbol;
 typedef unsigned int uint;
 
@@ -53,6 +57,9 @@ namespace util
 	}
 
 	std::string format(FormatRequest req, const std::string& name, uint flags, bool capitalize = false);
+	std::string format(FormatRequest req, Creature* creature, bool capitalize = false);
+	std::string format(FormatRequest req, Item* item, bool capitalize = false);
+	std::string format(FormatRequest req, Object* obj, bool capitalize = false);
 	std::string capitalize(std::string str);
 
 	std::string plural(std::string str);

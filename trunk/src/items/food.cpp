@@ -40,7 +40,7 @@ unsigned int Food::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Food", id);
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color);
+	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("amount", amount);
 	store ("nutrition", nutrition);
 	sg << store;
 	return id;
@@ -48,6 +48,6 @@ unsigned int Food::save(Savegame& sg)
 
 void Food::load(LoadBlock& load)
 {
-	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color);
+	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("amount", amount);
 	load ("nutrition", nutrition);
 }
