@@ -246,13 +246,15 @@ int Player::actionPickup()
 int Player::actionPickup(Item* item)
 {
 	Level* level = world.levels[world.currentLevel];
-	symbol s = creature->addItem(item);
+  symbol s = creature->addItem(item);
 	if (s != 0)
 	{
 		std::stringstream msg;
 		msg << "You pick up [" << s << "] " << util::format(FORMAT_INDEF, item->toString(), item->getFormatFlags()) << ".";
 		world.addMessage(msg.str());
-		level->removeItem(item, false);
+    // we have to delete the item if we added it to a stackable
+    if(creature->getInventory()[s]->getCount() > item->getCount()) level->removeItem(item, true);
+		else level->removeItem(item, false);
 		return 10;
 	}
 	return 0;

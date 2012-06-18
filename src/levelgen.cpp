@@ -600,7 +600,6 @@ Level* LevelGen::generateForestLevel(int levelId, int width, int height)
 				m->setTile(Point(x,y), TILE_DARK_GRASS);
 			}
 		}
-	
 	bool* bfs = new bool[width*height];
 	std::memset(bfs, sizeof(bfs), 0);
 	Point start = m->getRandomLocation(WALKABLE);
