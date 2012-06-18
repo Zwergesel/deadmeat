@@ -9,7 +9,7 @@ Ammo::Ammo()
 }
 
 Ammo::Ammo(std::string n, uint f, symbol s, TCODColor c, int ench, WeaponEffect e):
-	Item(n,f,s,c),enchantment(ench),effect(e)
+	Item(n,f,s,c, true),enchantment(ench),effect(e)
 {
 	type = ITEM_AMMO;
 	strType = "ammunition";
