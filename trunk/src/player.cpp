@@ -141,6 +141,7 @@ int Player::actionMove(int direction)
 			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
 			Object obj;
 			if (level->objectAt(newPos, obj) && obj.getType() == OBJ_STAIRSSAME) world.travel();
+			quickLook();
 			return static_cast<int>(static_cast<float>(creature->getWalkingSpeed()) * diagonal);
 		}
 		else
@@ -155,45 +156,45 @@ int Player::actionMove(int direction)
 int Player::actionLook(Point pos)
 {
 	Level* level = world.levels[world.currentLevel];
-	std::stringstream msg;
 	if (world.fovMap->isInFov(pos.x, pos.y))
 	{
 		// If square is visible...
 		Creature* c = level->creatureAt(pos);
 		std::vector<Item*> items = level->itemsAt(pos);
 		Object obj;
+		bool hasObj = level->objectAt(pos, obj);
+		
 		if (c != NULL && c != creature)
 		{
 			// ...see the creature there...
+			std::stringstream msg;
 			msg << "You see " << util::format(FORMAT_INDEF, c) << " here.";
 			world.addMessage(msg.str());
 		}
 		else if (items.size() == 1)
 		{
 			// ...or the items if there is no creature
-			msg << "You see " << util::format(FORMAT_INDEF, items[0]) << " here.";
+			std::stringstream msg;
+			msg << "You see " << util::format(FORMAT_INDEF, items.front()) << " here.";
 			world.addMessage(msg.str());
 		}
-		else if (items.size() >= 1)
+		else if (items.size() > 1)
 		{
-			msg << "You see several items here:";
+			std::stringstream msg;
+			msg << "You see the following items here:";
 			world.addMessage(msg.str());
 			for (std::vector<Item*>::iterator it=items.begin(); it != items.end();)
 			{
 				std::stringstream strlist;
 				strlist << util::format(FORMAT_INDEF, *it);
 				it++;
-				if (it != items.end()) strlist << ",";
+				strlist << (it == items.end() ? "." : ",");
 				world.addMessage(strlist.str());
 			}
 		}
-		else if (level->objectAt(pos, obj))
+		else if (!hasObj && c != NULL && c == creature)
 		{
-			msg << "You see " << util::format(FORMAT_INDEF, &obj) << " here.";
-			world.addMessage(msg.str());
-		}
-		else if (c != NULL && c == creature)
-		{
+			// Is the player here but nothing else? Look at yourself
 			world.addMessage("You look at yourself...");
 			Armor* a = creature->getArmor(ARMOR_BODY);
 			if (a == NULL)
@@ -202,13 +203,23 @@ int Player::actionLook(Point pos)
 			}
 			else
 			{
+				std::stringstream msg;
 				msg << "You think that you look sexy in " << util::format(FORMAT_YOUR, a) << ".";
 				world.addMessage(msg.str(), true);
 			}
 		}
-		else
+		else if (!hasObj)
 		{
+			// Is there nothing at all here, then describe the tile
+			std::stringstream msg;
 			msg << "You see " << world.tileSet->getDescription(level->getTile(pos)) << " here.";
+			world.addMessage(msg.str());
+		}
+		if (hasObj)
+		{
+			// Always mention the object even if there are creatures or items
+			std::stringstream msg;
+			msg << "You see " << util::format(FORMAT_INDEF, &obj) << " here.";
 			world.addMessage(msg.str());
 		}
 	}
@@ -217,6 +228,40 @@ int Player::actionLook(Point pos)
 		world.addMessage("You cannot see this spot.");
 	}
 	return 0;
+}
+
+void Player::quickLook()
+{
+	Level* level = world.levels[world.currentLevel];
+	std::vector<Item*> items = level->itemsAt(creature->getPos());
+	Object obj;
+	if (items.size() == 1)
+	{
+		std::stringstream msg;
+		msg << "There " << ((items.front()->getFormatFlags() & F_PLURAL) || (items.front()->getAmount() > 1) ? "are " : "is ");
+		msg << util::format(FORMAT_INDEF, items.front()) << " here.";
+		world.addMessage(msg.str());
+	}
+	else if (items.size() > 1)
+	{
+		std::stringstream msg;
+		msg << "There are ";
+		if (items.size() == 2) msg << "a couple of";
+		else if (items.size() == 3) msg << "a few";
+		else if (items.size() <= 5) msg << "a handful of";
+		else if (items.size() <= 8) msg << "several";
+		else if (items.size() <= 13) msg << "many";
+		else msg << "a big pile of";
+		msg << " items here.";
+		world.addMessage(msg.str());
+	}
+	if (level->objectAt(creature->getPos(), obj))
+	{
+		std::stringstream msg;
+		msg << "There " << (obj.getFormatFlags() & F_PLURAL ? "are " : "is ");
+		msg << util::format(FORMAT_INDEF, &obj) << " here.";
+		world.addMessage(msg.str());
+	}
 }
 
 int Player::actionPickup()
@@ -1145,8 +1190,8 @@ const std::string Player::HELP_TEXT =
 
 unsigned int Player::save(Savegame& sg)
 {
-	// saving resets the state
-	state = STATE_DEFAULT;
+	// saving resets the state, except for dressing
+	if (state != STATE_DRESSING) state = STATE_DEFAULT;
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Player", id);

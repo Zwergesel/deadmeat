@@ -29,7 +29,7 @@ Savegame::~Savegame()
 {
 	if (objects != NULL)
 	{
-		delete[] objects;
+		delete objects;
 		objects = NULL;
 	}
 }
@@ -202,6 +202,7 @@ bool Savegame::loadSavegame(std::string fileName)
 		unsigned int numObjects;
 		loadHeader(line, numObjects);
 
+		// Init pointer structures
 		objects = new void*[numObjects+1];
 		for (unsigned int x=0; x <= numObjects; x++) objects[x] = NULL;
 
@@ -214,9 +215,11 @@ bool Savegame::loadSavegame(std::string fileName)
 	{
 		std::cerr << "Savegame is corrupt: " << e.what() << std::endl;
 		loadStream.close();
+		delete[] objects;
 		return false;
 	}
 
+	// Success
 	std::cerr << "Savegame '" << fileName << "' successfully loaded!" << std::endl;
 	loadStream.close();
 	return true;
@@ -320,6 +323,12 @@ void Savegame::loadObject()
 	else if (objClass == "Goblin")
 	{
 		Goblin* obj = new Goblin();
+		objects[id] = static_cast<void*>(obj);
+		obj->load(load);
+	}
+	else if (objClass == "Object")
+	{
+		Object* obj = new Object();
 		objects[id] = static_cast<void*>(obj);
 		obj->load(load);
 	}

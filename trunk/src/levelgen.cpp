@@ -72,7 +72,10 @@ void LevelGen::generateWorld()
 	world.worldNodes.push_back(dungeon[1]);
 	world.worldNodes.push_back(dungeon[2]);
 	world.worldNodes.push_back(boss);
+}
 
+void LevelGen::loadLootTable()
+{
 	loot.add("sword", 30);
 	loot.add("dagger", 150);
 	loot.add("halberd", 30);

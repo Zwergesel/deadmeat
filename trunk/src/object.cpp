@@ -1,4 +1,5 @@
 #include "object.hpp"
+#include "savegame.hpp"
 
 Object::Object()
 {
@@ -58,4 +59,26 @@ TCODColor Object::getColor()
 std::string Object::toString()
 {
 	return name;
+}
+
+/*--------------------- SAVING AND LOADING ---------------------*/
+
+unsigned int Object::save(Savegame& sg)
+{
+	unsigned int id;
+	if (sg.saved(this,&id)) return id;
+	SaveBlock store("Object", id);
+	store ("type", (int) type) ("name", name) ("formatFlags", formatFlags);
+	store ("symbol", sym) ("color", color);
+	sg << store;
+	return id;
+}
+
+void Object::load(LoadBlock& load)
+{
+	int t;
+	load ("type", t) ("name", name) ("formatFlags", formatFlags);
+	load ("symbol", sym) ("color", color);
+	if (t < 0 || t >= NUM_OBJECTTYPES) throw SavegameFormatException("Object::load _ type out of range");
+	type = static_cast<OBJECTTYPE>(t);
 }

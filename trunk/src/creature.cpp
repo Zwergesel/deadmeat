@@ -636,7 +636,9 @@ void Creature::load(LoadBlock& load)
 		ss << "armor" << slot;
 		load (ss.str(), armor[slot]);
 	}
-	baseWeapon = *static_cast<Weapon*>(load.ptr("baseWeapon"));
+	Weapon* w = static_cast<Weapon*>(load.ptr("baseWeapon"));
+	baseWeapon = *w;
+	delete w;
 	load ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	load ("walkingSpeed", walkingSpeed);
 	load ("lastTimeRegen", lastTimeRegen);

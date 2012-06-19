@@ -36,6 +36,7 @@ struct WorldNode
 class LevelGen
 {
 public:
+	static void loadLootTable();
 	static void generateWorld();
 	// level generation functions, returns NULL on invalid parameters
 	static Level* generateLevel(int levelId, LEVELTYPE type);

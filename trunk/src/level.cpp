@@ -365,6 +365,11 @@ unsigned int Level::save(Savegame& sg)
 	{
 		store ("_position", items[d].first).ptr("_item", items[d].second->save(sg));
 	}
+	store("#objects", (int) objects.size());
+	for (unsigned int d=0; d<objects.size(); d++)
+	{
+		store("_position", objects[d].first).ptr("_object", objects[d].second.save(sg));
+	}
 	sg << store;
 	return id;
 }
@@ -390,5 +395,14 @@ void Level::load(LoadBlock& load)
 		load("_position", pos);
 		Item* item = static_cast<Item*>(load.ptr("_item"));
 		items.push_back(std::make_pair(pos,item));
+	}
+	load ("#objects", n);
+	while (n-->0)
+	{
+		Point pos;
+		load("_position", pos);
+		Object* obj = static_cast<Object*>(load.ptr("_object"));
+		objects.push_back(std::make_pair(pos,*obj));
+		delete obj;
 	}
 }
