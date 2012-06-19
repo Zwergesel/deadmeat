@@ -38,8 +38,8 @@ Player::Player(std::string name):
 	attrPoints = 0;
 	skillPoints = 3; // TODO: this is for debug
 	creature = new Creature(name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 200, 75,
-	                        Weapon("bare hands", F_NEUTER | F_PLURAL, '¤', TCODColor::pink, 8, 0, 3, 1, 2, 0, 2, EFFECT_NONE, 1), 0, 10, 0
-	                       );
+		Weapon(8, 0, 3, 1, 2, EFFECT_NONE, 1), 0, 10, 0
+	);
 	creature->setControlled(true);
 	creature->setAttackSkill(/* TODO: Something */0);
 	creature->setDefenseSkill(/* TODO: Something */0);
@@ -231,7 +231,7 @@ int Player::actionPickup()
 	}
 	else if (items.size() == 1)
 	{
-		return actionPickup(items[0]);
+		return actionPickup(items[0], items[0]->getAmount());
 	}
 	else
 	{
@@ -243,14 +243,14 @@ int Player::actionPickup()
 	return 0;
 }
 
-int Player::actionPickup(Item* item)
+int Player::actionPickup(Item* item, int num)
 {
 	Level* level = world.levels[world.currentLevel];
 	symbol s = creature->expectedInventoryLetter(item);
 	std::stringstream msg;
 	if (s != 0)
 	{
-		level->removeItem(item, item->getAmount(), false);
+		level->removeItem(item, num, false);
 		msg << "You pick up [" << s << "] " << util::format(FORMAT_INDEF, item) << ".";
 		world.addMessage(msg.str());
 		item = creature->addItem(item);
@@ -277,7 +277,7 @@ int Player::actionDrop()
 	return 0;
 }
 
-int Player::actionDrop(Item* item)
+int Player::actionDrop(Item* item, int num)
 {
 	Level* level = world.levels[world.currentLevel];
 	std::stringstream msg;
@@ -292,7 +292,7 @@ int Player::actionDrop(Item* item)
 		creature->wieldMainWeapon(NULL);
 		creature->setAttackSkill(skills[SKILL_ATTACK].value);
 	}
-	creature->removeItem(item, item->getAmount(), false);
+	creature->removeItem(item, num, false);
 	msg << "You drop " << util::format(FORMAT_INDEF, item) << ".";
 	world.addMessage(msg.str());
 	level->addItem(item, creature->getPos());
@@ -691,10 +691,10 @@ int Player::processAction()
 			if (world.itemSelection.keyInput(key))
 			{
 				int time = 0;
-				std::vector<Item*> items = world.itemSelection.getSelection();
-				for (std::vector<Item*>::iterator it = items.begin(); it != items.end(); it++)
+				std::vector<std::pair<Item*,int>> items = world.itemSelection.getSelection();
+				for (auto it = items.begin(); it != items.end(); it++)
 				{
-					time = std::max(time, actionPickup(*it));
+					time = std::max(time, actionPickup(it->first, it->second));
 				}
 				state = STATE_DEFAULT;
 				return time;
@@ -711,10 +711,10 @@ int Player::processAction()
 			if (world.itemSelection.keyInput(key))
 			{
 				int time = 0;
-				std::vector<Item*> items = world.itemSelection.getSelection();
-				for (std::vector<Item*>::iterator it = items.begin(); it != items.end(); it++)
+				std::vector<std::pair<Item*,int>> items = world.itemSelection.getSelection();
+				for (auto it = items.begin(); it != items.end(); it++)
 				{
-					time = std::max(time, actionDrop(*it));
+					time = std::max(time, actionDrop(it->first, it->second));
 				}
 				state = STATE_DEFAULT;
 				return time;
@@ -889,7 +889,7 @@ int Player::processAction()
 				if (reply == 'd')
 				{
 					state = STATE_DEFAULT;
-					return actionDrop(item);
+					return actionDrop(item, item->getAmount());
 				}
 				else if (reply == 'w')
 				{

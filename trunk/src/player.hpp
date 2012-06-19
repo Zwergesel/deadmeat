@@ -65,13 +65,13 @@ private:
 	int actionMove(int direction);
 	int actionLook(Point p);
 	int actionPickup();
-	int actionPickup(Item*);
+	int actionPickup(Item*, int num);
 	int actionWield(Item*);
 	int actionWear(Item*);
 	int actionTakeoff(Item*);
 	int actionEat(Item*);
 	int actionDrop();
-	int actionDrop(Item*);
+	int actionDrop(Item*, int num);
 	int actionRangedAttack(Point p);
 	void actionAutoTargetting();
 	int actionCharInfo(TCOD_key_t key);

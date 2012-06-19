@@ -45,19 +45,19 @@ void fillFactoryTemplates()
 	factory.setTemplate("blue baby dragon", &blubaby);
 	factory.setTemplate("Smaug", &dragon);
 
-	Weapon lightsaber("lightsaber", F_NEUTER, '(', TCODColor::red, 8, 30, 1, 10, 20, 30, 1, EFFECT_NONE, 1);
-	Weapon sword("long sword", F_NEUTER, '(', TCODColor::red, 15, 20, 12, 2, 8, 0, 1, EFFECT_NONE, 1);
-	Weapon dagger("dagger", F_NEUTER, '(', TCODColor::red, 7, 10, 8, 1, 4, 0, 1, EFFECT_NONE, 1);
-	Weapon halberd("halberd", F_NEUTER, '(', TCODColor::red, 22, 40, 15, 2, 10, 0, 2, EFFECT_NONE, 1);
+	Weapon lightsaber("lightsaber", F_NEUTER, '(', TCODColor::red, 1, 8, 30, 1, 10, 20, 30, 1, EFFECT_NONE, 1);
+	Weapon sword("long sword", F_NEUTER, '(', TCODColor::red, 1, 15, 20, 12, 2, 8, 0, 1, EFFECT_NONE, 1);
+	Weapon dagger("dagger", F_NEUTER, '(', TCODColor::red, 1, 7, 10, 8, 1, 4, 0, 1, EFFECT_NONE, 1);
+	Weapon halberd("halberd", F_NEUTER, '(', TCODColor::red, 1, 22, 40, 15, 2, 10, 0, 2, EFFECT_NONE, 1);
 	Item item1("item1", F_NEUTER | F_AN, '1', TCODColor::blue, 1);
 	Item item2("item2", F_NEUTER | F_AN, '2', TCODColor::green, 1);
-	Weapon bow("longbow", F_NEUTER, '(', TCODColor::cyan, 25, 25, 30, 2, 10, 0, 1, EFFECT_NONE, 20);
-	Armor body("uber armor", F_NEUTER | F_AN, ')', TCODColor::black, 100, 2, 10, ARMOR_BODY);
-	Armor helmet("prussian pickelhaube", F_NEUTER, ')', TCODColor::black, 50, 1, 0, ARMOR_HAT);
-	Armor boots("clown shoes", F_NEUTER | F_BOOTS, ')', TCODColor::black, -30, -1, 12, ARMOR_BOOTS);
-	Food food1("beefsteak", F_NEUTER, '%', TCODColor::darkOrange, 2500, 100);
-	Food food2("meat ball", F_NEUTER, '%', TCODColor::orange, 1000, 15);
-	Ammo arrow("arrow", F_NEUTER, '!', TCODColor::cyan, 0, EFFECT_NONE);
+	Weapon bow("longbow", F_NEUTER, '(', TCODColor::cyan, 1, 25, 25, 30, 2, 10, 0, 1, EFFECT_NONE, 20);
+	Armor body("uber armor", F_NEUTER | F_AN, ')', TCODColor::black, 1, 100, 2, 10, ARMOR_BODY);
+	Armor helmet("prussian pickelhaube", F_NEUTER, ')', TCODColor::black, 1, 50, 1, 0, ARMOR_HAT);
+	Armor boots("clown shoes", F_NEUTER | F_BOOTS, ')', TCODColor::black, 1, -30, -1, 12, ARMOR_BOOTS);
+	Food food1("beefsteak", F_NEUTER, '%', TCODColor::darkOrange, 1, 2500, 100);
+	Food food2("meat ball", F_NEUTER, '%', TCODColor::orange, 1, 1000, 15);
+	Ammo arrow("arrow", F_NEUTER, '!', TCODColor::cyan, 5, 0, EFFECT_NONE);
 
 	factory.setTemplate("lightsaber", &lightsaber);
 	factory.setTemplate("sword", &sword);

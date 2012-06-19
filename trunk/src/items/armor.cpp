@@ -8,8 +8,8 @@ Armor::Armor()
 	strType = "armor";
 }
 
-Armor::Armor(std::string n, uint f, symbol s, TCODColor c, int d, int e, int h, ArmorSlot as):
-	Item(n,f,s,c,1), defense(d), enchantment(e), hindrance(h), slot(as)
+Armor::Armor(std::string n, uint f, symbol s, TCODColor c, int x, int d, int e, int h, ArmorSlot as):
+	Item(n,f,s,c,x), defense(d), enchantment(e), hindrance(h), slot(as)
 {
 	type = ITEM_ARMOR;
 	strType = "armor";
@@ -19,7 +19,7 @@ Armor::~Armor() {}
 
 Item* Armor::clone()
 {
-	Armor* copy = new Armor(name, formatFlags, sym, color, defense, enchantment, hindrance, slot);
+	Armor* copy = new Armor(name, formatFlags, sym, color, amount, defense, enchantment, hindrance, slot);
 	return copy;
 }
 

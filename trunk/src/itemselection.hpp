@@ -24,7 +24,7 @@ class ItemSelection
 {
 
 private:
-	std::vector<std::pair<symbol,Item*> > namedChoices;
+	std::vector<std::pair<symbol,Item*>> namedChoices;
 	std::vector<Item*> anonChoices;
 	bool anonymous;
 	bool multiple;
@@ -35,7 +35,8 @@ private:
 	bool compiled;
 	std::vector<CompiledData> compiledStrings;
 	std::vector<int> pageStart;
-	std::vector<bool> selected;
+	std::vector<int> selected;
+	int splitAmount;
 	Item* choice;
 	symbol choiceSymbol;
 	int drawCounter;
@@ -65,9 +66,9 @@ public:
 
 	bool keyInput(TCOD_key_t key); /* returns true if selection should close and result is ready */
 	Item* getItem();
-	std::vector<Item*> getSelection();
+	std::vector<std::pair<Item*,int>> getSelection();
 	symbol getItemSymbol();
-	std::vector<symbol> getSelectionSymbols();
+	std::vector<std::pair<symbol,int>> getSelectionSymbols();
 
 };
 
