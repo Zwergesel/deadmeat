@@ -15,7 +15,7 @@ private:
 
 public:
 	Ammo();
-	Ammo(std::string name, uint format, symbol sym, TCODColor color, int enchantment, WeaponEffect effect);
+	Ammo(std::string name, uint format, symbol sym, TCODColor color, int amount, int enchantment, WeaponEffect effect);
 	~Ammo();
 	Item* clone();
 

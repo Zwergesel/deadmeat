@@ -22,7 +22,7 @@ bool sortAnon(Item* a, Item* b)
 	return false;
 }
 
-ItemSelection::ItemSelection(): anonymous(true),multiple(false),page(0),title(""),compiled(false),choice(NULL)
+ItemSelection::ItemSelection(): anonymous(true),multiple(false),page(0),title(""),compiled(false),splitAmount(0),choice(NULL)
 {
 }
 
@@ -32,6 +32,7 @@ ItemSelection::ItemSelection(const std::vector<std::pair<symbol,Item*> >& choice
 	page(0),
 	title(title),
 	compiled(false),
+	splitAmount(0),
 	choice(NULL),
 	choiceSymbol('\0')
 {
@@ -40,7 +41,7 @@ ItemSelection::ItemSelection(const std::vector<std::pair<symbol,Item*> >& choice
 	if (sort) std::sort(namedChoices.begin(), namedChoices.end(), sortNamed);
 	if (multiple)
 	{
-		selected.assign(namedChoices.size(), false);
+		selected.assign(namedChoices.size(), 0);
 	}
 }
 
@@ -50,6 +51,7 @@ ItemSelection::ItemSelection(const std::map<symbol,Item*>& choices, std::string 
 	page(0),
 	title(title),
 	compiled(false),
+	splitAmount(0),
 	choice(NULL),
 	choiceSymbol('\0')
 {
@@ -61,7 +63,7 @@ ItemSelection::ItemSelection(const std::map<symbol,Item*>& choices, std::string 
 	if (sort) std::sort(namedChoices.begin(), namedChoices.end(), sortNamed);
 	if (multiple)
 	{
-		selected.assign(namedChoices.size(), false);
+		selected.assign(namedChoices.size(), 0);
 	}
 }
 
@@ -71,6 +73,7 @@ ItemSelection::ItemSelection(const std::vector<Item*>& choices, std::string titl
 	page(0),
 	title(title),
 	compiled(false),
+	splitAmount(0),
 	choice(NULL),
 	choiceSymbol('\0')
 {
@@ -79,7 +82,7 @@ ItemSelection::ItemSelection(const std::vector<Item*>& choices, std::string titl
 	if (sort) std::sort(anonChoices.begin(), anonChoices.end(), sortAnon);
 	if (multiple)
 	{
-		selected.assign(anonChoices.size(), false);
+		selected.assign(anonChoices.size(), 0);
 	}
 }
 
@@ -110,34 +113,34 @@ symbol ItemSelection::getItemSymbol()
 	return choiceSymbol;
 }
 
-std::vector<Item*> ItemSelection::getSelection()
+std::vector<std::pair<Item*,int>> ItemSelection::getSelection()
 {
 	assert(multiple);
-	std::vector<Item*> list;
+	std::vector<std::pair<Item*,int>> list;
 	if (anonymous)
 	{
 		for (unsigned int u = 0; u < anonChoices.size(); u++)
 		{
-			if (selected[u]) list.push_back(anonChoices[u]);
+			if (selected[u] > 0) list.push_back(std::make_pair(anonChoices[u], selected[u]));
 		}
 	}
 	else
 	{
 		for (unsigned int u = 0; u < namedChoices.size(); u++)
 		{
-			if (selected[u]) list.push_back(namedChoices[u].second);
+			if (selected[u] > 0) list.push_back(std::make_pair(namedChoices[u].second, selected[u]));
 		}
 	}
 	return list;
 }
 
-std::vector<symbol> ItemSelection::getSelectionSymbols()
+std::vector<std::pair<symbol,int>> ItemSelection::getSelectionSymbols()
 {
 	assert(multiple && !anonymous);
-	std::vector<symbol> list;
+	std::vector<std::pair<symbol,int>> list;
 	for (unsigned int u = 0; u < namedChoices.size(); u++)
 	{
-		if (selected[u]) list.push_back(namedChoices[u].first);
+		if (selected[u] > 0) list.push_back(std::make_pair(namedChoices[u].first, selected[u]));
 	}
 	return list;
 }
@@ -235,21 +238,33 @@ std::string ItemSelection::getNextLine(int* row, bool* category)
 	*row = dat.row;
 	if (dat.category) return dat.text;
 	std::stringstream print;
-	print << dat.letter << ((multiple && selected[dat.itemIndex]) ? " + " : " - ") << dat.text;
+	print << dat.letter;
+	if (multiple && selected[dat.itemIndex] > 0)
+	{
+		int maxAmount = anonymous ? anonChoices[dat.itemIndex]->getAmount() : namedChoices[dat.itemIndex].second->getAmount();
+		print << (selected[dat.itemIndex] == maxAmount ? " + " : " # ");
+	}
+	else
+	{
+		print << " - ";
+	}
+	print << dat.text;
 	return print.str();
 }
 
 /* Return true means the selection has been made */
 bool ItemSelection::keyInput(TCOD_key_t key)
 {
-	if (!compiled) return true;
+	assert(compiled);
 	if (!key.pressed) return false;
+	
+	// Other keys
 	if (key.vk == TCODK_ESCAPE)
 	{
 		// Deselect all and end
 		if (multiple)
 		{
-			selected.assign(anonymous ? anonChoices.size() : namedChoices.size(), false);
+			selected.assign(anonymous ? anonChoices.size() : namedChoices.size(), 0);
 		}
 		else
 		{
@@ -261,35 +276,56 @@ bool ItemSelection::keyInput(TCOD_key_t key)
 	else if (key.vk == TCODK_SPACE)
 	{
 		// Advance one page, quit if the end was reached
+		splitAmount = 0;
 		if (++page >= static_cast<int>(pageStart.size())) return true;
+	}
+	else if (key.vk >= TCODK_0 && key.vk <= TCODK_9)
+	{
+		// Change split amount
+		int digit = key.vk - TCODK_0;
+		splitAmount = 10*splitAmount + digit;
+		return false;
+	}
+	else if (key.vk >= TCODK_KP0 && key.vk <= TCODK_KP9)
+	{
+		// Change split amount
+		int digit = key.vk - TCODK_KP0;
+		splitAmount = 10*splitAmount + digit;
+		return false;
 	}
 	else if (multiple && (key.c == ',' || key.c == '+'))
 	{
 		// Select all on current page
 		selectAllOnPage(true);
+		splitAmount = 0;
 		return false;
 	}
 	else if (multiple && key.c == '-')
 	{
 		// Deselect all on current page
 		selectAllOnPage(false);
+		splitAmount = 0;
 		return false;
 	}
 	else if ((key.c >= 'a' && key.c <= 'z') || (key.c >= 'A' && key.c <= 'Z'))
 	{
 		// Select an item
-		return toggleItem(key.c);
+		bool exit = toggleItem(key.c);
+		splitAmount = 0;
+		return exit;
 	}
 	else if (key.c == '>')
 	{
 		// Advance one page
 		if (page + 1 < static_cast<int>(pageStart.size())) page++;
+		splitAmount = 0;
 		return false;
 	}
 	else if (key.c == '<')
 	{
 		// Go back one page
 		if (page > 0) page--;
+		splitAmount = 0;
 		return false;
 	}
 	return false;
@@ -305,9 +341,15 @@ bool ItemSelection::toggleItem(char c)
 		CompiledData& info = compiledStrings[start++];
 		if (info.letter == c)
 		{
-			if (multiple)
+			int maxAmount = anonymous ? anonChoices[info.itemIndex]->getAmount() : namedChoices[info.itemIndex].second->getAmount();
+			if (multiple && splitAmount > 0)
 			{
-				selected[info.itemIndex] = !selected[info.itemIndex];
+				selected[info.itemIndex] = std::min(splitAmount, maxAmount);
+				return false;
+			}
+			else if (multiple)
+			{
+				selected[info.itemIndex] = selected[info.itemIndex] < maxAmount ? maxAmount : 0;
 				return false;
 			}
 			else if (anonymous)
@@ -334,7 +376,16 @@ void ItemSelection::selectAllOnPage(bool set)
 	while (start < end)
 	{
 		CompiledData info = compiledStrings[start++];
-		if (!info.category) selected[info.itemIndex] = set;
+		if (info.category) continue;
+		if (set)
+		{
+			int maxAmount = anonymous ? anonChoices[info.itemIndex]->getAmount() : namedChoices[info.itemIndex].second->getAmount();
+			selected[info.itemIndex] = maxAmount;
+		}
+		else
+		{
+			selected[info.itemIndex] = 0;
+		}
 	}
 }
 
@@ -350,13 +401,13 @@ ItemSelection* ItemSelection::runFilter()
 	{
 		anonChoices.erase(remove_if(anonChoices.begin(), anonChoices.end(),
 		                            std::bind1st(std::mem_fun(&ItemSelection::removeAnonItem), this)), anonChoices.end());
-		if (multiple) selected.assign(anonChoices.size(), false);
+		if (multiple) selected.assign(anonChoices.size(), 0);
 	}
 	else
 	{
 		namedChoices.erase(remove_if(namedChoices.begin(), namedChoices.end(),
 		                             std::bind1st(std::mem_fun(&ItemSelection::removeNamedItem), this)), namedChoices.end());
-		if (multiple) selected.assign(namedChoices.size(), false);
+		if (multiple) selected.assign(namedChoices.size(), 0);
 	}
 	return this;
 }

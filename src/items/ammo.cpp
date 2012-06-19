@@ -8,8 +8,8 @@ Ammo::Ammo()
 	strType = "ammunition";
 }
 
-Ammo::Ammo(std::string n, uint f, symbol s, TCODColor c, int ench, WeaponEffect e):
-	Item(n,f,s,c,1),enchantment(ench),effect(e)
+Ammo::Ammo(std::string n, uint f, symbol s, TCODColor c, int x, int ench, WeaponEffect e):
+	Item(n,f,s,c,x),enchantment(ench),effect(e)
 {
 	type = ITEM_AMMO;
 	strType = "ammunition";
@@ -21,7 +21,7 @@ Ammo::~Ammo()
 
 Item* Ammo::clone()
 {
-	Ammo* copy = new Ammo(name, formatFlags, sym, color, enchantment, effect);
+	Ammo* copy = new Ammo(name, formatFlags, sym, color, amount, enchantment, effect);
 	return copy;
 }
 
