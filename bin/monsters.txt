@@ -1,63 +1,23 @@
 Version: 0.10
-SavedObjects: 7       
+SavedObjects: 40      
 
 [[Weapon: 3]]
-name: claws
+name: x
 formatFlags: 0
 symbol: 35
 color: 255, 0, 127
-speed: 11
-hitBonus: 0
-baseDamage: 4
-numDice: 1
-diceMax: 3
-enchantment: 0
-hands: 2
-effect: 0
-range: 1
-
-[[Goblin: 2]]
-name: goblin
-formatFlags: 16384
-symbol: 103
-position: 0, 0
-color: 0, 255, 0
-health: 35
-maxHealth: 35
-mana: 0
-maxMana: 0
-controlled: false
-mainWeapon: 0
-armor0: 0
-armor1: 0
-armor2: 0
-baseWeapon: @3
-baseAC: 15
-attackSkill: 0
-defenseSkill: 0
-walkingSpeed: 10
-lastTimeRegen: 0
-lastPlayerPos: 0, 0
-seenPlayer: false
-expValue: 1000
-#inventory: 0
-
-[[Weapon: 5]]
-name: fangs
-formatFlags: 0
-symbol: 35
-color: 255, 0, 127
+amount: 1
 speed: 15
 hitBonus: 50
 baseDamage: 19
 numDice: 3
 diceMax: 7
 enchantment: 0
-hands: 2
+hands: 0
 effect: 0
 range: 1
 
-[[Goblin: 4]]
+[[Goblin: 2]]
 name: Smaug
 formatFlags: 16385
 symbol: 68
@@ -68,37 +28,340 @@ maxHealth: 300
 mana: 100
 maxMana: 100
 controlled: false
+quiver: 0
+mainWeapon: 0
+armor0: 0
+armor1: 0
+armor2: 0
+baseWeapon: @3
+baseAC: 75
+attackSkill: 0
+defenseSkill: 0
+walkingSpeed: 16
+lastTimeRegen: 0
+lastPlayerPos: 0, 0
+seenPlayer: false
+expValue: 2500
+#inventory: 0
+
+[[Weapon: 5]]
+name: x
+formatFlags: 0
+symbol: 35
+color: 255, 0, 127
+amount: 1
+speed: 16
+hitBonus: 15
+baseDamage: 5
+numDice: 1
+diceMax: 10
+enchantment: 0
+hands: 0
+effect: 0
+range: 1
+
+[[Goblin: 4]]
+name: blue baby dragon
+formatFlags: 16384
+symbol: 100
+position: 0, 0
+color: 0, 0, 255
+health: 55
+maxHealth: 55
+mana: 0
+maxMana: 0
+controlled: false
+quiver: 0
 mainWeapon: 0
 armor0: 0
 armor1: 0
 armor2: 0
 baseWeapon: @5
-baseAC: 75
+baseAC: 20
 attackSkill: 0
 defenseSkill: 0
-walkingSpeed: 30
+walkingSpeed: 13
 lastTimeRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
-expValue: 10000
+expValue: 600
 #inventory: 0
 
 [[Weapon: 7]]
-name: teeth
+name: x
 formatFlags: 0
 symbol: 35
 color: 255, 0, 127
-speed: 25
+amount: 1
+speed: 11
 hitBonus: 0
-baseDamage: 11
-numDice: 2
-diceMax: 6
+baseDamage: 4
+numDice: 1
+diceMax: 3
 enchantment: 0
 hands: 0
 effect: 0
 range: 1
 
 [[Goblin: 6]]
+name: goblin
+formatFlags: 16384
+symbol: 103
+position: 0, 0
+color: 0, 255, 0
+health: 35
+maxHealth: 35
+mana: 0
+maxMana: 0
+controlled: false
+quiver: 0
+mainWeapon: 0
+armor0: 0
+armor1: 0
+armor2: 0
+baseWeapon: @7
+baseAC: 15
+attackSkill: 0
+defenseSkill: 0
+walkingSpeed: 10
+lastTimeRegen: 0
+lastPlayerPos: 0, 0
+seenPlayer: false
+expValue: 300
+#inventory: 0
+
+[[Weapon: 9]]
+name: x
+formatFlags: 0
+symbol: 35
+color: 255, 0, 127
+amount: 1
+speed: 25
+hitBonus: 0
+baseDamage: 0
+numDice: 0
+diceMax: 0
+enchantment: 0
+hands: 0
+effect: 0
+range: 1
+
+[[Goblin: 8]]
+name: medic
+formatFlags: 32768
+symbol: 64
+position: 0, 0
+color: 255, 0, 127
+health: 180
+maxHealth: 180
+mana: 0
+maxMana: 0
+controlled: false
+quiver: 0
+mainWeapon: 0
+armor0: 0
+armor1: 0
+armor2: 0
+baseWeapon: @9
+baseAC: 0
+attackSkill: 0
+defenseSkill: 0
+walkingSpeed: 12
+lastTimeRegen: 0
+lastPlayerPos: 0, 0
+seenPlayer: false
+expValue: 10
+#inventory: 0
+
+[[Weapon: 11]]
+name: x
+formatFlags: 0
+symbol: 35
+color: 255, 0, 127
+amount: 1
+speed: 16
+hitBonus: 15
+baseDamage: 5
+numDice: 1
+diceMax: 10
+enchantment: 0
+hands: 0
+effect: 0
+range: 1
+
+[[Goblin: 10]]
+name: purple baby dragon
+formatFlags: 16384
+symbol: 100
+position: 0, 0
+color: 127, 0, 255
+health: 55
+maxHealth: 55
+mana: 0
+maxMana: 0
+controlled: false
+quiver: 0
+mainWeapon: 0
+armor0: 0
+armor1: 0
+armor2: 0
+baseWeapon: @11
+baseAC: 20
+attackSkill: 0
+defenseSkill: 0
+walkingSpeed: 13
+lastTimeRegen: 0
+lastPlayerPos: 0, 0
+seenPlayer: false
+expValue: 600
+#inventory: 0
+
+[[Weapon: 13]]
+name: x
+formatFlags: 0
+symbol: 35
+color: 255, 0, 127
+amount: 1
+speed: 10
+hitBonus: 0
+baseDamage: 1
+numDice: 1
+diceMax: 12
+enchantment: 0
+hands: 0
+effect: 0
+range: 1
+
+[[Goblin: 12]]
+name: rat
+formatFlags: 32768
+symbol: 114
+position: 0, 0
+color: 191, 191, 0
+health: 40
+maxHealth: 40
+mana: 0
+maxMana: 0
+controlled: false
+quiver: 0
+mainWeapon: 0
+armor0: 0
+armor1: 0
+armor2: 0
+baseWeapon: @13
+baseAC: 20
+attackSkill: 0
+defenseSkill: 0
+walkingSpeed: 11
+lastTimeRegen: 0
+lastPlayerPos: 0, 0
+seenPlayer: false
+expValue: 250
+#inventory: 0
+
+[[Weapon: 15]]
+name: x
+formatFlags: 0
+symbol: 35
+color: 255, 0, 127
+amount: 1
+speed: 16
+hitBonus: 15
+baseDamage: 5
+numDice: 1
+diceMax: 10
+enchantment: 0
+hands: 0
+effect: 0
+range: 1
+
+[[Goblin: 14]]
+name: red baby dragon
+formatFlags: 16384
+symbol: 100
+position: 0, 0
+color: 255, 0, 0
+health: 55
+maxHealth: 55
+mana: 0
+maxMana: 0
+controlled: false
+quiver: 0
+mainWeapon: 0
+armor0: 0
+armor1: 0
+armor2: 0
+baseWeapon: @15
+baseAC: 20
+attackSkill: 0
+defenseSkill: 0
+walkingSpeed: 13
+lastTimeRegen: 0
+lastPlayerPos: 0, 0
+seenPlayer: false
+expValue: 600
+#inventory: 0
+
+[[Weapon: 17]]
+name: x
+formatFlags: 0
+symbol: 35
+color: 255, 0, 127
+amount: 1
+speed: 13
+hitBonus: 0
+baseDamage: 3
+numDice: 1
+diceMax: 2
+enchantment: 0
+hands: 0
+effect: 0
+range: 1
+
+[[Goblin: 16]]
+name: sergeant
+formatFlags: 16384
+symbol: 64
+position: 0, 0
+color: 255, 0, 0
+health: 180
+maxHealth: 180
+mana: 0
+maxMana: 0
+controlled: false
+quiver: 0
+mainWeapon: 0
+armor0: 0
+armor1: 0
+armor2: 0
+baseWeapon: @17
+baseAC: 40
+attackSkill: 0
+defenseSkill: 0
+walkingSpeed: 14
+lastTimeRegen: 0
+lastPlayerPos: 0, 0
+seenPlayer: false
+expValue: 1000
+#inventory: 0
+
+[[Weapon: 19]]
+name: x
+formatFlags: 0
+symbol: 35
+color: 255, 0, 127
+amount: 1
+speed: 12
+hitBonus: 0
+baseDamage: 6
+numDice: 1
+diceMax: 4
+enchantment: 0
+hands: 0
+effect: 0
+range: 1
+
+[[Goblin: 18]]
 name: snake
 formatFlags: 16384
 symbol: 115
@@ -109,26 +372,398 @@ maxHealth: 20
 mana: 0
 maxMana: 0
 controlled: false
+quiver: 0
 mainWeapon: 0
 armor0: 0
 armor1: 0
 armor2: 0
-baseWeapon: @7
+baseWeapon: @19
 baseAC: 0
 attackSkill: 0
 defenseSkill: 0
-walkingSpeed: 3
+walkingSpeed: 5
 lastTimeRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
-expValue: 1000
+expValue: 300
 #inventory: 0
 
-[[MonsterFactory: 1]]
-#templates: 3
-_spawnName: goblin
+[[Weapon: 21]]
+name: x
+formatFlags: 0
+symbol: 35
+color: 255, 0, 127
+amount: 1
+speed: 16
+hitBonus: 0
+baseDamage: 3
+numDice: 1
+diceMax: 2
+enchantment: 0
+hands: 0
+effect: 0
+range: 1
+
+[[Goblin: 20]]
+name: soldier
+formatFlags: 16384
+symbol: 64
+position: 0, 0
+color: 0, 0, 255
+health: 120
+maxHealth: 120
+mana: 0
+maxMana: 0
+controlled: false
+quiver: 0
+mainWeapon: 0
+armor0: 0
+armor1: 0
+armor2: 0
+baseWeapon: @21
+baseAC: 0
+attackSkill: 0
+defenseSkill: 0
+walkingSpeed: 14
+lastTimeRegen: 0
+lastPlayerPos: 0, 0
+seenPlayer: false
+expValue: 600
+#inventory: 0
+
+[[Weapon: 23]]
+name: x
+formatFlags: 0
+symbol: 35
+color: 255, 0, 127
+amount: 1
+speed: 13
+hitBonus: 40
+baseDamage: 12
+numDice: 2
+diceMax: 8
+enchantment: 0
+hands: 0
+effect: 0
+range: 1
+
+[[Goblin: 22]]
+name: soldier ant
+formatFlags: 32768
+symbol: 97
+position: 0, 0
+color: 0, 0, 255
+health: 25
+maxHealth: 25
+mana: 0
+maxMana: 0
+controlled: false
+quiver: 0
+mainWeapon: 0
+armor0: 0
+armor1: 0
+armor2: 0
+baseWeapon: @23
+baseAC: 0
+attackSkill: 0
+defenseSkill: 0
+walkingSpeed: 14
+lastTimeRegen: 0
+lastPlayerPos: 0, 0
+seenPlayer: false
+expValue: 500
+#inventory: 0
+
+[[Weapon: 25]]
+name: x
+formatFlags: 0
+symbol: 35
+color: 255, 0, 127
+amount: 1
+speed: 14
+hitBonus: 0
+baseDamage: 3
+numDice: 2
+diceMax: 3
+enchantment: 0
+hands: 0
+effect: 0
+range: 1
+
+[[Goblin: 24]]
+name: spider
+formatFlags: 32768
+symbol: 115
+position: 0, 0
+color: 255, 0, 127
+health: 15
+maxHealth: 15
+mana: 0
+maxMana: 0
+controlled: false
+quiver: 0
+mainWeapon: 0
+armor0: 0
+armor1: 0
+armor2: 0
+baseWeapon: @25
+baseAC: 60
+attackSkill: 0
+defenseSkill: 0
+walkingSpeed: 8
+lastTimeRegen: 0
+lastPlayerPos: 0, 0
+seenPlayer: false
+expValue: 150
+#inventory: 0
+
+[[Weapon: 27]]
+name: x
+formatFlags: 0
+symbol: 35
+color: 255, 0, 127
+amount: 1
+speed: 18
+hitBonus: 20
+baseDamage: 14
+numDice: 1
+diceMax: 5
+enchantment: 0
+hands: 0
+effect: 0
+range: 1
+
+[[Goblin: 26]]
+name: troll
+formatFlags: 16384
+symbol: 84
+position: 0, 0
+color: 0, 0, 191
+health: 80
+maxHealth: 80
+mana: 0
+maxMana: 0
+controlled: false
+quiver: 0
+mainWeapon: 0
+armor0: 0
+armor1: 0
+armor2: 0
+baseWeapon: @27
+baseAC: 40
+attackSkill: 0
+defenseSkill: 0
+walkingSpeed: 15
+lastTimeRegen: 0
+lastPlayerPos: 0, 0
+seenPlayer: false
+expValue: 750
+#inventory: 0
+
+[[Ammo: 28]]
+name: arrow
+formatFlags: 65536
+symbol: 33
+color: 0, 255, 255
+amount: 5
+enchantment: 0
+effect: 0
+
+[[Food: 29]]
+name: beefsteak
+formatFlags: 65536
+symbol: 37
+color: 191, 95, 0
+amount: 1
+nutrition: 2500
+
+[[Armor: 30]]
+name: clown shoes
+formatFlags: 65544
+symbol: 41
+color: 0, 0, 0
+amount: 1
+defense: -30
+hindrance: 12
+slot: 1
+enchantment: -1
+
+[[Weapon: 31]]
+name: dagger
+formatFlags: 65536
+symbol: 40
+color: 255, 0, 0
+amount: 1
+speed: 7
+hitBonus: 10
+baseDamage: 8
+numDice: 1
+diceMax: 4
+enchantment: 0
+hands: 1
+effect: 0
+range: 1
+
+[[Weapon: 32]]
+name: halberd
+formatFlags: 65536
+symbol: 40
+color: 255, 0, 0
+amount: 1
+speed: 22
+hitBonus: 40
+baseDamage: 15
+numDice: 2
+diceMax: 10
+enchantment: 0
+hands: 2
+effect: 0
+range: 1
+
+[[Item: 33]]
+name: item1
+formatFlags: 65552
+symbol: 49
+color: 0, 0, 255
+amount: 1
+
+[[Item: 34]]
+name: item2
+formatFlags: 65552
+symbol: 50
+color: 0, 255, 0
+amount: 1
+
+[[Weapon: 35]]
+name: lightsaber
+formatFlags: 65536
+symbol: 40
+color: 255, 0, 0
+amount: 1
+speed: 8
+hitBonus: 30
+baseDamage: 1
+numDice: 10
+diceMax: 20
+enchantment: 30
+hands: 1
+effect: 0
+range: 1
+
+[[Weapon: 36]]
+name: longbow
+formatFlags: 65536
+symbol: 40
+color: 0, 255, 255
+amount: 1
+speed: 25
+hitBonus: 25
+baseDamage: 30
+numDice: 2
+diceMax: 10
+enchantment: 0
+hands: 1
+effect: 0
+range: 20
+
+[[Food: 37]]
+name: meat ball
+formatFlags: 65536
+symbol: 37
+color: 255, 127, 0
+amount: 1
+nutrition: 1000
+
+[[Armor: 38]]
+name: prussian pickelhaube
+formatFlags: 65536
+symbol: 41
+color: 0, 0, 0
+amount: 1
+defense: 50
+hindrance: 0
+slot: 2
+enchantment: 1
+
+[[Weapon: 39]]
+name: long sword
+formatFlags: 65536
+symbol: 40
+color: 255, 0, 0
+amount: 1
+speed: 15
+hitBonus: 20
+baseDamage: 12
+numDice: 2
+diceMax: 8
+enchantment: 0
+hands: 1
+effect: 0
+range: 1
+
+[[Armor: 40]]
+name: uber armor
+formatFlags: 65552
+symbol: 41
+color: 0, 0, 0
+amount: 1
+defense: 100
+hindrance: 10
+slot: 0
+enchantment: 2
+
+[[Factory: 1]]
+#creatures: 13
+_spawnName: Smaug
 _creature: @2
-_spawnName: red dragon
+_spawnName: blue baby dragon
 _creature: @4
-_spawnName: snake
+_spawnName: goblin
 _creature: @6
+_spawnName: medic
+_creature: @8
+_spawnName: purple baby dragon
+_creature: @10
+_spawnName: rat
+_creature: @12
+_spawnName: red baby dragon
+_creature: @14
+_spawnName: sergeant
+_creature: @16
+_spawnName: snake
+_creature: @18
+_spawnName: soldier
+_creature: @20
+_spawnName: soldier ant
+_creature: @22
+_spawnName: spider
+_creature: @24
+_spawnName: troll
+_creature: @26
+#items: 13
+_spawnName: arrows
+_item: @28
+_spawnName: beefsteak
+_item: @29
+_spawnName: clown shoes
+_item: @30
+_spawnName: dagger
+_item: @31
+_spawnName: halberd
+_item: @32
+_spawnName: item1
+_item: @33
+_spawnName: item2
+_item: @34
+_spawnName: lightsaber
+_item: @35
+_spawnName: longbow
+_item: @36
+_spawnName: meatball
+_item: @37
+_spawnName: pickelhaube
+_item: @38
+_spawnName: sword
+_item: @39
+_spawnName: uber armor
+_item: @40

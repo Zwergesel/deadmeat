@@ -42,6 +42,7 @@ Creature* Goblin::clone()
 	copy->lastPlayerPos = lastPlayerPos;
 	copy->seenPlayer = seenPlayer;
 	copy->expValue = expValue;
+	copy->quiver = quiver;
 	std::copy(armor, armor+NUM_ARMOR_SLOTS, copy->armor);
 	// Clone inventory
 	for (std::map<symbol,Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
@@ -138,6 +139,7 @@ unsigned int Goblin::save(Savegame& sg)
 	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("position", position);
 	store ("color", color) ("health", health) ("maxHealth", maxHealth);
 	store ("mana", mana) ("maxMana", maxMana) ("controlled", controlled);
+	store ("quiver", quiver);
 	store ("mainWeapon", (int) mainWeapon);
 	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
 	{

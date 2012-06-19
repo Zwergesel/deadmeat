@@ -6,7 +6,6 @@
 #include "player.hpp"
 #include "level.hpp"
 #include "world.hpp"
-#include "items/weapon.hpp"
 #include "savegame.hpp"
 
 const double Creature::FACT_ATSKL = 10.0;	// attack skill -> attack bonus
@@ -27,7 +26,7 @@ Creature::Creature(std::string n, uint f, symbol s, TCODColor c, int h, int m, W
 	name(n),		formatFlags(f),		sym(s),
 	color(c),		health(h),			maxHealth(h),
 	mana(m),		maxMana(m),			controlled(false),
-	mainWeapon(0),	baseWeapon(w),		baseAC(a),
+	mainWeapon(0), quiver(0),	baseWeapon(w),		baseAC(a),
 	walkingSpeed(ws),attackSkill(0),	defenseSkill(0),
 	level(NULL),	position(Point(0,0)),
 	lastPlayerPos(Point(0,0)), seenPlayer(false), expValue(exp)
@@ -51,6 +50,7 @@ Creature* Creature::clone()
 	copy->mana = mana;
 	copy->controlled = controlled;
 	copy->mainWeapon = mainWeapon;
+	copy->quiver = quiver;
 	copy->attackSkill = attackSkill;
 	copy->defenseSkill = defenseSkill;
 	copy->level = level;
@@ -401,6 +401,11 @@ int Creature::rangedAttack(Creature* target, Weapon* w)
 	assert(w->getRange() > 1);
 	// weapon to hit + weapon enchantment + fighting skill + weapon skill
 	int attack = static_cast<int>(FACT_HIT * w->getHitBonus() + FACT_WENCH * w->getEnchantment() + FACT_ATSKL * attackSkill);
+	if (getQuiver() != 0)
+	{
+		attack += getQuiver()->getEnchantment();
+		removeItem(getQuiver(), 1, true);
+	}
 	int damage = w->rollDamage();
 	// weapon speed + armor hindrance
 	int speed = static_cast<int>(w->getSpeed() + FACT_ATSPD * getHindrance());
@@ -547,6 +552,29 @@ std::map<symbol, Item*> Creature::getInventory()
 	return inventory;
 }
 
+Ammo* Creature::getQuiver()
+{
+	if (quiver > 0 && inventory.count(quiver) > 0)
+	{
+		assert(inventory[quiver]->getType() == ITEM_AMMO);
+		return static_cast<Ammo*>(inventory[quiver]);
+	}
+	return NULL;
+}
+
+void Creature::readyQuiver(Ammo* ammo)
+{
+	quiver = 0;
+	for (auto it=inventory.begin(); it!=inventory.end(); it++)
+	{
+		if ((*it).second == ammo)
+		{
+			quiver = (*it).first;
+			return;
+		}
+	}
+}
+
 /*--------------------- SAVING AND LOADING ---------------------*/
 
 unsigned int Creature::save(Savegame& sg)
@@ -557,6 +585,7 @@ unsigned int Creature::save(Savegame& sg)
 	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("position", position);
 	store ("color", color) ("health", health) ("maxHealth", maxHealth);
 	store ("mana", mana) ("maxMana", maxMana) ("controlled", controlled);
+	store ("quiver", (int) quiver);
 	store ("mainWeapon", (int) mainWeapon);
 	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
 	{
@@ -584,6 +613,7 @@ void Creature::load(LoadBlock& load)
 	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("position", position);
 	load ("color", color) ("health", health) ("maxHealth", maxHealth);
 	load ("mana", mana) ("maxMana", maxMana) ("controlled", controlled);
+	load ("quiver", quiver);
 	load ("mainWeapon", mainWeapon);
 	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
 	{

@@ -257,7 +257,7 @@ bool ItemSelection::keyInput(TCOD_key_t key)
 {
 	assert(compiled);
 	if (!key.pressed) return false;
-	
+
 	// Other keys
 	if (key.vk == TCODK_ESCAPE)
 	{

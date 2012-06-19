@@ -38,8 +38,8 @@ Player::Player(std::string name):
 	attrPoints = 0;
 	skillPoints = 3; // TODO: this is for debug
 	creature = new Creature(name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 200, 75,
-		Weapon(8, 0, 3, 1, 2, EFFECT_NONE, 1), 0, 10, 0
-	);
+	                        Weapon(8, 0, 3, 1, 2, EFFECT_NONE, 1), 0, 10, 0
+	                       );
 	creature->setControlled(true);
 	creature->setAttackSkill(/* TODO: Something */0);
 	creature->setDefenseSkill(/* TODO: Something */0);
@@ -292,6 +292,10 @@ int Player::actionDrop(Item* item, int num)
 		creature->wieldMainWeapon(NULL);
 		creature->setAttackSkill(skills[SKILL_ATTACK].value);
 	}
+	if (creature->getQuiver() == item && item->getAmount() <= num)
+	{
+		creature->readyQuiver(NULL);
+	}
 	creature->removeItem(item, num, false);
 	msg << "You drop " << util::format(FORMAT_INDEF, item) << ".";
 	world.addMessage(msg.str());
@@ -396,6 +400,22 @@ int Player::actionEat(Item* item)
 	return time;
 }
 
+int Player::actionQuiver(Item* item)
+{
+	if (item == NULL) return 0;
+	assert(item->getType() == ITEM_AMMO);
+
+	std::stringstream msg;
+	msg << "You ready " << util::format(FORMAT_INDEF, item->toString(),item->getFormatFlags()) << ".";
+	world.addMessage(msg.str());
+
+	assert(item->getType() == ITEM_AMMO);
+	Ammo* a = static_cast<Ammo*>(item);
+	creature->readyQuiver(a);
+
+	return 10;
+}
+
 int Player::actionCharInfo(TCOD_key_t key)
 {
 	if (key.vk == TCODK_ESCAPE || key.vk == TCODK_SPACE)
@@ -471,6 +491,13 @@ void Player::actionAutoTargetting()
 int Player::actionRangedAttack(Point pos)
 {
 	Level* level = world.levels[world.currentLevel];
+	// Check quiver
+	if (creature->getQuiver() == NULL)
+	{
+		world.addMessage("You have no ammunition ready.");
+		state = STATE_DEFAULT;
+		return 0;
+	}
 	// Check for valid target
 	Creature* target = level->creatureAt(pos);
 	if (target == NULL || !world.fovMap->isInFov(pos.x, pos.y))
@@ -701,6 +728,20 @@ int Player::processAction()
 			}
 			return 0;
 		}
+		// ready quiver
+		else if (state == STATE_DEFAULT && key.c == 'q')
+		{
+			world.itemSelection = ItemSelection(creature->getInventory(), "Ready your quiver");
+			world.itemSelection.filterType(ITEM_AMMO)->runFilter();
+			if (world.itemSelection.getNumChoices() <= 0)
+			{
+				world.addMessage("You aren't carrying any ammunition.");
+				return 0;
+			}
+			world.itemSelection.compile(world.viewItemList.height);
+			state = STATE_QUIVER;
+			return 0;
+		}
 		// drop items
 		else if (state == STATE_DEFAULT && key.c == 'd')
 		{
@@ -839,6 +880,16 @@ int Player::processAction()
 			{
 				state = STATE_DEFAULT;
 				return actionEat(world.itemSelection.getItem());
+			}
+			return 0;
+		}
+		// handle quiver window
+		else if (state == STATE_QUIVER)
+		{
+			if (world.itemSelection.keyInput(key))
+			{
+				state = STATE_DEFAULT;
+				return actionQuiver(world.itemSelection.getItem());
 			}
 			return 0;
 		}

@@ -30,6 +30,7 @@ enum STATE
   STATE_CHARINFO,
   STATE_RANGED_ATTACK,
   STATE_EAT,
+  STATE_QUIVER,
   NUM_STATE
 };
 
@@ -72,6 +73,7 @@ private:
 	int actionEat(Item*);
 	int actionDrop();
 	int actionDrop(Item*, int num);
+	int actionQuiver(Item*);
 	int actionRangedAttack(Point p);
 	void actionAutoTargetting();
 	int actionCharInfo(TCOD_key_t key);

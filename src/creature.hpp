@@ -8,6 +8,7 @@
 #include "utility.hpp"
 #include "items/weapon.hpp"
 #include "items/armor.hpp"
+#include "items/ammo.hpp"
 
 class Level;
 class Player;
@@ -27,6 +28,7 @@ protected:
 	bool controlled;
 	symbol mainWeapon;
 	symbol armor[NUM_ARMOR_SLOTS];
+	symbol quiver;
 	Weapon baseWeapon;
 	int baseAC;
 	int walkingSpeed;
@@ -62,6 +64,7 @@ public:
 	Weapon* getMainWeapon();
 	std::map<symbol,Item*> getArmor();
 	Armor* getArmor(ArmorSlot slot);
+	Ammo* getQuiver();
 	std::map<symbol, Item*> getInventory();
 	std::pair<int,int> getHealth();
 	std::pair<int,int> getMana();
@@ -80,6 +83,7 @@ public:
 	void wieldMainWeapon(Weapon* wpn);
 	void wearArmor(Armor* armor);
 	void takeOffArmor(Armor* armor);
+	void readyQuiver(Ammo* ammo);
 
 	symbol expectedInventoryLetter(Item* item);
 	Item* addItem(Item* item);
