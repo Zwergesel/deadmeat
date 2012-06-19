@@ -26,7 +26,7 @@ int corruptSave(const std::string& fileName)
 	TCODConsole::root->setDefaultBackground(TCODColor::blue);
 	TCODConsole::root->setDefaultForeground(TCODColor::white);
 	TCODConsole::root->clear();
-	TCODConsole::root->printEx(40, 18, TCOD_BKGND_NONE, TCOD_CENTER, "ERROR - SAVEGAME IS CORRUPT\n\nDELETE CORRUPT SAVEGAME?\n\n[Y]es / [N]o");
+	TCODConsole::root->printEx(40, 18, TCOD_BKGND_NONE, TCOD_CENTER, "ERROR - SAVEGAME \"%s\" IS CORRUPT\n\nDELETE CORRUPT SAVEGAME?\n\n[Y]es / [N]o", fileName.c_str());
 	TCODConsole::root->flush();
 	while (true)
 	{
@@ -94,6 +94,8 @@ int main()
 		world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - world.levels[0]->getHeight(), 0);
 
 		world.player->getCreature()->addItem(factory.spawnItem("lightsaber"));
+		world.player->getCreature()->addItem(factory.spawnItem("longbow"));
+		world.player->getCreature()->addItem(factory.spawnItem("arrows"));
 	}
 
 	while (!world.requestQuit)
