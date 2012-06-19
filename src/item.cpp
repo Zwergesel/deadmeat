@@ -2,6 +2,8 @@
 #include "savegame.hpp"
 #include <cassert>
 
+std::string Item::ACTIVE_STRINGS[NUM_ITEM_TYPE] = { "active", "wielded", "in quiver", "worn", "ERR_FOOD_ACTIVE" };
+
 Item::Item()
 {
 	// constructor for savegames
@@ -10,7 +12,7 @@ Item::Item()
 }
 
 Item::Item(std::string n, uint f, symbol s, TCODColor c, int x):
-	name(n), formatFlags(f), sym(s), color(c), amount(x)
+	name(n), formatFlags(f), sym(s), color(c), amount(x), active(false)
 {
 	type = ITEM_DEFAULT;
 	strType = "Item";
@@ -23,6 +25,7 @@ Item* Item::clone()
 	Item* copy = new Item(name, formatFlags, sym, color, amount);
 	copy->type = type;
 	copy->strType = strType;
+	copy->active = active;
 	return copy;
 }
 
@@ -78,6 +81,16 @@ void Item::changeAmount(int n)
 	amount += n;
 }
 
+void Item::setActive(bool set)
+{
+	active = set;
+}
+
+bool Item::isActive()
+{
+	return active;
+}
+
 bool Item::canStackWith(Item* compare)
 {
 	if (compare->getType() != type) return false;
@@ -94,12 +107,14 @@ unsigned int Item::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Item", id);
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("amount", amount);
+	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
+	store ("color", color) ("amount", amount) ("active", active);
 	sg << store;
 	return id;
 }
 
 void Item::load(LoadBlock& load)
 {
-	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("amount", amount);
+	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
+	load ("color", color) ("amount", amount) ("active", active);
 }

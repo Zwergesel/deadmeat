@@ -27,10 +27,13 @@ protected:
 	symbol sym;
 	TCODColor color;
 	int amount;
+	bool active;
 	ITEM_TYPE type;
 	std::string strType;
 
 public:
+	static std::string ACTIVE_STRINGS[NUM_ITEM_TYPE];
+
 	Item();
 	Item(std::string name, uint format, symbol sym, TCODColor color, int amount);
 	virtual ~Item();
@@ -46,6 +49,8 @@ public:
 	int getAmount();
 	void setAmount(int n);
 	void changeAmount(int n);
+	void setActive(bool set);
+	bool isActive();
 	bool canStackWith(Item* compare);
 
 	virtual unsigned int save(Savegame& sg);

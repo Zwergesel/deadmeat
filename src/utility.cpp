@@ -55,11 +55,15 @@ std::string util::format(FormatRequest req, Item* i, bool cap)
 		flags |= F_PLURAL;
 		std::stringstream ss;
 		ss << i->getAmount() << " " << plural(i->toString());
+		if (i->isActive()) ss << " (" << Item::ACTIVE_STRINGS[i->getType()] << ")";
 		return format(req, ss.str(), flags, cap);
 	}
 	else
 	{
-		return format(req, i->toString(), i->getFormatFlags(), cap);
+		std::stringstream ss;
+		ss << i->toString();
+		if (i->isActive()) ss << " (" << Item::ACTIVE_STRINGS[i->getType()] << ")";
+		return format(req, ss.str(), i->getFormatFlags(), cap);
 	}
 }
 

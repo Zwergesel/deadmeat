@@ -28,7 +28,7 @@ void fillFactoryTemplates()
 	wpns.push_back("halberd");
 	wpns.push_back("sword");
 	wpns.push_back("dagger");
-	fighter_weapons.add(wpns, 850, 1, 1); // TODO: do initialization lists compile in VS2010?
+	fighter_weapons.add(wpns, 850, 1, 1);
 	fighter_weapons.add("longbow", 200);
 
 	factory.setTemplate("goblin", &goblin);

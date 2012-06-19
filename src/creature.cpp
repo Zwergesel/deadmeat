@@ -136,6 +136,7 @@ void Creature::wieldMainWeapon(Weapon* wpn)
 	{
 		if ((*it).second == wpn)
 		{
+			it->second->setActive(true);
 			mainWeapon = (*it).first;
 		}
 	}
@@ -148,6 +149,7 @@ void Creature::wearArmor(Armor* a)
 	{
 		if ((*it).second == a)
 		{
+			it->second->setActive(true);
 			armor[a->getSlot()] = (*it).first;
 		}
 	}
@@ -158,6 +160,7 @@ void Creature::takeOffArmor(Armor* a)
 	symbol s = armor[a->getSlot()];
 	if (s > 0 && inventory.count(s) > 0 && inventory[s] == a)
 	{
+		a->setActive(false);
 		armor[a->getSlot()] = 0;
 	}
 }
@@ -397,20 +400,22 @@ int Creature::attack(Creature* target)
 
 int Creature::rangedAttack(Creature* target, Weapon* w)
 {
+	Ammo* ammo = getQuiver();
+	assert(ammo != NULL);
 	assert(w->getType() == ITEM_WEAPON);
 	assert(w->getRange() > 1);
 	// weapon to hit + weapon enchantment + fighting skill + weapon skill
-	int attack = static_cast<int>(FACT_HIT * w->getHitBonus() + FACT_WENCH * w->getEnchantment() + FACT_ATSKL * attackSkill);
-	if (getQuiver() != 0)
-	{
-		attack += getQuiver()->getEnchantment();
-		removeItem(getQuiver(), 1, true);
-	}
+	int attack = static_cast<int>(FACT_HIT * w->getHitBonus() + FACT_WENCH * (w->getEnchantment() + ammo->getEnchantment()) + FACT_ATSKL * attackSkill);
 	int damage = w->rollDamage();
 	// weapon speed + armor hindrance
 	int speed = static_cast<int>(w->getSpeed() + FACT_ATSPD * getHindrance());
 	// TODO: scale attack difficulty with distance
+	
+	// Remove ammo
+	if (ammo->getAmount() == 1) readyQuiver(NULL);
+	removeItem(getQuiver(), 1, true);
 
+	// Make attack roll
 	int defense = target->getDefense();
 	TCODRandom rngGauss;
 	rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
@@ -565,10 +570,12 @@ Ammo* Creature::getQuiver()
 void Creature::readyQuiver(Ammo* ammo)
 {
 	quiver = 0;
+	if (ammo == NULL) return;
 	for (auto it=inventory.begin(); it!=inventory.end(); it++)
 	{
 		if ((*it).second == ammo)
 		{
+			it->second->setActive(true);
 			quiver = (*it).first;
 			return;
 		}

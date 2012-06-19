@@ -20,6 +20,7 @@ Food::~Food() {}
 Item* Food::clone()
 {
 	Food* copy = new Food(name, formatFlags, sym, color, amount, nutrition, eatTime);
+	copy->active = active;
 	return copy;
 }
 

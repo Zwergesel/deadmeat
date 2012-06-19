@@ -22,6 +22,7 @@ Ammo::~Ammo()
 Item* Ammo::clone()
 {
 	Ammo* copy = new Ammo(name, formatFlags, sym, color, amount, enchantment, effect);
+	copy->active = active;
 	return copy;
 }
 
@@ -49,7 +50,8 @@ unsigned int Ammo::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Ammo", id);
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("amount", amount);
+	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
+	store ("color", color) ("amount", amount) ("active", active);
 	store ("enchantment", enchantment) ("effect", effect);
 	sg << store;
 	return id;
@@ -58,7 +60,8 @@ unsigned int Ammo::save(Savegame& sg)
 void Ammo::load(LoadBlock& load)
 {
 	int e;
-	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("color", color) ("amount", amount);
+	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
+	load ("color", color) ("amount", amount) ("active", active);
 	load ("enchantment", enchantment) ("effect", e);
 	if (e < 0 || e >= NUM_EFFECT) throw SavegameFormatException("Ammo::load _ effect out of range");
 	effect = static_cast<WeaponEffect>(e);
