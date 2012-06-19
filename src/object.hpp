@@ -4,6 +4,9 @@
 #include "utility.hpp"
 #include <libtcod.hpp>
 
+class Savegame;
+class LoadBlock;
+
 enum OBJECTTYPE
 {
   OBJ_STAIRSUP,
@@ -30,6 +33,9 @@ public:
 	symbol getSymbol();
 	TCODColor getColor();
 	std::string toString();
+	
+	unsigned int save(Savegame& sg);
+	void load(LoadBlock& load);
 };
 
 #endif

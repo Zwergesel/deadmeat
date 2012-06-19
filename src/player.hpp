@@ -78,6 +78,7 @@ private:
 	void actionAutoTargetting();
 	int actionCharInfo(TCOD_key_t key);
 	void moveCursor(int dir);
+	void quickLook();
 
 public:
 	Player();

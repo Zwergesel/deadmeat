@@ -66,6 +66,8 @@ int main()
 		if (!save.loadSavegame("monsters.txt")) return corruptSave("monsters.txt");
 	}
 
+	LevelGen::loadLootTable(); // TODO: temporarily here
+
 	if (true)
 	{
 		// TODO: this code should not be necessary once all data is stored in a savegame
