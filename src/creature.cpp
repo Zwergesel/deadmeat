@@ -410,10 +410,6 @@ int Creature::rangedAttack(Creature* target, Weapon* w)
 	// weapon speed + armor hindrance
 	int speed = static_cast<int>(w->getSpeed() + FACT_ATSPD * getHindrance());
 	// TODO: scale attack difficulty with distance
-	
-	// Remove ammo
-	if (ammo->getAmount() == 1) readyQuiver(NULL);
-	removeItem(getQuiver(), 1, true);
 
 	// Make attack roll
 	int defense = target->getDefense();
@@ -432,6 +428,14 @@ int Creature::rangedAttack(Creature* target, Weapon* w)
 	Point current;
 	while (!flightpath.step(&current.x, &current.y))
 	{
+		if (world.tileSet->isBlocking(level->getTile(current)))
+		{
+			std::stringstream msg;
+			msg << util::format(FORMAT_YOUR, ammo->getName(), ammo->getFormatFlags(), true) << " hits ";
+			msg << world.tileSet->getDescription(level->getTile(current)) << ".";
+			world.addMessage(msg.str());
+			return speed;
+		}
 		Creature* between = level->creatureAt(current);
 		if (between != NULL && rng->getInt(-150,300) > std::abs(hit)) // TODO: find a good value here
 		{
@@ -439,6 +443,10 @@ int Creature::rangedAttack(Creature* target, Weapon* w)
 			break;
 		}
 	}
+	
+	// Remove ammo
+	if (ammo->getAmount() == 1) readyQuiver(NULL);
+	removeItem(ammo, 1, true);
 
 	if (hit >= -70)
 	{

@@ -62,6 +62,7 @@ public:
 	void drawCreature(Creature* c, Point offset, Viewport view);
 	void drawWorld();
 	void drawInfo();
+	void drawCursor(Point target, Point offset, bool traceLine);
 	void drawItemSelection(ItemSelection& sel);
 	void drawCharInfo();
 

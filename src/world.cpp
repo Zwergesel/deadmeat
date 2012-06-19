@@ -223,10 +223,13 @@ void World::drawWorld()
 	{
 		drawItemSelection(world.itemSelection);
 	}
-	else if (state == STATE_INSPECT || state == STATE_RANGED_ATTACK)
+	else if (state == STATE_INSPECT)
 	{
-		Point c = player->getCursor() + levelOffset;
-		TCODConsole::root->setCharBackground(viewLevel.x + c.x, viewLevel.y + c.y, TCODColor::yellow, TCOD_BKGND_ALPHA(0.7));
+		drawCursor(player->getCursor(), levelOffset, false);
+	}
+	else if (state == STATE_RANGED_ATTACK)
+	{
+		drawCursor(player->getCursor(), levelOffset, true);
 	}
 	else if (state == STATE_CHARINFO)
 	{
@@ -373,6 +376,23 @@ void World::drawInfo()
 	{
 		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cSatiated%c", TCOD_COLCTRL_5, TCOD_COLCTRL_STOP);
 	}
+}
+
+void World::drawCursor(Point target, Point levelOffset, bool traceLine)
+{
+	target += levelOffset;
+	if (traceLine)
+	{
+		Point origin = player->getCreature()->getPos() + levelOffset;
+		Point current;
+		TCODLine line;
+		line.init(origin.x, origin.y, target.x, target.y);
+		while (!line.step(&current.x, &current.y) && (current.x != target.x || current.y != target.y))
+		{
+			TCODConsole::root->setCharBackground(viewLevel.x + current.x, viewLevel.y + current.y, TCODColor::yellow, TCOD_BKGND_ALPHA(0.4));
+		}
+	}
+	TCODConsole::root->setCharBackground(viewLevel.x + target.x, viewLevel.y + target.y, TCODColor::yellow, TCOD_BKGND_ALPHA(0.7));
 }
 
 void World::toggleFullscreen()

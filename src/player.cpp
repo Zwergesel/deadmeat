@@ -290,16 +290,15 @@ int Player::actionDrop(Item* item, int num)
 	}
 	if (creature->getMainWeapon() == item)
 	{
-		item->setActive(false);
 		creature->wieldMainWeapon(NULL);
 		creature->setAttackSkill(skills[SKILL_ATTACK].value);
 	}
 	else if (creature->getQuiver() == item && item->getAmount() <= num)
 	{
-		item->setActive(false);
 		creature->readyQuiver(NULL);
 	}
 	creature->removeItem(item, num, false);
+	if (item->getType() == ITEM_WEAPON || item->getType() == ITEM_AMMO) item->setActive(false);
 	msg << "You drop " << util::format(FORMAT_INDEF, item) << ".";
 	world.addMessage(msg.str());
 	level->addItem(item, creature->getPos());
