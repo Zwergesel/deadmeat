@@ -532,7 +532,17 @@ void World::load(LoadBlock& load)
 {
 	// Clean
 	messageLog.clear();
-	// TODO: delete player and levels [MEMORY LEAK]
+	if (player != NULL)
+	{
+		delete player;
+		player = NULL;
+	}
+	if (fovMap != NULL)
+	{
+		delete fovMap;
+		fovMap = NULL;
+	}
+
 	// Load
 	load ("currentLevel", currentLevel) ("levelOffset", levelOffset) ("time", time);
 	player = static_cast<Player*>(load.ptr("player"));
@@ -540,6 +550,8 @@ void World::load(LoadBlock& load)
 	load ("#levels", n);
 	for (int i=0; i<n; i++)
 	{
+		// Clean
+		if (levels[i] != NULL) delete levels[i];
 		levels[i] = static_cast<Level*>(load.ptr("_level"));
 	}
 	load ("#worldNodes", n);
