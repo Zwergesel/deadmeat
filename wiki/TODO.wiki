@@ -10,16 +10,16 @@
   * Ranged attacks should be able to hit creatures in their path, not just the target
   * Generate monsters with items
   * Let monsters drop their items when they die
+  * Stacking of items
 
 == Bugs / Issues ==
   * InventoryTable does not get saved in factory
 
 == Small improvements ==
-  * Variable "cursed" in Item
+  * quiver and use ammo
 
 == Major improvements ==
-  * Stacking of items
-  * Fully implement attributes
+  * Cursed Items
   * Support all skills
   * Item identification
   * Load level data from save files (possible monsters, possible loot, ...)
@@ -33,3 +33,4 @@
   * Display unseen items where the player has last seen them even if a monster picked them up
   * Quests
   * Story
+  * Name! :)
