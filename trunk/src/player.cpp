@@ -279,6 +279,7 @@ int Player::actionDrop()
 
 int Player::actionDrop(Item* item, int num)
 {
+	assert(item != NULL);
 	Level* level = world.levels[world.currentLevel];
 	std::stringstream msg;
 	if (item->getType() == ITEM_ARMOR && creature->getArmor(static_cast<Armor*>(item)->getSlot()) == item)
@@ -289,11 +290,13 @@ int Player::actionDrop(Item* item, int num)
 	}
 	if (creature->getMainWeapon() == item)
 	{
+		item->setActive(false);
 		creature->wieldMainWeapon(NULL);
 		creature->setAttackSkill(skills[SKILL_ATTACK].value);
 	}
-	if (creature->getQuiver() == item && item->getAmount() <= num)
+	else if (creature->getQuiver() == item && item->getAmount() <= num)
 	{
+		item->setActive(false);
 		creature->readyQuiver(NULL);
 	}
 	creature->removeItem(item, num, false);
@@ -310,7 +313,8 @@ int Player::actionWield(Item* itemObj)
 	assert(itemObj->getType() == ITEM_WEAPON);
 
 	Weapon* weapon = static_cast<Weapon*>(itemObj);
-	if (creature->getMainWeapon() == weapon)
+	Weapon* current = creature->getMainWeapon();
+	if (current == weapon)
 	{
 		msg << "You are already wielding " << util::format(FORMAT_DEF, weapon) << ".";
 		world.addMessage(msg.str());
@@ -318,10 +322,11 @@ int Player::actionWield(Item* itemObj)
 	}
 	else
 	{
-		creature->wieldMainWeapon(weapon);
-		creature->setAttackSkill(weapon->getRange() > 1 ? skills[SKILL_RANGED_ATTACK].value : skills[SKILL_ATTACK].value);
 		msg << "You are now wielding " << util::format(FORMAT_INDEF, weapon) << ".";
 		world.addMessage(msg.str());
+		if (current != NULL) current->setActive(false);
+		creature->wieldMainWeapon(weapon);
+		creature->setAttackSkill(weapon->getRange() > 1 ? skills[SKILL_RANGED_ATTACK].value : skills[SKILL_ATTACK].value);
 		return 30;
 	}
 }
@@ -354,10 +359,10 @@ int Player::actionWear(Item* itemObj)
 		}
 		else if (state == STATE_DRESSING)
 		{
-			creature->wearArmor(armor);
 			state = STATE_DEFAULT;
 			msg << "You finish putting on " << util::format(FORMAT_INDEF, armor) << ".";
 			world.addMessage(msg.str());
+			creature->wearArmor(armor);
 			return 0;
 		}
 	}
@@ -406,11 +411,12 @@ int Player::actionQuiver(Item* item)
 	assert(item->getType() == ITEM_AMMO);
 
 	std::stringstream msg;
-	msg << "You ready " << util::format(FORMAT_INDEF, item->toString(),item->getFormatFlags()) << ".";
+	msg << "You ready " << util::format(FORMAT_INDEF, item) << ".";
 	world.addMessage(msg.str());
 
-	assert(item->getType() == ITEM_AMMO);
 	Ammo* a = static_cast<Ammo*>(item);
+	Ammo* current = creature->getQuiver();
+	if (current != NULL) current->setActive(false);
 	creature->readyQuiver(a);
 
 	return 10;
