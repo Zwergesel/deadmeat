@@ -24,7 +24,11 @@ void fillFactoryTemplates()
 	Goblin dragon("Smaug", F_PROPER | F_MALE, 'D', TCODColor::red, 300, 100, Weapon(15, 50, 19, 3, 7, EFFECT_NONE, 1), 75, 16, 2500);
 
 	InventoryTable fighter_weapons;
-	fighter_weapons.add({"halberd","sword","dagger"}, 850, 1, 1); // TODO: do initialization lists compile in VS2010?
+	std::vector<std::string> wpns;
+	wpns.push_back("halberd");
+	wpns.push_back("sword");
+	wpns.push_back("dagger");
+	fighter_weapons.add(wpns, 850, 1, 1); // TODO: do initialization lists compile in VS2010?
 	fighter_weapons.add("longbow", 200);
 
 	factory.setTemplate("goblin", &goblin);
