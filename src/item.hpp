@@ -11,11 +11,11 @@ class LoadBlock;
 
 enum ITEM_TYPE
 {
-  ITEM_DEFAULT,
   ITEM_WEAPON,
   ITEM_AMMO,
   ITEM_ARMOR,
   ITEM_FOOD,
+  ITEM_DEFAULT,
   NUM_ITEM_TYPE
 };
 
@@ -56,5 +56,7 @@ public:
 	virtual unsigned int save(Savegame& sg);
 	virtual void load(LoadBlock& load);
 };
+
+extern Item PSEUDOITEM_NOTHING;
 
 #endif

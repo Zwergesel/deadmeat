@@ -8,7 +8,7 @@ Weapon::Weapon()
 {
 	// Empty constructor, for savegames
 	type = ITEM_WEAPON;
-	strType = "weapon";
+	strType = "weapons";
 }
 
 Weapon::Weapon(std::string n, uint f, symbol s, TCODColor c, int x, int spd, int hit, int dmg, int dice, int dmax, int ench, int h, WeaponEffect e, int r)
@@ -16,7 +16,7 @@ Weapon::Weapon(std::string n, uint f, symbol s, TCODColor c, int x, int spd, int
 	,diceMax(dmax), enchantment(ench), hands(h), effect(e), range(r)
 {
 	type = ITEM_WEAPON;
-	strType = "weapon";
+	strType = "weapons";
 }
 
 Weapon::Weapon(int spd, int hit, int dmg, int dice, int dmax, WeaponEffect e, int r):
@@ -24,7 +24,7 @@ Weapon::Weapon(int spd, int hit, int dmg, int dice, int dmax, WeaponEffect e, in
 	numDice(dice), diceMax(dmax), enchantment(0), hands(0), effect(e), range(r)
 {
 	type = ITEM_WEAPON;
-	strType = "weapon";
+	strType = "weapons";
 }
 
 Weapon::~Weapon() {}
