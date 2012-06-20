@@ -343,6 +343,7 @@ int Player::actionDrop(Item* item, int num)
 		creature->readyQuiver(NULL);
 	}
 	creature->removeItem(item, num, false);
+	// setActive(false) must be after removeItem in case of stack splits
 	if (item->getType() == ITEM_WEAPON || item->getType() == ITEM_AMMO) item->setActive(false);
 	msg << "You drop " << util::format(FORMAT_INDEF, item) << ".";
 	world.addMessage(msg.str());
@@ -353,11 +354,26 @@ int Player::actionDrop(Item* item, int num)
 int Player::actionWield(Item* itemObj)
 {
 	std::stringstream msg;
-	if (itemObj == NULL) return 0;
-	assert(itemObj->getType() == ITEM_WEAPON);
-
-	Weapon* weapon = static_cast<Weapon*>(itemObj);
 	Weapon* current = creature->getMainWeapon();
+	
+	if (itemObj == NULL)
+	{
+		if (current != NULL)
+		{
+			current->setActive(false);
+			creature->wieldMainWeapon(NULL);
+			creature->setAttackSkill(skills[SKILL_ATTACK].value);
+			msg << "You put away " << util::format(FORMAT_YOUR, current) << ".";
+			world.addMessage(msg.str());
+			return 15; // TODO: why 15?
+		}
+		return 0;
+	}
+	
+	assert(itemObj->getType() == ITEM_WEAPON);
+	Weapon* weapon = static_cast<Weapon*>(itemObj);
+	
+	// Wield new weapon
 	if (current == weapon)
 	{
 		msg << "You are already wielding " << util::format(FORMAT_DEF, weapon) << ".";
@@ -371,7 +387,7 @@ int Player::actionWield(Item* itemObj)
 		if (current != NULL) current->setActive(false);
 		creature->wieldMainWeapon(weapon);
 		creature->setAttackSkill(weapon->getRange() > 1 ? skills[SKILL_RANGED_ATTACK].value : skills[SKILL_ATTACK].value);
-		return 30;
+		return 30; // TODO: why 30?
 	}
 }
 
@@ -455,11 +471,22 @@ int Player::actionQuiver(Item* item)
 	assert(item->getType() == ITEM_AMMO);
 
 	std::stringstream msg;
+	Ammo* current = creature->getQuiver();
+	if (item == current)
+	{
+		current->setActive(false);
+		msg << util::format(FORMAT_DEF, current, true);
+		msg << ((current->getFormatFlags() & F_PLURAL) || current->getAmount() > 1 ? " are " : " is ");
+		msg << "already in your quiver";
+		world.addMessage(msg.str());
+		current->setActive(true);
+		return 0;
+	}
+
 	msg << "You ready " << util::format(FORMAT_INDEF, item) << ".";
 	world.addMessage(msg.str());
 
 	Ammo* a = static_cast<Ammo*>(item);
-	Ammo* current = creature->getQuiver();
 	if (current != NULL) current->setActive(false);
 	creature->readyQuiver(a);
 
@@ -833,8 +860,10 @@ int Player::processAction()
 		// open wield weapon screen
 		else if (state == STATE_DEFAULT && key.c == 'w')
 		{
-			world.itemSelection = ItemSelection(creature->getInventory(), "What do you want to wield?", false);
-			world.itemSelection.filterType(ITEM_WEAPON)->runFilter();
+			std::map<symbol,Item*> list = creature->getInventory();
+			list['*'] = &PSEUDOITEM_NOTHING;
+			world.itemSelection = ItemSelection(list, "What do you want to wield?", false);
+			world.itemSelection.filterType(ITEM_WEAPON)->filterType(ITEM_DEFAULT)->runFilter();
 			if (world.itemSelection.getNumChoices() > 0)
 			{
 				world.itemSelection.compile(world.viewItemList.height);
@@ -900,7 +929,8 @@ int Player::processAction()
 			if (world.itemSelection.keyInput(key))
 			{
 				state = STATE_DEFAULT;
-				return actionWield(world.itemSelection.getItem());
+				Item* choice = world.itemSelection.getItem();
+				if (choice != NULL) return actionWield(choice == &PSEUDOITEM_NOTHING ? NULL : choice);
 			}
 			return 0;
 		}

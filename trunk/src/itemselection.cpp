@@ -176,7 +176,7 @@ ItemSelection* ItemSelection::compile(int height)
 					pageStart.push_back(compiledStrings.size());
 				}
 				currentRow++;
-				compiledStrings.push_back(CompiledData(currentRow, '\0', util::capitalize(util::plural((*it)->typeString())), true, -1));
+				compiledStrings.push_back(CompiledData(currentRow, '\0', util::capitalize((*it)->typeString()), true, -1));
 				currentRow += 2;
 			}
 			/* Item */
@@ -203,7 +203,7 @@ ItemSelection* ItemSelection::compile(int height)
 					pageStart.push_back(compiledStrings.size());
 				}
 				currentRow++;
-				compiledStrings.push_back(CompiledData(currentRow, '\0', util::capitalize(util::plural(it->second->typeString())), true, -1));
+				compiledStrings.push_back(CompiledData(currentRow, '\0', util::capitalize(it->second->typeString()), true, -1));
 				currentRow += 2;
 			}
 			/* Item */
@@ -307,13 +307,6 @@ bool ItemSelection::keyInput(TCOD_key_t key)
 		splitAmount = 0;
 		return false;
 	}
-	else if ((key.c >= 'a' && key.c <= 'z') || (key.c >= 'A' && key.c <= 'Z'))
-	{
-		// Select an item
-		bool exit = toggleItem(key.c);
-		splitAmount = 0;
-		return exit;
-	}
 	else if (key.c == '>')
 	{
 		// Advance one page
@@ -327,6 +320,13 @@ bool ItemSelection::keyInput(TCOD_key_t key)
 		if (page > 0) page--;
 		splitAmount = 0;
 		return false;
+	}
+	else if ((key.c >= 'a' && key.c <= 'z') || (key.c >= 'A' && key.c <= 'Z') || key.c == '*')
+	{
+		// Select an item
+		bool exit = toggleItem(key.c);
+		splitAmount = 0;
+		return exit;
 	}
 	return false;
 }

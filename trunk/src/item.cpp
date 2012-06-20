@@ -2,20 +2,20 @@
 #include "savegame.hpp"
 #include <cassert>
 
-std::string Item::ACTIVE_STRINGS[NUM_ITEM_TYPE] = { "active", "wielded", "in quiver", "worn", "ERR_FOOD_ACTIVE" };
+std::string Item::ACTIVE_STRINGS[NUM_ITEM_TYPE] = { "wielded", "in quiver", "worn", "ERR_FOOD_ACTIVE", "active" };
 
 Item::Item()
 {
 	// constructor for savegames
 	type = ITEM_DEFAULT;
-	strType = "Item";
+	strType = "other options";
 }
 
 Item::Item(std::string n, uint f, symbol s, TCODColor c, int x):
 	name(n), formatFlags(f), sym(s), color(c), amount(x), active(false)
 {
 	type = ITEM_DEFAULT;
-	strType = "Item";
+	strType = "other options";
 }
 
 Item::~Item() {}
@@ -99,6 +99,8 @@ bool Item::canStackWith(Item* compare)
 	// TODO: subclass compare function call
 	return true;
 }
+
+Item PSEUDOITEM_NOTHING = Item("nothing", F_PROPER, '#', TCODColor::pink, 1);
 
 /*--------------------- SAVING AND LOADING ---------------------*/
 
