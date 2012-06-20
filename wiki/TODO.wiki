@@ -18,7 +18,6 @@
 
 == Small improvements ==
   * only fitting ammo should be used (arrows-bows, bullets-slings etc)
-  * item that are in use (worn, wielded etc) should be marked as such
 
 == Major improvements ==
   * Cursed Items
