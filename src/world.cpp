@@ -385,9 +385,8 @@ void World::drawCursor(Point target, Point levelOffset, bool traceLine)
 	{
 		Point origin = player->getCreature()->getPos() + levelOffset;
 		Point current;
-		TCODLine line;
-		line.init(origin.x, origin.y, target.x, target.y);
-		while (!line.step(&current.x, &current.y) && (current.x != target.x || current.y != target.y))
+		TCODLine::init(origin.x, origin.y, target.x, target.y);
+		while (!TCODLine::step(&current.x, &current.y) && (current.x != target.x || current.y != target.y))
 		{
 			TCODConsole::root->setCharBackground(viewLevel.x + current.x, viewLevel.y + current.y, TCODColor::yellow, TCOD_BKGND_ALPHA(0.4));
 		}

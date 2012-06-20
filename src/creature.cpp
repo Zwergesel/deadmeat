@@ -423,10 +423,9 @@ int Creature::rangedAttack(Creature* target, Weapon* w)
 	// Traverse the line of the shot
 	TCODRandom* rng = TCODRandom::getInstance();
 	Point destination = target->getPos();
-	TCODLine flightpath;
-	flightpath.init(position.x, position.y, destination.x, destination.y);
+	TCODLine::init(position.x, position.y, destination.x, destination.y);
 	Point current;
-	while (!flightpath.step(&current.x, &current.y))
+	while (!TCODLine::step(&current.x, &current.y))
 	{
 		if (world.tileSet->isBlocking(level->getTile(current)))
 		{
@@ -443,7 +442,7 @@ int Creature::rangedAttack(Creature* target, Weapon* w)
 			break;
 		}
 	}
-	
+
 	// Remove ammo
 	if (ammo->getAmount() == 1) readyQuiver(NULL);
 	removeItem(ammo, 1, true);
