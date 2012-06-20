@@ -163,7 +163,7 @@ int Player::actionLook(Point pos)
 		std::vector<Item*> items = level->itemsAt(pos);
 		Object obj;
 		bool hasObj = level->objectAt(pos, obj);
-		
+
 		if (c != NULL && c != creature)
 		{
 			// ...see the creature there...

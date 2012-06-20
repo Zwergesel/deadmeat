@@ -29,7 +29,7 @@ Savegame::~Savegame()
 {
 	if (objects != NULL)
 	{
-		delete objects;
+		delete[] objects;
 		objects = NULL;
 	}
 }
@@ -216,6 +216,7 @@ bool Savegame::loadSavegame(std::string fileName)
 		std::cerr << "Savegame is corrupt: " << e.what() << std::endl;
 		loadStream.close();
 		delete[] objects;
+		objects = NULL;
 		return false;
 	}
 

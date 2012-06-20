@@ -33,7 +33,7 @@ public:
 	symbol getSymbol();
 	TCODColor getColor();
 	std::string toString();
-	
+
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);
 };

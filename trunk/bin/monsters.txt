@@ -7,6 +7,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+active: false
 speed: 15
 hitBonus: 50
 baseDamage: 19
@@ -50,6 +51,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+active: false
 speed: 16
 hitBonus: 15
 baseDamage: 5
@@ -93,6 +95,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+active: false
 speed: 11
 hitBonus: 0
 baseDamage: 4
@@ -136,6 +139,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+active: false
 speed: 25
 hitBonus: 0
 baseDamage: 0
@@ -179,6 +183,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+active: false
 speed: 16
 hitBonus: 15
 baseDamage: 5
@@ -222,6 +227,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+active: false
 speed: 10
 hitBonus: 0
 baseDamage: 1
@@ -265,6 +271,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+active: false
 speed: 16
 hitBonus: 15
 baseDamage: 5
@@ -308,6 +315,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+active: false
 speed: 13
 hitBonus: 0
 baseDamage: 3
@@ -351,6 +359,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+active: false
 speed: 12
 hitBonus: 0
 baseDamage: 6
@@ -394,6 +403,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+active: false
 speed: 16
 hitBonus: 0
 baseDamage: 3
@@ -437,6 +447,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+active: false
 speed: 13
 hitBonus: 40
 baseDamage: 12
@@ -480,6 +491,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+active: false
 speed: 14
 hitBonus: 0
 baseDamage: 3
@@ -523,6 +535,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+active: false
 speed: 18
 hitBonus: 20
 baseDamage: 14
@@ -566,6 +579,7 @@ formatFlags: 65536
 symbol: 33
 color: 0, 255, 255
 amount: 5
+active: false
 enchantment: 0
 effect: 0
 
@@ -575,7 +589,9 @@ formatFlags: 65536
 symbol: 37
 color: 191, 95, 0
 amount: 1
+active: false
 nutrition: 2500
+eatTime: 100
 
 [[Armor: 30]]
 name: clown shoes
@@ -583,6 +599,7 @@ formatFlags: 65544
 symbol: 41
 color: 0, 0, 0
 amount: 1
+active: false
 defense: -30
 hindrance: 12
 slot: 1
@@ -594,6 +611,7 @@ formatFlags: 65536
 symbol: 40
 color: 255, 0, 0
 amount: 1
+active: false
 speed: 7
 hitBonus: 10
 baseDamage: 8
@@ -610,6 +628,7 @@ formatFlags: 65536
 symbol: 40
 color: 255, 0, 0
 amount: 1
+active: false
 speed: 22
 hitBonus: 40
 baseDamage: 15
@@ -626,6 +645,7 @@ formatFlags: 65552
 symbol: 49
 color: 0, 0, 255
 amount: 1
+active: false
 
 [[Item: 34]]
 name: item2
@@ -633,6 +653,7 @@ formatFlags: 65552
 symbol: 50
 color: 0, 255, 0
 amount: 1
+active: false
 
 [[Weapon: 35]]
 name: lightsaber
@@ -640,6 +661,7 @@ formatFlags: 65536
 symbol: 40
 color: 255, 0, 0
 amount: 1
+active: false
 speed: 8
 hitBonus: 30
 baseDamage: 1
@@ -656,6 +678,7 @@ formatFlags: 65536
 symbol: 40
 color: 0, 255, 255
 amount: 1
+active: false
 speed: 25
 hitBonus: 25
 baseDamage: 30
@@ -672,7 +695,9 @@ formatFlags: 65536
 symbol: 37
 color: 255, 127, 0
 amount: 1
+active: false
 nutrition: 1000
+eatTime: 15
 
 [[Armor: 38]]
 name: prussian pickelhaube
@@ -680,6 +705,7 @@ formatFlags: 65536
 symbol: 41
 color: 0, 0, 0
 amount: 1
+active: false
 defense: 50
 hindrance: 0
 slot: 2
@@ -691,6 +717,7 @@ formatFlags: 65536
 symbol: 40
 color: 255, 0, 0
 amount: 1
+active: false
 speed: 15
 hitBonus: 20
 baseDamage: 12
@@ -707,6 +734,7 @@ formatFlags: 65552
 symbol: 41
 color: 0, 0, 0
 amount: 1
+active: false
 defense: 100
 hindrance: 10
 slot: 0
