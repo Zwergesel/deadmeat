@@ -980,6 +980,11 @@ int Player::processAction()
 					options.append("w");
 					request.append("\n\nw - wield");
 				}
+				if (item->getType() == ITEM_AMMO && creature->getQuiver() != item)
+				{
+					options.append("q");
+					request.append("\n\nq - ready ammunition");
+				}
 				if (item->getType() == ITEM_ARMOR && creature->getArmor(static_cast<Armor*>(item)->getSlot()) != item)
 				{
 					options.append("W");
@@ -996,6 +1001,11 @@ int Player::processAction()
 				{
 					state = STATE_DEFAULT;
 					return actionWield(item);
+				}
+				else if (reply == 'q')
+				{
+					state = STATE_DEFAULT;
+					return actionQuiver(item);
 				}
 				else if (reply == 'W')
 				{
