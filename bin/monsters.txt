@@ -1,5 +1,5 @@
 Version: 0.10
-SavedObjects: 40      
+SavedObjects: 43      
 
 [[Weapon: 3]]
 name: x
@@ -17,6 +17,7 @@ enchantment: 0
 hands: 0
 effect: 0
 range: 1
+ammoType: 0
 
 [[Goblin: 2]]
 name: Smaug
@@ -61,6 +62,7 @@ enchantment: 0
 hands: 0
 effect: 0
 range: 1
+ammoType: 0
 
 [[Goblin: 4]]
 name: blue baby dragon
@@ -105,6 +107,7 @@ enchantment: 0
 hands: 0
 effect: 0
 range: 1
+ammoType: 0
 
 [[Goblin: 6]]
 name: goblin
@@ -149,6 +152,7 @@ enchantment: 0
 hands: 0
 effect: 0
 range: 1
+ammoType: 0
 
 [[Goblin: 8]]
 name: medic
@@ -193,6 +197,7 @@ enchantment: 0
 hands: 0
 effect: 0
 range: 1
+ammoType: 0
 
 [[Goblin: 10]]
 name: purple baby dragon
@@ -237,6 +242,7 @@ enchantment: 0
 hands: 0
 effect: 0
 range: 1
+ammoType: 0
 
 [[Goblin: 12]]
 name: rat
@@ -281,6 +287,7 @@ enchantment: 0
 hands: 0
 effect: 0
 range: 1
+ammoType: 0
 
 [[Goblin: 14]]
 name: red baby dragon
@@ -325,6 +332,7 @@ enchantment: 0
 hands: 0
 effect: 0
 range: 1
+ammoType: 0
 
 [[Goblin: 16]]
 name: sergeant
@@ -369,6 +377,7 @@ enchantment: 0
 hands: 0
 effect: 0
 range: 1
+ammoType: 0
 
 [[Goblin: 18]]
 name: snake
@@ -413,6 +422,7 @@ enchantment: 0
 hands: 0
 effect: 0
 range: 1
+ammoType: 0
 
 [[Goblin: 20]]
 name: soldier
@@ -457,6 +467,7 @@ enchantment: 0
 hands: 0
 effect: 0
 range: 1
+ammoType: 0
 
 [[Goblin: 22]]
 name: soldier ant
@@ -501,6 +512,7 @@ enchantment: 0
 hands: 0
 effect: 0
 range: 1
+ammoType: 0
 
 [[Goblin: 24]]
 name: spider
@@ -545,6 +557,7 @@ enchantment: 0
 hands: 0
 effect: 0
 range: 1
+ammoType: 0
 
 [[Goblin: 26]]
 name: troll
@@ -582,6 +595,7 @@ amount: 5
 active: false
 enchantment: 0
 effect: 0
+ammoType: 1
 
 [[Food: 29]]
 name: beefsteak
@@ -593,7 +607,29 @@ active: false
 nutrition: 2500
 eatTime: 100
 
-[[Armor: 30]]
+[[Ammo: 30]]
+name: bolt
+formatFlags: 65536
+symbol: 33
+color: 0, 0, 255
+amount: 5
+active: false
+enchantment: 0
+effect: 0
+ammoType: 2
+
+[[Ammo: 31]]
+name: bullet
+formatFlags: 65536
+symbol: 33
+color: 63, 63, 255
+amount: 5
+active: false
+enchantment: 0
+effect: 0
+ammoType: 3
+
+[[Armor: 32]]
 name: clown shoes
 formatFlags: 65544
 symbol: 41
@@ -605,7 +641,25 @@ hindrance: 12
 slot: 1
 enchantment: -1
 
-[[Weapon: 31]]
+[[Weapon: 33]]
+name: crossbow
+formatFlags: 65536
+symbol: 40
+color: 0, 0, 255
+amount: 1
+active: false
+speed: 35
+hitBonus: 25
+baseDamage: 40
+numDice: 3
+diceMax: 10
+enchantment: 0
+hands: 1
+effect: 0
+range: 20
+ammoType: 2
+
+[[Weapon: 34]]
 name: dagger
 formatFlags: 65536
 symbol: 40
@@ -621,8 +675,17 @@ enchantment: 0
 hands: 1
 effect: 0
 range: 1
+ammoType: 0
 
-[[Weapon: 32]]
+[[Gold: 35]]
+name: gold
+formatFlags: 4
+symbol: 36
+color: 242, 210, 0
+amount: 12
+active: false
+
+[[Weapon: 36]]
 name: halberd
 formatFlags: 65536
 symbol: 40
@@ -638,24 +701,9 @@ enchantment: 0
 hands: 2
 effect: 0
 range: 1
+ammoType: 0
 
-[[Item: 33]]
-name: item1
-formatFlags: 65552
-symbol: 49
-color: 0, 0, 255
-amount: 1
-active: false
-
-[[Item: 34]]
-name: item2
-formatFlags: 65552
-symbol: 50
-color: 0, 255, 0
-amount: 1
-active: false
-
-[[Weapon: 35]]
+[[Weapon: 37]]
 name: lightsaber
 formatFlags: 65536
 symbol: 40
@@ -671,8 +719,9 @@ enchantment: 30
 hands: 1
 effect: 0
 range: 1
+ammoType: 0
 
-[[Weapon: 36]]
+[[Weapon: 38]]
 name: longbow
 formatFlags: 65536
 symbol: 40
@@ -687,9 +736,10 @@ diceMax: 10
 enchantment: 0
 hands: 1
 effect: 0
-range: 20
+range: 30
+ammoType: 1
 
-[[Food: 37]]
+[[Food: 39]]
 name: meat ball
 formatFlags: 65536
 symbol: 37
@@ -699,7 +749,7 @@ active: false
 nutrition: 1000
 eatTime: 15
 
-[[Armor: 38]]
+[[Armor: 40]]
 name: prussian pickelhaube
 formatFlags: 65536
 symbol: 41
@@ -711,7 +761,25 @@ hindrance: 0
 slot: 2
 enchantment: 1
 
-[[Weapon: 39]]
+[[Weapon: 41]]
+name: slingshot
+formatFlags: 65536
+symbol: 40
+color: 63, 63, 255
+amount: 1
+active: false
+speed: 15
+hitBonus: 35
+baseDamage: 10
+numDice: 1
+diceMax: 10
+enchantment: 0
+hands: 1
+effect: 0
+range: 10
+ammoType: 3
+
+[[Weapon: 42]]
 name: long sword
 formatFlags: 65536
 symbol: 40
@@ -727,8 +795,9 @@ enchantment: 0
 hands: 1
 effect: 0
 range: 1
+ammoType: 0
 
-[[Armor: 40]]
+[[Armor: 43]]
 name: uber armor
 formatFlags: 65552
 symbol: 41
@@ -768,30 +837,36 @@ _spawnName: spider
 _creature: @24
 _spawnName: troll
 _creature: @26
-#items: 13
+#items: 16
 _spawnName: arrows
 _item: @28
 _spawnName: beefsteak
 _item: @29
-_spawnName: clown shoes
+_spawnName: bolts
 _item: @30
-_spawnName: dagger
+_spawnName: bullets
 _item: @31
-_spawnName: halberd
+_spawnName: clown shoes
 _item: @32
-_spawnName: item1
+_spawnName: crossbow
 _item: @33
-_spawnName: item2
+_spawnName: dagger
 _item: @34
-_spawnName: lightsaber
+_spawnName: gold
 _item: @35
-_spawnName: longbow
+_spawnName: halberd
 _item: @36
-_spawnName: meatball
+_spawnName: lightsaber
 _item: @37
-_spawnName: pickelhaube
+_spawnName: longbow
 _item: @38
-_spawnName: sword
+_spawnName: meatball
 _item: @39
-_spawnName: uber armor
+_spawnName: pickelhaube
 _item: @40
+_spawnName: slingshot
+_item: @41
+_spawnName: sword
+_item: @42
+_spawnName: uber armor
+_item: @43

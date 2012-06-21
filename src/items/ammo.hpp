@@ -12,14 +12,16 @@ class Ammo : public Item
 private:
 	int enchantment;
 	WeaponEffect effect;
+	AmmoType ammoType;
 
 public:
 	Ammo();
-	Ammo(std::string name, uint format, symbol sym, TCODColor color, int amount, int enchantment, WeaponEffect effect);
+	Ammo(std::string name, uint format, symbol sym, TCODColor color, int amount, int enchantment, WeaponEffect effect, AmmoType ammoType);
 	~Ammo();
 	Item* clone();
 
 	int getEnchantment();
+	AmmoType getAmmoType();
 	WeaponEffect getEffect();
 	std::string toString();
 

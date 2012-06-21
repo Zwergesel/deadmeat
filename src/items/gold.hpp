@@ -13,9 +13,9 @@ public:
 	Gold(int amount);
 	~Gold();
 	Item* clone();
-	
+
 	virtual unsigned int save(Savegame& sg);
-	virtual void load(LoadBlock& load);	
+	virtual void load(LoadBlock& load);
 };
 
 #endif
