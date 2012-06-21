@@ -108,6 +108,13 @@ TCOD_key_t Player::waitForKeypress(bool clBuf)
 			world.requestQuit = true;
 			return key;
 		}
+		#ifdef TCOD_MACOSX
+		else if (key.pressed && key.meta && key.c == 'q')
+		{
+			world.requestQuit = true;
+			return TCOD_key_t();
+		}
+		#endif
 		else if (key.pressed && (key.lalt || key.ralt) && key.vk == TCODK_ENTER)
 		{
 			world.toggleFullscreen();
