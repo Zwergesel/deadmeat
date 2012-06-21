@@ -38,8 +38,7 @@ Player::Player(std::string name):
 	attrPoints = 0;
 	skillPoints = 3; // TODO: this is for debug
 	creature = new Creature(name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 200, 75,
-	                        Weapon(8, 0, 3, 1, 2, EFFECT_NONE, 1), 0, 10, 0
-	                       );
+	                        Weapon(8, 0, 3, 1, 2, EFFECT_NONE, 1, AMMO_NONE), 0, 10, 0);
 	creature->setControlled(true);
 	creature->setAttackSkill(/* TODO: Something */0);
 	creature->setDefenseSkill(/* TODO: Something */0);
@@ -108,13 +107,13 @@ TCOD_key_t Player::waitForKeypress(bool clBuf)
 			world.requestQuit = true;
 			return key;
 		}
-		#ifdef TCOD_MACOSX
+#ifdef TCOD_MACOSX
 		else if (key.pressed && key.meta && key.c == 'q')
 		{
 			world.requestQuit = true;
 			return TCOD_key_t();
 		}
-		#endif
+#endif
 		else if (key.pressed && (key.lalt || key.ralt) && key.vk == TCODK_ENTER)
 		{
 			world.toggleFullscreen();
@@ -583,6 +582,12 @@ int Player::actionRangedAttack(Point pos)
 	if (creature->getQuiver() == NULL)
 	{
 		world.addMessage("You have no ammunition ready.");
+		state = STATE_DEFAULT;
+		return 0;
+	}
+	if (creature->getMainWeapon()->getAmmoType() != AMMO_NONE && creature->getQuiver()->getAmmoType() != creature->getMainWeapon()->getAmmoType())
+	{
+		world.addMessage("You have no fitting ammunition ready.");
 		state = STATE_DEFAULT;
 		return 0;
 	}

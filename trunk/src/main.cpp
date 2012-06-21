@@ -98,6 +98,10 @@ int main()
 		world.player->getCreature()->addItem(factory.spawnItem("lightsaber"));
 		world.player->getCreature()->addItem(factory.spawnItem("longbow"));
 		world.player->getCreature()->addItem(factory.spawnItem("arrows"));
+		world.player->getCreature()->addItem(factory.spawnItem("crossbow"));
+		world.player->getCreature()->addItem(factory.spawnItem("bolts"));
+		world.player->getCreature()->addItem(factory.spawnItem("slingshot"));
+		world.player->getCreature()->addItem(factory.spawnItem("bullets"));
 	}
 
 	while (!world.requestQuit)

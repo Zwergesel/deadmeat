@@ -15,6 +15,15 @@ enum WeaponEffect
   NUM_EFFECT
 };
 
+enum AmmoType
+{
+  AMMO_NONE,
+  AMMO_ARROW,
+  AMMO_BOLT,
+  AMMO_BULLET,
+  NUM_AMMOTYPE
+};
+
 class Weapon : public Item
 {
 private:
@@ -27,11 +36,12 @@ private:
 	int hands;
 	WeaponEffect effect;
 	int range;
+	AmmoType ammoType;
 
 public:
 	Weapon();
-	Weapon(std::string name, uint format, symbol sym, TCODColor color, int amount, int spd, int hit, int dmg, int dice, int dmax, int ench, int hands, WeaponEffect effect, int range);
-	Weapon(int spd, int hit, int dmg, int dice, int dmax, WeaponEffect effect, int range);
+	Weapon(std::string name, uint format, symbol sym, TCODColor color, int amount, int spd, int hit, int dmg, int dice, int dmax, int ench, int hands, WeaponEffect effect, int range, AmmoType ammoType);
+	Weapon(int spd, int hit, int dmg, int dice, int dmax, WeaponEffect effect, int range, AmmoType ammoType);
 	~Weapon();
 	Item* clone();
 
@@ -43,6 +53,7 @@ public:
 	int getEnchantment();
 	int getHandsUsed();
 	int getRange();
+	AmmoType getAmmoType();
 	float getDPS();
 	std::string toString();
 

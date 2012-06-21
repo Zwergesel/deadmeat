@@ -11,17 +11,17 @@ Weapon::Weapon()
 	strType = "weapons";
 }
 
-Weapon::Weapon(std::string n, uint f, symbol s, TCODColor c, int x, int spd, int hit, int dmg, int dice, int dmax, int ench, int h, WeaponEffect e, int r)
+Weapon::Weapon(std::string n, uint f, symbol s, TCODColor c, int x, int spd, int hit, int dmg, int dice, int dmax, int ench, int h, WeaponEffect e, int r, AmmoType a)
 	:Item(n,f,s,c,x), speed(spd), hitBonus(hit), baseDamage(dmg), numDice(dice)
-	,diceMax(dmax), enchantment(ench), hands(h), effect(e), range(r)
+	,diceMax(dmax), enchantment(ench), hands(h), effect(e), range(r), ammoType(a)
 {
 	type = ITEM_WEAPON;
 	strType = "weapons";
 }
 
-Weapon::Weapon(int spd, int hit, int dmg, int dice, int dmax, WeaponEffect e, int r):
+Weapon::Weapon(int spd, int hit, int dmg, int dice, int dmax, WeaponEffect e, int r, AmmoType a):
 	Item("x", F_DEFAULT, '#', TCODColor::pink, 1), speed(spd), hitBonus(hit), baseDamage(dmg),
-	numDice(dice), diceMax(dmax), enchantment(0), hands(0), effect(e), range(r)
+	numDice(dice), diceMax(dmax), enchantment(0), hands(0), effect(e), range(r), ammoType(a)
 {
 	type = ITEM_WEAPON;
 	strType = "weapons";
@@ -31,7 +31,7 @@ Weapon::~Weapon() {}
 
 Item* Weapon::clone()
 {
-	Weapon* copy = new Weapon(name, formatFlags, sym, color, amount, speed, hitBonus, baseDamage, numDice, diceMax, enchantment, hands, effect, range);
+	Weapon* copy = new Weapon(name, formatFlags, sym, color, amount, speed, hitBonus, baseDamage, numDice, diceMax, enchantment, hands, effect, range, ammoType);
 	copy->active = active;
 	return copy;
 }
@@ -88,6 +88,11 @@ float Weapon::getDPS()
 	return 10.f * (baseDamage + numDice * diceMax/2.0f) / speed;
 }
 
+AmmoType Weapon::getAmmoType()
+{
+	return ammoType;
+}
+
 std::string Weapon::toString()
 {
 	std::stringstream ss;
@@ -107,18 +112,22 @@ unsigned int Weapon::save(Savegame& sg)
 	store ("speed", speed) ("hitBonus", hitBonus) ("baseDamage", baseDamage);
 	store ("numDice", numDice) ("diceMax", diceMax) ("enchantment", enchantment);
 	store ("hands", hands) ("effect", effect) ("range", range);
+	store ("ammoType", ammoType);
 	sg << store;
 	return id;
 }
 
 void Weapon::load(LoadBlock& load)
 {
-	int e;
+	int e,a;
 	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
 	load ("color", color) ("amount", amount) ("active", active);
 	load ("speed", speed) ("hitBonus", hitBonus) ("baseDamage", baseDamage);
 	load ("numDice", numDice) ("diceMax", diceMax) ("enchantment", enchantment);
 	load ("hands", hands) ("effect", e) ("range", range);
+	load ("ammoType", a);
+	if (a < 0 || a >= NUM_AMMOTYPE) throw SavegameFormatException("Weapon::load _ ammoType out of range");
+	ammoType = static_cast<AmmoType>(a);
 	if (e < 0 || e >= NUM_EFFECT) throw SavegameFormatException("Weapon::load _ effect out of range");
 	effect = static_cast<WeaponEffect>(e);
 }
