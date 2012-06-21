@@ -112,6 +112,10 @@ TCOD_key_t Player::waitForKeypress(bool clBuf)
 		{
 			world.toggleFullscreen();
 		}
+		else if (key.pressed && key.vk == TCODK_F12)
+		{
+			TCODSystem::saveScreenshot(NULL);
+		}
 		else if (key.pressed)
 		{
 			if (world.getNumMessages() > 0) world.clearMessage = true;
@@ -355,7 +359,7 @@ int Player::actionWield(Item* itemObj)
 {
 	std::stringstream msg;
 	Weapon* current = creature->getMainWeapon();
-	
+
 	if (itemObj == NULL)
 	{
 		if (current != NULL)
@@ -369,10 +373,10 @@ int Player::actionWield(Item* itemObj)
 		}
 		return 0;
 	}
-	
+
 	assert(itemObj->getType() == ITEM_WEAPON);
 	Weapon* weapon = static_cast<Weapon*>(itemObj);
-	
+
 	// Wield new weapon
 	if (current == weapon)
 	{
@@ -671,7 +675,7 @@ int Player::processAction()
 			return 0;
 		}
 		// help screen
-		else if (state == STATE_DEFAULT && key.c == 'H')
+		else if (state == STATE_DEFAULT && (key.c == 'H' || key.vk == TCODK_F1))
 		{
 			world.drawBlockingWindow("Help", HELP_TEXT, " ", TCODColor::blue, false);
 			return 0;
