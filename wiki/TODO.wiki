@@ -12,12 +12,13 @@
   * Let monsters drop their items when they die
   * Stacking of items
   * quiver and use ammo
+  * only fitting ammo should be used (arrows-bows, bullets-slings etc)
 
 == Bugs / Issues ==
   * InventoryTable does not get saved in factory
 
 == Small improvements ==
-  * only fitting ammo should be used (arrows-bows, bullets-slings etc)
+
 
 == Major improvements ==
   * Cursed Items
