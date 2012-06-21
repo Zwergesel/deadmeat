@@ -49,9 +49,9 @@ std::string util::format(FormatRequest req, Creature* c, bool cap)
 
 std::string util::format(FormatRequest req, Item* i, bool cap)
 {
-	if (i->getAmount() > 1)
+	uint flags = i->getFormatFlags();
+	if (i->getAmount() > 1 || (flags & F_PLURAL))
 	{
-		uint flags = i->getFormatFlags();
 		flags |= F_PLURAL;
 		std::stringstream ss;
 		ss << i->getAmount() << " " << plural(i->toString());
@@ -83,6 +83,7 @@ std::string util::plural(std::string str)
 	if (str.compare("armor") == 0 || str.compare("Armor") == 0) return str;
 	if (str.compare("food") == 0 || str.compare("Food") == 0) return str;
 	if (str.compare("ammunition") == 0 || str.compare("Ammunition") == 0) return str;
+	if (str.compare("gold") == 0 || str.compare("Gold") == 0) return str;
 	std::string ret = str;
 	if (str.size() >= 1 && str[str.size()-1] == 's') ret.append("es");
 	else if (str.size() >= 2 && str[str.size()-2] == 's' && str[str.size()-1] == 'h') ret.append("es");

@@ -11,6 +11,7 @@ class LoadBlock;
 
 enum ITEM_TYPE
 {
+  ITEM_GOLD,
   ITEM_WEAPON,
   ITEM_AMMO,
   ITEM_ARMOR,

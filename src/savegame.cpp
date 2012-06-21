@@ -16,6 +16,7 @@
 #include "items/armor.hpp"
 #include "items/food.hpp"
 #include "items/ammo.hpp"
+#include "items/gold.hpp"
 #include "factory.hpp"
 
 std::string Savegame::version = "0.10";
@@ -318,6 +319,12 @@ void Savegame::loadObject()
 	else if (objClass == "Ammo")
 	{
 		Ammo* obj = new Ammo();
+		objects[id] = static_cast<void*>(obj);
+		obj->load(load);
+	}
+	else if (objClass == "Gold")
+	{
+		Gold* obj = new Gold();
 		objects[id] = static_cast<void*>(obj);
 		obj->load(load);
 	}

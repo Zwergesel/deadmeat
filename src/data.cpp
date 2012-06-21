@@ -49,8 +49,6 @@ void fillFactoryTemplates()
 	Weapon sword("long sword", F_NEUTER, '(', TCODColor::red, 1, 15, 20, 12, 2, 8, 0, 1, EFFECT_NONE, 1);
 	Weapon dagger("dagger", F_NEUTER, '(', TCODColor::red, 1, 7, 10, 8, 1, 4, 0, 1, EFFECT_NONE, 1);
 	Weapon halberd("halberd", F_NEUTER, '(', TCODColor::red, 1, 22, 40, 15, 2, 10, 0, 2, EFFECT_NONE, 1);
-	Item item1("item1", F_NEUTER | F_AN, '1', TCODColor::blue, 1);
-	Item item2("item2", F_NEUTER | F_AN, '2', TCODColor::green, 1);
 	Weapon bow("longbow", F_NEUTER, '(', TCODColor::cyan, 1, 25, 25, 30, 2, 10, 0, 1, EFFECT_NONE, 20);
 	Armor body("uber armor", F_NEUTER | F_AN, ')', TCODColor::black, 1, 100, 2, 10, ARMOR_BODY);
 	Armor helmet("prussian pickelhaube", F_NEUTER, ')', TCODColor::black, 1, 50, 1, 0, ARMOR_HAT);
@@ -58,13 +56,12 @@ void fillFactoryTemplates()
 	Food food1("beefsteak", F_NEUTER, '%', TCODColor::darkOrange, 1, 2500, 100);
 	Food food2("meat ball", F_NEUTER, '%', TCODColor::orange, 1, 1000, 15);
 	Ammo arrow("arrow", F_NEUTER, '!', TCODColor::cyan, 5, 0, EFFECT_NONE);
+	Gold gold(12);
 
 	factory.setTemplate("lightsaber", &lightsaber);
 	factory.setTemplate("sword", &sword);
 	factory.setTemplate("dagger", &dagger);
 	factory.setTemplate("halberd", &halberd);
-	factory.setTemplate("item1", &item1);
-	factory.setTemplate("item2", &item2);
 	factory.setTemplate("longbow", &bow);
 	factory.setTemplate("uber armor", &body);
 	factory.setTemplate("pickelhaube", &helmet);
@@ -72,4 +69,5 @@ void fillFactoryTemplates()
 	factory.setTemplate("beefsteak", &food1);
 	factory.setTemplate("meatball", &food2);
 	factory.setTemplate("arrows", &arrow);
+	factory.setTemplate("gold", &gold);
 }
