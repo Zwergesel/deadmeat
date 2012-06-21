@@ -321,10 +321,6 @@ bool ItemSelection::keyInput(TCOD_key_t key)
 		splitAmount = 0;
 		return exit;
 	}
-	else
-	{
-		std::cerr << "KEY: " << key.c << " :END" << std::endl;
-	}
 	return false;
 }
 
