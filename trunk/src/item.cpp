@@ -2,7 +2,7 @@
 #include "savegame.hpp"
 #include <cassert>
 
-std::string Item::ACTIVE_STRINGS[NUM_ITEM_TYPE] = { "wielded", "in quiver", "worn", "ERR_FOOD_ACTIVE", "active" };
+std::string Item::ACTIVE_STRINGS[NUM_ITEM_TYPE] = { "ERR_GOLD_ACTIVE", "wielded", "in quiver", "worn", "ERR_FOOD_ACTIVE", "active" };
 
 Item::Item()
 {
@@ -23,8 +23,6 @@ Item::~Item() {}
 Item* Item::clone()
 {
 	Item* copy = new Item(name, formatFlags, sym, color, amount);
-	copy->type = type;
-	copy->strType = strType;
 	copy->active = active;
 	return copy;
 }

@@ -687,15 +687,10 @@ int Player::processAction()
 			world.drawBlockingWindow("Help", HELP_TEXT, " ", TCODColor::blue, false);
 			return 0;
 		}
-		// numpad player movement
-		else if (state == STATE_DEFAULT && key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
+		// player movement
+		else if (state == STATE_DEFAULT && key.c >= '1' && key.c <= '9' && key.c != '5')
 		{
-			return actionMove(key.vk - TCODK_KP1);
-		}
-		// number keys player movement
-		else if (state == STATE_DEFAULT && key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.vk != TCODK_5)
-		{
-			return actionMove(key.vk - TCODK_1);
+			return actionMove(key.c - '1');
 		}
 		// up/down player movement
 		else if (state == STATE_DEFAULT && key.c == '<')
@@ -719,20 +714,14 @@ int Player::processAction()
 			return 0;
 		}
 		// wait/search
-		else if (state == STATE_DEFAULT && (key.vk == TCODK_5 || key.vk == TCODK_KP5))
+		else if (state == STATE_DEFAULT && key.c == '5')
 		{
 			return 10;
 		}
-		// number pad cursor movement
-		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK) && key.vk >= TCODK_KP1 && key.vk <= TCODK_KP9 && key.vk != TCODK_KP5)
+		// cursor movement
+		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK) && key.c >= '1' && key.c <= '9' && key.c != '5')
 		{
-			moveCursor(key.vk - TCODK_KP1);
-			return 0;
-		}
-		// number keys cursor movement
-		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK) && key.vk >= TCODK_1 && key.vk <= TCODK_9 && key.vk != TCODK_5)
-		{
-			moveCursor(key.vk - TCODK_1);
+			moveCursor(key.c - '1');
 			return 0;
 		}
 		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK) && key.vk == TCODK_ESCAPE)

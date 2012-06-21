@@ -80,8 +80,6 @@ void LevelGen::loadLootTable()
 	loot.add("dagger", 150);
 	loot.add("halberd", 30);
 	loot.add("lightsaber", 5);
-	loot.add("item1", 10);
-	loot.add("item2", 10);
 	loot.add("longbow", 30);
 	loot.add("uber armor", 50);
 	loot.add("pickelhaube", 80);
@@ -89,6 +87,7 @@ void LevelGen::loadLootTable()
 	loot.add("beefsteak", 125);
 	loot.add("meatball", 250);
 	loot.add("arrows", 100);
+	loot.add("gold", 250);
 }
 
 Level* LevelGen::generateLevel(int levelId, LEVELTYPE type)

@@ -490,6 +490,7 @@ void Creature::setBaseWeapon(Weapon base)
 
 symbol Creature::expectedInventoryLetter(Item* item)
 {
+	if (item->getType() == ITEM_GOLD) return '$';
 	for (auto it = inventory.begin(); it != inventory.end(); it++)
 	{
 		if (item->canStackWith(it->second)) return it->first;
@@ -515,6 +516,13 @@ Item* Creature::addItem(Item* item)
 			delete item;
 			return it->second;
 		}
+	}
+	// Special letter for gold
+	if (item->getType() == ITEM_GOLD)
+	{
+		assert(inventory.find('$') == inventory.end());
+		inventory['$'] = item;
+		return item;
 	}
 	// Insert the item in a new slot
 	for (int i=0; i<util::numLetters; i++)

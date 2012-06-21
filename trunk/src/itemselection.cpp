@@ -279,17 +279,10 @@ bool ItemSelection::keyInput(TCOD_key_t key)
 		splitAmount = 0;
 		if (++page >= static_cast<int>(pageStart.size())) return true;
 	}
-	else if (key.vk >= TCODK_0 && key.vk <= TCODK_9)
+	else if (key.c >= '0' && key.c <= '9')
 	{
 		// Change split amount
-		int digit = key.vk - TCODK_0;
-		splitAmount = 10*splitAmount + digit;
-		return false;
-	}
-	else if (key.vk >= TCODK_KP0 && key.vk <= TCODK_KP9)
-	{
-		// Change split amount
-		int digit = key.vk - TCODK_KP0;
+		int digit = key.c - '0';
 		splitAmount = 10*splitAmount + digit;
 		return false;
 	}
@@ -321,12 +314,14 @@ bool ItemSelection::keyInput(TCOD_key_t key)
 		splitAmount = 0;
 		return false;
 	}
-	else if ((key.c >= 'a' && key.c <= 'z') || (key.c >= 'A' && key.c <= 'Z') || key.c == '*')
+	else if ((key.c >= 'a' && key.c <= 'z') || (key.c >= 'A' && key.c <= 'Z') || key.c == '*' || key.c == '$')
 	{
 		// Select an item
 		bool exit = toggleItem(key.c);
 		splitAmount = 0;
 		return exit;
+	} else {
+		std::cerr << "KEY: " << key.c << " :END" << std::endl;
 	}
 	return false;
 }
