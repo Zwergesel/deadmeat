@@ -8,7 +8,7 @@ float PathFindingCallback::getWalkCost(int xFrom, int yFrom, int xTo, int yTo, v
 {
 	Level* level = static_cast<Level*>(userData);
 	Point target = Point(xTo, yTo);
-	if (!world.tileSet->isWalkable(level->getTile(target))) return 0.0;
+	if (!level->isWalkable(target)) return 0.0;
 	Creature* c = level->creatureAt(target);
 	if (c != NULL && c->isControlled() == false) return 0.0;
 	return 1.0;

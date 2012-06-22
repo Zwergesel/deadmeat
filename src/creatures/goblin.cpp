@@ -79,7 +79,7 @@ int Goblin::action()
 	TCODLine::init(p.x, p.y, ppos.x, ppos.y);
 	do
 	{
-		if (!world.tileSet->isTransparent(level->getTile(p)))
+		if (!level->isTransparent(p))
 		{
 			seesPlayer = false;
 			break;

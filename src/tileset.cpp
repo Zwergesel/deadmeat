@@ -10,7 +10,6 @@ TileSet::TileSet()
 	info[TILE_CAVE_WALL]    = TileInfo(TT_WALL, TCOD_CHAR_BLOCK1, TCODColor::grey, TCODColor(125,95,64), "a stone wall");
 	info[TILE_STONE_FLOOR]  = TileInfo(TT_GROUND, '.', TCODColor::grey, TCODColor::white, "a stone tunnel");
 	info[TILE_MEADOW]       = TileInfo(TT_GROUND, '.', TCODColor::green, TCODColor::white, "a meadow");
-	info[TILE_DOOR]         = TileInfo(TT_CURTAIN, '+', TCODColor::yellow, TCODColor::white, "a door");
 	info[TILE_GRASS]        = TileInfo(TT_GROUND, '.', TCODColor::lightGreen, TCODColor::lerp(TCODColor::lightGreen, TCODColor::white, 0.7f), "grass");
 	info[TILE_DARK_GRASS]   = TileInfo(TT_GROUND, '.', TCODColor::darkGreen, TCODColor(123, 160, 126), "forest ground");
 	info[TILE_TREE1]        = TileInfo(TT_WALL, TCOD_CHAR_CLUB, TCODColor(31, 97, 41), TCODColor(123, 160, 126), "a tree");

@@ -431,7 +431,11 @@ Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roo
 		{
 			if (swap1[x + y * width] == 0 || swap1[x + y *width] == 3) m->setTile(Point(x, y), TILE_CAVE_WALL);
 			else if (swap1[x + y * width] == 1) m->setTile(Point(x, y), TILE_CAVE_FLOOR);
-			else if (swap1[x + y * width] == 2) m->setTile(Point(x, y), TILE_DOOR);
+			else if (swap1[x + y * width] == 2)
+			{
+				m->setTile(Point(x,y), TILE_CAVE_FLOOR);
+				m->addObject(Object(OBJ_DOOR_CLOSED), Point(x,y));
+			}
 		}
 
 	if (!placeEntrances(levelId, m)) return NULL;
@@ -457,15 +461,17 @@ public:
 			{
 				m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y - 2), TILE_CAVE_FLOOR);
 				m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y - 1), TILE_CAVE_FLOOR);
-				m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y), TILE_DOOR);
 				m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y + 1), TILE_CAVE_FLOOR);
+				m->setTile(Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y), TILE_CAVE_FLOOR);
+				m->addObject(Object(OBJ_DOOR_CLOSED), Point(node->getRight()->x + node->getRight()->w / 2, node->getRight()->y));
 			}
 			else
 			{
 				m->setTile(Point(node->getRight()->x - 2, node->getRight()->y + node->getRight()->h / 2), TILE_CAVE_FLOOR);
 				m->setTile(Point(node->getRight()->x - 1, node->getRight()->y + node->getRight()->h / 2), TILE_CAVE_FLOOR);
-				m->setTile(Point(node->getRight()->x, node->getRight()->y + node->getRight()->h / 2), TILE_DOOR);
 				m->setTile(Point(node->getRight()->x + 1, node->getRight()->y + node->getRight()->h / 2), TILE_CAVE_FLOOR);
+				m->setTile(Point(node->getRight()->x, node->getRight()->y + node->getRight()->h / 2), TILE_CAVE_FLOOR);
+				m->addObject(Object(OBJ_DOOR_CLOSED), Point(node->getRight()->x, node->getRight()->y + node->getRight()->h / 2));
 			}
 		}
 		else
@@ -512,7 +518,7 @@ bool LevelGen::placeEntrances(int levelId, Level* l)
 	std::vector<Point> list;
 	for (int x=0; x<l->getWidth(); x++) for (int y=0; y<l->getHeight(); y++)
 		{
-			if (world.tileSet->isWalkable(l->getTile(Point(x,y)))) list.push_back(Point(x,y));
+			if (l->isWalkable(Point(x,y))) list.push_back(Point(x,y));
 		}
 	if (list.size() < 1) return false;
 	Point first = list[rng.getInt(0, list.size() - 1)];
@@ -523,14 +529,14 @@ bool LevelGen::placeEntrances(int levelId, Level* l)
 	TCODMap map(l->getWidth(), l->getHeight());
 	for (int x=0; x<l->getWidth(); x++) for (int y=0; y<l->getHeight(); y++)
 		{
-			map.setProperties(x, y, false, world.tileSet->isWalkable(l->getTile(Point(x,y))));
+			map.setProperties(x, y, false, l->isWalkable(Point(x,y)));
 		}
 	TCODDijkstra dtree(&map);
 	dtree.compute(first.x, first.y);
 	list.clear();
 	for (int x=0; x<l->getWidth(); x++) for (int y=0; y<l->getHeight(); y++)
 		{
-			if (world.tileSet->isWalkable(l->getTile(Point(x,y))) && dtree.getDistance(x,y) > 0.f) list.push_back(Point(x,y));
+			if (l->isWalkable(Point(x,y)) && dtree.getDistance(x,y) > 0.f) list.push_back(Point(x,y));
 		}
 	if (list.size() < world.worldNodes[levelId].link.size() - 1) return false;
 	// place remaining entrances

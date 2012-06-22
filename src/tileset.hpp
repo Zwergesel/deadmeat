@@ -13,7 +13,6 @@ enum Tile
   TILE_CAVE_WALL,
   TILE_STONE_FLOOR,
   TILE_MEADOW,
-  TILE_DOOR,
   TILE_GRASS,
   TILE_TREE1,
   TILE_TREE2,
@@ -24,14 +23,24 @@ enum Tile
   TILES_LENGTH
 };
 
+/* 
+ * Explanation:
+ * blocking = nothing can go through this tile
+ * walkable = creatures that walk on the ground can stand on this tile
+ * transparent = creatures can look through this tile
+ *
+ * walkable implies non-blocking, but not the other way around
+ * Example: a pit would be non-blocking and non-walkable. Flying creatures can pass it.
+ */
+
 enum TerrainType
 {
-  TT_GROUND,	// walkable, transparent, !blocking
-  TT_CURTAIN, // walkable, !transparent, !blocking
-  TT_WALL,	// !walkable, !transparent, blocking
-  TT_WINDOW,	// !walkable, transparent, blocking
-  TT_WATER,	// !walkable, transparent, !blocking
-  TT_PIT,		// !walkable, transparent, !blocking
+  TT_GROUND,   //  walkable,  transparent, !blocking
+  TT_CURTAIN,  //  walkable, !transparent, !blocking
+  TT_WALL,     // !walkable, !transparent,  blocking
+  TT_WINDOW,   // !walkable,  transparent,  blocking
+  TT_WATER,    // !walkable,  transparent, !blocking
+  TT_PIT,      // !walkable,  transparent, !blocking
   NUM_TERRAINTYPE
 };
 

@@ -143,14 +143,14 @@ int Player::actionMove(int direction)
 		{
 			return creature->attack(c);
 		}
-		else if (world.tileSet->isWalkable(level->getTile(newPos)))
+		else if (level->isWalkable(newPos))
 		{
 			float diagonal = ((newPos - ppos).x != 0 && (newPos - ppos).y != 0)?(std::sqrt(2.f)):(1.f);
 			creature->moveTo(newPos);
 			world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - level->getWidth(), 0);
 			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
-			Object obj;
-			if (level->objectAt(newPos, obj) && obj.getType() == OBJ_STAIRSSAME) world.travel();
+			Object* obj = level->objectAt(newPos);
+			if (obj != NULL) obj->onStep(creature);
 			quickLook();
 			return static_cast<int>(static_cast<float>(creature->getWalkingSpeed()) * diagonal);
 		}
@@ -171,8 +171,7 @@ int Player::actionLook(Point pos)
 		// If square is visible...
 		Creature* c = level->creatureAt(pos);
 		std::vector<Item*> items = level->itemsAt(pos);
-		Object obj;
-		bool hasObj = level->objectAt(pos, obj);
+		Object* obj = level->objectAt(pos);
 
 		if (c != NULL && c != creature)
 		{
@@ -202,7 +201,7 @@ int Player::actionLook(Point pos)
 				world.addMessage(strlist.str());
 			}
 		}
-		else if (!hasObj && c != NULL && c == creature)
+		else if (obj == NULL && c != NULL && c == creature)
 		{
 			// Is the player here but nothing else? Look at yourself
 			world.addMessage("You look at yourself...");
@@ -218,18 +217,18 @@ int Player::actionLook(Point pos)
 				world.addMessage(msg.str(), true);
 			}
 		}
-		else if (!hasObj)
+		else if (obj == NULL)
 		{
 			// Is there nothing at all here, then describe the tile
 			std::stringstream msg;
 			msg << "You see " << world.tileSet->getDescription(level->getTile(pos)) << " here.";
 			world.addMessage(msg.str());
 		}
-		if (hasObj)
+		if (obj != NULL)
 		{
 			// Always mention the object even if there are creatures or items
 			std::stringstream msg;
-			msg << "You see " << util::format(FORMAT_INDEF, &obj) << " here.";
+			msg << "You see " << util::format(FORMAT_INDEF, obj) << " here.";
 			world.addMessage(msg.str());
 		}
 	}
@@ -244,7 +243,7 @@ void Player::quickLook()
 {
 	Level* level = world.levels[world.currentLevel];
 	std::vector<Item*> items = level->itemsAt(creature->getPos());
-	Object obj;
+	Object* obj = level->objectAt(creature->getPos());
 	if (items.size() == 1)
 	{
 		std::stringstream msg;
@@ -265,11 +264,11 @@ void Player::quickLook()
 		msg << " items here.";
 		world.addMessage(msg.str());
 	}
-	if (level->objectAt(creature->getPos(), obj))
+	if (obj != NULL)
 	{
 		std::stringstream msg;
-		msg << "There " << (obj.getFormatFlags() & F_PLURAL ? "are " : "is ");
-		msg << util::format(FORMAT_INDEF, &obj) << " here.";
+		msg << "There " << (obj->getFormatFlags() & F_PLURAL ? "are " : "is ");
+		msg << util::format(FORMAT_INDEF, obj) << " here.";
 		world.addMessage(msg.str());
 	}
 }
@@ -500,7 +499,7 @@ int Player::actionQuiver(Item* item)
 	if (current != NULL) current->setActive(false);
 	creature->readyQuiver(a);
 
-	return 10;
+	return 0;
 }
 
 int Player::actionCharInfo(TCOD_key_t key)
@@ -660,6 +659,8 @@ int Player::processAction()
 	do
 	{
 		TCOD_key_t key = waitForKeypress(true);
+		
+		Level* level = world.levels[world.currentLevel];
 
 		// quit/abandon game
 		if (state == STATE_DEFAULT && key.c == 'Q')
@@ -700,8 +701,8 @@ int Player::processAction()
 		// up/down player movement
 		else if (state == STATE_DEFAULT && key.c == '<')
 		{
-			Object obj;
-			if (world.levels[world.currentLevel]->objectAt(creature->getPos(), obj) && obj.getType() == OBJ_STAIRSUP)
+			Object* obj = level->objectAt(creature->getPos());
+			if (obj != NULL && obj->getType() == OBJ_STAIRSUP)
 			{
 				world.travel();
 				return 10;
@@ -710,8 +711,8 @@ int Player::processAction()
 		}
 		else if (state == STATE_DEFAULT && key.c == '>')
 		{
-			Object obj;
-			if (world.levels[world.currentLevel]->objectAt(creature->getPos(), obj) && obj.getType() == OBJ_STAIRSDOWN)
+			Object* obj = level->objectAt(creature->getPos());
+			if (obj != NULL && obj->getType() == OBJ_STAIRSDOWN)
 			{
 				world.travel();
 				return 10;
@@ -755,7 +756,7 @@ int Player::processAction()
 				return 0;
 			}
 			state = STATE_RANGED_ATTACK;
-			targetList = world.levels[world.currentLevel]->getVisibleCreatures();
+			targetList = level->getVisibleCreatures();
 			if (targetList.size() > 0)
 			{
 				sort(targetList.begin(), targetList.end(), sortCreaturesByDistance);
@@ -926,6 +927,60 @@ int Player::processAction()
 			{
 				world.addMessage("You aren't carrying any food.");
 			}
+			return 0;
+		}
+		// open doors / close doors
+		else if (state == STATE_DEFAULT && (key.c == 'o' || key.c == 'c'))
+		{
+			world.addMessage("In which direction?");
+			state = key.c == 'o' ? STATE_OPEN : STATE_CLOSE;
+			return 0;
+		}
+		// open doors
+		else if (state == STATE_OPEN && (key.c >= '1' && key.c <= '9' && key.c != '5'))
+		{
+			state = STATE_DEFAULT;
+			Point target = creature->getPos() + Point(dx[key.c - '1'], dy[key.c - '1']);
+			Object* obj = level->objectAt(target);
+			if (obj != NULL && obj->getType() == OBJ_DOOR_CLOSED)
+			{
+				return obj->onUse();
+			}
+			else if (obj != NULL && obj->getType() == OBJ_DOOR_OPEN)
+			{
+				world.addMessage("This door is already open.");
+			}
+			else
+			{
+				world.addMessage("You see no door there.");
+			}
+			return 0;
+		}
+		// close doors
+		else if (state == STATE_CLOSE && (key.c >= '1' && key.c <= '9' && key.c != '5'))
+		{
+			state = STATE_DEFAULT;
+			Point target = creature->getPos() + Point(dx[key.c - '1'], dy[key.c - '1']);
+			Object* obj = level->objectAt(target);
+			if (obj != NULL && obj->getType() == OBJ_DOOR_OPEN)
+			{
+				return obj->onUse();
+			}
+			else if (obj != NULL && obj->getType() == OBJ_DOOR_CLOSED)
+			{
+				world.addMessage("This door is already closed.");
+			}
+			else
+			{
+				world.addMessage("You see no door there.");
+			}
+			return 0;
+		}
+		// Cancel open/close door
+		else if ((state == STATE_OPEN || state == STATE_CLOSE) && key.vk == TCODK_ESCAPE)
+		{
+			world.addMessage("Never mind!");
+			state = STATE_DEFAULT;
 			return 0;
 		}
 		// handle wield window

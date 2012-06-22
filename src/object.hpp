@@ -12,6 +12,10 @@ enum OBJECTTYPE
   OBJ_STAIRSUP,
   OBJ_STAIRSDOWN,
   OBJ_STAIRSSAME,
+  OBJ_DOOR_CLOSED,
+  OBJ_DOOR_OPEN,
+  OBJ_TRAP_BEAR,
+  OBJ_TRAP_FIRE,
   NUM_OBJECTTYPES
 };
 
@@ -33,6 +37,11 @@ public:
 	symbol getSymbol();
 	TCODColor getColor();
 	std::string toString();
+	
+	int onStep(Creature* guy);
+	int onUse();
+	bool isBlocking();
+	bool isTransparent();
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);
