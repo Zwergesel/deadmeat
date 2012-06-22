@@ -139,11 +139,11 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 		{
 			TileInfo inf = tileSet->getInfo(level->getTile(Point(x, y)));
 			// check for object
-			Object obj;
-			if (level->objectAt(Point(x,y), obj))
+			Object* obj = level->objectAt(Point(x,y));
+			if (obj != NULL)
 			{
-				inf.color = obj.getColor();
-				inf.sym = obj.getSymbol();
+				inf.color = obj->getColor();
+				inf.sym = obj->getSymbol();
 			}
 			if (fovMap->isInFov(x,y))
 			{
@@ -484,11 +484,11 @@ void World::buildFovMap()
 {
 	if (fovMap != NULL) delete fovMap;
 	fovMap = new TCODMap(levels[currentLevel]->getWidth(), levels[currentLevel]->getHeight());
-	for (int x=0; x<levels[currentLevel]->getWidth(); x++)
-		for (int y=0; y<levels[currentLevel]->getHeight(); y++)
+	Level* level = levels[currentLevel];
+	for (int x = 0; x < level->getWidth(); x++)
+		for (int y = 0; y < level->getHeight(); y++)
 		{
-			Tile t = world.levels[currentLevel]->getTile(Point(x,y));
-			world.fovMap->setProperties(x,y,world.tileSet->isTransparent(t),world.tileSet->isWalkable(t));
+			world.fovMap->setProperties(x,y,level->isTransparent(Point(x,y)),level->isWalkable(Point(x,y)));
 		}
 }
 

@@ -427,14 +427,17 @@ int Creature::rangedAttack(Creature* target, Weapon* w)
 	Point current;
 	while (!TCODLine::step(&current.x, &current.y))
 	{
-		if (world.tileSet->isBlocking(level->getTile(current)))
+		// Hit objects or terrain tiles
+		if (level->isBlocking(current))
 		{
 			std::stringstream msg;
+			Object* obj = level->objectAt(current);
 			msg << util::format(FORMAT_YOUR, ammo->getName(), ammo->getFormatFlags(), true) << " hits ";
-			msg << world.tileSet->getDescription(level->getTile(current)) << ".";
+			msg << (obj != NULL ? util::format(FORMAT_INDEF, obj) : world.tileSet->getDescription(level->getTile(current))) << ".";
 			world.addMessage(msg.str());
 			return speed;
 		}
+		// Hit other creatures
 		Creature* between = level->creatureAt(current);
 		if (between != NULL && rng->getInt(-150,300) > std::abs(hit)) // TODO: find a good value here
 		{

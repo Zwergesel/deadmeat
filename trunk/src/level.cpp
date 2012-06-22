@@ -169,17 +169,16 @@ void Level::addObject(Object obj, Point p)
 	objects.push_back(std::pair<Point, Object>(p, obj));
 }
 
-bool Level::objectAt(Point p, Object& obj)
+Object* Level::objectAt(Point p)
 {
 	for (auto it=objects.begin(); it<objects.end(); it++)
 	{
-		if (p == (*it).first)
+		if (p == it->first)
 		{
-			obj = (*it).second;
-			return true;
+			return &it->second;
 		}
 	}
-	return false;
+	return NULL;
 }
 
 Item* Level::addItem(Item* item, Point pos)
@@ -227,12 +226,34 @@ void Level::removeItem(Item* item, int num, bool del)
 	}
 }
 
+bool Level::isBlocking(Point pos)
+{
+	if (world.tileSet->isBlocking(map[coord(pos)])) return true;
+	Object* obj = objectAt(pos);
+	if (obj != NULL && obj->isBlocking()) return true;
+	return false;
+}
+
+bool Level::isWalkable(Point pos)
+{
+	Object* obj = objectAt(pos);
+	if (obj != NULL && obj->isBlocking()) return false;
+	return world.tileSet->isWalkable(map[coord(pos)]);
+}
+
+bool Level::isTransparent(Point pos)
+{
+	Object* obj = objectAt(pos);
+	if (obj != NULL && !obj->isTransparent()) return false;
+	return world.tileSet->isTransparent(map[coord(pos)]);
+}
+
 std::vector<Point> Level::getMatchingLocations(uint flags)
 {
 	std::vector<Point> list;
 	for (int y=0; y<height; y++) for (int x=0; x<width; x++)
 		{
-			if ((flags & WALKABLE) && !world.tileSet->isWalkable(map[coord(Point(x,y))])) continue;
+			if ((flags & WALKABLE) && !isWalkable(Point(x,y))) continue;
 			else if ((flags & NO_CREATURE) && creatureAt(Point(x,y)) != NULL) continue;
 			else if (flags & NO_ITEM)
 			{
