@@ -195,13 +195,13 @@ class RoomLevelCorridorsPathfinding : public ITCODPathCallback
 public:
 	virtual float getWalkCost( int xFrom, int yFrom, int xTo, int yTo, void *userData) const
 	{
-		std::vector<int>* dat = static_cast<std::vector<int>*>(userData);
-		int width = dat->back();
+		int* dat = static_cast<int*>(userData);
+		int width = dat[0];
 		int from = yFrom*width+xFrom;
 		int to = yTo*width+xTo;
-		if ((*dat)[from] == 3 || (*dat)[to] == 3) return 0.0f;
-		if ((*dat)[to] == 1) return 0.3f;
-		if ((*dat)[to] == 2) return 5.0f;
+		if (dat[1+from] == 3 || dat[1+to] == 3) return 0.0f;
+		if (dat[1+to] == 1) return 0.3f;
+		if (dat[1+to] == 2) return 5.0f;
 		return 1.0f;
 	}
 };
@@ -211,8 +211,9 @@ Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roo
 	if (width <= 2 || height <= 2) return NULL;
 	TCODRandom rng;
 	// 0=wall, 1=free, 2=door, 3=roomWall
-	int* swap1 = new int[width*height];
-	std::fill(swap1,swap1+width*height,0);
+	int* swap1 = new int[1 + width*height];
+	std::fill(swap1,swap1+1+width*height,0);
+	swap1[0] = width;
 
 	int roomNumber = static_cast<int>((static_cast<float>(width*height) / (5*5)) * roomDensity  / 100.f);
 	if (roomNumber <= 0) return NULL;
@@ -232,13 +233,13 @@ Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roo
 			bool free = true;
 			for (int i=-1; i<sizeX+1; i++) for (int j=-1; j<sizeY+1; j++)
 				{
-					if (swap1[x+i+(y+j)*width] != 0) free = false;
+					if (swap1[1+x+i+(y+j)*width] != 0) free = false;
 				}
 			if (!free) continue;
 			for (int i=-1; i<sizeX+1; i++) for (int j=-1; j<sizeY+1; j++)
 				{
-					if (i<0 || j<0 || i==sizeX || j==sizeY) swap1[x+i+(y+j)*width] = 3;
-					else swap1[x+i+(y+j)*width] = 1;
+					if (i<0 || j<0 || i==sizeX || j==sizeY) swap1[1+x+i+(y+j)*width] = 3;
+					else swap1[1+x+i+(y+j)*width] = 1;
 				}
 			int numDoors = rng.getInt(1, std::min(sizeX/2, sizeY/2));
 			for (int i=0; i<numDoors; i++)
@@ -266,8 +267,11 @@ Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roo
 					p.x = x + sizeX;
 					p.y = y + d;
 				}
-				doors.push_back(p);
-				swap1[p.x + p.y * width] = 2;
+				if ( p.x > 0 && p.x < width-1 && p.y > 0 && p.y < height -1)
+				{
+					doors.push_back(p);
+					swap1[1+p.x + p.y * width] = 2;
+				}
 			}
 		}
 		// diamond
@@ -280,14 +284,14 @@ Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roo
 			for (int i=0; i<2*size+1; i++) for (int j=0; j<2*size+1; j++)
 				{
 					int d = abs(i-size) + abs(j-size);
-					if (d <= size && swap1[x+i+(y+j)*width] != 0) free = false;
+					if (d <= size && swap1[1+x+i+(y+j)*width] != 0) free = false;
 				}
 			if (!free) continue;
 			for (int i=0; i<2*size+1; i++) for (int j=0; j<2*size+1; j++)
 				{
 					int d = abs(i-size) + abs(j-size);
-					if (d == size || d == size + 1) swap1[x+i+(y+j)*width] = 3;
-					if (d < size) swap1[x+i+(y+j)*width] = 1;
+					if (d == size || d == size + 1) swap1[1+x+i+(y+j)*width] = 3;
+					if (d < size) swap1[1+x+i+(y+j)*width] = 1;
 				}
 			int numDoors = rng.getInt(1, 4);
 			for (int i=0; i<numDoors; i++)
@@ -314,8 +318,11 @@ Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roo
 					p.x = x + size;
 					p.y = y + 2*size;
 				}
-				doors.push_back(p);
-				swap1[p.x + p.y * width] = 2;
+				if ( p.x > 0 && p.x < width-1 && p.y > 0 && p.y < height -1)
+				{
+					doors.push_back(p);
+					swap1[1+p.x + p.y * width] = 2;
+				}
 			}
 		}
 		// rect. diamond
@@ -332,15 +339,15 @@ Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roo
 					int dr = abs(i - sizeY - sizeX - 1) + abs(j - sizeY);
 					if (i <= sizeY)
 					{
-						if (dl <= sizeY && swap1[x+i+(y+j)*width] != 0) free = false;
+						if (dl <= sizeY && swap1[1+x+i+(y+j)*width] != 0) free = false;
 					}
 					else if (i >= sizeY + sizeX + 1)
 					{
-						if (dr <= sizeY && swap1[x+i+(y+j)*width] != 0) free = false;
+						if (dr <= sizeY && swap1[1+x+i+(y+j)*width] != 0) free = false;
 					}
 					else
 					{
-						if (swap1[x+i+(y+j)*width] != 0) free = false;
+						if (swap1[1+x+i+(y+j)*width] != 0) free = false;
 					}
 				}
 			if (!free) continue;
@@ -350,18 +357,18 @@ Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roo
 					int dr = abs(i - sizeY - sizeX - 1) + abs(j - sizeY);
 					if (i <= sizeY)
 					{
-						if (dl == sizeY  || dl == sizeY + 1) swap1[x+i+(y+j)*width] = 3;
-						if (dl < sizeY) swap1[x+i+(y+j)*width] = 1;
+						if (dl == sizeY  || dl == sizeY + 1) swap1[1+x+i+(y+j)*width] = 3;
+						if (dl < sizeY) swap1[1+x+i+(y+j)*width] = 1;
 					}
 					else if (i >= sizeY + sizeX + 1)
 					{
-						if (dr == sizeY  || dr == sizeY + 1) swap1[x+i+(y+j)*width] = 3;
-						if (dr < sizeY) swap1[x+i+(y+j)*width] = 1;
+						if (dr == sizeY  || dr == sizeY + 1) swap1[1+x+i+(y+j)*width] = 3;
+						if (dr < sizeY) swap1[1+x+i+(y+j)*width] = 1;
 					}
 					else
 					{
-						if (j==0 || j==2*sizeY) swap1[x+i+(y+j)*width] = 3;
-						else swap1[x+i+(y+j)*width] = 1;
+						if (j==0 || j==2*sizeY) swap1[1+x+i+(y+j)*width] = 3;
+						else swap1[1+x+i+(y+j)*width] = 1;
 					}
 				}
 			int numDoors = rng.getInt(1, 4);
@@ -390,8 +397,11 @@ Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roo
 					p.x = x + sizeY + d;
 					p.y = y + 2*sizeY;
 				}
-				doors.push_back(p);
-				swap1[p.x + p.y * width] = 2;
+				if ( p.x > 0 && p.x < width-1 && p.y > 0 && p.y < height -1)
+				{
+					doors.push_back(p);
+					swap1[1+p.x + p.y * width] = 2;
+				}
 			}
 		}
 	}
@@ -401,27 +411,25 @@ Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roo
 	for (int x=0; x<width; x++) for (int y=0; y<height; y++)
 		{
 			map.setProperties(x,y,false,false);
-			if (swap1[x+y*width] == 0 || swap1[x+y*width] == 2) map.setProperties(x,y,false,true);
+			if (swap1[1+x+y*width] == 0 || swap1[1+x+y*width] == 2) map.setProperties(x,y,false,true);
 		}
 	for (int c=0; c<(int)doors.size()*10; c++)
 	{
 		int a = rng.getInt(0, doors.size() - 1);
 		int b = rng.getInt(0, doors.size() - 1);
 		if (a == b) continue;
-		std::vector<int> vec;
-		for (int y=0; y<height; y++) for (int x=0; x<width; x++) vec.push_back(swap1[x+y*width]);
-		vec.push_back(width);
+
 		RoomLevelCorridorsPathfinding pathFinding;
-		TCODDijkstra path(width,height,&pathFinding,&vec,0.0f);
+		TCODDijkstra path(width,height,&pathFinding,swap1,0.0f);
 		path.compute(doors[a].x, doors[a].y);
 		path.setPath(doors[b].x, doors[b].y);
 		while (!path.isEmpty())
 		{
 			int x,y;
 			path.walk(&x,&y);
-			if (swap1[x+y*width] == 0)
+			if (swap1[1+x+y*width] == 0)
 			{
-				swap1[x+y*width] = 1;
+				swap1[1+x+y*width] = 1;
 			}
 		}
 	}
@@ -429,15 +437,15 @@ Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roo
 	Level* m = new Level(width,height);
 	for (int x=0; x<width; x++) for (int y=0; y<height; y++)
 		{
-			if (swap1[x + y * width] == 0 || swap1[x + y *width] == 3) m->setTile(Point(x, y), TILE_CAVE_WALL);
-			else if (swap1[x + y * width] == 1) m->setTile(Point(x, y), TILE_CAVE_FLOOR);
-			else if (swap1[x + y * width] == 2)
+			if (swap1[1+x + y * width] == 0 || swap1[1+x + y *width] == 3) m->setTile(Point(x, y), TILE_CAVE_WALL);
+			else if (swap1[1+x + y * width] == 1) m->setTile(Point(x, y), TILE_CAVE_FLOOR);
+			else if (swap1[1+x + y * width] == 2)
 			{
 				m->setTile(Point(x,y), TILE_CAVE_FLOOR);
 				m->addObject(Object(OBJ_DOOR_CLOSED), Point(x,y));
 			}
 		}
-
+	delete[] swap1;
 	if (!placeEntrances(levelId, m)) return NULL;
 
 	// RoomLevel monsters
