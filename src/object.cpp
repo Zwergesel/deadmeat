@@ -119,8 +119,8 @@ int Object::onStep(Creature* guy)
 	case OBJ_STAIRSSAME:
 		if (guy->isControlled()) world.travel();
 		return 0;
-	
-	// TRAPS
+
+		// TRAPS
 	case OBJ_TRAP_BEAR:
 		if (guy->isControlled()) msg << "You get caught in a bear trap.";
 		else msg << util::format(FORMAT_DEF, guy, true) << " gets caught in a bear trap.";

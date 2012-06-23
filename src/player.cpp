@@ -659,7 +659,7 @@ int Player::processAction()
 	do
 	{
 		TCOD_key_t key = waitForKeypress(true);
-		
+
 		Level* level = world.levels[world.currentLevel];
 
 		// quit/abandon game

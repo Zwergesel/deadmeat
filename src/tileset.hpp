@@ -23,7 +23,7 @@ enum Tile
   TILES_LENGTH
 };
 
-/* 
+/*
  * Explanation:
  * blocking = nothing can go through this tile
  * walkable = creatures that walk on the ground can stand on this tile

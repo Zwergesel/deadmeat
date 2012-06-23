@@ -66,7 +66,7 @@ public:
 	Object* objectAt(Point p);
 	Item* addItem(Item* item, Point pos);
 	void removeItem(Item* item, int num, bool del);
-	
+
 	// TODO: to make these perform well, level should really have an array of objecttype or something like that
 	bool isBlocking(Point pos);
 	bool isWalkable(Point pos);

@@ -86,7 +86,7 @@ int main()
 	else
 	{
 		LevelGen::generateWorld();
-		world.levels[0] = LevelGen::generateLevel(0, LEVELTYPE_FOREST);
+		world.levels[0] = LevelGen::generateLevel(0, LEVELTYPE_ROOM);
 
 		// Add player creature
 		Point newPos = world.levels[0]->getRandomLocation(WALKABLE);

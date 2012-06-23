@@ -37,7 +37,7 @@ public:
 	symbol getSymbol();
 	TCODColor getColor();
 	std::string toString();
-	
+
 	int onStep(Creature* guy);
 	int onUse();
 	bool isBlocking();
