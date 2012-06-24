@@ -53,6 +53,7 @@ public:
 	void setActive(bool set);
 	bool isActive();
 	bool canStackWith(Item* compare);
+	virtual void randomize(int level);
 
 	virtual unsigned int save(Savegame& sg);
 	virtual void load(LoadBlock& load);

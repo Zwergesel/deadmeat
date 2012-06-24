@@ -88,7 +88,7 @@ Creature* Factory::spawnCreature(std::string monsterclass)
 	std::vector<std::string> items = it->second.second.getRandom();
 	for (auto it=items.begin(); it!=items.end(); it++)
 	{
-		spawned->addItem(spawnItem(*it));
+		spawned->addItem(spawnItem(*it, true));
 	}
 	return spawned;
 }
@@ -109,11 +109,13 @@ void Factory::setTemplate(std::string monsterclass, Creature* c, const Inventory
 	}
 }
 
-Item* Factory::spawnItem(std::string itemclass)
+Item* Factory::spawnItem(std::string itemclass, bool randomize)
 {
 	auto it = items.find(itemclass);
 	assert(it != items.end());
-	return it->second->clone();
+	Item* item = it->second->clone();
+	if (randomize) item->randomize(0);
+	return item;
 }
 
 void Factory::setTemplate(std::string itemclass, Item* i)

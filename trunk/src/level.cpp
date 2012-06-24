@@ -311,7 +311,7 @@ void Level::placeItems(const RandomTable& items, int numItems)
 	auto list = getMatchingLocations(WALKABLE);
 	while (numItems-->0)
 	{
-		Item* i = factory.spawnItem(items.getRandom());
+		Item* i = factory.spawnItem(items.getRandom(), true);
 		addItem(i, chooseRandomPoint(list));
 	}
 }

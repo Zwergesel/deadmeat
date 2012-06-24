@@ -13,6 +13,7 @@ public:
 	Gold(int amount);
 	~Gold();
 	Item* clone();
+	void randomize(int level);
 
 	virtual unsigned int save(Savegame& sg);
 	virtual void load(LoadBlock& load);

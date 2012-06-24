@@ -44,6 +44,13 @@ ArmorSlot Armor::getSlot()
 	return slot;
 }
 
+void Armor::randomize(int level)
+{
+	TCODRandom* rng = TCODRandom::getInstance();
+	int roll = rng->getInt(0,999);
+	enchantment = (roll / 800) + (roll / 950) + (roll / 995);
+}
+
 /*--------------------- SAVING AND LOADING ---------------------*/
 
 unsigned int Armor::save(Savegame& sg)

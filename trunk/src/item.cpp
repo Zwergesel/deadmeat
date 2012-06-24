@@ -98,6 +98,10 @@ bool Item::canStackWith(Item* compare)
 	return true;
 }
 
+void Item::randomize(int level)
+{
+}
+
 Item PSEUDOITEM_NOTHING = Item("nothing", F_PROPER, '#', TCODColor::pink, 1);
 
 /*--------------------- SAVING AND LOADING ---------------------*/

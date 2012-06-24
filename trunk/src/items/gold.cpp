@@ -25,6 +25,13 @@ Item* Gold::clone()
 	return copy;
 }
 
+void Gold::randomize(int level)
+{
+	TCODRandom* rng = TCODRandom::getInstance();
+	amount = rng->getInt(0,250,30);
+	if (amount == 0) amount = rng->getInt(1, 30);
+}
+
 /*--------------------- SAVING AND LOADING ---------------------*/
 
 unsigned int Gold::save(Savegame& sg)

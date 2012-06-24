@@ -56,6 +56,7 @@ public:
 	AmmoType getAmmoType();
 	float getDPS();
 	std::string toString();
+	void randomize(int level);
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);
