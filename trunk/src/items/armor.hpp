@@ -33,6 +33,7 @@ public:
 	int getEnchantment();
 	int getHindrance();
 	ArmorSlot getSlot();
+	std::string toString();
 	void randomize(int level);
 
 	unsigned int save(Savegame& sg);

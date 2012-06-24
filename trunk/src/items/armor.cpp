@@ -44,6 +44,13 @@ ArmorSlot Armor::getSlot()
 	return slot;
 }
 
+std::string Armor::toString()
+{
+	std::stringstream ss;
+	ss << (enchantment < 0 ? "" : "+") << enchantment << " " << name;
+	return ss.str();
+}
+
 void Armor::randomize(int level)
 {
 	TCODRandom* rng = TCODRandom::getInstance();

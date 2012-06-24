@@ -638,12 +638,14 @@ int Player::actionRangedAttack(Point pos)
 int Player::action()
 {
 	// health regeneration
-	creature->regenerate(skills[SKILL_HEALTH].value);
+	creature->regenerate(skills[SKILL_HEALTH].value, skills[SKILL_MANA_REGEN].value);
 
 	int time = Player::processAction();
 
-	// hunger
-	addNutrition(-time);
+	// hunger, roll for thougness to see if player gets more hungry
+	TCODRandom* rng = TCODRandom::getInstance();
+	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
+	if ( rng->getInt(0, 40) <= 40 - skills[SKILL_NEG_EFFECT].value ) addNutrition(-time);
 
 	return time;
 }
