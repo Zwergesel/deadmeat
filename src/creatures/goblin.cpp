@@ -39,6 +39,7 @@ Creature* Goblin::clone()
 	copy->position = position;
 	copy->walkingSpeed = walkingSpeed;
 	copy->lastTimeRegen = lastTimeRegen;
+	copy->lastTimeManaRegen = lastTimeManaRegen;
 	copy->lastPlayerPos = lastPlayerPos;
 	copy->seenPlayer = seenPlayer;
 	copy->expValue = expValue;
@@ -54,7 +55,7 @@ Creature* Goblin::clone()
 
 int Goblin::action()
 {
-	regenerate(0);
+	regenerate(0, 0);
 
 	// pick best weapon
 	symbol choice = '0';
@@ -150,7 +151,7 @@ unsigned int Goblin::save(Savegame& sg)
 	store.ptr("baseWeapon", baseWeapon.save(sg));
 	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	store ("walkingSpeed", walkingSpeed);
-	store ("lastTimeRegen", lastTimeRegen);
+	store ("lastTimeRegen", lastTimeRegen) ("lastTimeManaRegen", lastTimeManaRegen);
 	store ("lastPlayerPos", lastPlayerPos) ("seenPlayer", seenPlayer);
 	store ("expValue", expValue);
 	store ("#inventory", (int) inventory.size());

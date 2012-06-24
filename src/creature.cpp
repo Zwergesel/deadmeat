@@ -33,6 +33,7 @@ Creature::Creature(std::string n, uint f, symbol s, TCODColor c, int h, int m, W
 {
 	std::fill(armor, armor+NUM_ARMOR_SLOTS, 0);
 	lastTimeRegen = world.time;
+	lastTimeManaRegen = world.time;
 }
 
 Creature::~Creature()
@@ -57,6 +58,7 @@ Creature* Creature::clone()
 	copy->position = position;
 	copy->walkingSpeed = walkingSpeed;
 	copy->lastTimeRegen = lastTimeRegen;
+	copy->lastTimeManaRegen = lastTimeManaRegen;
 	copy->lastPlayerPos = lastPlayerPos;
 	copy->seenPlayer = seenPlayer;
 	copy->expValue = expValue;
@@ -241,13 +243,20 @@ void Creature::die(Creature* instigator)
 	}
 }
 
-void Creature::regenerate(int speedup)
+void Creature::regenerate(int healthSpeedup, int manaSpeedup)
 {
-	if ((world.time - lastTimeRegen) > (30 - speedup))
+	if ((world.time - lastTimeRegen) > (30 - healthSpeedup))
 	{
-		int bonus = (world.time - lastTimeRegen) / (30 - speedup);
+		int bonus = (world.time - lastTimeRegen) / (30 - healthSpeedup);
 		health = std::min(maxHealth, health + bonus);
-		lastTimeRegen += (30 - speedup) * bonus;
+		//lastTimeRegen += (30 - healthSpeedup) * bonus; WTF?
+		lastTimeRegen = world.time;
+	}
+	if ((world.time - lastTimeManaRegen) > (30 - manaSpeedup))
+	{
+		int bonus = (world.time - lastTimeManaRegen) / (30 - manaSpeedup);
+		health = std::min(maxMana, mana + bonus);
+		lastTimeManaRegen = world.time;
 	}
 }
 
@@ -621,7 +630,7 @@ unsigned int Creature::save(Savegame& sg)
 	store.ptr("baseWeapon", baseWeapon.save(sg));
 	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	store ("walkingSpeed", walkingSpeed);
-	store ("lastTimeRegen", lastTimeRegen);
+	store ("lastTimeRegen", lastTimeRegen) ("lastTimeManaRegen", lastTimeManaRegen);
 	store ("lastPlayerPos", lastPlayerPos) ("seenPlayer", seenPlayer);
 	store ("expValue", expValue);
 	store ("#inventory", (int) inventory.size());
@@ -651,7 +660,7 @@ void Creature::load(LoadBlock& load)
 	delete w;
 	load ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	load ("walkingSpeed", walkingSpeed);
-	load ("lastTimeRegen", lastTimeRegen);
+	load ("lastTimeRegen", lastTimeRegen) ("lastTimeManaRegen", lastTimeManaRegen);
 	load ("lastPlayerPos", lastPlayerPos) ("seenPlayer", seenPlayer);
 	load ("expValue", expValue);
 	int n;

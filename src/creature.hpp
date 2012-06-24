@@ -38,6 +38,7 @@ protected:
 	Point position;
 	std::map<symbol,Item*> inventory;
 	int lastTimeRegen;
+	int lastTimeManaRegen;
 	Point lastPlayerPos;
 	bool seenPlayer;
 	int expValue;
@@ -70,7 +71,7 @@ public:
 	std::pair<int,int> getMana();
 	int getHindrance();
 	int getWalkingSpeed();
-	void regenerate(int speedup);
+	void regenerate(int healthSpeedup, int manaSpeedup);
 
 	void setControlled(bool);
 	void setLevel(Level* l);

@@ -41,6 +41,7 @@ attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 16
 lastTimeRegen: 0
+lastTimeManaRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 2500
@@ -86,6 +87,7 @@ attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 13
 lastTimeRegen: 0
+lastTimeManaRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 600
@@ -131,6 +133,7 @@ attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 10
 lastTimeRegen: 0
+lastTimeManaRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 300
@@ -176,6 +179,7 @@ attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 12
 lastTimeRegen: 0
+lastTimeManaRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 10
@@ -221,6 +225,7 @@ attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 13
 lastTimeRegen: 0
+lastTimeManaRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 600
@@ -266,6 +271,7 @@ attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 11
 lastTimeRegen: 0
+lastTimeManaRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 250
@@ -311,6 +317,7 @@ attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 13
 lastTimeRegen: 0
+lastTimeManaRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 600
@@ -356,6 +363,7 @@ attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 14
 lastTimeRegen: 0
+lastTimeManaRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 1000
@@ -401,6 +409,7 @@ attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 5
 lastTimeRegen: 0
+lastTimeManaRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 300
@@ -446,6 +455,7 @@ attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 14
 lastTimeRegen: 0
+lastTimeManaRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 600
@@ -491,6 +501,7 @@ attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 14
 lastTimeRegen: 0
+lastTimeManaRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 500
@@ -536,6 +547,7 @@ attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 8
 lastTimeRegen: 0
+lastTimeManaRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 150
@@ -581,6 +593,7 @@ attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 15
 lastTimeRegen: 0
+lastTimeManaRegen: 0
 lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 750
