@@ -48,6 +48,14 @@ std::string Ammo::toString()
 	return ss.str();
 }
 
+void Ammo::randomize(int level)
+{
+	TCODRandom* rng = TCODRandom::getInstance();
+	amount = rng->getInt(1,30,5) + rng->getInt(0,30,5);
+	int roll = rng->getInt(0,999);
+	enchantment = (roll / 800) + (roll / 950) + (roll / 995);
+}
+
 /*--------------------- SAVING AND LOADING ---------------------*/
 
 unsigned int Ammo::save(Savegame& sg)

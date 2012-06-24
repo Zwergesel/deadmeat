@@ -63,7 +63,7 @@ private:
 public:
 	Factory();
 	Creature* spawnCreature(std::string monsterclass);
-	Item* spawnItem(std::string itemclass);
+	Item* spawnItem(std::string itemclass, bool randomize = false);
 
 	void setTemplate(std::string monsterclass, Creature* c, const InventoryTable& inv = InventoryTable());
 	void setTemplate(std::string itemclass, Item* i);

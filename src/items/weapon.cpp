@@ -100,6 +100,13 @@ std::string Weapon::toString()
 	return ss.str();
 }
 
+void Weapon::randomize(int level)
+{
+	TCODRandom* rng = TCODRandom::getInstance();
+	int roll = rng->getInt(0,999);
+	enchantment = (roll / 800) + (roll / 950) + (roll / 995);
+}
+
 /*--------------------- SAVING AND LOADING ---------------------*/
 
 unsigned int Weapon::save(Savegame& sg)
