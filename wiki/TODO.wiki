@@ -12,7 +12,7 @@
   * InventoryTable does not get saved in factory
 
 == Small improvements ==
-
+  * item weight, burdened satus etc.
 
 == Major improvements ==
   * Cursed Items
