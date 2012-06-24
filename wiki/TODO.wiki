@@ -4,13 +4,9 @@
 
 == Test ==
   * Changing levels
-  * Creature::die should work without an instigator
   * Ranged attacks should be able to hit creatures in their path, not just the target
   * Generate monsters with items
   * Let monsters drop their items when they die
-  * Stacking of items
-  * quiver and use ammo
-  * only fitting ammo should be used (arrows-bows, bullets-slings etc)
 
 == Bugs / Issues ==
   * InventoryTable does not get saved in factory
