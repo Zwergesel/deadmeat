@@ -4,8 +4,6 @@
 
 == Test ==
   * Changing levels
-  * Stairs should be objects, so that they can lie on different grounds (grass, cave, ...)
-  * Time to eat should depend on the food
   * Creature::die should work without an instigator
   * Ranged attacks should be able to hit creatures in their path, not just the target
   * Generate monsters with items
@@ -30,9 +28,8 @@
 
 == Milestones for later / No priority ==
   * Magic system
-  * Character creation
+  * Character creation (race, class, name)
   * Random level generation
   * Display unseen items where the player has last seen them even if a monster picked them up
   * Quests
   * Story
-  * Name! :)
