@@ -682,11 +682,11 @@ int Creature::getStatusStrength(Status type)
 
 /*--------------------- SAVING AND LOADING ---------------------*/
 
-unsigned int Creature::save(Savegame& sg)
+unsigned int Creature::save(Savegame& sg, const std::string& classname)
 {
 	unsigned int id;
 	if (sg.saved(this, &id)) return id;
-	SaveBlock store("Creature", id);
+	SaveBlock store(classname, id);
 	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("position", position);
 	store ("color", color) ("health", health) ("maxHealth", maxHealth);
 	store ("mana", mana) ("maxMana", maxMana) ("controlled", controlled);
@@ -708,6 +708,11 @@ unsigned int Creature::save(Savegame& sg)
 	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
 	{
 		store ("_symbol", (int) it->first) .ptr("_item", it->second->save(sg));
+	}
+	store ("#status", (int) status.size());
+	for (auto it = status.begin(); it != status.end(); it++)
+	{
+		store ("_type", (int) it->type) ("_start", it->start) ("_duration", it->duration) ("_strength", it->strength);
 	}
 	sg << store;
 	return id;
@@ -741,5 +746,16 @@ void Creature::load(LoadBlock& load)
 		symbol s;
 		load ("_symbol", s);
 		inventory[s] = static_cast<Item*>(load.ptr("_item"));
+	}
+	load ("#status", n);
+	while (n-->0)
+	{
+		int t;
+		load ("_type", t);
+		if (t < 0 || t >= NUM_STATUS) throw SavegameFormatException("Creature::load _ status out of bounds");
+		StatusInfo stat;
+		stat.type = static_cast<Status>(t);
+		load ("_start", stat.start) ("_duration", stat.duration) ("_strength", stat.strength);
+		status.push_back(stat);
 	}
 }

@@ -140,7 +140,7 @@ public:
 
 	virtual int action();
 
-	virtual unsigned int save(Savegame& sg);
+	virtual unsigned int save(Savegame& sg, const std::string& classname = "Creature");
 	void load(LoadBlock& load);
 
 	static const double FACT_ATSKL;		// attack skill -> attack bonus
