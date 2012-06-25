@@ -124,6 +124,8 @@ int Goblin::action()
 		{
 			float diagonal = ((target - position).x != 0 && (target - position).y != 0)?(std::sqrt(2.f)):(1.f);
 			position = target;
+			Object* obj = level->objectAt(target);
+			if (obj != NULL) obj->onStep(this);
 			return static_cast<int>(static_cast<float>(getWalkingSpeed()) * diagonal);
 		}
 	}

@@ -15,6 +15,40 @@ class Player;
 class Savegame;
 class LoadBlock;
 
+// TODO: mark implemented status (plural!); currently none
+enum Status
+{
+	STATUS_WOUND,
+	STATUS_POISON,
+	STATUS_SICK,
+	STATUS_STUN,
+	STATUS_PARALYZE,
+	STATUS_SLEEP,
+	STATUS_FEAR,
+	STATUS_CONFUSE,
+	STATUS_SLOW,
+	STATUS_HASTE,
+	STATUS_IMMOBILE,
+	STATUS_BLIND,
+	STATUS_HALLU,
+	STATUS_CONDEMN,
+	STATUS_FIRE,
+	STATUS_FREEZE,
+	STATUS_BRAIN,
+	STATUS_DRAIN,
+	NUM_STATUS
+};
+
+struct StatusInfo
+{
+	Status type;
+	int start;
+	int duration;
+	int strength;
+	StatusInfo(){};
+	StatusInfo(Status t, int s, int d, int x):type(t),start(s),duration(d),strength(x){};
+};
+
 class Creature
 {
 protected:
@@ -42,6 +76,7 @@ protected:
 	Point lastPlayerPos;
 	bool seenPlayer;
 	int expValue;
+	std::vector<StatusInfo> status;
 
 	void die(Creature* instigator);
 	Creature(const Creature& copy);
@@ -80,6 +115,9 @@ public:
 	void setBaseWeapon(Weapon base);
 	void addMaxHealth(int delta);
 	void addMaxMana(int delta);
+	virtual void affect(Status type, int start, int duration, int strength);
+	void updateStatus(int time);
+	int getStatusStrength(Status status);
 
 	void wieldMainWeapon(Weapon* wpn);
 	void wearArmor(Armor* armor);

@@ -609,6 +609,70 @@ void Creature::readyQuiver(Ammo* ammo)
 	}
 }
 
+// Usage: Process immunities or strength reductions in overloaded method, then call this method
+void Creature::affect(Status type, int start, int duration, int strength)
+{
+	for (auto it = status.begin(); it != status.end(); it++)
+	{
+		if (it->type == type) {
+			// Stack effect
+			// TODO: decide via type how stacking works
+			it->strength = std::max(it->strength, strength);
+			it->duration = std::max(it->duration, (duration - start));
+			return;
+		}
+	}
+	status.push_back(StatusInfo(type, start, duration, strength));
+}
+
+void Creature::updateStatus(int time)
+{
+	for (int d=status.size() - 1; d >= 0; d--)
+	{
+		if (status[d].start >= time)
+		{
+			status[d].start -= time;
+			continue;
+		}
+		time -= status[d].start;
+		status[d].start = 0;
+		// Effect
+		switch (status[d].type)
+		{
+		case STATUS_FIRE:
+			if (controlled) world.addMessage("You are burning!");
+			hurt(static_cast<int>(time*status[d].strength/10.0f), NULL);
+			break;
+		default:
+			std::cerr << name << " has effect " << status[d].type << std::endl;
+		}
+		// Reduce duration
+		status[d].duration -= time;
+		if (status[d].duration <= 0)
+		{
+			// Effect ends
+			status.erase(status.begin()+d);
+			switch (status[d].type)
+			{
+			case STATUS_FIRE:
+				if (controlled) world.addMessage("Thankfully the fire dies out.");
+				break;
+			default:
+				std::cerr << name << " ends effect " << status[d].type << std::endl;
+			}
+		}
+	}
+}
+
+int Creature::getStatusStrength(Status type)
+{
+	for (auto it = status.begin(); it != status.end(); it++)
+	{
+		if (it->type == type) return it->start == 0 ? it->strength : 0;
+	}
+	return 0;
+}
+
 /*--------------------- SAVING AND LOADING ---------------------*/
 
 unsigned int Creature::save(Savegame& sg)
