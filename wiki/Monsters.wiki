@@ -2,8 +2,11 @@
 
 = Monsters =
 
+  * Speed: Immobile, Very slow, Slow, Normal, Fast, Very Fast
+  * Damage: Very low, Low, Medium, High, Very High, Extreme
+
 || *Name* || *Level* || *Speed* || *Attackspeed* || *Damage* || *Special* ||
-|| Rat || 1 || Faster || Faster || Very low || Spreads diseases ||
+|| Rat || 1 || Fast || Fast || Very low || Spreads diseases ||
 || Goblin || 3 || Normal || Normal || Low || Can use weapons ||
-|| Snake || 5 || Faster || Slower || High || Bite is poisonous ||
-|| Kobold || 6 || Faster || Slower || Low || Use ranged weapons (slings, rocks) and keep their distance ||
+|| Snake || 5 || Fast || Slow || High || Bite is poisonous ||
+|| Kobold || 6 || Fast || Slow || Low || Use ranged weapons (slings, rocks) and keep their distance ||
