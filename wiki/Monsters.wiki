@@ -1,0 +1,9 @@
+#summary Ideas for possible monsters
+
+= Monsters =
+
+|| *Name* || *Level* || *Speed* || *Attackspeed* || *Damage* || *Special* ||
+|| Rat || 1 || Faster || Faster || Very low || Spreads diseases ||
+|| Goblin || 3 || Normal || Normal || Low || Can use weapons ||
+|| Snake || 5 || Faster || Slower || High || Bite is poisonous ||
+|| Kobold || 6 || Faster || Slower || Low || Use ranged weapons (slings, rocks) and keep their distance ||
