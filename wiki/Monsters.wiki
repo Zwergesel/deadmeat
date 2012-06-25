@@ -4,9 +4,10 @@
 
   * Speed: Immobile, Very slow, Slow, Normal, Fast, Very Fast
   * Damage: Very low, Low, Medium, High, Very High, Extreme
+  * Armor: None, Weak, Medium, Heavy, Extreme
 
-|| *Name* || *Level* || *Speed* || *Attackspeed* || *Damage* || *Special* ||
-|| Rat || 1 || Fast || Fast || Very low || Spreads diseases ||
-|| Goblin || 3 || Normal || Normal || Low || Can use weapons ||
-|| Snake || 5 || Fast || Slow || High || Bite is poisonous ||
-|| Kobold || 6 || Fast || Slow || Low || Use ranged weapons (slings, rocks) and keep their distance ||
+|| *Name* || *Level* || *Speed* || *Attackspeed* || *Damage* || *Armor* || *Special* ||
+|| Rat || 1 || Fast || Fast || Very low || None || Spreads diseases ||
+|| Goblin || 3 || Normal || Normal || Low || None || Can use weapons ||
+|| Snake || 5 || Fast || Slow || High || None || Bite is poisonous ||
+|| Kobold || 6 || Fast || Slow || Low || None || Use ranged weapons (slings, rocks) and keep their distance ||
