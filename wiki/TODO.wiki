@@ -21,6 +21,9 @@
   * Load level data from save files (possible monsters, possible loot, ...)
   * Environment objects: Doors, traps, ...
   * config file
+  * Implement more status effects
+  * More creatures with different behaviors
+  * Potions
 
 == Milestones for later / No priority ==
   * Magic system
@@ -29,3 +32,4 @@
   * Display unseen items where the player has last seen them even if a monster picked them up
   * Quests
   * Story
+  * Crafting
