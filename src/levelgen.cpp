@@ -700,6 +700,18 @@ Level* LevelGen::generateForestLevel(int levelId, int width, int height)
 	forest.add("goblin", 50).add("snake", 400).add("soldier ant", 200);
 	m->populate(forest, width*height/250 + 1);
 	m->placeItems(loot, width*height/250 + 1);
+	
+	std::vector<Point> list = m->getMatchingLocations(WALKABLE | NO_OBJECT);
+	m->addObject(OBJ_TRAP_FIRE, m->chooseRandomPoint(list, true));
+	m->addObject(OBJ_TRAP_FIRE, m->chooseRandomPoint(list, true));
+	m->addObject(OBJ_TRAP_FIRE, m->chooseRandomPoint(list, true));
+	m->addObject(OBJ_TRAP_FIRE, m->chooseRandomPoint(list, true));
+	m->addObject(OBJ_TRAP_FIRE, m->chooseRandomPoint(list, true));
+	m->addObject(OBJ_TRAP_BEAR, m->chooseRandomPoint(list, true));
+	m->addObject(OBJ_TRAP_BEAR, m->chooseRandomPoint(list, true));
+	m->addObject(OBJ_TRAP_BEAR, m->chooseRandomPoint(list, true));
+	m->addObject(OBJ_TRAP_BEAR, m->chooseRandomPoint(list, true));
+	m->addObject(OBJ_TRAP_BEAR, m->chooseRandomPoint(list, true));
 
 	return m;
 }

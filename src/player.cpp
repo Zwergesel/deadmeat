@@ -243,7 +243,6 @@ void Player::quickLook()
 {
 	Level* level = world.levels[world.currentLevel];
 	std::vector<Item*> items = level->itemsAt(creature->getPos());
-	Object* obj = level->objectAt(creature->getPos());
 	if (items.size() == 1)
 	{
 		std::stringstream msg;
@@ -264,13 +263,7 @@ void Player::quickLook()
 		msg << " items here.";
 		world.addMessage(msg.str());
 	}
-	if (obj != NULL)
-	{
-		std::stringstream msg;
-		msg << "There " << (obj->getFormatFlags() & F_PLURAL ? "are " : "is ");
-		msg << util::format(FORMAT_INDEF, obj) << " here.";
-		world.addMessage(msg.str());
-	}
+	// Note: Object will identify itself in Object::onStep()
 }
 
 int Player::actionPickup()

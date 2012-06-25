@@ -18,7 +18,8 @@ enum RANDOM_LOCATION_FLAGS
   ANY_SPACE = 0,
   WALKABLE = 1,
   NO_CREATURE = 2,
-  NO_ITEM = 4
+  NO_ITEM = 4,
+  NO_OBJECT = 8
 };
 
 struct TimelineAction

@@ -112,26 +112,48 @@ bool Object::isTransparent()
 int Object::onStep(Creature* guy)
 {
 	std::stringstream msg;
+	Point pos = guy->getPos();
 	switch (type)
 	{
 	default:
+		if (guy->isControlled())
+		{
+			// Inform player what he sees here
+			msg << "There " << (formatFlags & F_PLURAL ? "are " : "is ");
+			msg << util::format(FORMAT_INDEF, this) << " here.";
+			world.addMessage(msg.str());		
+		}
 		return 0;
+		
 	case OBJ_STAIRSSAME:
 		if (guy->isControlled()) world.travel();
 		return 0;
 
 		// TRAPS
 	case OBJ_TRAP_BEAR:
-		if (guy->isControlled()) msg << "You get caught in a bear trap.";
-		else msg << util::format(FORMAT_DEF, guy, true) << " gets caught in a bear trap.";
-		world.addMessage(msg.str());
+		if (guy->isControlled())
+		{
+			world.addMessage("You get caught in a bear trap.");
+		}
+		else if (world.fovMap->isInFov(pos.x, pos.y))
+		{
+			msg << util::format(FORMAT_DEF, guy, true) << " gets caught in a bear trap.";
+			world.addMessage(msg.str());
+		}
 		guy->hurt(50, NULL);
 		return 0;
+		
 	case OBJ_TRAP_FIRE:
-		if (guy->isControlled()) msg << "You get roasted by a fire trap.";
-		else msg << util::format(FORMAT_DEF, guy, true) << " gets roasted by a fire trap.";
-		world.addMessage(msg.str());
-		guy->hurt(50, NULL);
+		if (guy->isControlled())
+		{
+			world.addMessage("Flames erupt from the ground and you catch on fire!");
+		}
+		else if (world.fovMap->isInFov(pos.x, pos.y))
+		{
+			msg << util::format(FORMAT_DEF, guy, true) << " gets roasted in a fire trap.";
+			world.addMessage(msg.str());
+		}
+		guy->affect(STATUS_FIRE, 0, 100, 5);
 		return 0;
 	}
 }

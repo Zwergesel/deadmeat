@@ -268,6 +268,7 @@ std::vector<Point> Level::getMatchingLocations(uint flags)
 				}
 				if (hasItems) continue;
 			}
+			else if ((flags & NO_OBJECT) && objectAt(Point(x,y)) != NULL) continue;
 			list.push_back(Point(x,y));
 		}
 	return list;
@@ -340,11 +341,13 @@ void Level::performCreatureTurn()
 	{
 		// player action; returns time the action took
 		time = world.player->action();
+		creatures.back().actor->updateStatus(time);
 	}
 	else
 	{
 		// creature action; returns time the action took
 		time = creatures.back().actor->action();
+		creatures.back().actor->updateStatus(time);
 		// creatures should never use zero time
 		assert(time > 0);
 	}
