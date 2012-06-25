@@ -129,7 +129,7 @@ int Object::onStep(Creature* guy)
 		if (guy->isControlled()) world.travel();
 		return 0;
 
-		// TRAPS
+	// ==== TRAPS ==== //
 	case OBJ_TRAP_BEAR:
 		if (guy->isControlled())
 		{
@@ -140,7 +140,8 @@ int Object::onStep(Creature* guy)
 			msg << util::format(FORMAT_DEF, guy, true) << " gets caught in a bear trap.";
 			world.addMessage(msg.str());
 		}
-		guy->hurt(50, NULL);
+		guy->hurt(20, NULL);
+		guy->affect(STATUS_IMMOBILE, 0, 100, 1);
 		return 0;
 		
 	case OBJ_TRAP_FIRE:

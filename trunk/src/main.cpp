@@ -86,7 +86,7 @@ int main()
 	else
 	{
 		LevelGen::generateWorld();
-		world.levels[0] = LevelGen::generateLevel(0, LEVELTYPE_ROOM);
+		world.levels[0] = LevelGen::generateLevel(0, LEVELTYPE_FOREST);
 
 		// Add player creature
 		Point newPos = world.levels[0]->getRandomLocation(WALKABLE);
@@ -112,6 +112,8 @@ int main()
 			level->performCreatureTurn();
 		}
 
+		// Garbage collector
+		world.cleanGarbage();
 		// Show new game state
 		world.drawWorld();
 		TCODConsole::root->flush();

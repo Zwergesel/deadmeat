@@ -492,6 +492,16 @@ void World::buildFovMap()
 		}
 }
 
+void World::cleanGarbage()
+{
+	while (garbage.size() > 0)
+	{
+		Creature* current = garbage.front();
+		garbage.pop_front();
+		if (current != NULL) delete current;
+	}
+}
+
 /*--------------------- SAVING AND LOADING ---------------------*/
 
 unsigned int World::save(Savegame& sg)
