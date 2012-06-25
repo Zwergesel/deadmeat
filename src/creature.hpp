@@ -115,9 +115,11 @@ public:
 	void setBaseWeapon(Weapon base);
 	void addMaxHealth(int delta);
 	void addMaxMana(int delta);
+	
 	virtual void affect(Status type, int start, int duration, int strength);
 	void updateStatus(int time);
 	int getStatusStrength(Status status);
+	void endStatus(Status type);
 
 	void wieldMainWeapon(Weapon* wpn);
 	void wearArmor(Armor* armor);

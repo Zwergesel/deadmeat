@@ -44,6 +44,7 @@ public:
 	int time;
 	bool clearMessage;
 	std::vector<WorldNode> worldNodes;
+	std::deque<Creature*> garbage;
 
 	World();
 	~World();
@@ -68,6 +69,8 @@ public:
 
 	void buildFovMap();
 	void travel();
+	
+	void cleanGarbage();
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);

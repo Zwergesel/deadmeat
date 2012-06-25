@@ -239,7 +239,8 @@ void Creature::die(Creature* instigator)
 			level->addItem(it->second, position);
 		}
 		inventory.clear();
-		level->removeCreature(this, true);
+		level->removeCreature(this, false);
+		world.garbage.push_back(this);
 	}
 }
 
@@ -249,14 +250,14 @@ void Creature::regenerate(int healthSpeedup, int manaSpeedup)
 	{
 		int bonus = (world.time - lastTimeRegen) / (30 - healthSpeedup);
 		health = std::min(maxHealth, health + bonus);
-		//lastTimeRegen += (30 - healthSpeedup) * bonus; WTF?
-		lastTimeRegen = world.time;
+		// Don't just set lastTimeRegen to world.time, because you are losing time that did not divide evenly that way
+		lastTimeRegen += (30 - healthSpeedup) * bonus;
 	}
 	if ((world.time - lastTimeManaRegen) > (30 - manaSpeedup))
 	{
 		int bonus = (world.time - lastTimeManaRegen) / (30 - manaSpeedup);
-		health = std::min(maxMana, mana + bonus);
-		lastTimeManaRegen = world.time;
+		mana = std::min(maxMana, mana + bonus);
+		lastTimeManaRegen += (30 - manaSpeedup) * bonus;
 	}
 }
 
@@ -644,23 +645,29 @@ void Creature::updateStatus(int time)
 			hurt(static_cast<int>(time*status[d].strength/10.0f), NULL);
 			break;
 		default:
-			std::cerr << name << " has effect " << status[d].type << std::endl;
+			std::cerr << name << " has effect " << status[d].type << " strength " << status[d].strength << " for " << time << std::endl;
 		}
 		// Reduce duration
 		status[d].duration -= time;
-		if (status[d].duration <= 0)
+		if (status[d].duration <= 0) endStatus(status[d].type);
+	}
+}
+
+void Creature::endStatus(Status type)
+{
+	for (auto it = status.begin(); it != status.end(); it++)
+	{
+		if (it->type != type) continue;
+		switch (type)
 		{
-			// Effect ends
-			status.erase(status.begin()+d);
-			switch (status[d].type)
-			{
-			case STATUS_FIRE:
-				if (controlled) world.addMessage("Thankfully the fire dies out.");
-				break;
-			default:
-				std::cerr << name << " ends effect " << status[d].type << std::endl;
-			}
+		case STATUS_FIRE:
+			if (controlled) world.addMessage("The flames go out.");
+			break;
+		default:
+			std::cerr << name << " ends effect " << type << std::endl;
 		}
+		status.erase(it);
+		break;
 	}
 }
 
