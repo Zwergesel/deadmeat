@@ -1,0 +1,28 @@
+#summary Races and Classes
+
+= Races =
+
+|| *Race* || *STR* || *DEX*  || *CON* || *INT* || *PER* || *Special* ||
+|| _Dragonborn_ || 7 || 5 || 5 || 4 || 5 || breathes fire or ice ||
+|| _Dwarf_ || 6 || 4 || 7 || 5 || 2 || Slow runner, difficult to hit, cannot train swimming ||
+|| _Elf_ || 3 || 8 || 2 || 4 || 7 || ||
+|| _Golem_ || 7 || 2 || 9 || 2 || 4 || Rarely gets hungry ||
+|| _Human_ || 4 || 4 || 4 || 8 || 4 || Jack-of-all-Trades ||
+|| _Imp_ || 3 || 4 || 2 || 9 || 7 || ||
+|| _Orc_ || 8 || 4 || 6 || 3 || 3 || ||
+|| _Undead_ || 4 || 6 || 8 || 3 || 4 || No hunger, big health bonus, no regeneration, eats corpses to regenerate ||
+
+= Classes =
+
+|| *Class* || *DRA* || *DWA* || *ELF* || *GOL* || *HUM* || *IMP* || *ORC* || *UND* || *Special* ||
+|| _Warrior_ || x || x || x || x || x || || x || x || ||
+|| _Rogue_ || x || || x || || x || x || || x || ||
+|| _Hunter_ || x || x || x || || x || || x || x || ||
+|| _Paladin_ || x || x || || x || x || || || || ||
+|| _Monk_ || || x || x || x || x || x || || || ||
+|| _Voodoo-Priest_ || || x || || x || x || x || x || x || ||
+|| _Druid/Witch_ || || x || x || || x || || x || || ||
+|| _Wizard/Sorcerer_ || x || || || x || x || x || x || x || ||
+|| _Musketeer_ || x || x || || x || x || x || || x || ||
+|| _Engineer/Alchemist_ || x || x || || x || x || x || || x || ||
+|| _Scholar_ || || x || x || || x || x || || x || ||
