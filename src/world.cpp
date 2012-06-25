@@ -494,7 +494,7 @@ void World::buildFovMap()
 
 void World::cleanGarbage()
 {
-	while (garbage.size() > 0)
+	while (!garbage.empty())
 	{
 		Creature* current = garbage.front();
 		garbage.pop_front();

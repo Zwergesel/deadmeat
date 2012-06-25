@@ -136,33 +136,7 @@ int Goblin::action()
 
 unsigned int Goblin::save(Savegame& sg)
 {
-	unsigned int id;
-	if (sg.saved(this, &id)) return id;
-	SaveBlock store("Goblin", id);
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("position", position);
-	store ("color", color) ("health", health) ("maxHealth", maxHealth);
-	store ("mana", mana) ("maxMana", maxMana) ("controlled", controlled);
-	store ("quiver", quiver);
-	store ("mainWeapon", (int) mainWeapon);
-	for (int slot = 0; slot < NUM_ARMOR_SLOTS; slot++)
-	{
-		std::stringstream ss;
-		ss << "armor" << slot;
-		store (ss.str(), armor[slot]);
-	}
-	store.ptr("baseWeapon", baseWeapon.save(sg));
-	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
-	store ("walkingSpeed", walkingSpeed);
-	store ("lastTimeRegen", lastTimeRegen) ("lastTimeManaRegen", lastTimeManaRegen);
-	store ("lastPlayerPos", lastPlayerPos) ("seenPlayer", seenPlayer);
-	store ("expValue", expValue);
-	store ("#inventory", (int) inventory.size());
-	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
-	{
-		store ("_symbol", (int) it->first) .ptr("_item", it->second->save(sg));
-	}
-	sg << store;
-	return id;
+	return Creature::save(sg, "Goblin");
 }
 
 // Note: Loading should work fine through Creature::load
