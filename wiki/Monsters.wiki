@@ -11,3 +11,4 @@
 || Goblin || 3 || Normal || Normal || Low || None || Can use weapons ||
 || Snake || 5 || Fast || Slow || High || None || Bite is poisonous ||
 || Kobold || 6 || Fast || Slow || Low || None || Use ranged weapons (slings, rocks) and keep their distance ||
+|| Troll || 14 || Slow || Very Slow || High || Medium || Immune to many effects, high regeneration rate ||
