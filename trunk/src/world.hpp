@@ -69,7 +69,7 @@ public:
 
 	void buildFovMap();
 	void travel();
-	
+
 	void cleanGarbage();
 
 	unsigned int save(Savegame& sg);

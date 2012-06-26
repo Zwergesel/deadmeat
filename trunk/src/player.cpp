@@ -160,11 +160,26 @@ int Player::actionMove(int direction)
 		}
 		else if (level->isWalkable(newPos))
 		{
+			Object* obj = level->objectAt(newPos);
+			// if object is invisible, roll for caution
+			if (obj != NULL && !obj->isVisible())
+			{
+				TCODRandom* rng = TCODRandom::getInstance();
+				rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
+				// skill/33 chance of getting it
+				if (3 * skills[SKILL_TRAPS].value >= rng->getInt(0, 100))
+				{
+					std::stringstream ss;
+					ss << "Caution! There is " << util::format(FORMAT_INDEF, obj) << " here!";
+					world.addMessage(ss.str(), true);
+					return 0;
+				}
+			}
+
 			float diagonal = ((newPos - ppos).x != 0 && (newPos - ppos).y != 0)?(std::sqrt(2.f)):(1.f);
 			creature->moveTo(newPos);
 			world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - level->getWidth(), 0);
 			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
-			Object* obj = level->objectAt(newPos);
 			if (obj != NULL) obj->onStep(creature);
 			quickLook();
 			return static_cast<int>(static_cast<float>(creature->getWalkingSpeed()) * diagonal);
@@ -227,14 +242,14 @@ int Player::actionLook(Point pos)
 				world.addMessage(msg.str(), true);
 			}
 		}
-		else if (obj == NULL)
+		else if (obj == NULL || !obj->isVisible())
 		{
 			// Is there nothing at all here, then describe the tile
 			std::stringstream msg;
 			msg << "You see " << world.tileSet->getDescription(level->getTile(pos)) << " here.";
 			world.addMessage(msg.str());
 		}
-		if (obj != NULL)
+		if (obj != NULL && obj->isVisible())
 		{
 			// Always mention the object even if there are creatures or items
 			std::stringstream msg;

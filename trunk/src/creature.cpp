@@ -615,7 +615,8 @@ void Creature::affect(Status type, int start, int duration, int strength)
 {
 	for (auto it = status.begin(); it != status.end(); it++)
 	{
-		if (it->type == type) {
+		if (it->type == type)
+		{
 			// Stack effect
 			// TODO: decide via type how stacking works
 			it->strength = std::max(it->strength, strength);
