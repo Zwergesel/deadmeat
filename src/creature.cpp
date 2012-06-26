@@ -645,7 +645,7 @@ void Creature::updateStatus(int time)
 			hurt(static_cast<int>(time*status[d].strength/10.0f), NULL);
 			break;
 		default:
-			std::cerr << name << " has effect " << status[d].type << " strength " << status[d].strength << " for " << time << std::endl;
+			std::cerr << name << " has effect " << status[d].type << " strength " << status[d].strength << " for " << status[d].duration << std::endl;
 		}
 		// Reduce duration
 		status[d].duration -= time;

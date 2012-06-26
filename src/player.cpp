@@ -143,6 +143,21 @@ int Player::actionMove(int direction)
 		{
 			return creature->attack(c);
 		}
+		else if (creature->getStatusStrength(STATUS_IMMOBILE) > 0)
+		{
+			// TODO: own status for bear traps?
+			TCODRandom* rng = TCODRandom::getInstance();
+			if (rng->getInt(0,40) < attributes[ATTR_STR])
+			{
+				world.addMessage("You escape the bear trap.");
+				creature->endStatus(STATUS_IMMOBILE);
+			}
+			else
+			{
+				world.addMessage("You're trying to get free.");
+			}
+			return 15;
+		}
 		else if (level->isWalkable(newPos))
 		{
 			float diagonal = ((newPos - ppos).x != 0 && (newPos - ppos).y != 0)?(std::sqrt(2.f)):(1.f);
@@ -153,11 +168,6 @@ int Player::actionMove(int direction)
 			if (obj != NULL) obj->onStep(creature);
 			quickLook();
 			return static_cast<int>(static_cast<float>(creature->getWalkingSpeed()) * diagonal);
-		}
-		else
-		{
-			world.addMessage("Bonk!");
-			return 0;
 		}
 	}
 	return 0;
