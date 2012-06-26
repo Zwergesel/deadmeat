@@ -140,7 +140,7 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 			TileInfo inf = tileSet->getInfo(level->getTile(Point(x, y)));
 			// check for object
 			Object* obj = level->objectAt(Point(x,y));
-			if (obj != NULL)
+			if (obj != NULL )//&& obj->isVisible())
 			{
 				inf.color = obj->getColor();
 				inf.sym = obj->getSymbol();
@@ -375,7 +375,8 @@ void World::drawInfo()
 	else if (world.player->getNutrition() >= HUNGER_NORMAL)
 	{
 		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cSatiated%c", TCOD_COLCTRL_5, TCOD_COLCTRL_STOP);
-	} else if (world.player->getCreature()->getStatusStrength(STATUS_FIRE) > 0)
+	}
+	else if (world.player->getCreature()->getStatusStrength(STATUS_FIRE) > 0)
 	{
 		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cBurning%c", TCOD_COLCTRL_4, TCOD_COLCTRL_STOP);
 	}

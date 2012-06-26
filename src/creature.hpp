@@ -18,25 +18,25 @@ class LoadBlock;
 // TODO: mark implemented statuses
 enum Status
 {
-	STATUS_WOUND,
-	STATUS_POISON,
-	STATUS_SICK,
-	STATUS_STUN,
-	STATUS_PARALYZE,
-	STATUS_SLEEP,
-	STATUS_FEAR,
-	STATUS_CONFUSE,
-	STATUS_SLOW,
-	STATUS_HASTE,
-	STATUS_IMMOBILE,
-	STATUS_BLIND,
-	STATUS_HALLU,
-	STATUS_CONDEMN,
-	STATUS_FIRE,      // damage over time
-	STATUS_FREEZE,
-	STATUS_BRAIN,
-	STATUS_DRAIN,
-	NUM_STATUS
+  STATUS_WOUND,
+  STATUS_POISON,
+  STATUS_SICK,
+  STATUS_STUN,
+  STATUS_PARALYZE,
+  STATUS_SLEEP,
+  STATUS_FEAR,
+  STATUS_CONFUSE,
+  STATUS_SLOW,
+  STATUS_HASTE,
+  STATUS_IMMOBILE,
+  STATUS_BLIND,
+  STATUS_HALLU,
+  STATUS_CONDEMN,
+  STATUS_FIRE,      // damage over time
+  STATUS_FREEZE,
+  STATUS_BRAIN,
+  STATUS_DRAIN,
+  NUM_STATUS
 };
 
 struct StatusInfo
@@ -45,8 +45,8 @@ struct StatusInfo
 	int start;
 	int duration;
 	int strength;
-	StatusInfo(){};
-	StatusInfo(Status t, int s, int d, int x):type(t),start(s),duration(d),strength(x){};
+	StatusInfo() {};
+	StatusInfo(Status t, int s, int d, int x):type(t),start(s),duration(d),strength(x) {};
 };
 
 class Creature
@@ -115,7 +115,7 @@ public:
 	void setBaseWeapon(Weapon base);
 	void addMaxHealth(int delta);
 	void addMaxMana(int delta);
-	
+
 	virtual void affect(Status type, int start, int duration, int strength);
 	void updateStatus(int time);
 	int getStatusStrength(Status status);

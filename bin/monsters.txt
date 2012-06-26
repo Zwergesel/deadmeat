@@ -19,7 +19,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 2]]
+[[Creature: 2]]
 name: Smaug
 formatFlags: 16385
 symbol: 68
@@ -46,6 +46,7 @@ lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 2500
 #inventory: 0
+#status: 0
 
 [[Weapon: 5]]
 name: x
@@ -65,7 +66,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 4]]
+[[Creature: 4]]
 name: blue baby dragon
 formatFlags: 16384
 symbol: 100
@@ -92,6 +93,7 @@ lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 600
 #inventory: 0
+#status: 0
 
 [[Weapon: 7]]
 name: x
@@ -111,7 +113,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 6]]
+[[Creature: 6]]
 name: goblin
 formatFlags: 16384
 symbol: 103
@@ -138,6 +140,7 @@ lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 300
 #inventory: 0
+#status: 0
 
 [[Weapon: 9]]
 name: x
@@ -157,7 +160,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 8]]
+[[Creature: 8]]
 name: medic
 formatFlags: 32768
 symbol: 64
@@ -184,6 +187,7 @@ lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 10
 #inventory: 0
+#status: 0
 
 [[Weapon: 11]]
 name: x
@@ -203,7 +207,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 10]]
+[[Creature: 10]]
 name: purple baby dragon
 formatFlags: 16384
 symbol: 100
@@ -230,6 +234,7 @@ lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 600
 #inventory: 0
+#status: 0
 
 [[Weapon: 13]]
 name: x
@@ -249,7 +254,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 12]]
+[[Creature: 12]]
 name: rat
 formatFlags: 32768
 symbol: 114
@@ -276,6 +281,7 @@ lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 250
 #inventory: 0
+#status: 0
 
 [[Weapon: 15]]
 name: x
@@ -295,7 +301,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 14]]
+[[Creature: 14]]
 name: red baby dragon
 formatFlags: 16384
 symbol: 100
@@ -322,6 +328,7 @@ lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 600
 #inventory: 0
+#status: 0
 
 [[Weapon: 17]]
 name: x
@@ -341,7 +348,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 16]]
+[[Creature: 16]]
 name: sergeant
 formatFlags: 16384
 symbol: 64
@@ -368,6 +375,7 @@ lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 1000
 #inventory: 0
+#status: 0
 
 [[Weapon: 19]]
 name: x
@@ -387,7 +395,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 18]]
+[[Creature: 18]]
 name: snake
 formatFlags: 16384
 symbol: 115
@@ -414,6 +422,7 @@ lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 300
 #inventory: 0
+#status: 0
 
 [[Weapon: 21]]
 name: x
@@ -433,7 +442,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 20]]
+[[Creature: 20]]
 name: soldier
 formatFlags: 16384
 symbol: 64
@@ -460,6 +469,7 @@ lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 600
 #inventory: 0
+#status: 0
 
 [[Weapon: 23]]
 name: x
@@ -479,7 +489,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 22]]
+[[Creature: 22]]
 name: soldier ant
 formatFlags: 32768
 symbol: 97
@@ -506,6 +516,7 @@ lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 500
 #inventory: 0
+#status: 0
 
 [[Weapon: 25]]
 name: x
@@ -525,7 +536,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 24]]
+[[Creature: 24]]
 name: spider
 formatFlags: 32768
 symbol: 115
@@ -552,6 +563,7 @@ lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 150
 #inventory: 0
+#status: 0
 
 [[Weapon: 27]]
 name: x
@@ -571,7 +583,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 26]]
+[[Creature: 26]]
 name: troll
 formatFlags: 16384
 symbol: 84
@@ -598,6 +610,7 @@ lastPlayerPos: 0, 0
 seenPlayer: false
 expValue: 750
 #inventory: 0
+#status: 0
 
 [[Ammo: 28]]
 name: arrow

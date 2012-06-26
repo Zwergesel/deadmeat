@@ -27,15 +27,17 @@ private:
 	uint formatFlags;
 	symbol sym;
 	TCODColor color;
+	bool visible;
 
 public:
 	Object();
 	Object(OBJECTTYPE type);
-	Object(OBJECTTYPE type, symbol sym, TCODColor color);
+	Object(OBJECTTYPE type, symbol sym, TCODColor color, bool visible = true);
 	uint getFormatFlags();
 	OBJECTTYPE getType();
 	symbol getSymbol();
 	TCODColor getColor();
+	bool isVisible();
 	std::string toString();
 
 	int onStep(Creature* guy);
