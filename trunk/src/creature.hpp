@@ -15,7 +15,7 @@ class Player;
 class Savegame;
 class LoadBlock;
 
-// TODO: mark implemented status (plural!); currently none
+// TODO: mark implemented statuses
 enum Status
 {
 	STATUS_WOUND,
@@ -32,7 +32,7 @@ enum Status
 	STATUS_BLIND,
 	STATUS_HALLU,
 	STATUS_CONDEMN,
-	STATUS_FIRE,
+	STATUS_FIRE,      // damage over time
 	STATUS_FREEZE,
 	STATUS_BRAIN,
 	STATUS_DRAIN,

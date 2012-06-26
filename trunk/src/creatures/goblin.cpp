@@ -120,6 +120,11 @@ int Goblin::action()
 		{
 			return attack(c);
 		}
+		else if (getStatusStrength(STATUS_IMMOBILE) > 0)
+		{
+			TCODRandom* rng = TCODRandom::getInstance();
+			if (rng->getInt(0,9) == 0) endStatus(STATUS_IMMOBILE);
+		}
 		else
 		{
 			float diagonal = ((target - position).x != 0 && (target - position).y != 0)?(std::sqrt(2.f)):(1.f);
