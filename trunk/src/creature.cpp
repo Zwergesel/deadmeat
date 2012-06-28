@@ -683,6 +683,11 @@ int Creature::getStatusStrength(Status type)
 
 /*--------------------- SAVING AND LOADING ---------------------*/
 
+unsigned int Creature::save(Savegame& sg)
+{
+	return save(sg, "Creature");
+}
+
 unsigned int Creature::save(Savegame& sg, const std::string& classname)
 {
 	unsigned int id;
