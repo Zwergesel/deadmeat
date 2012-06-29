@@ -140,7 +140,7 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 			TileInfo inf = tileSet->getInfo(level->getTile(Point(x, y)));
 			// check for object
 			Object* obj = level->objectAt(Point(x,y));
-			if (obj != NULL )//&& obj->isVisible())
+			if (obj != NULL && obj->isVisible())
 			{
 				inf.color = obj->getColor();
 				inf.sym = obj->getSymbol();
@@ -376,7 +376,17 @@ void World::drawInfo()
 	{
 		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cSatiated%c", TCOD_COLCTRL_5, TCOD_COLCTRL_STOP);
 	}
-	else if (world.player->getCreature()->getStatusStrength(STATUS_FIRE) > 0)
+	if (world.player->getWeight() > BURDEN_NORMAL && world.player->getWeight() <= BURDEN_BURDENED)
+	{
+		TCODConsole::root->setColorControl(TCOD_COLCTRL_1, TCODColor::lightTurquoise, TCODColor::black);
+		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cBurdened%c", TCOD_COLCTRL_1, TCOD_COLCTRL_STOP);
+	}
+	if (world.player->getWeight() > BURDEN_BURDENED)
+	{
+		TCODConsole::root->setColorControl(TCOD_COLCTRL_1, TCODColor::darkTurquoise, TCODColor::black);
+		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cOverloaded%c", TCOD_COLCTRL_1, TCOD_COLCTRL_STOP);
+	}
+	if (world.player->getCreature()->getStatusStrength(STATUS_FIRE) > 0)
 	{
 		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cBurning%c", TCOD_COLCTRL_4, TCOD_COLCTRL_STOP);
 	}

@@ -45,6 +45,12 @@ enum HungerLevel
   HUNGER_SATIATED = 4500
 };
 
+enum BurdenLevel
+{
+  BURDEN_NORMAL = 100,
+  BURDEN_BURDENED = 150
+};
+
 class Player
 {
 private:
@@ -108,6 +114,7 @@ public:
 	float getWeaponSpeedBonus();
 	float getMoveSpeedBonus();
 	float getArmorHindranceReduction();
+	int getWeight();
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);

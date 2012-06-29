@@ -46,21 +46,21 @@ void fillFactoryTemplates()
 	factory.setTemplate("blue baby dragon", &blubaby);
 	factory.setTemplate("Smaug", &dragon);
 
-	Weapon lightsaber("lightsaber", F_NEUTER, '(', TCODColor::red, 1, 8, 30, 1, 10, 20, 30, 1, EFFECT_NONE, 1, AMMO_NONE);
-	Weapon sword("long sword", F_NEUTER, '(', TCODColor::red, 1, 15, 20, 12, 2, 8, 0, 1, EFFECT_NONE, 1, AMMO_NONE);
-	Weapon dagger("dagger", F_NEUTER, '(', TCODColor::red, 1, 7, 10, 8, 1, 4, 0, 1, EFFECT_NONE, 1, AMMO_NONE);
-	Weapon halberd("halberd", F_NEUTER, '(', TCODColor::red, 1, 22, 40, 15, 2, 10, 0, 2, EFFECT_NONE, 1, AMMO_NONE);
-	Weapon bow("longbow", F_NEUTER, '(', TCODColor::cyan, 1, 25, 25, 30, 2, 10, 0, 1, EFFECT_NONE, 30, AMMO_ARROW);
-	Weapon crossbow("crossbow", F_NEUTER, '(', TCODColor::blue, 1, 35, 25, 40, 3, 10, 0, 1, EFFECT_NONE, 20, AMMO_BOLT);
-	Weapon slingshot("slingshot", F_NEUTER, '(', TCODColor::lightBlue, 1, 15, 35, 10, 1, 10, 0, 1, EFFECT_NONE, 10, AMMO_BULLET);
-	Armor body("uber armor", F_NEUTER | F_AN, ')', TCODColor::black, 1, 100, 2, 10, ARMOR_BODY);
-	Armor helmet("prussian pickelhaube", F_NEUTER, ')', TCODColor::black, 1, 50, 1, 0, ARMOR_HAT);
-	Armor boots("clown shoes", F_NEUTER | F_BOOTS, ')', TCODColor::black, 1, -30, -1, 12, ARMOR_BOOTS);
-	Food food1("beefsteak", F_NEUTER, '%', TCODColor::darkOrange, 1, 2500, 100);
-	Food food2("meat ball", F_NEUTER, '%', TCODColor::orange, 1, 1000, 15);
-	Ammo arrow("arrow", F_NEUTER, '!', TCODColor::cyan, 5, 0, EFFECT_NONE, AMMO_ARROW);
-	Ammo bolt("bolt", F_NEUTER, '!', TCODColor::blue, 5, 0, EFFECT_NONE, AMMO_BOLT);
-	Ammo bullet("bullet", F_NEUTER, '!', TCODColor::lightBlue, 5, 0, EFFECT_NONE, AMMO_BULLET);
+	Weapon lightsaber("lightsaber", F_NEUTER, '(', TCODColor::red, 1, 1, 8, 30, 1, 10, 20, 30, 1, EFFECT_NONE, 1, AMMO_NONE);
+	Weapon sword("long sword", F_NEUTER, '(', TCODColor::red, 1, 10, 15, 20, 12, 2, 8, 0, 1, EFFECT_NONE, 1, AMMO_NONE);
+	Weapon dagger("dagger", F_NEUTER, '(', TCODColor::red, 1, 2, 7, 10, 8, 1, 4, 0, 1, EFFECT_NONE, 1, AMMO_NONE);
+	Weapon halberd("halberd", F_NEUTER, '(', TCODColor::red, 1, 20, 22, 40, 15, 2, 10, 0, 2, EFFECT_NONE, 1, AMMO_NONE);
+	Weapon bow("longbow", F_NEUTER, '(', TCODColor::cyan, 1, 10, 25, 25, 30, 2, 10, 0, 1, EFFECT_NONE, 30, AMMO_ARROW);
+	Weapon crossbow("crossbow", F_NEUTER, '(', TCODColor::blue, 1, 15, 35, 25, 40, 3, 10, 0, 1, EFFECT_NONE, 20, AMMO_BOLT);
+	Weapon slingshot("slingshot", F_NEUTER, '(', TCODColor::lightBlue, 1, 1, 15, 35, 10, 1, 10, 0, 1, EFFECT_NONE, 10, AMMO_BULLET);
+	Armor body("uber armor", F_NEUTER | F_AN, ')', TCODColor::black, 1, 30, 100, 2, 10, ARMOR_BODY);
+	Armor helmet("prussian pickelhaube", F_NEUTER, ')', TCODColor::black, 1, 5, 50, 1, 0, ARMOR_HAT);
+	Armor boots("clown shoes", F_NEUTER | F_BOOTS, ')', TCODColor::black, 1, 5, -30, -1, 12, ARMOR_BOOTS);
+	Food food1("beefsteak", F_NEUTER, '%', TCODColor::darkOrange, 1, 3, 2500, 100);
+	Food food2("meat ball", F_NEUTER, '%', TCODColor::orange, 1, 1, 1000, 15);
+	Ammo arrow("arrow", F_NEUTER, '!', TCODColor::cyan, 5, 1, 0, EFFECT_NONE, AMMO_ARROW);
+	Ammo bolt("bolt", F_NEUTER, '!', TCODColor::blue, 5, 1, 0, EFFECT_NONE, AMMO_BOLT);
+	Ammo bullet("bullet", F_NEUTER, '!', TCODColor::lightBlue, 5, 1, 0, EFFECT_NONE, AMMO_BULLET);
 	Gold gold(12);
 
 	factory.setTemplate("lightsaber", &lightsaber);

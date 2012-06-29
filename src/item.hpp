@@ -31,12 +31,13 @@ protected:
 	bool active;
 	ITEM_TYPE type;
 	std::string strType;
+	int weight;
 
 public:
 	static std::string ACTIVE_STRINGS[NUM_ITEM_TYPE];
 
 	Item();
-	Item(std::string name, uint format, symbol sym, TCODColor color, int amount);
+	Item(std::string name, uint format, symbol sym, TCODColor color, int amount, int weight);
 	virtual ~Item();
 	virtual Item* clone();
 
@@ -48,6 +49,7 @@ public:
 	virtual std::string toString();
 	std::string typeString();
 	int getAmount();
+	int getWeight();
 	void setAmount(int n);
 	void changeAmount(int n);
 	void setActive(bool set);

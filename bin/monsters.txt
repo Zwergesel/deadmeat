@@ -7,6 +7,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+weight: 0
 active: false
 speed: 15
 hitBonus: 50
@@ -19,7 +20,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Creature: 2]]
+[[Goblin: 2]]
 name: Smaug
 formatFlags: 16385
 symbol: 68
@@ -54,6 +55,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+weight: 0
 active: false
 speed: 16
 hitBonus: 15
@@ -66,7 +68,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Creature: 4]]
+[[Goblin: 4]]
 name: blue baby dragon
 formatFlags: 16384
 symbol: 100
@@ -101,6 +103,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+weight: 0
 active: false
 speed: 11
 hitBonus: 0
@@ -113,7 +116,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Creature: 6]]
+[[Goblin: 6]]
 name: goblin
 formatFlags: 16384
 symbol: 103
@@ -148,6 +151,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+weight: 0
 active: false
 speed: 25
 hitBonus: 0
@@ -160,7 +164,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Creature: 8]]
+[[Goblin: 8]]
 name: medic
 formatFlags: 32768
 symbol: 64
@@ -195,6 +199,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+weight: 0
 active: false
 speed: 16
 hitBonus: 15
@@ -207,7 +212,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Creature: 10]]
+[[Goblin: 10]]
 name: purple baby dragon
 formatFlags: 16384
 symbol: 100
@@ -242,6 +247,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+weight: 0
 active: false
 speed: 10
 hitBonus: 0
@@ -254,7 +260,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Creature: 12]]
+[[Goblin: 12]]
 name: rat
 formatFlags: 32768
 symbol: 114
@@ -289,6 +295,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+weight: 0
 active: false
 speed: 16
 hitBonus: 15
@@ -301,7 +308,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Creature: 14]]
+[[Goblin: 14]]
 name: red baby dragon
 formatFlags: 16384
 symbol: 100
@@ -336,6 +343,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+weight: 0
 active: false
 speed: 13
 hitBonus: 0
@@ -348,7 +356,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Creature: 16]]
+[[Goblin: 16]]
 name: sergeant
 formatFlags: 16384
 symbol: 64
@@ -383,6 +391,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+weight: 0
 active: false
 speed: 12
 hitBonus: 0
@@ -395,7 +404,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Creature: 18]]
+[[Goblin: 18]]
 name: snake
 formatFlags: 16384
 symbol: 115
@@ -430,6 +439,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+weight: 0
 active: false
 speed: 16
 hitBonus: 0
@@ -442,7 +452,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Creature: 20]]
+[[Goblin: 20]]
 name: soldier
 formatFlags: 16384
 symbol: 64
@@ -477,6 +487,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+weight: 0
 active: false
 speed: 13
 hitBonus: 40
@@ -489,7 +500,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Creature: 22]]
+[[Goblin: 22]]
 name: soldier ant
 formatFlags: 32768
 symbol: 97
@@ -524,6 +535,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+weight: 0
 active: false
 speed: 14
 hitBonus: 0
@@ -536,7 +548,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Creature: 24]]
+[[Goblin: 24]]
 name: spider
 formatFlags: 32768
 symbol: 115
@@ -571,6 +583,7 @@ formatFlags: 0
 symbol: 35
 color: 255, 0, 127
 amount: 1
+weight: 0
 active: false
 speed: 18
 hitBonus: 20
@@ -583,7 +596,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Creature: 26]]
+[[Goblin: 26]]
 name: troll
 formatFlags: 16384
 symbol: 84
@@ -618,6 +631,7 @@ formatFlags: 65536
 symbol: 33
 color: 0, 255, 255
 amount: 5
+weight: 1
 active: false
 enchantment: 0
 effect: 0
@@ -629,6 +643,7 @@ formatFlags: 65536
 symbol: 37
 color: 191, 95, 0
 amount: 1
+weight: 3
 active: false
 nutrition: 2500
 eatTime: 100
@@ -639,6 +654,7 @@ formatFlags: 65536
 symbol: 33
 color: 0, 0, 255
 amount: 5
+weight: 1
 active: false
 enchantment: 0
 effect: 0
@@ -650,6 +666,7 @@ formatFlags: 65536
 symbol: 33
 color: 63, 63, 255
 amount: 5
+weight: 1
 active: false
 enchantment: 0
 effect: 0
@@ -661,6 +678,7 @@ formatFlags: 65544
 symbol: 41
 color: 0, 0, 0
 amount: 1
+weight: 5
 active: false
 defense: -30
 hindrance: 12
@@ -673,6 +691,7 @@ formatFlags: 65536
 symbol: 40
 color: 0, 0, 255
 amount: 1
+weight: 15
 active: false
 speed: 35
 hitBonus: 25
@@ -691,6 +710,7 @@ formatFlags: 65536
 symbol: 40
 color: 255, 0, 0
 amount: 1
+weight: 2
 active: false
 speed: 7
 hitBonus: 10
@@ -709,6 +729,7 @@ formatFlags: 4
 symbol: 36
 color: 242, 210, 0
 amount: 12
+weight: 0
 active: false
 
 [[Weapon: 36]]
@@ -717,6 +738,7 @@ formatFlags: 65536
 symbol: 40
 color: 255, 0, 0
 amount: 1
+weight: 20
 active: false
 speed: 22
 hitBonus: 40
@@ -735,6 +757,7 @@ formatFlags: 65536
 symbol: 40
 color: 255, 0, 0
 amount: 1
+weight: 1
 active: false
 speed: 8
 hitBonus: 30
@@ -753,6 +776,7 @@ formatFlags: 65536
 symbol: 40
 color: 0, 255, 255
 amount: 1
+weight: 10
 active: false
 speed: 25
 hitBonus: 25
@@ -771,6 +795,7 @@ formatFlags: 65536
 symbol: 37
 color: 255, 127, 0
 amount: 1
+weight: 1
 active: false
 nutrition: 1000
 eatTime: 15
@@ -781,6 +806,7 @@ formatFlags: 65536
 symbol: 41
 color: 0, 0, 0
 amount: 1
+weight: 5
 active: false
 defense: 50
 hindrance: 0
@@ -793,6 +819,7 @@ formatFlags: 65536
 symbol: 40
 color: 63, 63, 255
 amount: 1
+weight: 1
 active: false
 speed: 15
 hitBonus: 35
@@ -811,6 +838,7 @@ formatFlags: 65536
 symbol: 40
 color: 255, 0, 0
 amount: 1
+weight: 10
 active: false
 speed: 15
 hitBonus: 20
@@ -829,6 +857,7 @@ formatFlags: 65552
 symbol: 41
 color: 0, 0, 0
 amount: 1
+weight: 30
 active: false
 defense: 100
 hindrance: 10
