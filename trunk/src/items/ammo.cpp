@@ -8,8 +8,8 @@ Ammo::Ammo()
 	strType = "ammunition";
 }
 
-Ammo::Ammo(std::string n, uint f, symbol s, TCODColor c, int x, int ench, WeaponEffect e, AmmoType a):
-	Item(n,f,s,c,x),enchantment(ench),effect(e),ammoType(a)
+Ammo::Ammo(std::string n, uint f, symbol s, TCODColor c, int x, int w, int ench, WeaponEffect e, AmmoType a):
+	Item(n,f,s,c,x,w),enchantment(ench),effect(e),ammoType(a)
 {
 	type = ITEM_AMMO;
 	strType = "ammunition";
@@ -21,7 +21,7 @@ Ammo::~Ammo()
 
 Item* Ammo::clone()
 {
-	Ammo* copy = new Ammo(name, formatFlags, sym, color, amount, enchantment, effect, ammoType);
+	Ammo* copy = new Ammo(name, formatFlags, sym, color, amount, weight, enchantment, effect, ammoType);
 	copy->active = active;
 	return copy;
 }
@@ -64,7 +64,7 @@ unsigned int Ammo::save(Savegame& sg)
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Ammo", id);
 	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	store ("color", color) ("amount", amount) ("active", active);
+	store ("color", color) ("amount", amount) ("weight", weight) ("active", active);
 	store ("enchantment", enchantment) ("effect", effect);
 	store ("ammoType", ammoType);
 	sg << store;
@@ -75,7 +75,7 @@ void Ammo::load(LoadBlock& load)
 {
 	int e,a;
 	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	load ("color", color) ("amount", amount) ("active", active);
+	load ("color", color) ("amount", amount) ("weight", weight) ("active", active);
 	load ("enchantment", enchantment) ("effect", e);
 	load ("ammoType", a);
 	if (a < 0 || a >= NUM_AMMOTYPE) throw SavegameFormatException("Ammo::load _ ammoType out of range");

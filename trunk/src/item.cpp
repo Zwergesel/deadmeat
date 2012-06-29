@@ -11,8 +11,8 @@ Item::Item()
 	strType = "other options";
 }
 
-Item::Item(std::string n, uint f, symbol s, TCODColor c, int x):
-	name(n), formatFlags(f), sym(s), color(c), amount(x), active(false)
+Item::Item(std::string n, uint f, symbol s, TCODColor c, int x, int w):
+	name(n), formatFlags(f), sym(s), color(c), amount(x), active(false), weight(w)
 {
 	type = ITEM_DEFAULT;
 	strType = "other options";
@@ -22,7 +22,7 @@ Item::~Item() {}
 
 Item* Item::clone()
 {
-	Item* copy = new Item(name, formatFlags, sym, color, amount);
+	Item* copy = new Item(name, formatFlags, sym, color, amount, weight);
 	copy->active = active;
 	return copy;
 }
@@ -73,6 +73,11 @@ void Item::setAmount(int n)
 	amount = n;
 }
 
+int Item::getWeight()
+{
+	return weight;
+}
+
 void Item::changeAmount(int n)
 {
 	assert(amount + n >= 0);
@@ -102,7 +107,7 @@ void Item::randomize(int level)
 {
 }
 
-Item PSEUDOITEM_NOTHING = Item("nothing", F_PROPER, '#', TCODColor::pink, 1);
+Item PSEUDOITEM_NOTHING = Item("nothing", F_PROPER, '#', TCODColor::pink, 1, 0);
 
 /*--------------------- SAVING AND LOADING ---------------------*/
 
@@ -112,7 +117,7 @@ unsigned int Item::save(Savegame& sg)
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Item", id);
 	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	store ("color", color) ("amount", amount) ("active", active);
+	store ("color", color) ("amount", amount) ("weight", weight) ("active", active);
 	sg << store;
 	return id;
 }
@@ -120,5 +125,5 @@ unsigned int Item::save(Savegame& sg)
 void Item::load(LoadBlock& load)
 {
 	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	load ("color", color) ("amount", amount) ("active", active);
+	load ("color", color) ("amount", amount) ("weight", weight) ("active", active);
 }

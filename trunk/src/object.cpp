@@ -155,7 +155,7 @@ int Object::onStep(Creature* guy)
 			visible = true;
 		}
 		guy->hurt(20, NULL);
-		guy->affect(STATUS_IMMOBILE, 0, 1 << 30, 1);
+		guy->affect(STATUS_IMMOBILE, 0, 100, 1);
 		return 0;
 
 	case OBJ_TRAP_FIRE:

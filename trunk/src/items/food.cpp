@@ -8,8 +8,8 @@ Food::Food()
 	strType = "food";
 }
 
-Food::Food(std::string n, uint f, symbol s, TCODColor c, int x, int u, int t):
-	Item(n,f,s,c,x), nutrition(u), eatTime(t)
+Food::Food(std::string n, uint f, symbol s, TCODColor c, int x, int w, int u, int t):
+	Item(n,f,s,c,x,w), nutrition(u), eatTime(t)
 {
 	type = ITEM_FOOD;
 	strType = "food";
@@ -19,7 +19,7 @@ Food::~Food() {}
 
 Item* Food::clone()
 {
-	Food* copy = new Food(name, formatFlags, sym, color, amount, nutrition, eatTime);
+	Food* copy = new Food(name, formatFlags, sym, color, amount, weight, nutrition, eatTime);
 	copy->active = active;
 	return copy;
 }
@@ -42,7 +42,7 @@ unsigned int Food::save(Savegame& sg)
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Food", id);
 	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	store ("color", color) ("amount", amount) ("active", active);
+	store ("color", color) ("amount", amount) ("weight", weight) ("active", active);
 	store ("nutrition", nutrition) ("eatTime", eatTime);
 	sg << store;
 	return id;
@@ -51,6 +51,6 @@ unsigned int Food::save(Savegame& sg)
 void Food::load(LoadBlock& load)
 {
 	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	load ("color", color) ("amount", amount) ("active", active);
+	load ("color", color) ("amount", amount) ("weight", weight) ("active", active);
 	load ("nutrition", nutrition) ("eatTime", eatTime);
 }

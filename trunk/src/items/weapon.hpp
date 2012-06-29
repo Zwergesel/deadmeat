@@ -40,7 +40,7 @@ private:
 
 public:
 	Weapon();
-	Weapon(std::string name, uint format, symbol sym, TCODColor color, int amount, int spd, int hit, int dmg, int dice, int dmax, int ench, int hands, WeaponEffect effect, int range, AmmoType ammoType);
+	Weapon(std::string name, uint format, symbol sym, TCODColor color, int amount, int weight, int spd, int hit, int dmg, int dice, int dmax, int ench, int hands, WeaponEffect effect, int range, AmmoType ammoType);
 	Weapon(int spd, int hit, int dmg, int dice, int dmax, WeaponEffect effect, int range, AmmoType ammoType);
 	~Weapon();
 	Item* clone();

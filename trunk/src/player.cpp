@@ -145,7 +145,10 @@ int Player::actionMove(int direction)
 		}
 		else if (creature->getStatusStrength(STATUS_IMMOBILE) > 0)
 		{
+			world.addMessage("You try to move but you can't!");
+			return 15;
 			// TODO: own status for bear traps?
+			/*
 			TCODRandom* rng = TCODRandom::getInstance();
 			if (rng->getInt(0,40) < attributes[ATTR_STR])
 			{
@@ -156,7 +159,7 @@ int Player::actionMove(int direction)
 			{
 				world.addMessage("You're trying to get free.");
 			}
-			return 15;
+			return 15;*/
 		}
 		else if (level->isWalkable(newPos))
 		{
@@ -182,7 +185,8 @@ int Player::actionMove(int direction)
 			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
 			if (obj != NULL) obj->onStep(creature);
 			quickLook();
-			return static_cast<int>(static_cast<float>(creature->getWalkingSpeed()) * diagonal);
+			int slow = std::max(0, creature->getStatusStrength(STATUS_SLOW) - skills[SKILL_NEG_EFFECT].value);
+			return slow + static_cast<int>(static_cast<float>(creature->getWalkingSpeed()) * diagonal);
 		}
 	}
 	return 0;
@@ -657,6 +661,10 @@ int Player::action()
 {
 	// health regeneration
 	creature->regenerate(skills[SKILL_HEALTH].value, skills[SKILL_MANA_REGEN].value);
+
+	// check if weight slows or immobilizes the player
+	if (getWeight() > BURDEN_NORMAL && getWeight() <= BURDEN_BURDENED) creature->affect(STATUS_SLOW, 0, 1, 40);
+	if (getWeight() > BURDEN_BURDENED) creature->affect(STATUS_IMMOBILE, 0, 1, 1);
 
 	int time = Player::processAction();
 
@@ -1272,6 +1280,17 @@ float Player::getMoveSpeedBonus()
 float Player::getArmorHindranceReduction()
 {
 	return (10 - skills[SKILL_ARMOR].value) / 10.0f;
+}
+
+int Player::getWeight()
+{
+	int weight = 0;
+	auto inv = creature->getInventory();
+	for (auto it = inv.begin(); it!=inv.end(); it++)
+	{
+		weight += (*it).second->getAmount() * (*it).second->getWeight();
+	}
+	return weight;
 }
 
 bool sortCreaturesByDistance(Creature* a, Creature* b)
