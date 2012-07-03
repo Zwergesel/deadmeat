@@ -78,5 +78,6 @@ public:
 
 // Global world variable
 extern World world;
+extern TCODRandom* rng;
 
 #endif

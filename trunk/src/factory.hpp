@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include "libtcod.hpp"
 #include "utility.hpp"
 
 /* Forward declarations */
@@ -15,6 +16,7 @@ class Creature;
 class Item;
 class Savegame;
 class LoadBlock;
+extern TCODRandom* rng;
 
 /* Actual classes */
 

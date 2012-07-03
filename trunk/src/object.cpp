@@ -154,7 +154,7 @@ int Object::onStep(Creature* guy)
 			world.addMessage(msg.str());
 			visible = true;
 		}
-		guy->hurt(20, NULL);
+		guy->hurt(20, NULL, DAMAGE_WEAPON);
 		guy->affect(STATUS_IMMOBILE, 0, 100, 1);
 		return 0;
 

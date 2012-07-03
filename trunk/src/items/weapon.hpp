@@ -12,6 +12,7 @@ enum WeaponEffect
   EFFECT_NONE,
   EFFECT_POISON,
   EFFECT_FIRE,
+  EFFECT_DISEASE,
   NUM_EFFECT
 };
 
@@ -37,6 +38,8 @@ private:
 	WeaponEffect effect;
 	int range;
 	AmmoType ammoType;
+	
+	static std::string EFFECT_NAMES[NUM_EFFECT];
 
 public:
 	Weapon();

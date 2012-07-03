@@ -1,5 +1,6 @@
 #include "armor.hpp"
 #include "savegame.hpp"
+#include "../world.hpp"
 
 Armor::Armor()
 {
@@ -53,7 +54,6 @@ std::string Armor::toString()
 
 void Armor::randomize(int level)
 {
-	TCODRandom* rng = TCODRandom::getInstance();
 	int roll = rng->getInt(0,999);
 	enchantment = (roll / 800) + (roll / 950) + (roll / 995);
 }

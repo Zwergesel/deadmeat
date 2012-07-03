@@ -2,7 +2,10 @@
 #include <sstream>
 #include "weapon.hpp"
 #include <iostream>
-#include "savegame.hpp"
+#include "../savegame.hpp"
+#include "../world.hpp"
+
+std::string Weapon::EFFECT_NAMES[NUM_EFFECT] = { "", "poisoned", "flaming", "contaminated" };
 
 Weapon::Weapon()
 {
@@ -38,8 +41,6 @@ Item* Weapon::clone()
 
 int Weapon::rollDamage()
 {
-	TCODRandom* rng = TCODRandom::getInstance();
-	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
 	int dmg = baseDamage;
 	for (int i=numDice; i>0; --i)
 	{
@@ -96,15 +97,19 @@ AmmoType Weapon::getAmmoType()
 std::string Weapon::toString()
 {
 	std::stringstream ss;
-	ss << (enchantment < 0 ? "" : "+") << enchantment << " " << name;
+	if (EFFECT_NAMES[effect].length() > 0) ss << EFFECT_NAMES[effect] << " ";
+	ss << (enchantment < 0 ? "" : "+") << enchantment << " ";
+	ss << name;
 	return ss.str();
 }
 
 void Weapon::randomize(int level)
 {
-	TCODRandom* rng = TCODRandom::getInstance();
 	int roll = rng->getInt(0,999);
 	enchantment = (roll / 800) + (roll / 950) + (roll / 995);
+	roll = rng->getInt(0,999);
+	if (roll < 200) effect = EFFECT_FIRE;
+	else if (roll < 400) effect = EFFECT_POISON;
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/

@@ -19,8 +19,6 @@ RandomTable& RandomTable::add(std::string option, int prob)
 
 std::string RandomTable::getRandom() const
 {
-	TCODRandom* rng = TCODRandom::getInstance();
-	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
 	int roll = rng->getInt(1,probTotal);
 	for (auto it=options.begin(); it!=options.end(); it++)
 	{
@@ -59,8 +57,6 @@ InventoryTable& InventoryTable::add(const std::vector<std::string>& list, int pe
 std::vector<std::string> InventoryTable::getRandom()
 {
 	std::vector<std::string> result;
-	TCODRandom* rng = TCODRandom::getInstance();
-	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
 	for (auto it = options.begin(); it != options.end(); it++)
 	{
 		if (it->permill == 1000 || rng->getInt(0,999) < it->permill)

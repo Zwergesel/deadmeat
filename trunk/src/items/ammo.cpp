@@ -1,5 +1,6 @@
 #include "ammo.hpp"
 #include "../savegame.hpp"
+#include "../world.hpp"
 #include <iostream>
 
 Ammo::Ammo()
@@ -50,7 +51,6 @@ std::string Ammo::toString()
 
 void Ammo::randomize(int level)
 {
-	TCODRandom* rng = TCODRandom::getInstance();
 	amount = rng->getInt(1,30,5) + rng->getInt(0,30,5);
 	int roll = rng->getInt(0,999);
 	enchantment = (roll / 800) + (roll / 950) + (roll / 995);
