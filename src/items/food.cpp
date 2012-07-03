@@ -1,5 +1,6 @@
 #include "food.hpp"
 #include "savegame.hpp"
+#include "../world.hpp"
 
 Food::Food()
 {

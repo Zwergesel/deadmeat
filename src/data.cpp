@@ -6,6 +6,7 @@
 #include "items/food.hpp"
 #include "items/ammo.hpp"
 #include "items/gold.hpp"
+#include "world.hpp"
 
 void fillFactoryTemplates()
 {

@@ -28,7 +28,6 @@ Player::Player(std::string name):
 	state(STATE_DEFAULT)
 {
 	Skill::setDefaults(skills);
-	TCODRandom* rng = TCODRandom::getInstance();
 	attributes[ATTR_STR] = rng->getInt(2,8);
 	attributes[ATTR_DEX] = rng->getInt(2,8);
 	attributes[ATTR_CON] = rng->getInt(2,8);
@@ -149,7 +148,6 @@ int Player::actionMove(int direction)
 			return 15;
 			// TODO: own status for bear traps?
 			/*
-			TCODRandom* rng = TCODRandom::getInstance();
 			if (rng->getInt(0,40) < attributes[ATTR_STR])
 			{
 				world.addMessage("You escape the bear trap.");
@@ -167,8 +165,6 @@ int Player::actionMove(int direction)
 			// if object is invisible, roll for caution
 			if (obj != NULL && !obj->isVisible())
 			{
-				TCODRandom* rng = TCODRandom::getInstance();
-				rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
 				// skill/33 chance of getting it
 				if (3 * skills[SKILL_TRAPS].value >= rng->getInt(0, 100))
 				{
@@ -635,8 +631,6 @@ int Player::actionRangedAttack(Point pos)
 	}
 	state = STATE_DEFAULT;
 	// Disruption by creatures standing next to the player
-	TCODRandom* rng = TCODRandom::getInstance();
-	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
 	for (int i=0; i<9; i++)
 	{
 		if (i == 4) i++;
@@ -669,8 +663,7 @@ int Player::action()
 	int time = Player::processAction();
 
 	// hunger, roll for thougness to see if player gets more hungry
-	TCODRandom* rng = TCODRandom::getInstance();
-	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
+	// TODO: is this a good method?
 	if ( rng->getInt(0, 40) <= 40 - skills[SKILL_NEG_EFFECT].value ) addNutrition(-time);
 
 	return time;
@@ -1262,8 +1255,6 @@ std::string Player::getName()
 
 int Player::rollBonusDamage()
 {
-	TCODRandom* rng = TCODRandom::getInstance();
-	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
 	return 2*skills[SKILL_DAMAGE].value + rng->getInt(0,skills[SKILL_DAMAGE].value);
 }
 

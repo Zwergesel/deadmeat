@@ -188,7 +188,7 @@ std::pair<int,int> Creature::getMana()
 	return std::make_pair(mana, maxMana);
 }
 
-bool Creature::hurt(int damage, Creature* instigator)
+bool Creature::hurt(int damage, Creature* instigator, DamageType type)
 {
 	health -= damage;
 	if (health <= 0)
@@ -393,7 +393,7 @@ int Creature::attack(Creature* target)
 		(msg << util::format(FORMAT_DEF, target) << " for ");
 		msg << damage << " damage.";
 		world.addMessage(msg.str());
-		target->hurt(damage, this);
+		target->hurt(damage, this, DAMAGE_WEAPON);
 	}
 	else
 	{
@@ -431,7 +431,6 @@ int Creature::rangedAttack(Creature* target, Weapon* w)
 	if (mean < 0) hit = -rngGauss.getInt(-300, 300, -mean);
 
 	// Traverse the line of the shot
-	TCODRandom* rng = TCODRandom::getInstance();
 	Point destination = target->getPos();
 	TCODLine::init(position.x, position.y, destination.x, destination.y);
 	Point current;
@@ -471,7 +470,7 @@ int Creature::rangedAttack(Creature* target, Weapon* w)
 		(msg << util::format(FORMAT_DEF, target) << " for ");
 		msg << damage << " damage.";
 		world.addMessage(msg.str());
-		target->hurt(damage, this);
+		target->hurt(damage, this, DAMAGE_WEAPON);
 	}
 	else
 	{
@@ -643,7 +642,7 @@ void Creature::updateStatus(int time)
 		{
 		case STATUS_FIRE:
 			if (controlled) world.addMessage("You are burning!");
-			hurt(static_cast<int>(time*status[d].strength/10.0f), NULL);
+			hurt(static_cast<int>(time*status[d].strength/10.0f), NULL, DAMAGE_FIRE);
 			break;
 		default:
 			std::cerr << name << " has effect " << status[d].type << " strength " << status[d].strength << " for " << status[d].duration << std::endl;

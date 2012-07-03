@@ -122,7 +122,6 @@ int Goblin::action()
 		}
 		else if (getStatusStrength(STATUS_IMMOBILE) > 0)
 		{
-			TCODRandom* rng = TCODRandom::getInstance();
 			if (rng->getInt(0,9) == 0) endStatus(STATUS_IMMOBILE);
 		}
 		else

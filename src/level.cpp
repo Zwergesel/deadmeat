@@ -277,8 +277,6 @@ std::vector<Point> Level::getMatchingLocations(uint flags)
 Point Level::chooseRandomPoint(std::vector<Point>& list, bool erase)
 {
 	assert(list.size() > 0);
-	TCODRandom* rng = TCODRandom::getInstance();
-	rng->setDistribution(TCOD_DISTRIBUTION_LINEAR);
 	int index = rng->getInt(0,list.size()-1);
 	if (erase)
 	{

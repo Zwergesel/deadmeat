@@ -1,5 +1,6 @@
 #include "gold.hpp"
 #include "../savegame.hpp"
+#include "../world.hpp"
 
 Gold::Gold():
 	Item("gold", F_PLURAL, '$', TCODColor(242, 210, 0), 1, 0)
@@ -27,7 +28,6 @@ Item* Gold::clone()
 
 void Gold::randomize(int level)
 {
-	TCODRandom* rng = TCODRandom::getInstance();
 	amount = rng->getInt(0,250,30);
 	if (amount == 0) amount = rng->getInt(1, 30);
 }

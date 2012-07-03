@@ -39,6 +39,15 @@ enum Status
   NUM_STATUS
 };
 
+enum DamageType
+{
+  DAMAGE_WEAPON,
+  DAMAGE_FIRE,
+  DAMAGE_DROWN,
+  DAMAGE_SPIKES,
+  NUM_DAMAGETYPE
+};
+
 struct StatusInfo
 {
 	Status type;
@@ -135,7 +144,7 @@ public:
 	void move(Point pos);
 	void moveTo(Point pos);
 
-	bool hurt(int damage, Creature* instigator); // TODO : ,DamageType dt
+	bool hurt(int damage, Creature* instigator, DamageType type);
 	void kill();
 
 	virtual int action();

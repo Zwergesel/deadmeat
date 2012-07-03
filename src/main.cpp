@@ -19,10 +19,13 @@
 
 World world;
 Factory factory;
+TCODRandom* rng;
+
 void fillFactoryTemplates();
 
 int corruptSave(const std::string& fileName)
 {
+	rng = TCODRandom::getInstance();
 	TCODConsole::root->setDefaultBackground(TCODColor::blue);
 	TCODConsole::root->setDefaultForeground(TCODColor::white);
 	TCODConsole::root->clear();
