@@ -11,6 +11,7 @@
 
 == Bugs / Issues ==
   * InventoryTable does not get saved in factory
+  * checks for closing doors
 
 == Small improvements ==
 
