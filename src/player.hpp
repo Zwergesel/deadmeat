@@ -68,8 +68,8 @@ private:
 	std::vector<Creature*> targetList;
 
 	static const std::string HELP_TEXT;
-	static int dx[9];
-	static int dy[9];
+	static int dx[13];
+	static int dy[13];
 
 	int actionMove(int direction);
 	int actionLook(Point p);
@@ -83,9 +83,11 @@ private:
 	int actionDrop(Item*, int num);
 	int actionQuiver(Item*);
 	int actionRangedAttack(Point p);
+	int actionOpen(int direction);
+	int actionClose(int direction);
 	void actionAutoTargetting();
 	int actionCharInfo(TCOD_key_t key);
-	void moveCursor(int dir);
+	void moveCursor(int direction);
 	void quickLook();
 
 public:

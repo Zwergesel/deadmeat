@@ -29,6 +29,7 @@ enum Status
   STATUS_SLOW,
   STATUS_HASTE,
   STATUS_IMMOBILE,
+  STATUS_BEARTRAP,	// immobile, possible to escape
   STATUS_BLIND,
   STATUS_HALLU,
   STATUS_CONDEMN,

@@ -120,9 +120,9 @@ int Goblin::action()
 		{
 			return attack(c);
 		}
-		else if (getStatusStrength(STATUS_IMMOBILE) > 0)
+		else if (getStatusStrength(STATUS_BEARTRAP) > 0)
 		{
-			if (rng->getInt(0,9) == 0) endStatus(STATUS_IMMOBILE);
+			if (rng->getInt(0,9) == 0) endStatus(STATUS_BEARTRAP);
 		}
 		else
 		{

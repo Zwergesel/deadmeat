@@ -76,18 +76,33 @@ void LevelGen::generateWorld()
 
 void LevelGen::loadLootTable()
 {
-	loot.add("sword", 30);
-	loot.add("dagger", 150);
+	/* Melee Weapons */
+	loot.add("sword", 45);
+	loot.add("dagger", 90);
 	loot.add("halberd", 30);
 	loot.add("lightsaber", 5);
+	
+	/* Ranged Weapons */
 	loot.add("longbow", 30);
-	loot.add("uber armor", 50);
-	loot.add("pickelhaube", 80);
-	loot.add("clown shoes", 70);
-	loot.add("beefsteak", 125);
-	loot.add("meatball", 250);
+	loot.add("crossbow", 30);
+	loot.add("slingshot", 80);
+	
+	/* Armor */
+	loot.add("uber armor", 30);
+	loot.add("pickelhaube", 70);
+	loot.add("clown shoes", 50);
+	
+	/* Food */
+	loot.add("beefsteak", 150);
+	loot.add("meatball", 300);
+	
+	/* Ammo */
 	loot.add("arrows", 100);
-	loot.add("gold", 250);
+	loot.add("bolts", 100);
+	loot.add("bullets", 150);
+	
+	/* Gold */
+	loot.add("gold", 350);
 }
 
 Level* LevelGen::generateLevel(int levelId, LEVELTYPE type)
