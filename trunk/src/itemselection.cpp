@@ -273,6 +273,10 @@ bool ItemSelection::keyInput(TCOD_key_t key)
 		}
 		return true;
 	}
+	else if (key.vk == TCODK_ENTER)
+	{
+		return true;
+	}
 	else if (key.vk == TCODK_SPACE)
 	{
 		// Advance one page, quit if the end was reached

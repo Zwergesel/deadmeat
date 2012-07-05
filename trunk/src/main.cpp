@@ -97,13 +97,7 @@ int main()
 		world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - world.levels[0]->getWidth(), 0);
 		world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - world.levels[0]->getHeight(), 0);
 
-		world.player->getCreature()->addItem(factory.spawnItem("lightsaber"));
-		world.player->getCreature()->addItem(factory.spawnItem("longbow"));
-		world.player->getCreature()->addItem(factory.spawnItem("arrows"));
-		world.player->getCreature()->addItem(factory.spawnItem("crossbow"));
-		world.player->getCreature()->addItem(factory.spawnItem("bolts"));
-		world.player->getCreature()->addItem(factory.spawnItem("slingshot"));
-		world.player->getCreature()->addItem(factory.spawnItem("bullets"));
+		world.player->getCreature()->addItem(factory.spawnItem("dagger", false));
 	}
 
 	while (!world.requestQuit)
@@ -128,7 +122,7 @@ int main()
 			{
 				key = world.player->waitForKeypress(true);
 			}
-			while (key.vk != TCODK_SPACE && !world.requestQuit);
+			while (key.vk != TCODK_SPACE && key.vk != TCODK_ENTER && !world.requestQuit);
 			world.popMessage();
 		}
 		else if (world.gameover)

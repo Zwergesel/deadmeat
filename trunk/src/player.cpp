@@ -13,8 +13,9 @@
 #include "items/food.hpp"
 #include "savegame.hpp"
 
-int Player::dx[] = {-1,0,1,-1,0,1,-1,0,1};
-int Player::dy[] = {1,1,1,0,0,0,-1,-1,-1};
+// Note: last four are direction keys up, left, right, down
+int Player::dx[] = {-1, 0, 1,-1, 0, 1,-1, 0, 1, 0,-1, 1, 0};
+int Player::dy[] = { 1, 1, 1, 0, 0, 0,-1,-1,-1,-1, 0, 0, 1};
 
 bool sortCreaturesByDistance(Creature* a, Creature* b);
 
@@ -142,22 +143,22 @@ int Player::actionMove(int direction)
 		{
 			return creature->attack(c);
 		}
-		else if (creature->getStatusStrength(STATUS_IMMOBILE) > 0)
+		else if (creature->getStatusStrength(STATUS_BEARTRAP) > 0)
 		{
-			world.addMessage("You try to move but you can't!");
-			return 15;
-			// TODO: own status for bear traps?
-			/*
 			if (rng->getInt(0,40) < attributes[ATTR_STR])
 			{
 				world.addMessage("You escape the bear trap.");
-				creature->endStatus(STATUS_IMMOBILE);
+				creature->endStatus(STATUS_BEARTRAP);
 			}
 			else
 			{
-				world.addMessage("You're trying to get free.");
+				world.addMessage("You're trying to get out of the bear trap.");
 			}
-			return 15;*/
+			return 15;
+		}
+		else if (creature->getStatusStrength(STATUS_IMMOBILE) > 0)
+		{
+			world.addMessage("You try to move, but can't.");
 		}
 		else if (level->isWalkable(newPos))
 		{
@@ -651,6 +652,48 @@ int Player::actionRangedAttack(Point pos)
 	return creature->rangedAttack(target, w);
 }
 
+int Player::actionOpen(int direction)
+{
+	state = STATE_DEFAULT;
+	Level* level = world.levels[world.currentLevel];
+	Point target = creature->getPos() + Point(dx[direction], dy[direction]);
+	Object* obj = level->objectAt(target);
+	if (obj != NULL && obj->getType() == OBJ_DOOR_CLOSED)
+	{
+		return obj->onUse(level, target);
+	}
+	else if (obj != NULL && obj->getType() == OBJ_DOOR_OPEN)
+	{
+		world.addMessage("This door is already open.");
+	}
+	else
+	{
+		world.addMessage("You see no door there.");
+	}
+	return 0;
+}
+
+int Player::actionClose(int direction)
+{
+	state = STATE_DEFAULT;
+	Level* level = world.levels[world.currentLevel];
+	Point target = creature->getPos() + Point(dx[direction], dy[direction]);
+	Object* obj = level->objectAt(target);
+	if (obj != NULL && obj->getType() == OBJ_DOOR_OPEN)
+	{
+		return obj->onUse(level, target);
+	}
+	else if (obj != NULL && obj->getType() == OBJ_DOOR_CLOSED)
+	{
+		world.addMessage("This door is already closed.");
+	}
+	else
+	{
+		world.addMessage("You see no door there.");
+	}
+	return 0;
+}
+
 int Player::action()
 {
 	// health regeneration
@@ -719,6 +762,10 @@ int Player::processAction()
 		{
 			return actionMove(key.c - '1');
 		}
+		else if (state == STATE_DEFAULT && key.vk >= TCODK_UP && key.vk <= TCODK_DOWN)
+		{
+			return actionMove(key.vk - TCODK_UP + 9);
+		}
 		// up/down player movement
 		else if (state == STATE_DEFAULT && key.c == '<')
 		{
@@ -751,6 +798,11 @@ int Player::processAction()
 			moveCursor(key.c - '1');
 			return 0;
 		}
+		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK) && key.vk >= TCODK_UP && key.vk <= TCODK_DOWN)
+		{
+			moveCursor(key.vk - TCODK_UP + 9);
+			return 0;
+		}
 		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK) && key.vk == TCODK_ESCAPE)
 		{
 			state = STATE_DEFAULT;
@@ -763,7 +815,7 @@ int Player::processAction()
 			return 0;
 		}
 		// fire a ranged weapon
-		else if (state == STATE_RANGED_ATTACK && (key.c == '.' || key.vk == TCODK_ENTER))
+		else if (state == STATE_RANGED_ATTACK && (key.c == '.' || key.vk == TCODK_ENTER || key.vk == TCODK_SPACE))
 		{
 			return actionRangedAttack(cursor);
 		}
@@ -796,7 +848,7 @@ int Player::processAction()
 			cursor = creature->getPos();
 			return 0;
 		}
-		else if (state == STATE_INSPECT && (key.c == '.' || key.vk == TCODK_ENTER))
+		else if (state == STATE_INSPECT && (key.c == '.' || key.vk == TCODK_ENTER || key.vk == TCODK_SPACE))
 		{
 			state = STATE_DEFAULT;
 			return actionLook(cursor);
@@ -960,42 +1012,20 @@ int Player::processAction()
 		// open doors
 		else if (state == STATE_OPEN && (key.c >= '1' && key.c <= '9' && key.c != '5'))
 		{
-			state = STATE_DEFAULT;
-			Point target = creature->getPos() + Point(dx[key.c - '1'], dy[key.c - '1']);
-			Object* obj = level->objectAt(target);
-			if (obj != NULL && obj->getType() == OBJ_DOOR_CLOSED)
-			{
-				return obj->onUse();
-			}
-			else if (obj != NULL && obj->getType() == OBJ_DOOR_OPEN)
-			{
-				world.addMessage("This door is already open.");
-			}
-			else
-			{
-				world.addMessage("You see no door there.");
-			}
-			return 0;
+			return actionOpen(key.c - '1');
+		}
+		else if (state == STATE_OPEN && (key.vk >= TCODK_UP && key.vk <= TCODK_DOWN))
+		{
+			return actionOpen(key.vk - TCODK_UP + 9);
 		}
 		// close doors
 		else if (state == STATE_CLOSE && (key.c >= '1' && key.c <= '9' && key.c != '5'))
 		{
-			state = STATE_DEFAULT;
-			Point target = creature->getPos() + Point(dx[key.c - '1'], dy[key.c - '1']);
-			Object* obj = level->objectAt(target);
-			if (obj != NULL && obj->getType() == OBJ_DOOR_OPEN)
-			{
-				return obj->onUse();
-			}
-			else if (obj != NULL && obj->getType() == OBJ_DOOR_CLOSED)
-			{
-				world.addMessage("This door is already closed.");
-			}
-			else
-			{
-				world.addMessage("You see no door there.");
-			}
-			return 0;
+			return actionClose(key.c - '1');
+		}
+		else if (state == STATE_CLOSE && (key.vk >= TCODK_UP && key.vk <= TCODK_DOWN))
+		{
+			return actionClose(key.vk - TCODK_UP + 9);
 		}
 		// Cancel open/close door
 		else if ((state == STATE_OPEN || state == STATE_CLOSE) && key.vk == TCODK_ESCAPE)

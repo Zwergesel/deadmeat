@@ -2,6 +2,7 @@
 #include "savegame.hpp"
 #include "creature.hpp"
 #include "world.hpp"
+#include "level.hpp"
 
 Object::Object()
 {
@@ -155,7 +156,7 @@ int Object::onStep(Creature* guy)
 			visible = true;
 		}
 		guy->hurt(20, NULL, DAMAGE_WEAPON);
-		guy->affect(STATUS_IMMOBILE, 0, 100, 1);
+		guy->affect(STATUS_BEARTRAP, 0, 100, 1);
 		return 0;
 
 	case OBJ_TRAP_FIRE:
@@ -175,16 +176,32 @@ int Object::onStep(Creature* guy)
 	}
 }
 
-int Object::onUse()
+int Object::onUse(Level* level, Point pos)
 {
+	Creature* c;
+	std::vector<Item*> items;
 	std::stringstream msg;
 	switch (type)
 	{
 	default:
 		return 0;
 	case OBJ_DOOR_OPEN:
-		*this = Object(OBJ_DOOR_CLOSED);
-		world.addMessage("The door closes.");
+		c = level->creatureAt(pos);
+		items = level->itemsAt(pos);
+		if (c == NULL && items.size() == 0)
+		{
+			*this = Object(OBJ_DOOR_CLOSED);
+			world.addMessage("The door closes.");
+		}
+		else if (c != NULL)
+		{
+			msg << "You try to close the door, but " << util::format(FORMAT_DEF, c) << " is in the way.";
+			world.addMessage(msg.str());
+		}
+		else
+		{
+			world.addMessage("You try to close the door, but there are items blocking it.");
+		}
 		return 15;
 	case OBJ_DOOR_CLOSED:
 		*this = Object(OBJ_DOOR_OPEN);

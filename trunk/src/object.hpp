@@ -6,6 +6,7 @@
 
 class Savegame;
 class LoadBlock;
+class Level;
 
 enum OBJECTTYPE
 {
@@ -41,7 +42,7 @@ public:
 	std::string toString();
 
 	int onStep(Creature* guy);
-	int onUse();
+	int onUse(Level* level, Point pos);
 	bool isBlocking();
 	bool isTransparent();
 
