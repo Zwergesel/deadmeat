@@ -454,7 +454,7 @@ Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roo
 			else if (swap1[1+x + y * width] == 2)
 			{
 				m->setTile(Point(x,y), TILE_CAVE_FLOOR);
-				m->addObject(Object(OBJ_DOOR_CLOSED), Point(x,y));
+				m->addObject(Object(rng->getFloat(0,1) < 0.2 ? OBJ_DOOR_LOCKED : OBJ_DOOR_CLOSED), Point(x,y));
 			}
 		}
 	delete[] swap1;
@@ -628,7 +628,7 @@ Level* LevelGen::generateForestLevel(int levelId, int width, int height)
 		}
 
 	bool* bfs = new bool[width*height];
-	std::memset(bfs, sizeof(bfs), 0);
+	std::fill(bfs, bfs+width*height, false);
 	Point start = m->getRandomLocation(WALKABLE);
 	bool complete;
 

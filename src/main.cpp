@@ -128,7 +128,7 @@ int main()
 		else if (world.gameover)
 		{
 			// Game over
-			world.drawBlockingWindow("GAME OVER", "You are dead!", " ", TCODColor::red);
+			world.drawBlockingWindow("GAME OVER", "You are dead!\n" + world.deathReason, " ", TCODColor::red);
 			world.requestQuit = true;
 		}
 		else

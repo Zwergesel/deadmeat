@@ -208,6 +208,12 @@ void Creature::die(Creature* instigator)
 {
 	if (controlled)
 	{
+		if (instigator != NULL)
+		{
+			std::stringstream msg;
+			msg << "You were killed by " << util::format(FORMAT_INDEF, instigator) << ".";
+			world.deathReason = msg.str();
+		}
 		world.addMessage("You die...", true);
 		// This message will not be visible, but forces confirmation by the player
 		world.addMessage("", true);
@@ -344,72 +350,91 @@ void Creature::addMaxMana(int delta)
 	maxMana = util::clamp(maxMana + delta, 0, 9999);
 }
 
-int Creature::attack(Creature* target)
+int Creature::attack(Point position)
 {
+	// baseWeapon or wielded melee weapon, but not ranged weapons
+	Weapon* weapon = &baseWeapon;
+	Weapon* main = (mainWeapon > 0 ? static_cast<Weapon*>(inventory[mainWeapon]) : NULL);
+	assert(main == NULL || main->getType() == ITEM_WEAPON);
+	if (main != NULL && main->getRange() <= 1) weapon = main;
+	
+	// defense gets calculated later
+	int defense = 0;
 	// base attack (hands, claws, etc.)
-	int attack = static_cast<int>(FACT_HIT * baseWeapon.getHitBonus() + FACT_WENCH * baseWeapon.getEnchantment() + FACT_ATSKL * attackSkill);
+	int attack = static_cast<int>(FACT_HIT * weapon->getHitBonus() + FACT_WENCH * weapon->getEnchantment() + FACT_ATSKL * attackSkill);
 	// base attack damage
-	int damage = baseWeapon.rollDamage();
+	int damage = weapon->rollDamage();
 	// base attack speed
-	int speed = static_cast<int>(baseWeapon.getSpeed() + FACT_ATSPD * getHindrance());
+	int speed = static_cast<int>(weapon->getSpeed() + FACT_ATSPD * getHindrance());
 
-	if (mainWeapon > 0 && inventory.count(mainWeapon) > 0)
-	{
-		assert(inventory[mainWeapon]->getType() == ITEM_WEAPON);
-		Weapon* w = static_cast<Weapon*>(inventory[mainWeapon]);
-		// Ranged weapons are not used in close combat
-		if (w->getRange() <= 1)
-		{
-			// weapon to hit + weapon enchantment + fighting skill + weapon skill
-			attack = static_cast<int>(FACT_HIT * w->getHitBonus() + FACT_WENCH * w->getEnchantment() + FACT_ATSKL * attackSkill);
-			damage = w->rollDamage();
-			// weapon speed + armor hindrance
-			speed = static_cast<int>(w->getSpeed() + FACT_ATSPD * getHindrance());
-		}
-	}
-
-	// skill boni
+	// skill bonus
 	if (controlled)
 	{
 		speed = std::max(1, static_cast<int>(speed * world.player->getWeaponSpeedBonus()));
 		damage += world.player->rollBonusDamage();
 	}
-
-	int defense = target->getDefense();
-	TCODRandom rngGauss;
-	rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
-	int mean = attack - defense;
-	int hit = 0;
-	if (mean >= 0) hit = rngGauss.getInt(-300, 300, mean);
-	if (mean < 0) hit = -rngGauss.getInt(-300, 300, -mean);
-	if (hit >= -70)
+	
+	// Attack creatures
+	Creature* target = level->creatureAt(position);
+	if (target != NULL)
 	{
-		if (hit <= 0) damage /= 2;
-		if (hit > 175) damage *= 2;
-		std::stringstream msg;
-		controlled ? (msg << "You hit ") :
-		(msg << util::format(FORMAT_DEF, this, true) << " hits ");
-		target->isControlled() ? (msg << "you for ") :
-		(msg << util::format(FORMAT_DEF, target) << " for ");
-		msg << damage << " damage.";
-		world.addMessage(msg.str());
-		target->hurt(damage, this, DAMAGE_WEAPON);
+		defense = target->getDefense();
+		TCODRandom rngGauss;
+		rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
+		int mean = util::clamp(1000 + attack - defense, 500, 1500);
+		int hit = rngGauss.getInt(700, 1300, mean);
+		if (hit >= 930)
+		{
+			if (hit <= 1000) damage /= 2;
+			if (hit > 1175) damage *= 2;
+			std::stringstream msg;
+			controlled ? (msg << "You hit ") :
+			(msg << util::format(FORMAT_DEF, this, true) << " hits ");
+			target->isControlled() ? (msg << "you for ") :
+			(msg << util::format(FORMAT_DEF, target) << " for ");
+			msg << damage << " damage.";
+			world.addMessage(msg.str());
+			target->hurt(damage, this, DAMAGE_WEAPON);
+		}
+		else
+		{
+			std::stringstream msg;
+			controlled ? (msg << "You miss ") :
+			(msg << util::format(FORMAT_DEF, this, true) << " misses ");
+			target->isControlled() ? (msg << "you.") :
+			(msg << util::format(FORMAT_DEF, target) << ".");
+			world.addMessage(msg.str());
+		}
+		return speed;
 	}
+
+	// Hit objects
+	Object* obj = level->objectAt(position);
+	if (obj != NULL && obj->onAttack(this, attack, damage, weapon))
+	{
+		// Note: onAttack should handle everything if it returns true
+		return speed;
+	}
+	// Hit world
+	else if (world.tileSet->isBlocking(level->getTile(position)))
+	{
+		std::stringstream msg;
+		msg << "You bash " << util::format(FORMAT_YOUR, weapon->getName(), weapon->getFormatFlags());
+		msg << " against " << world.tileSet->getDescription(level->getTile(position)) << ".";
+		world.addMessage(msg.str());
+	}
+	// Hit nothing
 	else
 	{
-		std::stringstream msg;
-		controlled ? (msg << "You miss ") :
-		(msg << util::format(FORMAT_DEF, this, true) << " misses ");
-		target->isControlled() ? (msg << "you.") :
-		(msg << util::format(FORMAT_DEF, target) << ".");
-		world.addMessage(msg.str());
+		world.addMessage("You strike at thin air.");
 	}
-
+	
 	return speed;
 }
 
-int Creature::rangedAttack(Creature* target, Weapon* w)
+int Creature::rangedAttack(Point position, Weapon* w)
 {
+	Creature* target = level->creatureAt(position);
 	Ammo* ammo = getQuiver();
 	assert(ammo != NULL);
 	assert(w->getType() == ITEM_WEAPON);
@@ -641,7 +666,11 @@ void Creature::updateStatus(int time)
 		switch (status[d].type)
 		{
 		case STATUS_FIRE:
-			if (controlled) world.addMessage("You are burning!");
+			if (controlled)
+			{
+				world.addMessage("You are burning!");
+				world.deathReason = "You burnt to death.";
+			}
 			hurt(static_cast<int>(time*status[d].strength/10.0f), NULL, DAMAGE_FIRE);
 			break;
 		default:

@@ -33,6 +33,7 @@ enum STATE
   STATE_QUIVER,
   STATE_OPEN,
   STATE_CLOSE,
+  STATE_ATTACK,
   NUM_STATE
 };
 
@@ -68,8 +69,8 @@ private:
 	std::vector<Creature*> targetList;
 
 	static const std::string HELP_TEXT;
-	static int dx[13];
-	static int dy[13];
+	static int dx[9];
+	static int dy[9];
 
 	int actionMove(int direction);
 	int actionLook(Point p);
@@ -89,6 +90,7 @@ private:
 	int actionCharInfo(TCOD_key_t key);
 	void moveCursor(int direction);
 	void quickLook();
+	int getDirection(TCOD_key_t);
 
 public:
 	Player();
