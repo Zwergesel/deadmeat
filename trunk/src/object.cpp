@@ -3,6 +3,7 @@
 #include "creature.hpp"
 #include "world.hpp"
 #include "level.hpp"
+#include "items/weapon.hpp"
 
 Object::Object()
 {
@@ -41,12 +42,25 @@ Object::Object(OBJECTTYPE t)
 		formatFlags = F_DEFAULT;
 		visible = true;
 		break;
-	default:
+	case OBJ_DOOR_LOCKED:
+		sym = 197;
+		color = TCODColor::darkYellow;
+		name = "door";
+		formatFlags = F_DEFAULT;
+		visible = true;
+		break;
 	case OBJ_DOOR_OPEN:
 		sym = TCOD_CHAR_BLOCK1;
 		color = TCODColor::darkYellow;
 		name = "open door";
 		formatFlags = F_AN;
+		visible = true;
+		break;
+	case OBJ_DOOR_BROKEN:
+		sym = TCOD_CHAR_BLOCK1;
+		color = TCODColor::darkYellow;
+		name = "broken door";
+		formatFlags = F_DEFAULT;
 		visible = true;
 		break;
 	case OBJ_TRAP_BEAR:
@@ -62,6 +76,13 @@ Object::Object(OBJECTTYPE t)
 		name = "fire trap";
 		formatFlags = F_DEFAULT;
 		visible = false;
+		break;
+	default:
+		sym = '#';
+		color = TCODColor::pink;
+		name = "OBJECT_ERROR";
+		formatFlags = F_AN;
+		visible = true;
 		break;
 	}
 }
@@ -107,6 +128,7 @@ bool Object::isBlocking()
 	default:
 		return false;
 	case OBJ_DOOR_CLOSED:
+	case OBJ_DOOR_LOCKED:
 		return true;
 	}
 }
@@ -118,6 +140,7 @@ bool Object::isTransparent()
 	default:
 		return true;
 	case OBJ_DOOR_CLOSED:
+	case OBJ_DOOR_LOCKED:
 		return false;
 	}
 }
@@ -147,6 +170,7 @@ int Object::onStep(Creature* guy)
 		if (guy->isControlled())
 		{
 			world.addMessage("You get caught in a bear trap.", true);
+			world.deathReason = "You were crushed by a bear trap.";
 			visible = true;
 		}
 		else if (world.fovMap->isInFov(pos.x, pos.y))
@@ -185,6 +209,7 @@ int Object::onUse(Level* level, Point pos)
 	{
 	default:
 		return 0;
+		
 	case OBJ_DOOR_OPEN:
 		c = level->creatureAt(pos);
 		items = level->itemsAt(pos);
@@ -203,10 +228,41 @@ int Object::onUse(Level* level, Point pos)
 			world.addMessage("You try to close the door, but there are items blocking it.");
 		}
 		return 15;
+		
 	case OBJ_DOOR_CLOSED:
 		*this = Object(OBJ_DOOR_OPEN);
 		world.addMessage("The door opens.");
 		return 15;
+	}
+}
+
+bool Object::onAttack(Creature* guy, int attack, int damage, Weapon* weapon)
+{
+	TCODRandom rngGauss;
+	rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
+	int hit;
+	std::stringstream msg;
+	
+	switch (type)
+	{
+	default:
+		return false;
+	case OBJ_DOOR_CLOSED:
+	case OBJ_DOOR_LOCKED:
+		// Roll attack against the door; doors have 50 defense
+		hit = util::clamp(attack + 950, 500, 1500);
+		hit = rngGauss.getInt(700, 1300, hit);
+		if (hit > 1100)
+		{
+			*this = Object(OBJ_DOOR_BROKEN);
+			if (guy->isControlled()) world.addMessage("You hit the door really hard and destroy it.");
+		}
+		else if (guy->isControlled())
+		{
+			msg << "You bash against the door with " << util::format(FORMAT_YOUR, weapon->getName(), weapon->getFormatFlags()) << ".";
+			world.addMessage(msg.str());
+		}
+		return true;
 	}
 }
 

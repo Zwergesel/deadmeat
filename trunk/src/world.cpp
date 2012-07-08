@@ -24,6 +24,7 @@ World::World()
 	gameover = false;
 	time = 0;
 	clearMessage = false;
+	deathReason = "";
 }
 
 World::~World()

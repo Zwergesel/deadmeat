@@ -58,7 +58,7 @@ int Goblin::action()
 	regenerate(0, 0);
 
 	// pick best weapon
-	symbol choice = '0';
+	symbol choice = '\0';
 	float value = baseWeapon.getDPS();
 	for (auto it=inventory.begin(); it!=inventory.end(); it++)
 	{
@@ -118,7 +118,7 @@ int Goblin::action()
 		Creature* c = level->creatureAt(target);
 		if (c != NULL && c->isControlled())
 		{
-			return attack(c);
+			return attack(target);
 		}
 		else if (getStatusStrength(STATUS_BEARTRAP) > 0)
 		{

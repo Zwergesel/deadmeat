@@ -140,8 +140,8 @@ public:
 	Item* addItem(Item* item);
 	void removeItem(Item* item, int num, bool del);
 
-	int attack(Creature* target);
-	int rangedAttack(Creature* target, Weapon* weapon);
+	int attack(Point position);
+	int rangedAttack(Point position, Weapon* weapon);
 	void move(Point pos);
 	void moveTo(Point pos);
 

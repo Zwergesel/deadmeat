@@ -13,9 +13,9 @@
 #include "items/food.hpp"
 #include "savegame.hpp"
 
-// Note: last four are direction keys up, left, right, down
-int Player::dx[] = {-1, 0, 1,-1, 0, 1,-1, 0, 1, 0,-1, 1, 0};
-int Player::dy[] = { 1, 1, 1, 0, 0, 0,-1,-1,-1,-1, 0, 0, 1};
+int Player::dx[] = {-1, 0, 1,-1, 0, 1,-1, 0, 1};
+int Player::dy[] = { 1, 1, 1, 0, 0, 0,-1,-1,-1};
+
 
 bool sortCreaturesByDistance(Creature* a, Creature* b);
 
@@ -88,6 +88,7 @@ void Player::addNutrition(int delta)
 	if (nutrition <= HUNGER_STARVING)
 	{
 		world.addMessage("You are starving...");
+		world.deathReason = "You starved to death.";
 		creature->kill();
 	}
 }
@@ -141,7 +142,7 @@ int Player::actionMove(int direction)
 		Creature* c = level->creatureAt(newPos);
 		if (c != NULL)
 		{
-			return creature->attack(c);
+			return creature->attack(newPos);
 		}
 		else if (creature->getStatusStrength(STATUS_BEARTRAP) > 0)
 		{
@@ -649,7 +650,7 @@ int Player::actionRangedAttack(Point pos)
 		}
 	}
 	// Shoot
-	return creature->rangedAttack(target, w);
+	return creature->rangedAttack(pos, w);
 }
 
 int Player::actionOpen(int direction)
@@ -661,6 +662,11 @@ int Player::actionOpen(int direction)
 	if (obj != NULL && obj->getType() == OBJ_DOOR_CLOSED)
 	{
 		return obj->onUse(level, target);
+	}
+	else if (obj != NULL && obj->getType() == OBJ_DOOR_LOCKED)
+	{
+		world.addMessage("The door appears to be locked.");
+		return 5;
 	}
 	else if (obj != NULL && obj->getType() == OBJ_DOOR_OPEN)
 	{
@@ -687,11 +693,25 @@ int Player::actionClose(int direction)
 	{
 		world.addMessage("This door is already closed.");
 	}
+	else if (obj != NULL && obj->getType() == OBJ_DOOR_BROKEN)
+	{
+		world.addMessage("This door is destroyed.");
+	}
 	else
 	{
 		world.addMessage("You see no door there.");
 	}
 	return 0;
+}
+
+int Player::getDirection(TCOD_key_t key)
+{
+	if (key.c >= '1' && key.c <= '9' && key.c != '5') return key.c - '1';
+	if (key.vk == TCODK_UP) return 7;
+	if (key.vk == TCODK_LEFT) return 3;
+	if (key.vk == TCODK_RIGHT) return 5;
+	if (key.vk == TCODK_DOWN) return 1;
+	return -1;
 }
 
 int Player::action()
@@ -723,7 +743,8 @@ int Player::processAction()
 	do
 	{
 		TCOD_key_t key = waitForKeypress(true);
-
+		
+		int direction = getDirection(key);
 		Level* level = world.levels[world.currentLevel];
 
 		// quit/abandon game
@@ -737,7 +758,7 @@ int Player::processAction()
 			return 0;
 		}
 		// save&quit
-		if (state == STATE_DEFAULT && key.c == 'S')
+		else if (state == STATE_DEFAULT && key.c == 'S')
 		{
 			if (world.drawBlockingWindow("Save & Quit", "Save game and quit?\n\n[y]es / [n]o", "yn") == 'y')
 			{
@@ -758,13 +779,9 @@ int Player::processAction()
 			return 0;
 		}
 		// player movement
-		else if (state == STATE_DEFAULT && key.c >= '1' && key.c <= '9' && key.c != '5')
+		else if (state == STATE_DEFAULT && direction >= 0)
 		{
-			return actionMove(key.c - '1');
-		}
-		else if (state == STATE_DEFAULT && key.vk >= TCODK_UP && key.vk <= TCODK_DOWN)
-		{
-			return actionMove(key.vk - TCODK_UP + 9);
+			return actionMove(direction);
 		}
 		// up/down player movement
 		else if (state == STATE_DEFAULT && key.c == '<')
@@ -793,14 +810,9 @@ int Player::processAction()
 			return 10;
 		}
 		// cursor movement
-		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK) && key.c >= '1' && key.c <= '9' && key.c != '5')
+		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK) && direction >= 0)
 		{
-			moveCursor(key.c - '1');
-			return 0;
-		}
-		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK) && key.vk >= TCODK_UP && key.vk <= TCODK_DOWN)
-		{
-			moveCursor(key.vk - TCODK_UP + 9);
+			moveCursor(direction);
 			return 0;
 		}
 		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK) && key.vk == TCODK_ESCAPE)
@@ -918,7 +930,20 @@ int Player::processAction()
 			}
 			return 0;
 		}
-		// charater screen
+		// attack square
+		else if (state == STATE_DEFAULT && key.c == 'a')
+		{
+			state = STATE_ATTACK;
+			world.addMessage("In which direction?");
+			return 0;
+		}
+		else if (state == STATE_ATTACK && direction >= 0)
+		{
+			state = STATE_DEFAULT;
+			Point target = creature->getPos() + Point(dx[direction], dy[direction]);
+			return creature->attack(target);
+		}
+		// character screen
 		else if (state == STATE_DEFAULT && key.c == 'C')
 		{
 			state = STATE_CHARINFO;
@@ -1010,25 +1035,17 @@ int Player::processAction()
 			return 0;
 		}
 		// open doors
-		else if (state == STATE_OPEN && (key.c >= '1' && key.c <= '9' && key.c != '5'))
+		else if (state == STATE_OPEN && direction >= 0)
 		{
-			return actionOpen(key.c - '1');
-		}
-		else if (state == STATE_OPEN && (key.vk >= TCODK_UP && key.vk <= TCODK_DOWN))
-		{
-			return actionOpen(key.vk - TCODK_UP + 9);
+			return actionOpen(direction);
 		}
 		// close doors
-		else if (state == STATE_CLOSE && (key.c >= '1' && key.c <= '9' && key.c != '5'))
+		else if (state == STATE_CLOSE && direction >= 0)
 		{
-			return actionClose(key.c - '1');
+			return actionClose(direction);
 		}
-		else if (state == STATE_CLOSE && (key.vk >= TCODK_UP && key.vk <= TCODK_DOWN))
-		{
-			return actionClose(key.vk - TCODK_UP + 9);
-		}
-		// Cancel open/close door
-		else if ((state == STATE_OPEN || state == STATE_CLOSE) && key.vk == TCODK_ESCAPE)
+		// Cancel states that require a direction
+		else if ((state == STATE_OPEN || state == STATE_CLOSE || state == STATE_ATTACK) && key.vk == TCODK_ESCAPE)
 		{
 			world.addMessage("Never mind!");
 			state = STATE_DEFAULT;
@@ -1329,10 +1346,13 @@ const std::string Player::HELP_TEXT =
   "; - Look at items/monsters somewhere else\n"
   ", - Pick up item\n"
   ". - Confirm Location\n"
+  "a - Attack\n"
   "d - Drop items\n"
+  "c - Close door\n"
   "e - Eat\n"
   "f - Fire a ranged weapon\n"
   "i - Open inventory\n"
+  "o - Open door\n"
   "w - Wield a weapon\n"
   "W - Wear armor\n"
   "T - Take off armor\n"

@@ -45,6 +45,7 @@ public:
 	bool clearMessage;
 	std::vector<WorldNode> worldNodes;
 	std::deque<Creature*> garbage;
+	std::string deathReason;
 
 	World();
 	~World();

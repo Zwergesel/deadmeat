@@ -7,6 +7,7 @@
 class Savegame;
 class LoadBlock;
 class Level;
+class Weapon;
 
 enum OBJECTTYPE
 {
@@ -15,6 +16,8 @@ enum OBJECTTYPE
   OBJ_STAIRSSAME,
   OBJ_DOOR_CLOSED,
   OBJ_DOOR_OPEN,
+  OBJ_DOOR_LOCKED,
+  OBJ_DOOR_BROKEN,
   OBJ_TRAP_BEAR,
   OBJ_TRAP_FIRE,
   NUM_OBJECTTYPES
@@ -43,6 +46,7 @@ public:
 
 	int onStep(Creature* guy);
 	int onUse(Level* level, Point pos);
+	bool onAttack(Creature* guy, int attack, int damage, Weapon* weapon);
 	bool isBlocking();
 	bool isTransparent();
 
