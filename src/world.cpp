@@ -220,7 +220,8 @@ void World::drawWorld()
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);
 	STATE state = player->getState();
 	if (state == STATE_INVENTORY || state == STATE_PICKUP || state == STATE_WIELD || state == STATE_WEAR
-	    || state == STATE_DROP || state == STATE_TAKEOFF || state == STATE_EAT || state == STATE_QUIVER)
+	    || state == STATE_DROP || state == STATE_TAKEOFF || state == STATE_EAT || state == STATE_QUIVER
+		|| state == STATE_USE)
 	{
 		drawItemSelection(world.itemSelection);
 	}

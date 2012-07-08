@@ -233,6 +233,10 @@ int Object::onUse(Level* level, Point pos)
 		*this = Object(OBJ_DOOR_OPEN);
 		world.addMessage("The door opens.");
 		return 15;
+		
+	case OBJ_DOOR_LOCKED:
+		*this = Object(OBJ_DOOR_CLOSED);
+		return 0;
 	}
 }
 
@@ -252,7 +256,7 @@ bool Object::onAttack(Creature* guy, int attack, int damage, Weapon* weapon)
 		// Roll attack against the door; doors have 50 defense
 		hit = util::clamp(attack + 950, 500, 1500);
 		hit = rngGauss.getInt(700, 1300, hit);
-		if (hit > 1100)
+		if (hit >= 1250 || (hit > 1000 && (1250 - hit) * damage >= 2000))
 		{
 			*this = Object(OBJ_DOOR_BROKEN);
 			if (guy->isControlled()) world.addMessage("You hit the door really hard and destroy it.");
