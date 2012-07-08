@@ -34,16 +34,18 @@ enum STATE
   STATE_OPEN,
   STATE_CLOSE,
   STATE_ATTACK,
+  STATE_USE,
+  STATE_USE_DIRECTION,
   NUM_STATE
 };
 
 enum HungerLevel
 {
   HUNGER_STARVING = 0,
-  HUNGER_WEAK = 600,
-  HUNGER_HUNGRY = 1500,
-  HUNGER_NORMAL = 3500,
-  HUNGER_SATIATED = 4500
+  HUNGER_WEAK = 900,
+  HUNGER_HUNGRY = 1800,
+  HUNGER_NORMAL = 5000,
+  HUNGER_SATIATED = 7000
 };
 
 enum BurdenLevel
@@ -67,6 +69,7 @@ private:
 	int attrPoints;
 	int skillPoints;
 	std::vector<Creature*> targetList;
+	Item* selectedItem;
 
 	static const std::string HELP_TEXT;
 	static int dx[9];
@@ -80,6 +83,8 @@ private:
 	int actionWear(Item*);
 	int actionTakeoff(Item*);
 	int actionEat(Item*);
+	int actionUse(Item*);
+	int actionUse(Item*, int direction);
 	int actionDrop();
 	int actionDrop(Item*, int num);
 	int actionQuiver(Item*);

@@ -101,6 +101,9 @@ void LevelGen::loadLootTable()
 	loot.add("bolts", 100);
 	loot.add("bullets", 150);
 	
+	/* Tools */
+	loot.add("lockpick", 25);
+	
 	/* Gold */
 	loot.add("gold", 350);
 }

@@ -6,6 +6,7 @@
 #include "items/food.hpp"
 #include "items/ammo.hpp"
 #include "items/gold.hpp"
+#include "items/tool.hpp"
 #include "world.hpp"
 
 void fillFactoryTemplates()
@@ -62,6 +63,7 @@ void fillFactoryTemplates()
 	Ammo arrow("arrow", F_NEUTER, '!', TCODColor::cyan, 5, 1, 0, EFFECT_NONE, AMMO_ARROW);
 	Ammo bolt("bolt", F_NEUTER, '!', TCODColor::blue, 5, 1, 0, EFFECT_NONE, AMMO_BOLT);
 	Ammo bullet("bullet", F_NEUTER, '!', TCODColor::lightBlue, 5, 1, 0, EFFECT_NONE, AMMO_BULLET);
+	Tool lockpick("lockpick", F_NEUTER, '[', TCODColor::red, 1, 1, TOOL_LOCKPICK);
 	Gold gold(12);
 
 	factory.setTemplate("lightsaber", &lightsaber);
@@ -80,4 +82,5 @@ void fillFactoryTemplates()
 	factory.setTemplate("bolts", &bolt);
 	factory.setTemplate("bullets", &bullet);
 	factory.setTemplate("gold", &gold);
+	factory.setTemplate("lockpick", &lockpick);
 }

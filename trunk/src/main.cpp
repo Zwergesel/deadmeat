@@ -98,6 +98,7 @@ int main()
 		world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - world.levels[0]->getHeight(), 0);
 
 		world.player->getCreature()->addItem(factory.spawnItem("dagger", false));
+		world.player->getCreature()->addItem(factory.spawnItem("lockpick", false));
 	}
 
 	while (!world.requestQuit)

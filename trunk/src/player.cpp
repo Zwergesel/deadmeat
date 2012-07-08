@@ -11,6 +11,7 @@
 #include "item.hpp"
 #include "items/weapon.hpp"
 #include "items/food.hpp"
+#include "items/tool.hpp"
 #include "savegame.hpp"
 
 int Player::dx[] = {-1, 0, 1,-1, 0, 1,-1, 0, 1};
@@ -19,14 +20,16 @@ int Player::dy[] = { 1, 1, 1, 0, 0, 0,-1,-1,-1};
 
 bool sortCreaturesByDistance(Creature* a, Creature* b);
 
-Player::Player()
+Player::Player():
+	selectedItem(NULL)
 {
 	Skill::setDefaults(skills);
 }
 
 Player::Player(std::string name):
 	name(name),
-	state(STATE_DEFAULT)
+	state(STATE_DEFAULT),
+	selectedItem(NULL)
 {
 	Skill::setDefaults(skills);
 	attributes[ATTR_STR] = rng->getInt(2,8);
@@ -36,13 +39,13 @@ Player::Player(std::string name):
 	level = 1;
 	experience = 0;
 	attrPoints = 0;
-	skillPoints = 3; // TODO: this is for debug
+	skillPoints = 3;
 	creature = new Creature(name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 200, 75,
 	                        Weapon(8, 0, 3, 1, 2, EFFECT_NONE, 1, AMMO_NONE), 0, 10, 0);
 	creature->setControlled(true);
-	creature->setAttackSkill(/* TODO: Something */0);
-	creature->setDefenseSkill(/* TODO: Something */0);
-	nutrition = 2500;
+	creature->setAttackSkill(0);
+	creature->setDefenseSkill(0);
+	nutrition = 4000;
 }
 
 Player::~Player()
@@ -492,6 +495,38 @@ int Player::actionEat(Item* item)
 	creature->removeItem(item, 1, true);
 
 	return time;
+}
+
+int Player::actionUse(Item* item)
+{
+	if (item == NULL) return 0;
+	assert(item->getType() == ITEM_TOOL);
+	
+	Tool* tool = static_cast<Tool*>(item);
+	if (tool->requiresDirection())
+	{
+		state = STATE_USE_DIRECTION;
+		selectedItem = item;
+		world.addMessage("In which direction?");
+		return 0;
+	}
+	else
+	{
+		Level* level = world.levels[world.currentLevel];
+		return tool->use(level, creature->getPos());
+	}
+}
+
+int Player::actionUse(Item* item, int direction)
+{
+	if (item == NULL) return 0;
+	assert(item->getType() == ITEM_TOOL);
+	
+	Tool* tool = static_cast<Tool*>(item);
+	Level* level = world.levels[world.currentLevel];
+	Point target = creature->getPos() + Point(dx[direction], dy[direction]);
+	
+	return tool->use(level, target);
 }
 
 int Player::actionQuiver(Item* item)
@@ -1027,6 +1062,22 @@ int Player::processAction()
 			}
 			return 0;
 		}
+		// open use tool screen
+		else if (state == STATE_DEFAULT && key.c == 'u')
+		{
+			world.itemSelection = ItemSelection(creature->getInventory(), "What do you want to use?", false);
+			world.itemSelection.filterType(ITEM_TOOL)->runFilter();
+			if (world.itemSelection.getNumChoices() > 0)
+			{
+				world.itemSelection.compile(world.viewItemList.height);
+				state = STATE_USE;
+			}
+			else
+			{
+				world.addMessage("You aren't carrying any tools.");
+			}
+			return 0;
+		}
 		// open doors / close doors
 		else if (state == STATE_DEFAULT && (key.c == 'o' || key.c == 'c'))
 		{
@@ -1044,8 +1095,14 @@ int Player::processAction()
 		{
 			return actionClose(direction);
 		}
+		// use a tool that requires a direction
+		else if (state == STATE_USE_DIRECTION && direction >= 0)
+		{
+			state = STATE_DEFAULT;
+			return actionUse(selectedItem, direction);
+		}
 		// Cancel states that require a direction
-		else if ((state == STATE_OPEN || state == STATE_CLOSE || state == STATE_ATTACK) && key.vk == TCODK_ESCAPE)
+		else if ((state == STATE_OPEN || state == STATE_CLOSE || state == STATE_ATTACK || state == STATE_USE_DIRECTION) && key.vk == TCODK_ESCAPE)
 		{
 			world.addMessage("Never mind!");
 			state = STATE_DEFAULT;
@@ -1101,6 +1158,15 @@ int Player::processAction()
 			}
 			return 0;
 		}
+		// handle use tool window
+		else if (state == STATE_USE)
+		{
+			if (world.itemSelection.keyInput(key))
+			{
+				state = STATE_DEFAULT;
+				return actionUse(world.itemSelection.getItem());
+			}
+		}
 		// handle inventory
 		else if (state == STATE_INVENTORY)
 		{
@@ -1128,7 +1194,7 @@ int Player::processAction()
 					options.append("T");
 					request.append("\n\nT - take off");
 				}
-				if (true /* tools */)
+				if (item->getType() == ITEM_TOOL)
 				{
 					options.append("u");
 					request.append("\n\nu - use");
@@ -1179,6 +1245,11 @@ int Player::processAction()
 				{
 					state = STATE_DEFAULT;
 					return actionEat(item);
+				}
+				else if (reply == 'u')
+				{
+					state = STATE_DEFAULT;
+					return actionUse(item);
 				}
 			}
 			return 0;
@@ -1353,6 +1424,7 @@ const std::string Player::HELP_TEXT =
   "f - Fire a ranged weapon\n"
   "i - Open inventory\n"
   "o - Open door\n"
+  "u - Use a tool\n"
   "w - Wield a weapon\n"
   "W - Wear armor\n"
   "T - Take off armor\n"
