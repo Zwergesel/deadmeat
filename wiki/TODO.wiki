@@ -21,7 +21,7 @@
   * Support all skills
   * Item identification
   * Load level data from save files (possible monsters, possible loot, ...)
-  * Environment objects: Doors, traps, ...
+  * More Environment objects: traps, ...
   * config file
   * Implement more status effects
   * More creatures with different behaviors
