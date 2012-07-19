@@ -106,10 +106,12 @@ void LevelGen::loadLootTable()
 
 	/* Gold */
 	loot.add("gold", 350);
-	loot.add("crossbow", 40);
-	loot.add("bolts", 90);
-	loot.add("slingshot", 100);
-	loot.add("bullets", 120);
+
+	/* Potions */
+	loot.add("pMinorHeal", 300);
+	loot.add("pHeal", 200);
+	loot.add("pFullHeal", 100);
+	loot.add("pHaste", 50);
 }
 
 Level* LevelGen::generateLevel(int levelId, LEVELTYPE type)
