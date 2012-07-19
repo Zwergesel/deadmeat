@@ -1,5 +1,5 @@
 Version: 0.10
-SavedObjects: 43      
+SavedObjects: 48      
 
 [[Weapon: 3]]
 name: x
@@ -628,7 +628,7 @@ expValue: 750
 [[Ammo: 28]]
 name: arrow
 formatFlags: 65536
-symbol: 33
+symbol: 47
 color: 0, 255, 255
 amount: 5
 weight: 1
@@ -651,7 +651,7 @@ eatTime: 100
 [[Ammo: 30]]
 name: bolt
 formatFlags: 65536
-symbol: 33
+symbol: 47
 color: 0, 0, 255
 amount: 5
 weight: 1
@@ -663,7 +663,7 @@ ammoType: 2
 [[Ammo: 31]]
 name: bullet
 formatFlags: 65536
-symbol: 33
+symbol: 47
 color: 63, 63, 255
 amount: 5
 weight: 1
@@ -770,7 +770,17 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Weapon: 38]]
+[[Tool: 38]]
+name: lockpick
+formatFlags: 65536
+symbol: 91
+color: 255, 0, 0
+amount: 1
+weight: 1
+active: false
+tool: 0
+
+[[Weapon: 39]]
 name: longbow
 formatFlags: 65536
 symbol: 40
@@ -789,7 +799,7 @@ effect: 0
 range: 30
 ammoType: 1
 
-[[Food: 39]]
+[[Food: 40]]
 name: meat ball
 formatFlags: 65536
 symbol: 37
@@ -800,7 +810,47 @@ active: false
 nutrition: 1000
 eatTime: 15
 
-[[Armor: 40]]
+[[Potion: 41]]
+name: full heal potion
+formatFlags: 65536
+symbol: 33
+color: 191, 0, 0
+amount: 1
+weight: 3
+active: false
+potion: 2
+
+[[Potion: 42]]
+name: haste potion
+formatFlags: 65536
+symbol: 33
+color: 0, 0, 255
+amount: 1
+weight: 3
+active: false
+potion: 3
+
+[[Potion: 43]]
+name: heal potion
+formatFlags: 65536
+symbol: 33
+color: 255, 0, 0
+amount: 1
+weight: 3
+active: false
+potion: 1
+
+[[Potion: 44]]
+name: minor heal potion
+formatFlags: 65536
+symbol: 33
+color: 255, 63, 63
+amount: 1
+weight: 3
+active: false
+potion: 0
+
+[[Armor: 45]]
 name: prussian pickelhaube
 formatFlags: 65536
 symbol: 41
@@ -813,7 +863,7 @@ hindrance: 0
 slot: 2
 enchantment: 1
 
-[[Weapon: 41]]
+[[Weapon: 46]]
 name: slingshot
 formatFlags: 65536
 symbol: 40
@@ -832,7 +882,7 @@ effect: 0
 range: 10
 ammoType: 3
 
-[[Weapon: 42]]
+[[Weapon: 47]]
 name: long sword
 formatFlags: 65536
 symbol: 40
@@ -851,7 +901,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Armor: 43]]
+[[Armor: 48]]
 name: uber armor
 formatFlags: 65552
 symbol: 41
@@ -892,7 +942,7 @@ _spawnName: spider
 _creature: @24
 _spawnName: troll
 _creature: @26
-#items: 16
+#items: 21
 _spawnName: arrows
 _item: @28
 _spawnName: beefsteak
@@ -913,15 +963,25 @@ _spawnName: halberd
 _item: @36
 _spawnName: lightsaber
 _item: @37
-_spawnName: longbow
+_spawnName: lockpick
 _item: @38
-_spawnName: meatball
+_spawnName: longbow
 _item: @39
-_spawnName: pickelhaube
+_spawnName: meatball
 _item: @40
-_spawnName: slingshot
+_spawnName: pFullHeal
 _item: @41
-_spawnName: sword
+_spawnName: pHaste
 _item: @42
-_spawnName: uber armor
+_spawnName: pHeal
 _item: @43
+_spawnName: pMinorHeal
+_item: @44
+_spawnName: pickelhaube
+_item: @45
+_spawnName: slingshot
+_item: @46
+_spawnName: sword
+_item: @47
+_spawnName: uber armor
+_item: @48

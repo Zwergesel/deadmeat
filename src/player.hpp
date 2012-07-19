@@ -36,6 +36,7 @@ enum STATE
   STATE_ATTACK,
   STATE_USE,
   STATE_USE_DIRECTION,
+  STATE_DRINK,
   NUM_STATE
 };
 
@@ -85,6 +86,7 @@ private:
 	int actionEat(Item*);
 	int actionUse(Item*);
 	int actionUse(Item*, int direction);
+	int actionDrink(Item*);
 	int actionDrop();
 	int actionDrop(Item*, int num);
 	int actionQuiver(Item*);

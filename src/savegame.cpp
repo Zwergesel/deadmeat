@@ -18,6 +18,7 @@
 #include "items/ammo.hpp"
 #include "items/gold.hpp"
 #include "items/tool.hpp"
+#include "items/potion.hpp"
 #include "factory.hpp"
 
 std::string Savegame::version = "0.10";
@@ -326,6 +327,12 @@ void Savegame::loadObject()
 	else if (objClass == "Tool")
 	{
 		Tool* obj = new Tool();
+		objects[id] = static_cast<void*>(obj);
+		obj->load(load);
+	}
+	else if (objClass == "Potion")
+	{
+		Potion* obj = new Potion();
 		objects[id] = static_cast<void*>(obj);
 		obj->load(load);
 	}
