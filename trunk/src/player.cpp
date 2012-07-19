@@ -12,6 +12,7 @@
 #include "items/weapon.hpp"
 #include "items/food.hpp"
 #include "items/tool.hpp"
+#include "items/potion.hpp"
 #include "savegame.hpp"
 
 int Player::dx[] = {-1, 0, 1,-1, 0, 1,-1, 0, 1};
@@ -41,7 +42,7 @@ Player::Player(std::string name):
 	attrPoints = 0;
 	skillPoints = 3;
 	creature = new Creature(name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 200, 75,
-		Weapon("fists", F_PLURAL, '#', TCODColor::pink, 1, 0, 8, 0, 3, 1, 2, 0, 2, EFFECT_NONE, 1, AMMO_NONE), 0, 10, 0);
+	                        Weapon("fists", F_PLURAL, '#', TCODColor::pink, 1, 0, 8, 0, 3, 1, 2, 0, 2, EFFECT_NONE, 1, AMMO_NONE), 0, 10, 0);
 	creature->setControlled(true);
 	creature->setAttackSkill(0);
 	creature->setDefenseSkill(0);
@@ -187,7 +188,10 @@ int Player::actionMove(int direction)
 			if (obj != NULL) obj->onStep(creature);
 			quickLook();
 			int slow = std::max(0, creature->getStatusStrength(STATUS_SLOW) - skills[SKILL_NEG_EFFECT].value);
-			return slow + static_cast<int>(static_cast<float>(creature->getWalkingSpeed()) * diagonal);
+			int haste = std::max(0, creature->getStatusStrength(STATUS_HASTE));
+			int time = static_cast<int>(static_cast<float>(creature->getWalkingSpeed()) * diagonal) + slow - haste;
+			time = std::max(1, time);
+			return time;
 		}
 	}
 	return 0;
@@ -497,11 +501,27 @@ int Player::actionEat(Item* item)
 	return time;
 }
 
+int Player::actionDrink(Item* item)
+{
+	if (item == NULL) return 0;
+	assert(item->getType() == ITEM_POTION);
+	Potion* potion = static_cast<Potion*>(item);
+
+	std::stringstream msg;
+	msg << "You drink " << util::format(FORMAT_INDEF, potion->toString(), potion->getFormatFlags()) << ".";
+	world.addMessage(msg.str());
+
+	potion->effect(creature);
+
+	creature->removeItem(item, 1, true);
+	return 15;
+}
+
 int Player::actionUse(Item* item)
 {
 	if (item == NULL) return 0;
 	assert(item->getType() == ITEM_TOOL);
-	
+
 	Tool* tool = static_cast<Tool*>(item);
 	if (tool->requiresDirection())
 	{
@@ -521,11 +541,11 @@ int Player::actionUse(Item* item, int direction)
 {
 	if (item == NULL) return 0;
 	assert(item->getType() == ITEM_TOOL);
-	
+
 	Tool* tool = static_cast<Tool*>(item);
 	Level* level = world.levels[world.currentLevel];
 	Point target = creature->getPos() + Point(dx[direction], dy[direction]);
-	
+
 	return tool->use(level, target);
 }
 
@@ -778,7 +798,7 @@ int Player::processAction()
 	do
 	{
 		TCOD_key_t key = waitForKeypress(true);
-		
+
 		int direction = getDirection(key);
 		Level* level = world.levels[world.currentLevel];
 
@@ -1078,6 +1098,22 @@ int Player::processAction()
 			}
 			return 0;
 		}
+		// open drink screen
+		else if (state == STATE_DEFAULT && key.c == 'D')
+		{
+			world.itemSelection = ItemSelection(creature->getInventory(), "What do you want to drink?", false);
+			world.itemSelection.filterType(ITEM_POTION)->runFilter();
+			if (world.itemSelection.getNumChoices() > 0)
+			{
+				world.itemSelection.compile(world.viewItemList.height);
+				state = STATE_DRINK;
+			}
+			else
+			{
+				world.addMessage("You aren't carrying any potions.");
+			}
+			return 0;
+		}
 		// open doors / close doors
 		else if (state == STATE_DEFAULT && (key.c == 'o' || key.c == 'c'))
 		{
@@ -1167,6 +1203,15 @@ int Player::processAction()
 				return actionUse(world.itemSelection.getItem());
 			}
 		}
+		// handle drink window
+		else if (state == STATE_DRINK)
+		{
+			if (world.itemSelection.keyInput(key))
+			{
+				state = STATE_DEFAULT;
+				return actionDrink(world.itemSelection.getItem());
+			}
+		}
 		// handle inventory
 		else if (state == STATE_INVENTORY)
 		{
@@ -1198,6 +1243,11 @@ int Player::processAction()
 				{
 					options.append("u");
 					request.append("\n\nu - use");
+				}
+				if (item->getType() == ITEM_POTION)
+				{
+					options.append("D");
+					request.append("\n\nD - drink");
 				}
 				if (item->getType() == ITEM_WEAPON)
 				{
@@ -1250,6 +1300,11 @@ int Player::processAction()
 				{
 					state = STATE_DEFAULT;
 					return actionUse(item);
+				}
+				else if (reply == 'D')
+				{
+					state = STATE_DEFAULT;
+					return actionDrink(item);
 				}
 			}
 			return 0;

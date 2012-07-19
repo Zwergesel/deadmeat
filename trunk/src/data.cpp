@@ -7,6 +7,7 @@
 #include "items/ammo.hpp"
 #include "items/gold.hpp"
 #include "items/tool.hpp"
+#include "items/potion.hpp"
 #include "world.hpp"
 
 void fillFactoryTemplates()
@@ -60,10 +61,14 @@ void fillFactoryTemplates()
 	Armor boots("clown shoes", F_NEUTER | F_BOOTS, ')', TCODColor::black, 1, 5, -30, -1, 12, ARMOR_BOOTS);
 	Food food1("beefsteak", F_NEUTER, '%', TCODColor::darkOrange, 1, 3, 2500, 100);
 	Food food2("meat ball", F_NEUTER, '%', TCODColor::orange, 1, 1, 1000, 15);
-	Ammo arrow("arrow", F_NEUTER, '!', TCODColor::cyan, 5, 1, 0, EFFECT_NONE, AMMO_ARROW);
-	Ammo bolt("bolt", F_NEUTER, '!', TCODColor::blue, 5, 1, 0, EFFECT_NONE, AMMO_BOLT);
-	Ammo bullet("bullet", F_NEUTER, '!', TCODColor::lightBlue, 5, 1, 0, EFFECT_NONE, AMMO_BULLET);
+	Ammo arrow("arrow", F_NEUTER, '/', TCODColor::cyan, 5, 1, 0, EFFECT_NONE, AMMO_ARROW);
+	Ammo bolt("bolt", F_NEUTER, '/', TCODColor::blue, 5, 1, 0, EFFECT_NONE, AMMO_BOLT);
+	Ammo bullet("bullet", F_NEUTER, '/', TCODColor::lightBlue, 5, 1, 0, EFFECT_NONE, AMMO_BULLET);
 	Tool lockpick("lockpick", F_NEUTER, '[', TCODColor::red, 1, 1, TOOL_LOCKPICK);
+	Potion minorHeal("minor heal potion", F_NEUTER, '!', TCODColor::lightRed, 1, 3, POTION_MINORHEAL);
+	Potion heal("heal potion", F_NEUTER, '!', TCODColor::red, 1, 3, POTION_HEAL);
+	Potion fullHeal("full heal potion", F_NEUTER, '!', TCODColor::darkRed, 1, 3, POTION_FULLHEAL);
+	Potion haste("haste potion", F_NEUTER, '!', TCODColor::blue, 1, 3, POTION_HASTE);
 	Gold gold(12);
 
 	factory.setTemplate("lightsaber", &lightsaber);
@@ -83,4 +88,8 @@ void fillFactoryTemplates()
 	factory.setTemplate("bullets", &bullet);
 	factory.setTemplate("gold", &gold);
 	factory.setTemplate("lockpick", &lockpick);
+	factory.setTemplate("pMinorHeal", &minorHeal);
+	factory.setTemplate("pHeal", &heal);
+	factory.setTemplate("pFullHeal", &fullHeal);
+	factory.setTemplate("pHaste", &haste);
 }

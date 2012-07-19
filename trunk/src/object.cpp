@@ -209,7 +209,7 @@ int Object::onUse(Level* level, Point pos)
 	{
 	default:
 		return 0;
-		
+
 	case OBJ_DOOR_OPEN:
 		c = level->creatureAt(pos);
 		items = level->itemsAt(pos);
@@ -228,12 +228,12 @@ int Object::onUse(Level* level, Point pos)
 			world.addMessage("You try to close the door, but there are items blocking it.");
 		}
 		return 15;
-		
+
 	case OBJ_DOOR_CLOSED:
 		*this = Object(OBJ_DOOR_OPEN);
 		world.addMessage("The door opens.");
 		return 15;
-		
+
 	case OBJ_DOOR_LOCKED:
 		*this = Object(OBJ_DOOR_CLOSED);
 		return 0;
@@ -246,7 +246,7 @@ bool Object::onAttack(Creature* guy, int attack, int damage, Weapon* weapon)
 	rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
 	int hit;
 	std::stringstream msg;
-	
+
 	switch (type)
 	{
 	default:

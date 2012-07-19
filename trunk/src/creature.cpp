@@ -357,7 +357,7 @@ int Creature::attack(Point position)
 	Weapon* main = (mainWeapon > 0 ? static_cast<Weapon*>(inventory[mainWeapon]) : NULL);
 	assert(main == NULL || main->getType() == ITEM_WEAPON);
 	if (main != NULL && main->getRange() <= 1) weapon = main;
-	
+
 	// defense gets calculated later
 	int defense = 0;
 	// base attack (hands, claws, etc.)
@@ -373,7 +373,7 @@ int Creature::attack(Point position)
 		speed = std::max(1, static_cast<int>(speed * world.player->getWeaponSpeedBonus()));
 		damage += world.player->rollBonusDamage();
 	}
-	
+
 	// Attack creatures
 	Creature* target = level->creatureAt(position);
 	if (target != NULL)
@@ -428,7 +428,7 @@ int Creature::attack(Point position)
 	{
 		world.addMessage("You strike at thin air.");
 	}
-	
+
 	return speed;
 }
 

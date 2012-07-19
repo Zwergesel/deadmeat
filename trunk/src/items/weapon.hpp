@@ -38,7 +38,7 @@ private:
 	WeaponEffect effect;
 	int range;
 	AmmoType ammoType;
-	
+
 	static std::string EFFECT_NAMES[NUM_EFFECT];
 
 public:

@@ -10,21 +10,21 @@ class Level;
 
 enum ToolType
 {
-	TOOL_LOCKPICK,
-	NUM_TOOLTYPE
+  TOOL_LOCKPICK,
+  NUM_TOOLTYPE
 };
 
 class Tool : public Item
 {
 private:
 	ToolType tool;
-	
+
 public:
 	Tool();
 	Tool(std::string name, uint format, symbol sym, TCODColor color, int amount, int weight, ToolType tool);
 	~Tool();
 	Item* clone();
-	
+
 	bool requiresDirection();
 	int use(Level* level, Point position);
 

@@ -86,6 +86,6 @@ void Tool::load(LoadBlock& load)
 	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
 	load ("color", color) ("amount", amount) ("weight", weight) ("active", active);
 	load ("tool", t);
-	if (t < 0 || tool >= NUM_TOOLTYPE) throw SavegameFormatException("Tool::load _ tool out of bounds");
+	if (t < 0 || t >= NUM_TOOLTYPE) throw SavegameFormatException("Tool::load _ tool out of bounds");
 	tool = static_cast<ToolType>(t);
 }
