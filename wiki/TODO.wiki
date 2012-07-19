@@ -9,12 +9,13 @@
   * Let monsters drop their items when they die
   * item weight, burdened satus etc.
   * checks for closing doors
+  * Potions
 
 == Bugs / Issues ==
   * InventoryTable does not get saved in factory
 
 == Small improvements ==
-
+  * more Potions
 
 == Major improvements ==
   * Cursed Items
@@ -25,7 +26,7 @@
   * config file
   * Implement more status effects
   * More creatures with different behaviors
-  * Potions
+
 
 == Milestones for later / No priority ==
   * Magic system
