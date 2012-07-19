@@ -8,10 +8,10 @@
   * Generate monsters with items
   * Let monsters drop their items when they die
   * item weight, burdened satus etc.
+  * checks for closing doors
 
 == Bugs / Issues ==
   * InventoryTable does not get saved in factory
-  * checks for closing doors
 
 == Small improvements ==
 
