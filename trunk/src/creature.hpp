@@ -14,6 +14,7 @@ class Level;
 class Player;
 class Savegame;
 class LoadBlock;
+class SaveBlock;
 
 // TODO: mark implemented statuses
 enum Status
@@ -81,11 +82,9 @@ protected:
 	Level* level;
 	Point position;
 	std::map<symbol,Item*> inventory;
+	int expValue;
 	int lastTimeRegen;
 	int lastTimeManaRegen;
-	Point lastPlayerPos;
-	bool seenPlayer;
-	int expValue;
 	std::vector<StatusInfo> status;
 
 	void die(Creature* instigator);
@@ -97,6 +96,7 @@ public:
 	Creature(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed, int expValue);
 	virtual ~Creature();
 	virtual Creature* clone();
+	void copyFrom(Creature*);
 
 	std::string getName();
 	uint getFormatFlags();
@@ -150,9 +150,9 @@ public:
 
 	virtual int action();
 
-	unsigned int save(Savegame& sg, const std::string& classname);
+	virtual void storeAll(Savegame& sg, SaveBlock& store);
 	virtual unsigned int save(Savegame& sg);
-	void load(LoadBlock& load);
+	virtual void load(LoadBlock& load);
 
 	static const double FACT_ATSKL;		// attack skill -> attack bonus
 	static const double FACT_DEFSKL;	// defense skill -> defense bonus
@@ -164,16 +164,38 @@ public:
 	static const double FACT_WALKSPD;	// hindrance -> walk speed
 };
 
-class Goblin: public Creature
+class BasicMonster : public Creature
 {
-public:
-	Goblin();
-	Goblin(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed, int expValue);
-	~Goblin();
-	Creature* clone();
+protected:
+	bool defaultUsesMeleeWeapons;
+	bool defaultUsesRangedWeapons;
+	Point lastSeenPlayer;
 
-	int action();
-	unsigned int save(Savegame& sg);
+	virtual bool usesMeleeWeapons();
+	virtual bool usesRangedWeapons();
+	virtual void useBestWeapon();
+	virtual int scoreWeapon(Weapon*);
+	virtual bool shouldFlee();
+	virtual bool seePlayer();
+	virtual int doRangedAttack(Weapon*);
+	virtual int doSpecialAttack();
+	virtual int doMeleeAttack(Weapon*);
+	virtual int doChargePlayer();
+	virtual int doWander();
+	int navigateTo(Point);
+
+public:
+	BasicMonster();
+	BasicMonster(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed, int expValue, bool meleeWpn, bool rangedWpn);
+	virtual ~BasicMonster();
+	virtual Creature* clone();
+	void copyFrom(BasicMonster*);
+
+	virtual int action();
+
+	virtual void storeAll(Savegame& sg, SaveBlock& store);
+	virtual unsigned int save(Savegame& sg);
+	virtual void load(LoadBlock& load);
 };
 
 #endif

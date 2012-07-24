@@ -342,9 +342,9 @@ void Savegame::loadObject()
 		objects[id] = static_cast<void*>(obj);
 		obj->load(load);
 	}
-	else if (objClass == "Goblin")
+	else if (objClass == "BasicMonster")
 	{
-		Goblin* obj = new Goblin();
+		BasicMonster* obj = new BasicMonster();
 		objects[id] = static_cast<void*>(obj);
 		obj->load(load);
 	}
