@@ -16,6 +16,7 @@
 
 == Small improvements ==
   * more Potions
+  * Creature->heal()
 
 == Major improvements ==
   * Cursed Items
