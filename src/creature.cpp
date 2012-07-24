@@ -28,12 +28,10 @@ Creature::Creature(std::string n, uint f, symbol s, TCODColor c, int h, int m, W
 	mana(m),		maxMana(m),			controlled(false),
 	mainWeapon(0), quiver(0),	baseWeapon(w),		baseAC(a),
 	walkingSpeed(ws),attackSkill(0),	defenseSkill(0),
-	level(NULL),	position(Point(0,0)),
-	lastPlayerPos(Point(0,0)), seenPlayer(false), expValue(exp)
+	level(NULL),	position(Point(0,0)), expValue(exp),
+	lastTimeRegen(world.time), lastTimeManaRegen(world.time)
 {
 	std::fill(armor, armor+NUM_ARMOR_SLOTS, 0);
-	lastTimeRegen = world.time;
-	lastTimeManaRegen = world.time;
 }
 
 Creature::~Creature()
@@ -46,29 +44,42 @@ Creature::~Creature()
 
 Creature* Creature::clone()
 {
-	Creature* copy = new Creature(name, formatFlags, sym, color, maxHealth, maxMana, baseWeapon, baseAC, walkingSpeed, expValue);
-	copy->health = health;
-	copy->mana = mana;
-	copy->controlled = controlled;
-	copy->mainWeapon = mainWeapon;
-	copy->quiver = quiver;
-	copy->attackSkill = attackSkill;
-	copy->defenseSkill = defenseSkill;
-	copy->level = level;
-	copy->position = position;
-	copy->walkingSpeed = walkingSpeed;
-	copy->lastTimeRegen = lastTimeRegen;
-	copy->lastTimeManaRegen = lastTimeManaRegen;
-	copy->lastPlayerPos = lastPlayerPos;
-	copy->seenPlayer = seenPlayer;
-	copy->expValue = expValue;
-	std::copy(armor, armor+NUM_ARMOR_SLOTS, copy->armor);
-	// Clone inventory
-	for (std::map<symbol,Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
-	{
-		copy->inventory.insert(std::make_pair(it->first, it->second->clone()));
-	}
+	Creature* copy = new Creature();
+	copy->copyFrom(this);
 	return copy;
+}
+
+void Creature::copyFrom(Creature* original)
+{
+	name = original->name;
+	formatFlags = original->formatFlags;
+	sym = original->sym;
+	color = original->color;
+	maxHealth = original->maxHealth;
+	maxMana = original->maxMana;
+	baseWeapon = original->baseWeapon;
+	baseAC = original->baseAC;
+	walkingSpeed = original->walkingSpeed;
+	expValue = original->expValue;
+	health = original->health;
+	mana = original->mana;
+	controlled = original->controlled;
+	mainWeapon = original->mainWeapon;
+	quiver = original->quiver;
+	attackSkill = original->attackSkill;
+	defenseSkill = original->defenseSkill;
+	level = original->level;
+	position = original->position;
+	walkingSpeed = original->walkingSpeed;
+	lastTimeRegen = original->lastTimeRegen;
+	lastTimeManaRegen = original->lastTimeManaRegen;
+	expValue = original->expValue;
+	std::copy(original->armor, original->armor+NUM_ARMOR_SLOTS, armor);
+	// Clone inventory
+	for (std::map<symbol,Item*>::iterator it = original->inventory.begin(); it != original->inventory.end(); it++)
+	{
+		inventory.insert(std::make_pair(it->first, it->second->clone()));
+	}
 }
 
 std::string Creature::getName()
@@ -711,16 +722,8 @@ int Creature::getStatusStrength(Status type)
 
 /*--------------------- SAVING AND LOADING ---------------------*/
 
-unsigned int Creature::save(Savegame& sg)
+void Creature::storeAll(Savegame& sg, SaveBlock& store)
 {
-	return save(sg, "Creature");
-}
-
-unsigned int Creature::save(Savegame& sg, const std::string& classname)
-{
-	unsigned int id;
-	if (sg.saved(this, &id)) return id;
-	SaveBlock store(classname, id);
 	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("position", position);
 	store ("color", color) ("health", health) ("maxHealth", maxHealth);
 	store ("mana", mana) ("maxMana", maxMana) ("controlled", controlled);
@@ -736,7 +739,6 @@ unsigned int Creature::save(Savegame& sg, const std::string& classname)
 	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	store ("walkingSpeed", walkingSpeed);
 	store ("lastTimeRegen", lastTimeRegen) ("lastTimeManaRegen", lastTimeManaRegen);
-	store ("lastPlayerPos", lastPlayerPos) ("seenPlayer", seenPlayer);
 	store ("expValue", expValue);
 	store ("#inventory", (int) inventory.size());
 	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
@@ -748,6 +750,14 @@ unsigned int Creature::save(Savegame& sg, const std::string& classname)
 	{
 		store ("_type", (int) it->type) ("_start", it->start) ("_duration", it->duration) ("_strength", it->strength);
 	}
+}
+
+unsigned int Creature::save(Savegame& sg)
+{
+	unsigned int id;
+	if (sg.saved(this, &id)) return id;
+	SaveBlock store("Creature", id);
+	storeAll(sg, store);
 	sg << store;
 	return id;
 }
@@ -771,7 +781,6 @@ void Creature::load(LoadBlock& load)
 	load ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	load ("walkingSpeed", walkingSpeed);
 	load ("lastTimeRegen", lastTimeRegen) ("lastTimeManaRegen", lastTimeManaRegen);
-	load ("lastPlayerPos", lastPlayerPos) ("seenPlayer", seenPlayer);
 	load ("expValue", expValue);
 	int n;
 	load ("#inventory", n);
