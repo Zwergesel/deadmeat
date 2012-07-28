@@ -178,15 +178,12 @@ void Creature::takeOffArmor(Armor* a)
 	}
 }
 
-void Creature::move(Point dpos)
-{
-	position.x += dpos.x;
-	position.y += dpos.y;
-}
-
 void Creature::moveTo(Point pos)
 {
 	this->position = pos;
+	assert(level != NULL);
+	Object* obj = level->objectAt(pos);
+	if (obj != NULL) obj->onStep(this);
 }
 
 std::pair<int,int> Creature::getHealth()
@@ -336,9 +333,9 @@ void Creature::setControlled(bool c)
 	controlled = c;
 }
 
-void Creature::setPos(Point p)
+void Creature::setPos(Point pos)
 {
-	position = p;
+	position = pos;
 }
 
 void Creature::setLevel(Level* l)
@@ -361,7 +358,7 @@ void Creature::addMaxMana(int delta)
 	maxMana = util::clamp(maxMana + delta, 0, 9999);
 }
 
-int Creature::attack(Point position)
+int Creature::attack(Point pos)
 {
 	// baseWeapon or wielded melee weapon, but not ranged weapons
 	Weapon* weapon = &baseWeapon;
@@ -371,11 +368,8 @@ int Creature::attack(Point position)
 
 	// defense gets calculated later
 	int defense = 0;
-	// base attack (hands, claws, etc.)
 	int attack = static_cast<int>(FACT_HIT * weapon->getHitBonus() + FACT_WENCH * weapon->getEnchantment() + FACT_ATSKL * attackSkill);
-	// base attack damage
 	int damage = weapon->rollDamage();
-	// base attack speed
 	int speed = static_cast<int>(weapon->getSpeed() + FACT_ATSPD * getHindrance());
 
 	// skill bonus
@@ -386,7 +380,7 @@ int Creature::attack(Point position)
 	}
 
 	// Attack creatures
-	Creature* target = level->creatureAt(position);
+	Creature* target = level->creatureAt(pos);
 	if (target != NULL)
 	{
 		defense = target->getDefense();
@@ -396,8 +390,11 @@ int Creature::attack(Point position)
 		int hit = rngGauss.getInt(700, 1300, mean);
 		if (hit >= 930)
 		{
+			// Half damage or critical damage
 			if (hit <= 1000) damage /= 2;
 			if (hit > 1175) damage *= 2;
+			
+			// Message about hit
 			std::stringstream msg;
 			controlled ? (msg << "You hit ") :
 			(msg << util::format(FORMAT_DEF, this, true) << " hits ");
@@ -405,7 +402,35 @@ int Creature::attack(Point position)
 			(msg << util::format(FORMAT_DEF, target) << " for ");
 			msg << damage << " damage.";
 			world.addMessage(msg.str());
-			target->hurt(damage, this, DAMAGE_WEAPON);
+			
+			// Apply pre weapon effects
+			WeaponEffect effect = weapon->getEffect();
+			DamageType dmgtype = DAMAGE_WEAPON;
+			
+			// Hurt the target
+			target->hurt(damage, this, dmgtype);
+			
+			// Apply post weapon effects
+			if (effect == EFFECT_POISON)
+			{
+				target->affect(STATUS_POISON, 0, 200, 3);
+			}
+			else if (effect == EFFECT_FIRE)
+			{
+				target->affect(STATUS_FIRE, 0, 100, 5);
+			}
+			else if (effect == EFFECT_KNOCKBACK)
+			{
+				Point knock = pos + pos - position;
+				if (level->creatureAt(knock) == NULL && !level->isBlocking(knock) && rng->getFloat(0.0,1.0) > 0.5)
+				{
+					target->moveTo(knock);
+					std::stringstream msg;
+					controlled ? msg << "Your strike pushes " : msg << util::format(FORMAT_DEF, this, true) << "'s strike pushes ";
+					controlled ? msg << util::format(FORMAT_DEF, this) << " back." : msg << "you back.";
+					world.addMessage(msg.str());
+				}
+			}
 		}
 		else
 		{

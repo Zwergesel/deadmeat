@@ -13,6 +13,7 @@ enum WeaponEffect
   EFFECT_POISON,
   EFFECT_FIRE,
   EFFECT_DISEASE,
+  EFFECT_KNOCKBACK,
   NUM_EFFECT
 };
 
@@ -56,6 +57,7 @@ public:
 	int getEnchantment();
 	int getHandsUsed();
 	int getRange();
+	WeaponEffect getEffect();
 	AmmoType getAmmoType();
 	float getDPS();
 	std::string toString();

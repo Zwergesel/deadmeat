@@ -84,6 +84,11 @@ int Weapon::getRange()
 	return range;
 }
 
+WeaponEffect Weapon::getEffect()
+{
+	return effect;
+}
+
 float Weapon::getDPS()
 {
 	return 10.f * (baseDamage + numDice * diceMax/2.0f) / speed;

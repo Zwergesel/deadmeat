@@ -300,7 +300,7 @@ void Level::populate(const RandomTable& spawns, int numCreatures)
 	while (numCreatures-->0)
 	{
 		Creature* c = factory.spawnCreature(spawns.getRandom());
-		c->moveTo(chooseRandomPoint(list,true));
+		c->setPos(chooseRandomPoint(list,true));
 		addCreature(c, world.time);
 	}
 }

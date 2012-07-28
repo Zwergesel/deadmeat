@@ -185,7 +185,6 @@ int Player::actionMove(int direction)
 			creature->moveTo(newPos);
 			world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - level->getWidth(), 0);
 			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
-			if (obj != NULL) obj->onStep(creature);
 			quickLook();
 			int slow = std::max(0, creature->getStatusStrength(STATUS_SLOW) - skills[SKILL_NEG_EFFECT].value);
 			int haste = std::max(0, creature->getStatusStrength(STATUS_HASTE));

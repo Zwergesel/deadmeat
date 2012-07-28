@@ -142,8 +142,7 @@ public:
 
 	int attack(Point position);
 	int rangedAttack(Point position, Weapon* weapon);
-	void move(Point pos);
-	void moveTo(Point pos);
+	void moveTo(Point pos); // moveTo performs object events at the target square
 
 	bool hurt(int damage, Creature* instigator, DamageType type);
 	void kill();
@@ -167,8 +166,9 @@ public:
 class BasicMonster : public Creature
 {
 protected:
-	bool defaultUsesMeleeWeapons;
-	bool defaultUsesRangedWeapons;
+	bool bUseMelee;
+	bool bUseRanged;
+	float bFleePerc;
 	Point lastSeenPlayer;
 
 	virtual bool usesMeleeWeapons();
@@ -186,7 +186,7 @@ protected:
 
 public:
 	BasicMonster();
-	BasicMonster(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed, int expValue, bool meleeWpn, bool rangedWpn);
+	BasicMonster(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed, int expValue, bool useMelee, bool useRanged, float fleePerc);
 	virtual ~BasicMonster();
 	virtual Creature* clone();
 	void copyFrom(BasicMonster*);
