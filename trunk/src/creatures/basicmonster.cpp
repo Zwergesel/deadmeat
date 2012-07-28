@@ -11,9 +11,9 @@ BasicMonster::BasicMonster()
 	// for savegames, initializes nothing
 }
 
-BasicMonster::BasicMonster(std::string n, uint f, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws, int exp, bool wm, bool wr):
+BasicMonster::BasicMonster(std::string n, uint f, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws, int exp, bool wm, bool wr, float fl):
 	Creature(n,f,s,c,h,m,w,a,ws,exp),
-	defaultUsesMeleeWeapons(wm), defaultUsesRangedWeapons(wr),
+	bUseMelee(wm), bUseRanged(wr), bFleePerc(fl),
 	lastSeenPlayer(Point(-1,-1))
 {
 }
@@ -36,19 +36,19 @@ Creature* BasicMonster::clone()
 void BasicMonster::copyFrom(BasicMonster* original)
 {
 	Creature::copyFrom(original);
-	defaultUsesMeleeWeapons = original->defaultUsesMeleeWeapons;
-	defaultUsesRangedWeapons = original->defaultUsesRangedWeapons;
+	bUseMelee = original->bUseMelee;
+	bUseRanged = original->bUseRanged;
 	lastSeenPlayer = original->lastSeenPlayer;
 }
 
 bool BasicMonster::usesMeleeWeapons()
 {
-	return defaultUsesMeleeWeapons;
+	return bUseMelee;
 }
 
 bool BasicMonster::usesRangedWeapons()
 {
-	return defaultUsesRangedWeapons;
+	return bUseRanged;
 }
 
 void BasicMonster::useBestWeapon()
@@ -82,7 +82,7 @@ int BasicMonster::scoreWeapon(Weapon* weapon)
 
 bool BasicMonster::shouldFlee()
 {
-	return ((maxHealth / health) >= 5);
+	return (100.0f * health / maxHealth < bFleePerc);
 }
 
 bool BasicMonster::seePlayer()
@@ -163,9 +163,7 @@ int BasicMonster::navigateTo(Point target)
 		else
 		{
 			float diagonal = (step.x - position.x != 0 && step.y - position.y != 0) ? std::sqrt(2.f) : 1.f;
-			position = step;
-			Object* obj = level->objectAt(step);
-			if (obj != NULL) obj->onStep(this);
+			moveTo(step);
 			return static_cast<int>(getWalkingSpeed() * diagonal);
 		}
 	} else {
@@ -225,8 +223,8 @@ int BasicMonster::action()
 void BasicMonster::storeAll(Savegame& sg, SaveBlock& store)
 {
 	Creature::storeAll(sg, store);
-	store ("lastSeenPlayer", lastSeenPlayer) ("defaultUsesMeleeWeapons", defaultUsesMeleeWeapons);
-	store ("defaultUsesRangedWeapons", defaultUsesRangedWeapons);
+	store ("lastSeenPlayer", lastSeenPlayer) ("bUseMelee", bUseMelee);
+	store ("bUseRanged", bUseRanged);
 }
 
 unsigned int BasicMonster::save(Savegame& sg)
@@ -242,6 +240,6 @@ unsigned int BasicMonster::save(Savegame& sg)
 void BasicMonster::load(LoadBlock& load)
 {
 	Creature::load(load);
-	load ("lastSeenPlayer", lastSeenPlayer) ("defaultUsesMeleeWeapons", defaultUsesMeleeWeapons);
-	load ("defaultUsesRangedWeapons", defaultUsesRangedWeapons);
+	load ("lastSeenPlayer", lastSeenPlayer) ("bUseMelee", bUseMelee);
+	load ("bUseRanged", bUseRanged);
 }

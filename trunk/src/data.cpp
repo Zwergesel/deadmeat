@@ -13,19 +13,19 @@
 void fillFactoryTemplates()
 {
 	// Add/edit/remove creature templates here
-	BasicMonster goblin("goblin", F_MALE, 'g', TCODColor::green, 35, 0, Weapon(11, 0, 4, 1, 3, EFFECT_NONE, 1, AMMO_NONE), 15, 10, 300, true, true);
-	BasicMonster snake("snake", F_MALE , 's', TCODColor::darkChartreuse, 20, 0, Weapon(12, 0, 6, 1, 4, EFFECT_NONE, 1, AMMO_NONE), 0, 5, 300, false, false);
-	BasicMonster troll("troll", F_MALE, 'T', TCODColor::darkBlue, 80, 0, Weapon(18, 20, 14, 1, 5, EFFECT_NONE, 1, AMMO_NONE), 40, 15, 750, false, false);
-	BasicMonster spider("spider", F_FEMALE, 's', TCODColor::pink, 15, 0, Weapon(14, 0, 3, 2, 3, EFFECT_NONE, 1, AMMO_NONE), 60, 8, 150, false, false);
-	BasicMonster rat("rat", F_FEMALE, 'r', TCODColor::darkYellow, 40, 0, Weapon(10, 0, 1, 1, 12, EFFECT_NONE, 1, AMMO_NONE), 20, 11, 250, false, false);
-	BasicMonster ant("soldier ant", F_FEMALE, 'a', TCODColor::blue, 25, 0, Weapon(13, 40, 12, 2, 8, EFFECT_NONE, 1, AMMO_NONE), 0, 14, 500, false, false);
-	BasicMonster soldier("soldier", F_MALE, '@', TCODColor::blue, 120, 0, Weapon(16, 0, 3, 1, 2, EFFECT_NONE, 1, AMMO_NONE), 0, 14, 600, true, true);
-	BasicMonster sergeant("sergeant", F_MALE, '@', TCODColor::red, 180, 0, Weapon(13, 0, 3, 1, 2, EFFECT_NONE, 1, AMMO_NONE), 40, 14, 1000, true, true);
-	BasicMonster medic("medic", F_FEMALE, '@', TCODColor::pink, 180, 0, Weapon(25, 0, 0, 0, 0, EFFECT_NONE, 1, AMMO_NONE), 0, 12, 10, true, true);
-	BasicMonster redbaby("red baby dragon", F_MALE, 'd', TCODColor::red, 55, 0, Weapon(16, 15, 5, 1, 10, EFFECT_NONE, 1, AMMO_NONE), 20, 13, 600, false, false);
-	BasicMonster purbaby("purple baby dragon", F_MALE, 'd', TCODColor::violet, 55, 0, Weapon(16, 15, 5, 1, 10, EFFECT_NONE, 1, AMMO_NONE), 20, 13, 600, false, false);
-	BasicMonster blubaby("blue baby dragon", F_MALE, 'd', TCODColor::blue, 55, 0, Weapon(16, 15, 5, 1, 10, EFFECT_NONE, 1, AMMO_NONE), 20, 13, 600, false, false);
-	BasicMonster dragon("Smaug", F_PROPER | F_MALE, 'D', TCODColor::red, 300, 100, Weapon(15, 50, 19, 3, 7, EFFECT_NONE, 1, AMMO_NONE), 75, 16, 2500, false, false);
+	BasicMonster goblin("goblin", F_MALE, 'g', TCODColor::green, 35, 0, Weapon(11, 0, 4, 1, 3, EFFECT_NONE, 1, AMMO_NONE), 15, 10, 300, true, true, 20.0);
+	BasicMonster snake("snake", F_MALE , 's', TCODColor::darkChartreuse, 20, 0, Weapon(12, 0, 6, 1, 4, EFFECT_POISON, 1, AMMO_NONE), 0, 5, 300, false, false, 0);
+	BasicMonster troll("troll", F_MALE, 'T', TCODColor::darkBlue, 80, 0, Weapon(18, 20, 14, 1, 5, EFFECT_NONE, 1, AMMO_NONE), 40, 15, 750, false, false, 0);
+	BasicMonster spider("spider", F_FEMALE, 's', TCODColor::pink, 15, 0, Weapon(14, 0, 3, 2, 3, EFFECT_NONE, 1, AMMO_NONE), 60, 8, 150, false, false, 0);
+	BasicMonster rat("rat", F_FEMALE, 'r', TCODColor::darkYellow, 40, 0, Weapon(10, 0, 1, 1, 12, EFFECT_NONE, 1, AMMO_NONE), 20, 11, 250, false, false, 0);
+	BasicMonster bear("bear", F_MALE, 'B', TCODColor(100, 70, 40), 100, 0, Weapon(13, 40, 12, 2, 8, EFFECT_KNOCKBACK, 1, AMMO_NONE), 0, 14, 500, false, false, 0);
+	BasicMonster soldier("soldier", F_MALE, '@', TCODColor::blue, 120, 0, Weapon(16, 0, 3, 1, 2, EFFECT_NONE, 1, AMMO_NONE), 0, 14, 600, true, true, 0.25);
+	BasicMonster sergeant("sergeant", F_MALE, '@', TCODColor::red, 180, 0, Weapon(13, 0, 3, 1, 2, EFFECT_NONE, 1, AMMO_NONE), 40, 14, 1000, true, true, 0.25);
+	BasicMonster medic("medic", F_FEMALE, '@', TCODColor::pink, 180, 0, Weapon(25, 0, 0, 0, 0, EFFECT_NONE, 1, AMMO_NONE), 0, 12, 10, true, true, 0.5);
+	BasicMonster redbaby("red baby dragon", F_MALE, 'd', TCODColor::red, 55, 0, Weapon(16, 15, 5, 1, 10, EFFECT_NONE, 1, AMMO_NONE), 20, 13, 600, false, false, 0);
+	BasicMonster purbaby("purple baby dragon", F_MALE, 'd', TCODColor::violet, 55, 0, Weapon(16, 15, 5, 1, 10, EFFECT_NONE, 1, AMMO_NONE), 20, 13, 600, false, false, 0);
+	BasicMonster blubaby("blue baby dragon", F_MALE, 'd', TCODColor::blue, 55, 0, Weapon(16, 15, 5, 1, 10, EFFECT_NONE, 1, AMMO_NONE), 20, 13, 600, false, false, 0);
+	BasicMonster dragon("Smaug", F_PROPER | F_MALE, 'D', TCODColor::red, 300, 100, Weapon(15, 50, 19, 3, 7, EFFECT_NONE, 1, AMMO_NONE), 75, 16, 2500, false, false, 0);
 
 	InventoryTable fighter_weapons;
 	std::vector<std::string> wpns;
@@ -40,7 +40,7 @@ void fillFactoryTemplates()
 	factory.setTemplate("troll", &troll);
 	factory.setTemplate("spider", &spider);
 	factory.setTemplate("rat", &rat);
-	factory.setTemplate("soldier ant", &ant);
+	factory.setTemplate("bear", &bear);
 	factory.setTemplate("soldier", &soldier, fighter_weapons);
 	factory.setTemplate("sergeant", &sergeant, fighter_weapons);
 	factory.setTemplate("medic", &medic);

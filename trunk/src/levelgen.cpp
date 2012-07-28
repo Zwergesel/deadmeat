@@ -125,7 +125,7 @@ Level* LevelGen::generateLevel(int levelId, LEVELTYPE type)
 		lair.add("red baby dragon", 100).add("purple baby dragon", 200).add("blue baby dragon", 100);
 		l->populate(lair, 12);
 		Creature* smaug = factory.spawnCreature("Smaug");
-		smaug->moveTo(l->getRandomLocation(WALKABLE | NO_CREATURE));
+		smaug->setPos(l->getRandomLocation(WALKABLE | NO_CREATURE));
 		l->addCreature(smaug, world.time);
 		return l;
 	}
@@ -471,7 +471,7 @@ Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roo
 
 	// RoomLevel monsters
 	RandomTable room;
-	room.add("goblin", 300).add("troll", 120).add("rat", 400).add("soldier ant", 220).add("soldier", 100);
+	room.add("goblin", 300).add("troll", 120).add("rat", 400).add("bear", 220).add("soldier", 100);
 	m->populate(room, width*height/250);
 	m->placeItems(loot, width*height/350);
 
@@ -593,7 +593,7 @@ Level* LevelGen::generatePlainLevel(int levelId, int width, int height)
 
 	// Meadow monsters
 	RandomTable meadow;
-	meadow.add("goblin", 50).add("snake", 400).add("soldier ant", 200);
+	meadow.add("goblin", 50).add("snake", 400).add("bear", 200);
 	m->populate(meadow, width*height/800 + 2);
 	m->placeItems(loot, width*height/800 + 1);
 
@@ -716,7 +716,7 @@ Level* LevelGen::generateForestLevel(int levelId, int width, int height)
 
 	// Meadow monsters
 	RandomTable forest;
-	forest.add("goblin", 50).add("snake", 400).add("soldier ant", 200);
+	forest.add("goblin", 50).add("snake", 400).add("bear", 200);
 	m->populate(forest, width*height/250 + 1);
 	m->placeItems(loot, width*height/250 + 1);
 
