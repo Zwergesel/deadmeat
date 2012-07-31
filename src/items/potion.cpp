@@ -30,13 +30,13 @@ void Potion::effect(Creature* c)
 	switch (potion)
 	{
 	case POTION_MINORHEAL:
-		c->hurt(-15, NULL, DAMAGE_WEAPON);
+		c->heal(15);
 		break;
 	case POTION_HEAL:
-		c->hurt(-std::max(30, c->getHealth().second / 4), NULL, DAMAGE_WEAPON);
+		c->heal(std::max(30, c->getHealth().second / 4));
 		break;
 	case POTION_FULLHEAL:
-		c->hurt(-c->getHealth().second, NULL, DAMAGE_WEAPON);
+		c->heal(c->getHealth().second);
 		break;
 	case POTION_HASTE:
 		c->affect(STATUS_HASTE, 0, 100, 15);

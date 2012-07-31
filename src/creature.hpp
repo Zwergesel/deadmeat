@@ -148,6 +148,7 @@ public:
 	void moveTo(Point pos); // moveTo performs object events at the target square
 
 	bool hurt(int damage, Creature* instigator, DamageType type);
+	void heal(int amount);
 	void kill();
 
 	virtual int action();

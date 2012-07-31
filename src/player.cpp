@@ -1136,6 +1136,7 @@ int Player::processAction()
 			{
 				world.addMessage("You aren't carrying any books.");
 			}
+			return 0;
 		}
 		// open doors / close doors
 		else if (state == STATE_DEFAULT && (key.c == 'o' || key.c == 'c'))
