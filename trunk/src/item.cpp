@@ -97,9 +97,9 @@ bool Item::isActive()
 bool Item::canStackWith(Item* compare)
 {
 	if (compare->getType() != type) return false;
-	if (type == ITEM_WEAPON || type == ITEM_ARMOR) return false;
+	if (type == ITEM_WEAPON || type == ITEM_ARMOR || type == ITEM_CORPSE) return false;
 	if (compare->getName() != name) return false;
-	// TODO: subclass compare function call
+	// TODO: subclass compare function call (or override?)
 	return true;
 }
 
