@@ -7,6 +7,7 @@
 #include <sstream>
 #include "utility.hpp"
 #include "skill.hpp"
+#include "spell.hpp"
 
 class Creature;
 class Level;
@@ -38,7 +39,6 @@ enum STATE
   STATE_USE_DIRECTION,
   STATE_DRINK,
   STATE_READ,
-  STATE_CAST,
   NUM_STATE
 };
 
@@ -89,6 +89,7 @@ private:
 	int actionUse(Item*);
 	int actionUse(Item*, int direction);
 	int actionRead(Item*);
+	int actionCast(SPELL);
 	int actionDrink(Item*);
 	int actionDrop();
 	int actionDrop(Item*, int num);

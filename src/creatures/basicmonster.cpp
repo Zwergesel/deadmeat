@@ -57,7 +57,7 @@ void BasicMonster::useBestWeapon()
 	bool ranged = usesRangedWeapons();
 	int bestScore = -1;
 	symbol bestWeapon = '\0';
-	
+
 	for (auto it = inventory.begin(); it != inventory.end(); it++)
 	{
 		if (it->second->getType() != ITEM_WEAPON) continue;
@@ -71,7 +71,7 @@ void BasicMonster::useBestWeapon()
 			bestWeapon = it->first;
 		}
 	}
-	
+
 	mainWeapon = bestWeapon;
 }
 
@@ -89,7 +89,7 @@ bool BasicMonster::seePlayer()
 {
 	// TODO: sight radius
 	if (world.fovMap->isInFov(position.x, position.y)) return true;
-	
+
 	// Trace line
 	Point target = world.player->getCreature()->getPos();
 	Point current = position;
@@ -166,7 +166,9 @@ int BasicMonster::navigateTo(Point target)
 			moveTo(step);
 			return static_cast<int>(getWalkingSpeed() * diagonal);
 		}
-	} else {
+	}
+	else
+	{
 		return 0;
 	}
 }
@@ -189,30 +191,30 @@ int BasicMonster::action()
 		Weapon* weapon = getMainWeapon();
 		if (weapon == NULL) weapon = &baseWeapon;
 		int range = weapon->getRange();
-		
+
 		// Ranged attack
 		if (range > 1 && sqdist <= range*range)
 		{
 			time = doRangedAttack(weapon);
 			if (time > 0) return time;
 		}
-		
+
 		// Special attacks (e.g. dragon breath)
 		time = doSpecialAttack();
 		if (time > 0) return time;
-		
+
 		// Melee attack
 		if (sqdist <= 2)
 		{
 			time = doMeleeAttack(weapon);
 			if (time > 0) return time;
 		}
-		
+
 		// Run towards player / tactical movement
 		time = doChargePlayer();
 		if (time > 0) return time;
 	}
-	
+
 	// Random walk, search for items, etc.
 	time = doWander();
 	return time > 0 ? time : 10;
