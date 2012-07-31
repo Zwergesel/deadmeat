@@ -208,6 +208,11 @@ bool Creature::hurt(int damage, Creature* instigator, DamageType type)
 	return false;
 }
 
+void Creature::heal(int amount)
+{
+	health = std::min(health + amount, maxHealth);
+}
+
 void Creature::kill()
 {
 	die(NULL);
