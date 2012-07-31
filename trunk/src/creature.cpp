@@ -321,7 +321,10 @@ int Creature::getHindrance()
 int Creature::getWalkingSpeed()
 {
 	float reduction = controlled ? world.player->getMoveSpeedBonus() : 1.0f;
-	return std::max(1, static_cast<int>((walkingSpeed + FACT_WALKSPD * getHindrance()) * reduction));
+	int slow = getStatusStrength(STATUS_SLOW);
+	if (controlled) slow = std::max(0, slow - world.player->getSkill(SKILL_NEG_EFFECT).value);
+	int haste = std::max(0, getStatusStrength(STATUS_HASTE));
+	return std::max(1, static_cast<int>((walkingSpeed + FACT_WALKSPD * getHindrance()) * reduction + slow + haste));
 }
 
 bool Creature::isControlled()
