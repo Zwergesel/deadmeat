@@ -339,6 +339,7 @@ void Level::performCreatureTurn()
 	{
 		// player action; returns time the action took
 		time = world.player->action();
+    // TODO: this crashes when changing level!
 		if (time > 0) creatures.back().actor->updateStatus(time);
 	}
 	else
