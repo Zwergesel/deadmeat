@@ -545,14 +545,36 @@ int Player::actionUse(Item* item, int direction)
 	return tool->use(level, target);
 }
 
+int Player::actionCast(SPELL spell)
+{
+	if (creature->knowsSpell(spell) == false)
+	{
+		world.addMessage("You don't know that spell.");
+		return 0;
+	}
+	Point target;
+
+	creature->addMana(-g_spells[spell].getManaCost());
+	int chance = g_spells[spell].getDifficulty() - 5 * skills[g_spells[spell].getSkill()].value;
+	if (rng->getInt(0, 100) > chance) Spell::cast(spell, creature, target);
+	else
+	{
+		std::stringstream ss;
+		ss << "You failed to cast " << g_spells[spell].getName() << "!";
+		world.addMessage(ss.str());
+	}
+	return g_spells[spell].getCastTime();
+}
+
 int Player::actionRead(Item* item)
 {
 	if (item == NULL) return 0;
 	assert(item->getType() == ITEM_SPELLBOOK);
-	
+
 	SpellBook* book = static_cast<SpellBook*>(item);
 	std::stringstream msg;
-	msg << "You learned the spell NR." << book->getSpell() << "!";
+	creature->learnSpell(book->getSpell());
+	msg << "You learned the spell \"" << g_spells[book->getSpell()].getName() << "\"!";
 	world.addMessage(msg.str());
 	return 0;
 }
@@ -1090,6 +1112,36 @@ int Player::processAction()
 			}
 			return 0;
 		}
+		// open cast screen
+		else if (state == STATE_DEFAULT && key.c == 'z')
+		{
+			std::vector<SPELL> spells;
+			for (int i=0; i<NUM_SPELL; i++) if (creature->knowsSpell(static_cast<SPELL>(i))) spells.push_back(static_cast<SPELL>(i));
+			if (spells.size() > 0)
+			{
+				std::stringstream text;
+				std::stringstream keys;
+				keys << " ";
+				int count = 0;
+				for (auto it = spells.begin(); it < spells.end(); it++)
+				{
+					text << "[" << util::letters[count] << "] - " << g_spells[*it].getName() << "\n";
+					keys << util::letters[count++];
+				}
+				unsigned char cc = world.drawBlockingWindow("Which spell do you want to cast?", text.str(), keys.str());
+				if (cc == ' ' || cc == '\0')
+				{
+					world.addMessage("Nevermind.");
+					return 0;
+				}
+				return actionCast(spells[util::letterToInt(cc)]);
+			}
+			else
+			{
+				world.addMessage("You don't know any spells.");
+			}
+			return 0;
+		}
 		// open use tool screen
 		else if (state == STATE_DEFAULT && key.c == 'u')
 		{
@@ -1265,7 +1317,7 @@ int Player::processAction()
 				{
 					options.append("D");
 					request.append("\n\nD - drink");
-				}				
+				}
 				if (item->getType() == ITEM_FOOD)
 				{
 					options.append("e");

@@ -32,7 +32,7 @@ Creature::Creature(std::string n, uint f, symbol s, TCODColor c, int h, int m, W
 	lastTimeRegen(world.time), lastTimeManaRegen(world.time)
 {
 	std::fill(armor, armor+NUM_ARMOR_SLOTS, 0);
-  std::fill(spells, spells+NUM_SPELL, false);
+	std::fill(spells, spells+NUM_SPELL, false);
 }
 
 Creature::~Creature()
@@ -143,6 +143,16 @@ std::map<symbol,Item*> Creature::getArmor()
 	return worn;
 }
 
+bool Creature::knowsSpell(SPELL spell)
+{
+	return spells[spell];
+}
+
+void Creature::learnSpell(SPELL spell)
+{
+	spells[spell] = true;
+}
+
 void Creature::wieldMainWeapon(Weapon* wpn)
 {
 	mainWeapon = 0;
@@ -216,6 +226,11 @@ void Creature::heal(int amount)
 void Creature::kill()
 {
 	die(NULL);
+}
+
+void Creature::addMana(int amount)
+{
+	mana = util::clamp(mana + amount, 0, maxMana);
 }
 
 void Creature::die(Creature* instigator)
@@ -402,7 +417,7 @@ int Creature::attack(Point target)
 			// Half damage or critical damage
 			if (hit <= 1000) damage /= 2;
 			if (hit > 1175) damage *= 2;
-			
+
 			// Message about hit
 			std::stringstream msg;
 			controlled ? (msg << "You hit ") :
@@ -411,14 +426,14 @@ int Creature::attack(Point target)
 			(msg << util::format(FORMAT_DEF, victim) << " for ");
 			msg << damage << " damage.";
 			world.addMessage(msg.str());
-			
+
 			// Apply pre weapon effects
 			WeaponEffect effect = weapon->getEffect();
 			DamageType dmgtype = DAMAGE_WEAPON;
-			
+
 			// Hurt the target
 			victim->hurt(damage, this, dmgtype);
-			
+
 			// Apply post weapon effects
 			if (effect == EFFECT_POISON)
 			{

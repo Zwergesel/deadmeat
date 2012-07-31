@@ -18,7 +18,7 @@ public:
 	SpellBook(std::string name, uint formatFlags, symbol sym, TCODColor clr, int weight, SPELL spell);
 	~SpellBook();
 	Item* clone();
-	
+
 	SPELL getSpell();
 
 	virtual unsigned int save(Savegame& sg);

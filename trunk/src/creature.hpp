@@ -88,7 +88,7 @@ protected:
 	int lastTimeRegen;
 	int lastTimeManaRegen;
 	std::vector<StatusInfo> status;
-  bool spells[NUM_SPELL];
+	bool spells[NUM_SPELL];
 
 	void die(Creature* instigator);
 	Creature(const Creature& copy);
@@ -119,6 +119,8 @@ public:
 	std::pair<int,int> getMana();
 	int getHindrance();
 	int getWalkingSpeed();
+	bool knowsSpell(SPELL spell);
+	void learnSpell(SPELL spell);
 	void regenerate(int healthSpeedup, int manaSpeedup);
 
 	void setControlled(bool);
@@ -150,6 +152,7 @@ public:
 	bool hurt(int damage, Creature* instigator, DamageType type);
 	void heal(int amount);
 	void kill();
+	void addMana(int amount);
 
 	virtual int action();
 
