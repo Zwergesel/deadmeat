@@ -104,6 +104,8 @@ int main()
 		world.player->getCreature()->addItem(factory.spawnItem("pFullHeal", false));
 		world.player->getCreature()->addItem(factory.spawnItem("pHaste", false));
 		world.player->getCreature()->addItem(factory.spawnItem("sbCripple", false));
+		world.player->getCreature()->addItem(factory.spawnItem("sbFrenzy", false));
+		world.player->getCreature()->addItem(factory.spawnItem("sbFire", false));
 	}
 
 	while (!world.requestQuit)

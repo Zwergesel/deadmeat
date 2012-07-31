@@ -6,13 +6,13 @@
 
 Spell g_spells[NUM_SPELL] =
 {
-	Spell("Cripple", SKILL_VOODOO, 10, 10, 10, true),
-	Spell("Frenzy", SKILL_VOODOO, 20, 20, 20, false),
-	Spell("Fire", SKILL_ELEMENTAL, 10, 10, 10, true)
+	Spell("Cripple", SKILL_VOODOO, 10, 10, 10, true, false),
+	Spell("Frenzy", SKILL_VOODOO, 20, 20, 20, false, false),
+	Spell("Fire", SKILL_ELEMENTAL, 10, 10, 10, true, true)
 };
 
 
-Spell::Spell(std::string n, SKILLS s, int mc, int c, int d, bool t) : name(n), magicSchool(s), manaCost(mc), castTime(c), difficulty(d), targeted(t)
+Spell::Spell(std::string n, SKILLS s, int mc, int c, int d, bool t, bool p) : name(n), magicSchool(s), manaCost(mc), castTime(c), difficulty(d), targeted(t), projectile(p)
 {
 }
 
@@ -44,6 +44,11 @@ int Spell::getDifficulty()
 bool Spell::isTargeted()
 {
 	return targeted;
+}
+
+bool Spell::isProjectile()
+{
+	return projectile;
 }
 
 bool Spell::cast(SPELL spell, Creature* caster, Point target)

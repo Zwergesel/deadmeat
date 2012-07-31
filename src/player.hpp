@@ -134,6 +134,7 @@ public:
 	float getMoveSpeedBonus();
 	float getArmorHindranceReduction();
 	int getWeight();
+	SPELL getSelectedSpell();
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);
