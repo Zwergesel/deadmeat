@@ -187,11 +187,7 @@ int Player::actionMove(int direction)
 			world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - level->getWidth(), 0);
 			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
 			quickLook();
-			int slow = std::max(0, creature->getStatusStrength(STATUS_SLOW) - skills[SKILL_NEG_EFFECT].value);
-			int haste = std::max(0, creature->getStatusStrength(STATUS_HASTE));
-			int time = static_cast<int>(static_cast<float>(creature->getWalkingSpeed()) * diagonal) + slow - haste;
-			time = std::max(1, time);
-			return time;
+			return static_cast<int>(static_cast<float>(creature->getWalkingSpeed()) * diagonal);
 		}
 	}
 	return 0;
@@ -857,7 +853,7 @@ int Player::processAction()
 			if (obj != NULL && obj->getType() == OBJ_STAIRSUP)
 			{
 				world.travel();
-				return 10;
+				return 0;
 			}
 			return 0;
 		}
@@ -867,7 +863,7 @@ int Player::processAction()
 			if (obj != NULL && obj->getType() == OBJ_STAIRSDOWN)
 			{
 				world.travel();
-				return 10;
+				return 0;
 			}
 			return 0;
 		}
