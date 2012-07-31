@@ -12,7 +12,6 @@
   * InventoryTable does not get saved in factory
 
 == Small improvements ==
-  * More stuff (items, objects, monsters)
   * Implement missing status effects
 
 == Major improvements ==
@@ -24,7 +23,7 @@
   * Magic system
   * Peaceful creatures
 
-== Milestones for later / No priority ==
+== Vertical Steps ==
   * Character creation (race, class, name)
   * Random level generation
   * Display unseen items where the player has last seen them even if a monster picked them up (?)
