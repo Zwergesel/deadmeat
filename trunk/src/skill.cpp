@@ -32,6 +32,11 @@ void Skill::setDefaults(Skill* skills)
 	skills[SKILL_ALCHEMY] = Skill("Alchemy", 0, 0, 15, 0);
 	skills[SKILL_COOKING] = Skill("Cooking", 0, 0, 15, 0);
 	skills[SKILL_BLACKSMITH] = Skill("Blacksmithing", 0, 0, 15, 0);
+	skills[SKILL_VOODOO] = Skill("Voodoo", 0, 0, 20, 0);
+	skills[SKILL_ELEMENTAL] = Skill("Elemental", 0, 0, 20, 0);
+	skills[SKILL_CLERICAL] = Skill("Clerical", 0, 0, 20, 0);
+	skills[SKILL_NATURE] = Skill("Witchcraft", 0, 0, 20, 0);
+	skills[SKILL_PSIONIC] = Skill("Psionic", 0, 0, 20, 0);
 
 	// Requirements
 	for (int i=1; i<=20; i++)
@@ -43,6 +48,11 @@ void Skill::setDefaults(Skill* skills)
 		skills[SKILL_HEALTH].req[i].push_back(std::make_pair(ATTR_CON, i));
 		skills[SKILL_MANA].req[i].push_back(std::make_pair(ATTR_INT, i));
 		skills[SKILL_MANA_REGEN].req[i].push_back(std::make_pair(ATTR_INT, i));
+		skills[SKILL_VOODOO].req[i].push_back(std::make_pair(ATTR_INT, i));
+		skills[SKILL_ELEMENTAL].req[i].push_back(std::make_pair(ATTR_INT, i));
+		skills[SKILL_CLERICAL].req[i].push_back(std::make_pair(ATTR_INT, i));
+		skills[SKILL_NATURE].req[i].push_back(std::make_pair(ATTR_INT, i));
+		skills[SKILL_PSIONIC].req[i].push_back(std::make_pair(ATTR_INT, i));
 	}
 	for (int i=1; i<=10; i++)
 	{
