@@ -14,6 +14,7 @@
 #include "items/tool.hpp"
 #include "items/potion.hpp"
 #include "items/spellbook.hpp"
+#include "items/corpse.hpp"
 #include "savegame.hpp"
 
 int Player::dx[] = {-1, 0, 1,-1, 0, 1,-1, 0, 1};
@@ -43,7 +44,7 @@ Player::Player(std::string name):
 	attrPoints = 0;
 	skillPoints = 3;
 	creature = new Creature(name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 200, 75,
-	                        Weapon("fists", F_PLURAL, '#', TCODColor::pink, 1, 0, 8, 0, 3, 1, 2, 0, 2, EFFECT_NONE, 1, AMMO_NONE), 0, 10, 0);
+	                        Weapon("fists", F_PLURAL, '#', TCODColor::pink, 1, 0, 8, 0, 3, 1, 2, 0, 2, EFFECT_NONE, 1, AMMO_NONE), 0, 10, 0, "");
 	creature->setControlled(true);
 	creature->setAttackSkill(0);
 	creature->setDefenseSkill(0);
@@ -470,20 +471,34 @@ int Player::actionTakeoff(Item* item)
 int Player::actionEat(Item* item)
 {
 	if (item == NULL) return 0;
-	assert(item->getType() == ITEM_FOOD);
+	assert(item->getType() == ITEM_FOOD || item->getType() == ITEM_CORPSE);
 
-	Food* f = static_cast<Food*>(item);
+	if (item->getType() == ITEM_FOOD)
+	{
+		Food* f = static_cast<Food*>(item);
 
-	std::stringstream msg;
-	msg << "You eat " << util::format(FORMAT_INDEF, f->toString(), f->getFormatFlags()) << ".";
-	world.addMessage(msg.str());
+		std::stringstream msg;
+		msg << "You eat " << util::format(FORMAT_INDEF, f->toString(), f->getFormatFlags()) << ".";
+		world.addMessage(msg.str());
 
-	addNutrition(f->getNutrition());
-	int time = f->getEatTime();
+		addNutrition(f->getNutrition());
+		int time = f->getEatTime();
+		creature->removeItem(item, 1, true);
+		return time;
+	}
+	else
+	{
+		Corpse* c = static_cast<Corpse*>(item);
 
-	creature->removeItem(item, 1, true);
+		std::stringstream msg;
+		msg << util::format(FORMAT_DEF, c, true) << " tastes disgusting, but you eat as much of it as you can.";
+		world.addMessage(msg.str());
 
-	return time;
+		addNutrition(c->getNutrition());
+		int time = c->getEatTime();
+		creature->removeItem(item, 1, true);
+		return time;
+	}
 }
 
 int Player::actionDrink(Item* item)
@@ -1121,7 +1136,7 @@ int Player::processAction()
 		else if (state == STATE_DEFAULT && key.c == 'e')
 		{
 			world.itemSelection = ItemSelection(creature->getInventory(), "What do you want to eat?", false);
-			world.itemSelection.filterType(ITEM_FOOD)->runFilter();
+			world.itemSelection.filterType(ITEM_FOOD)->filterType(ITEM_CORPSE)->runFilter();
 			if (world.itemSelection.getNumChoices() > 0)
 			{
 				world.itemSelection.compile(world.viewItemList.height);
@@ -1343,7 +1358,7 @@ int Player::processAction()
 					options.append("D");
 					request.append("\n\nD - drink");
 				}
-				if (item->getType() == ITEM_FOOD)
+				if (item->getType() == ITEM_FOOD || item->getType() == ITEM_CORPSE)
 				{
 					options.append("e");
 					request.append("\n\ne - eat");

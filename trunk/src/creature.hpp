@@ -87,6 +87,7 @@ protected:
 	int expValue;
 	int lastTimeRegen;
 	int lastTimeManaRegen;
+	std::string corpseName;
 	std::vector<StatusInfo> status;
 	bool spells[NUM_SPELL];
 
@@ -96,7 +97,7 @@ protected:
 public:
 
 	Creature(); // for savegames
-	Creature(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed, int expValue);
+	Creature(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed, int expValue, const std::string& corpseName);
 	virtual ~Creature();
 	virtual Creature* clone();
 	void copyFrom(Creature*);
@@ -193,7 +194,7 @@ protected:
 
 public:
 	BasicMonster();
-	BasicMonster(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed, int expValue, bool useMelee, bool useRanged, float fleePerc);
+	BasicMonster(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed, int expValue, const std::string& corpseName, bool useMelee, bool useRanged, float fleePerc);
 	virtual ~BasicMonster();
 	virtual Creature* clone();
 	void copyFrom(BasicMonster*);
