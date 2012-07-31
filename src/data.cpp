@@ -8,6 +8,7 @@
 #include "items/gold.hpp"
 #include "items/tool.hpp"
 #include "items/potion.hpp"
+#include "items/spellbook.hpp"
 #include "world.hpp"
 
 void fillFactoryTemplates()
@@ -69,7 +70,8 @@ void fillFactoryTemplates()
 	Potion heal("heal potion", F_NEUTER, '!', TCODColor::red, 1, 3, POTION_HEAL);
 	Potion fullHeal("full heal potion", F_NEUTER, '!', TCODColor::darkRed, 1, 3, POTION_FULLHEAL);
 	Potion haste("haste potion", F_NEUTER, '!', TCODColor::blue, 1, 3, POTION_HASTE);
-	Gold gold(12);
+	SpellBook v_cripple("voodoo book named 'Cripple'", F_NEUTER, 21, TCODColor::purple, 6, SPELL_V_CRIPPLE);
+	Gold gold(1);
 
 	factory.setTemplate("lightsaber", &lightsaber);
 	factory.setTemplate("sword", &sword);
@@ -92,4 +94,5 @@ void fillFactoryTemplates()
 	factory.setTemplate("pHeal", &heal);
 	factory.setTemplate("pFullHeal", &fullHeal);
 	factory.setTemplate("pHaste", &haste);
+	factory.setTemplate("sbCripple", &v_cripple);
 }
