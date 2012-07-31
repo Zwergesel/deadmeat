@@ -229,9 +229,13 @@ void World::drawWorld()
 	{
 		drawCursor(player->getCursor(), levelOffset, false);
 	}
-	else if (state == STATE_RANGED_ATTACK || state == STATE_CAST_TARGET)
+	else if (state == STATE_RANGED_ATTACK)
 	{
 		drawCursor(player->getCursor(), levelOffset, true);
+	}
+	else if (state == STATE_CAST_TARGET)
+	{
+		drawCursor(player->getCursor(), levelOffset, g_spells[world.player->getSelectedSpell()].isProjectile());
 	}
 	else if (state == STATE_CHARINFO)
 	{
@@ -262,10 +266,10 @@ void World::drawCharInfo()
 	attributeInfo.printEx(8, 8, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Intelligence    %2d", player->getAttribute(ATTR_INT));
 	if (player->getAttributePoints() > 0)
 	{
-		attributeInfo.printEx(2, 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[S] - ");
-		attributeInfo.printEx(2, 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[D] - ");
-		attributeInfo.printEx(2, 6, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[C] - ");
-		attributeInfo.printEx(2, 8, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[I] - ");
+		attributeInfo.printEx(2, 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "S - ");
+		attributeInfo.printEx(2, 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, "D - ");
+		attributeInfo.printEx(2, 6, TCOD_BKGND_DEFAULT, TCOD_LEFT, "C - ");
+		attributeInfo.printEx(2, 8, TCOD_BKGND_DEFAULT, TCOD_LEFT, "I - ");
 		attributeInfo.printEx(attributeInfo.getWidth()-3, attributeInfo.getHeight() - 3, TCOD_BKGND_DEFAULT, TCOD_RIGHT, "Points left = %-2d", player->getAttributePoints());
 	}
 	TCODConsole::blit(&attributeInfo, 0, 0, 0, 0, &frame, charInfo.getWidth() - 1, 0, 1.f, 1.f);
@@ -292,7 +296,7 @@ void World::drawCharInfo()
 
 		if (player->getSkillPoints() > 0 && allowTrain)
 		{
-			skillInfo.printEx(2, 4 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "[%c] - ", util::letters[i]);
+			skillInfo.printEx(2, 4 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%c - ", util::letters[i]);
 		}
 
 		skillInfo.printEx(8, 4 + i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%-15s %2d", sk.name.c_str(), sk.value);

@@ -554,14 +554,20 @@ int Player::actionCast(SPELL spell, Point target)
 {
 	assert(creature->knowsSpell(spell));
 	state = STATE_DEFAULT;
-	creature->addMana(-g_spells[spell].getManaCost());
 	int chance = g_spells[spell].getDifficulty() - 5 * skills[g_spells[spell].getSkill()].value;
+	if (creature->getMana().first < g_spells[spell].getManaCost())
+	{
+		world.addMessage("You don't have enough mana to cast this spell.");
+		return 0;
+	}
 	if (rng->getInt(0, 100) > chance)
 	{
+		creature->addMana(-g_spells[spell].getManaCost());
 		Spell::cast(spell, creature, target);
 	}
 	else
 	{
+		creature->addMana(-g_spells[spell].getManaCost()/2);
 		std::stringstream msg;
 		msg << "You failed to cast " << g_spells[spell].getName() << "!";
 		world.addMessage(msg.str());
@@ -580,7 +586,7 @@ int Player::actionRead(Item* item)
 	creature->learnSpell(book->getSpell());
 	msg << "You learned the spell \"" << g_spells[book->getSpell()].getName() << "\"!";
 	world.addMessage(msg.str());
-	return 0;
+	return g_spells[book->getSpell()].getDifficulty();
 }
 
 int Player::actionQuiver(Item* item)
@@ -1136,11 +1142,15 @@ int Player::processAction()
 			{
 				std::stringstream text;
 				std::stringstream keys;
+				text << "      Spell                Fail Chance\n\n";
 				keys << " ";
 				int count = 0;
 				for (auto it = spells.begin(); it < spells.end(); it++)
 				{
-					text << "[" << util::letters[count] << "] - " << g_spells[*it].getName() << "\n";
+					std::string padding;
+					padding.append(20 - g_spells[*it].getName().size(), ' ');
+					int chance = util::clamp(g_spells[*it].getDifficulty() - skills[g_spells[*it].getSkill()].value, 0, 100);
+					text << util::letters[count] << " - " << g_spells[*it].getName() << padding << chance << "%\n";
 					keys << util::letters[count++];
 				}
 				unsigned char cc = world.drawBlockingWindow("Which spell do you want to cast?", text.str(), keys.str());
@@ -1439,6 +1449,11 @@ int Player::getAttribute(ATTRIBUTE attr)
 Skill Player::getSkill(SKILLS skill)
 {
 	return skills[skill];
+}
+
+SPELL Player::getSelectedSpell()
+{
+	return selectedSpell;
 }
 
 void Player::moveCursor(int dir)

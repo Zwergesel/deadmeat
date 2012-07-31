@@ -112,6 +112,11 @@ void LevelGen::loadLootTable()
 	loot.add("pHeal", 200);
 	loot.add("pFullHeal", 100);
 	loot.add("pHaste", 50);
+
+	/* Spellbooks */
+	loot.add("sbCripple", 20);
+	loot.add("sbFrenzy", 15);
+	loot.add("sbFire", 20);
 }
 
 Level* LevelGen::generateLevel(int levelId, LEVELTYPE type)

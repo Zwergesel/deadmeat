@@ -21,15 +21,17 @@ private:
 	int castTime;
 	int difficulty;
 	bool targeted;
+	bool projectile;
 
 public:
-	Spell(std::string name, SKILLS magicSchool, int manaCost, int castTime, int difficulty, bool targeted);
+	Spell(std::string name, SKILLS magicSchool, int manaCost, int castTime, int difficulty, bool targeted, bool projectile);
 	std::string getName();
 	SKILLS getSkill();
 	int getManaCost();
 	int getCastTime();
 	int getDifficulty();
 	bool isTargeted();
+	bool isProjectile();
 	static bool cast(SPELL spell, Creature* caster, Point target);
 };
 

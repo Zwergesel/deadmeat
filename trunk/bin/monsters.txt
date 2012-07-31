@@ -1,5 +1,5 @@
 Version: 0.10
-SavedObjects: 49      
+SavedObjects: 51      
 
 [[Weapon: 3]]
 name: x
@@ -886,7 +886,27 @@ weight: 6
 active: false
 spell: 0
 
-[[Weapon: 47]]
+[[SpellBook: 47]]
+name: elemental book named 'Fireball'
+formatFlags: 65536
+symbol: 21
+color: 0, 127, 255
+amount: 1
+weight: 6
+active: false
+spell: 2
+
+[[SpellBook: 48]]
+name: voodoo book named 'Frenzy'
+formatFlags: 65536
+symbol: 21
+color: 191, 0, 255
+amount: 1
+weight: 6
+active: false
+spell: 1
+
+[[Weapon: 49]]
 name: slingshot
 formatFlags: 65536
 symbol: 40
@@ -905,7 +925,7 @@ effect: 0
 range: 10
 ammoType: 3
 
-[[Weapon: 48]]
+[[Weapon: 50]]
 name: long sword
 formatFlags: 65536
 symbol: 40
@@ -924,7 +944,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Armor: 49]]
+[[Armor: 51]]
 name: uber armor
 formatFlags: 65552
 symbol: 41
@@ -965,7 +985,7 @@ _spawnName: spider
 _creature: @24
 _spawnName: troll
 _creature: @26
-#items: 22
+#items: 24
 _spawnName: arrows
 _item: @28
 _spawnName: beefsteak
@@ -1004,9 +1024,13 @@ _spawnName: pickelhaube
 _item: @45
 _spawnName: sbCripple
 _item: @46
-_spawnName: slingshot
+_spawnName: sbFire
 _item: @47
-_spawnName: sword
+_spawnName: sbFrenzy
 _item: @48
-_spawnName: uber armor
+_spawnName: slingshot
 _item: @49
+_spawnName: sword
+_item: @50
+_spawnName: uber armor
+_item: @51

@@ -71,6 +71,8 @@ void fillFactoryTemplates()
 	Potion fullHeal("full heal potion", F_NEUTER, '!', TCODColor::darkRed, 1, 3, POTION_FULLHEAL);
 	Potion haste("haste potion", F_NEUTER, '!', TCODColor::blue, 1, 3, POTION_HASTE);
 	SpellBook v_cripple("voodoo book named 'Cripple'", F_NEUTER, 21, TCODColor::purple, 6, SPELL_V_CRIPPLE);
+	SpellBook v_frenzy("voodoo book named 'Frenzy'", F_NEUTER, 21, TCODColor::purple, 6, SPELL_V_FRENZY);
+	SpellBook e_fire("elemental book named 'Fireball'", F_NEUTER, 21, TCODColor::azure, 6, SPELL_E_FIRE);
 	Gold gold(1);
 
 	factory.setTemplate("lightsaber", &lightsaber);
@@ -95,4 +97,6 @@ void fillFactoryTemplates()
 	factory.setTemplate("pFullHeal", &fullHeal);
 	factory.setTemplate("pHaste", &haste);
 	factory.setTemplate("sbCripple", &v_cripple);
+	factory.setTemplate("sbFrenzy", &v_frenzy);
+	factory.setTemplate("sbFire", &e_fire);
 }
