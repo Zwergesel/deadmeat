@@ -4,10 +4,7 @@
 
 == Test ==
   * Changing levels
-  * Ranged attacks should be able to hit creatures in their path, not just the target
-  * Generate monsters with items
-  * Let monsters drop their items when they die
-  * item weight, burdened satus etc.
+  * item weight, burdened status etc.
   * checks for closing doors
   * Potions
 
@@ -15,25 +12,22 @@
   * InventoryTable does not get saved in factory
 
 == Small improvements ==
-  * more Potions
-  * Creature->heal()
+  * More stuff (items, objects, monsters)
+  * Implement missing status effects
 
 == Major improvements ==
-  * Cursed Items
-  * Support all skills
+  * Cursed Items (?)
+  * Fully support all skills
   * Item identification
   * Load level data from save files (possible monsters, possible loot, ...)
-  * More Environment objects: traps, ...
   * config file
-  * Implement more status effects
-  * More creatures with different behaviors
-
+  * Magic system
+  * Peaceful creatures
 
 == Milestones for later / No priority ==
-  * Magic system
   * Character creation (race, class, name)
   * Random level generation
-  * Display unseen items where the player has last seen them even if a monster picked them up
+  * Display unseen items where the player has last seen them even if a monster picked them up (?)
   * Quests
   * Story
   * Crafting
