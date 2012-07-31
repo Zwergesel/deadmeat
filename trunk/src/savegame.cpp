@@ -19,6 +19,7 @@
 #include "items/gold.hpp"
 #include "items/tool.hpp"
 #include "items/potion.hpp"
+#include "items/spellbook.hpp"
 #include "factory.hpp"
 
 std::string Savegame::version = "0.10";
@@ -339,6 +340,12 @@ void Savegame::loadObject()
 	else if (objClass == "Gold")
 	{
 		Gold* obj = new Gold();
+		objects[id] = static_cast<void*>(obj);
+		obj->load(load);
+	}
+	else if (objClass == "SpellBook")
+	{
+		SpellBook* obj = new SpellBook();
 		objects[id] = static_cast<void*>(obj);
 		obj->load(load);
 	}

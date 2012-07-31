@@ -13,6 +13,7 @@
 #include "items/food.hpp"
 #include "items/tool.hpp"
 #include "items/potion.hpp"
+#include "items/spellbook.hpp"
 #include "savegame.hpp"
 
 int Player::dx[] = {-1, 0, 1,-1, 0, 1,-1, 0, 1};
@@ -546,6 +547,18 @@ int Player::actionUse(Item* item, int direction)
 	Point target = creature->getPos() + Point(dx[direction], dy[direction]);
 
 	return tool->use(level, target);
+}
+
+int Player::actionRead(Item* item)
+{
+	if (item == NULL) return 0;
+	assert(item->getType() == ITEM_SPELLBOOK);
+	
+	SpellBook* book = static_cast<SpellBook*>(item);
+	std::stringstream msg;
+	msg << "You learned the spell NR." << book->getSpell() << "!";
+	world.addMessage(msg.str());
+	return 0;
 }
 
 int Player::actionQuiver(Item* item)
@@ -1113,6 +1126,21 @@ int Player::processAction()
 			}
 			return 0;
 		}
+		// open read screen
+		else if (state == STATE_DEFAULT && key.c == 'r')
+		{
+			world.itemSelection = ItemSelection(creature->getInventory(), "What do you want to read?", false);
+			world.itemSelection.filterType(ITEM_SPELLBOOK)->runFilter();
+			if (world.itemSelection.getNumChoices() > 0)
+			{
+				world.itemSelection.compile(world.viewItemList.height);
+				state = STATE_READ;
+			}
+			else
+			{
+				world.addMessage("You aren't carrying any books.");
+			}
+		}
 		// open doors / close doors
 		else if (state == STATE_DEFAULT && (key.c == 'o' || key.c == 'c'))
 		{
@@ -1211,6 +1239,15 @@ int Player::processAction()
 				return actionDrink(world.itemSelection.getItem());
 			}
 		}
+		// handle read window
+		else if (state == STATE_READ)
+		{
+			if (world.itemSelection.keyInput(key))
+			{
+				state = STATE_DEFAULT;
+				return actionRead(world.itemSelection.getItem());
+			}
+		}
 		// handle inventory
 		else if (state == STATE_INVENTORY)
 		{
@@ -1227,10 +1264,25 @@ int Player::processAction()
 				request.append(item->toString());
 				request.append(":");
 				request.append("\n\nd - drop");
+				if (item->getType() == ITEM_POTION)
+				{
+					options.append("D");
+					request.append("\n\nD - drink");
+				}				
 				if (item->getType() == ITEM_FOOD)
 				{
 					options.append("e");
 					request.append("\n\ne - eat");
+				}
+				if (item->getType() == ITEM_AMMO && creature->getQuiver() != item)
+				{
+					options.append("q");
+					request.append("\n\nq - ready ammunition");
+				}
+				if (item->getType() == ITEM_SPELLBOOK)
+				{
+					options.append("r");
+					request.append("\n\nr - read");
 				}
 				request.append("\n\nt - throw");
 				if (item->getType() == ITEM_ARMOR && creature->getArmor(static_cast<Armor*>(item)->getSlot()) == item)
@@ -1243,20 +1295,10 @@ int Player::processAction()
 					options.append("u");
 					request.append("\n\nu - use");
 				}
-				if (item->getType() == ITEM_POTION)
-				{
-					options.append("D");
-					request.append("\n\nD - drink");
-				}
 				if (item->getType() == ITEM_WEAPON)
 				{
 					options.append("w");
 					request.append("\n\nw - wield");
-				}
-				if (item->getType() == ITEM_AMMO && creature->getQuiver() != item)
-				{
-					options.append("q");
-					request.append("\n\nq - ready ammunition");
 				}
 				if (item->getType() == ITEM_ARMOR && creature->getArmor(static_cast<Armor*>(item)->getSlot()) != item)
 				{
@@ -1304,6 +1346,11 @@ int Player::processAction()
 				{
 					state = STATE_DEFAULT;
 					return actionDrink(item);
+				}
+				else if (reply == 'r')
+				{
+					state = STATE_DEFAULT;
+					return actionRead(item);
 				}
 			}
 			return 0;
@@ -1478,6 +1525,7 @@ const std::string Player::HELP_TEXT =
   "f - Fire a ranged weapon\n"
   "i - Open inventory\n"
   "o - Open door\n"
+  "r - Read a book\n"
   "u - Use a tool\n"
   "w - Wield a weapon\n"
   "W - Wear armor\n"
