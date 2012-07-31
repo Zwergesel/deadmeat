@@ -15,21 +15,22 @@ const double Creature::FACT_HIT = 1.0;		// hitbonus scaling
 const double Creature::FACT_WENCH = 10.0;	// weapon enchantment -> attack bonus
 const double Creature::FACT_AENCH = 10.0;	// armor enchantment -> defense bonus
 const double Creature::FACT_ATSPD = 1.0;	// hindrance -> attack speed
-const double Creature::FACT_WALKSPD = 1.0; // hindrance -> walk speed
+const double Creature::FACT_WALKSPD = 1.0;  // hindrance -> walk speed
 
 Creature::Creature()
 {
 	// for savegames, initializes nothing
 }
 
-Creature::Creature(std::string n, uint f, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws, int exp):
+Creature::Creature(std::string n, uint f, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws, int exp, const std::string& corp):
 	name(n),		formatFlags(f),		sym(s),
 	color(c),		health(h),			maxHealth(h),
 	mana(m),		maxMana(m),			controlled(false),
 	mainWeapon(0), quiver(0),	baseWeapon(w),		baseAC(a),
 	walkingSpeed(ws),attackSkill(0),	defenseSkill(0),
 	level(NULL),	position(Point(0,0)), expValue(exp),
-	lastTimeRegen(world.time), lastTimeManaRegen(world.time)
+	lastTimeRegen(world.time), lastTimeManaRegen(world.time),
+	corpseName(corp)
 {
 	std::fill(armor, armor+NUM_ARMOR_SLOTS, 0);
 	std::fill(spells, spells+NUM_SPELL, false);
@@ -75,6 +76,7 @@ void Creature::copyFrom(Creature* original)
 	lastTimeRegen = original->lastTimeRegen;
 	lastTimeManaRegen = original->lastTimeManaRegen;
 	expValue = original->expValue;
+	corpseName = original->corpseName;
 	std::copy(original->armor, original->armor+NUM_ARMOR_SLOTS, armor);
 	// Clone inventory
 	for (std::map<symbol,Item*>::iterator it = original->inventory.begin(); it != original->inventory.end(); it++)
@@ -268,12 +270,18 @@ void Creature::die(Creature* instigator)
 
 	if (!controlled)
 	{
-		// Drop all items and remove creature from level
+		// Drop all items
 		for (auto it=inventory.begin(); it!=inventory.end(); it++)
 		{
 			level->addItem(it->second, position);
 		}
 		inventory.clear();
+		// Drop a corpse
+		if (corpseName.length() > 0)
+		{
+			level->addItem(factory.spawnItem(corpseName, true), position);
+		}
+		// Remove creature from level
 		level->removeCreature(this, false);
 		world.garbage.push_back(this);
 	}
