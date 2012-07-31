@@ -32,6 +32,7 @@ Creature::Creature(std::string n, uint f, symbol s, TCODColor c, int h, int m, W
 	lastTimeRegen(world.time), lastTimeManaRegen(world.time)
 {
 	std::fill(armor, armor+NUM_ARMOR_SLOTS, 0);
+  std::fill(spells, spells+NUM_SPELL, false);
 }
 
 Creature::~Creature()
@@ -358,7 +359,7 @@ void Creature::addMaxMana(int delta)
 	maxMana = util::clamp(maxMana + delta, 0, 9999);
 }
 
-int Creature::attack(Point pos)
+int Creature::attack(Point target)
 {
 	// baseWeapon or wielded melee weapon, but not ranged weapons
 	Weapon* weapon = &baseWeapon;
@@ -380,10 +381,10 @@ int Creature::attack(Point pos)
 	}
 
 	// Attack creatures
-	Creature* target = level->creatureAt(pos);
-	if (target != NULL)
+	Creature* victim = level->creatureAt(target);
+	if (victim != NULL)
 	{
-		defense = target->getDefense();
+		defense = victim->getDefense();
 		TCODRandom rngGauss;
 		rngGauss.setDistribution(TCOD_DISTRIBUTION_GAUSSIAN_RANGE);
 		int mean = util::clamp(1000 + attack - defense, 500, 1500);
@@ -398,8 +399,8 @@ int Creature::attack(Point pos)
 			std::stringstream msg;
 			controlled ? (msg << "You hit ") :
 			(msg << util::format(FORMAT_DEF, this, true) << " hits ");
-			target->isControlled() ? (msg << "you for ") :
-			(msg << util::format(FORMAT_DEF, target) << " for ");
+			victim->isControlled() ? (msg << "you for ") :
+			(msg << util::format(FORMAT_DEF, victim) << " for ");
 			msg << damage << " damage.";
 			world.addMessage(msg.str());
 			
@@ -408,23 +409,23 @@ int Creature::attack(Point pos)
 			DamageType dmgtype = DAMAGE_WEAPON;
 			
 			// Hurt the target
-			target->hurt(damage, this, dmgtype);
+			victim->hurt(damage, this, dmgtype);
 			
 			// Apply post weapon effects
 			if (effect == EFFECT_POISON)
 			{
-				target->affect(STATUS_POISON, 0, 200, 3);
+				victim->affect(STATUS_POISON, 0, 200, 3);
 			}
 			else if (effect == EFFECT_FIRE)
 			{
-				target->affect(STATUS_FIRE, 0, 100, 5);
+				victim->affect(STATUS_FIRE, 0, 100, 5);
 			}
 			else if (effect == EFFECT_KNOCKBACK)
 			{
-				Point knock = pos + pos - position;
+				Point knock = target + target - position;
 				if (level->creatureAt(knock) == NULL && !level->isBlocking(knock) && rng->getFloat(0.0,1.0) > 0.5)
 				{
-					target->moveTo(knock);
+					victim->moveTo(knock);
 					std::stringstream msg;
 					controlled ? msg << "Your strike pushes " : msg << util::format(FORMAT_DEF, this, true) << "'s strike pushes ";
 					controlled ? msg << util::format(FORMAT_DEF, this) << " back." : msg << "you back.";
@@ -437,26 +438,26 @@ int Creature::attack(Point pos)
 			std::stringstream msg;
 			controlled ? (msg << "You miss ") :
 			(msg << util::format(FORMAT_DEF, this, true) << " misses ");
-			target->isControlled() ? (msg << "you.") :
-			(msg << util::format(FORMAT_DEF, target) << ".");
+			victim->isControlled() ? (msg << "you.") :
+			(msg << util::format(FORMAT_DEF, victim) << ".");
 			world.addMessage(msg.str());
 		}
 		return speed;
 	}
 
 	// Hit objects
-	Object* obj = level->objectAt(position);
+	Object* obj = level->objectAt(target);
 	if (obj != NULL && obj->onAttack(this, attack, damage, weapon))
 	{
 		// Note: onAttack should handle everything if it returns true
 		return speed;
 	}
 	// Hit world
-	else if (world.tileSet->isBlocking(level->getTile(position)))
+	else if (world.tileSet->isBlocking(level->getTile(target)))
 	{
 		std::stringstream msg;
 		msg << "You bash " << util::format(FORMAT_YOUR, weapon->getName(), weapon->getFormatFlags());
-		msg << " against " << world.tileSet->getDescription(level->getTile(position)) << ".";
+		msg << " against " << world.tileSet->getDescription(level->getTile(target)) << ".";
 		world.addMessage(msg.str());
 	}
 	// Hit nothing

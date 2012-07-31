@@ -77,7 +77,7 @@ void BasicMonster::useBestWeapon()
 
 int BasicMonster::scoreWeapon(Weapon* weapon)
 {
-	return weapon->getDPS();
+	return static_cast<int>(weapon->getDPS());
 }
 
 bool BasicMonster::shouldFlee()

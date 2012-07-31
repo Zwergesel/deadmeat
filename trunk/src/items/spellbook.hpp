@@ -2,15 +2,11 @@
 #define _SPELLBOOK_CPP
 
 #include "../item.hpp"
+#include "../spell.hpp"
 
 class Savegame;
 class LoadBlock;
 
-enum SPELL
-{
-	SPELL_V_CRIPPLE,
-	NUM_SPELL
-};
 
 class SpellBook : public Item
 {

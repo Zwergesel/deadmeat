@@ -1,5 +1,5 @@
 Version: 0.10
-SavedObjects: 48      
+SavedObjects: 49      
 
 [[Weapon: 3]]
 name: x
@@ -20,7 +20,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 2]]
+[[BasicMonster: 2]]
 name: Smaug
 formatFlags: 16385
 symbol: 68
@@ -43,13 +43,63 @@ defenseSkill: 0
 walkingSpeed: 16
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-lastPlayerPos: 0, 0
-seenPlayer: false
 expValue: 2500
 #inventory: 0
 #status: 0
+lastSeenPlayer: -1, -1
+bUseMelee: false
+bUseRanged: false
 
 [[Weapon: 5]]
+name: x
+formatFlags: 0
+symbol: 35
+color: 255, 0, 127
+amount: 1
+weight: 0
+active: false
+speed: 13
+hitBonus: 40
+baseDamage: 12
+numDice: 2
+diceMax: 8
+enchantment: 0
+hands: 0
+effect: 4
+range: 1
+ammoType: 0
+
+[[BasicMonster: 4]]
+name: bear
+formatFlags: 16384
+symbol: 66
+position: 0, 0
+color: 100, 70, 40
+health: 100
+maxHealth: 100
+mana: 0
+maxMana: 0
+controlled: false
+quiver: 0
+mainWeapon: 0
+armor0: 0
+armor1: 0
+armor2: 0
+baseWeapon: @5
+baseAC: 0
+attackSkill: 0
+defenseSkill: 0
+walkingSpeed: 14
+lastTimeRegen: 0
+lastTimeManaRegen: 0
+expValue: 500
+#inventory: 0
+#status: 0
+lastSeenPlayer: -1, -1
+bUseMelee: false
+bUseRanged: false
+
+[[Weapon: 7]]
 name: x
 formatFlags: 0
 symbol: 35
@@ -68,7 +118,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 4]]
+[[BasicMonster: 6]]
 name: blue baby dragon
 formatFlags: 16384
 symbol: 100
@@ -84,20 +134,21 @@ mainWeapon: 0
 armor0: 0
 armor1: 0
 armor2: 0
-baseWeapon: @5
+baseWeapon: @7
 baseAC: 20
 attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 13
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-lastPlayerPos: 0, 0
-seenPlayer: false
 expValue: 600
 #inventory: 0
 #status: 0
+lastSeenPlayer: -1, -1
+bUseMelee: false
+bUseRanged: false
 
-[[Weapon: 7]]
+[[Weapon: 9]]
 name: x
 formatFlags: 0
 symbol: 35
@@ -116,7 +167,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 6]]
+[[BasicMonster: 8]]
 name: goblin
 formatFlags: 16384
 symbol: 103
@@ -132,20 +183,21 @@ mainWeapon: 0
 armor0: 0
 armor1: 0
 armor2: 0
-baseWeapon: @7
+baseWeapon: @9
 baseAC: 15
 attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 10
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-lastPlayerPos: 0, 0
-seenPlayer: false
 expValue: 300
 #inventory: 0
 #status: 0
+lastSeenPlayer: -1, -1
+bUseMelee: true
+bUseRanged: true
 
-[[Weapon: 9]]
+[[Weapon: 11]]
 name: x
 formatFlags: 0
 symbol: 35
@@ -164,7 +216,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 8]]
+[[BasicMonster: 10]]
 name: medic
 formatFlags: 32768
 symbol: 64
@@ -180,20 +232,21 @@ mainWeapon: 0
 armor0: 0
 armor1: 0
 armor2: 0
-baseWeapon: @9
+baseWeapon: @11
 baseAC: 0
 attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 12
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-lastPlayerPos: 0, 0
-seenPlayer: false
 expValue: 10
 #inventory: 0
 #status: 0
+lastSeenPlayer: -1, -1
+bUseMelee: true
+bUseRanged: true
 
-[[Weapon: 11]]
+[[Weapon: 13]]
 name: x
 formatFlags: 0
 symbol: 35
@@ -212,7 +265,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 10]]
+[[BasicMonster: 12]]
 name: purple baby dragon
 formatFlags: 16384
 symbol: 100
@@ -228,20 +281,21 @@ mainWeapon: 0
 armor0: 0
 armor1: 0
 armor2: 0
-baseWeapon: @11
+baseWeapon: @13
 baseAC: 20
 attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 13
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-lastPlayerPos: 0, 0
-seenPlayer: false
 expValue: 600
 #inventory: 0
 #status: 0
+lastSeenPlayer: -1, -1
+bUseMelee: false
+bUseRanged: false
 
-[[Weapon: 13]]
+[[Weapon: 15]]
 name: x
 formatFlags: 0
 symbol: 35
@@ -260,7 +314,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 12]]
+[[BasicMonster: 14]]
 name: rat
 formatFlags: 32768
 symbol: 114
@@ -276,20 +330,21 @@ mainWeapon: 0
 armor0: 0
 armor1: 0
 armor2: 0
-baseWeapon: @13
+baseWeapon: @15
 baseAC: 20
 attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 11
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-lastPlayerPos: 0, 0
-seenPlayer: false
 expValue: 250
 #inventory: 0
 #status: 0
+lastSeenPlayer: -1, -1
+bUseMelee: false
+bUseRanged: false
 
-[[Weapon: 15]]
+[[Weapon: 17]]
 name: x
 formatFlags: 0
 symbol: 35
@@ -308,7 +363,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 14]]
+[[BasicMonster: 16]]
 name: red baby dragon
 formatFlags: 16384
 symbol: 100
@@ -324,20 +379,21 @@ mainWeapon: 0
 armor0: 0
 armor1: 0
 armor2: 0
-baseWeapon: @15
+baseWeapon: @17
 baseAC: 20
 attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 13
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-lastPlayerPos: 0, 0
-seenPlayer: false
 expValue: 600
 #inventory: 0
 #status: 0
+lastSeenPlayer: -1, -1
+bUseMelee: false
+bUseRanged: false
 
-[[Weapon: 17]]
+[[Weapon: 19]]
 name: x
 formatFlags: 0
 symbol: 35
@@ -356,7 +412,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 16]]
+[[BasicMonster: 18]]
 name: sergeant
 formatFlags: 16384
 symbol: 64
@@ -372,20 +428,21 @@ mainWeapon: 0
 armor0: 0
 armor1: 0
 armor2: 0
-baseWeapon: @17
+baseWeapon: @19
 baseAC: 40
 attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 14
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-lastPlayerPos: 0, 0
-seenPlayer: false
 expValue: 1000
 #inventory: 0
 #status: 0
+lastSeenPlayer: -1, -1
+bUseMelee: true
+bUseRanged: true
 
-[[Weapon: 19]]
+[[Weapon: 21]]
 name: x
 formatFlags: 0
 symbol: 35
@@ -400,11 +457,11 @@ numDice: 1
 diceMax: 4
 enchantment: 0
 hands: 0
-effect: 0
+effect: 1
 range: 1
 ammoType: 0
 
-[[Goblin: 18]]
+[[BasicMonster: 20]]
 name: snake
 formatFlags: 16384
 symbol: 115
@@ -420,20 +477,21 @@ mainWeapon: 0
 armor0: 0
 armor1: 0
 armor2: 0
-baseWeapon: @19
+baseWeapon: @21
 baseAC: 0
 attackSkill: 0
 defenseSkill: 0
 walkingSpeed: 5
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-lastPlayerPos: 0, 0
-seenPlayer: false
 expValue: 300
 #inventory: 0
 #status: 0
+lastSeenPlayer: -1, -1
+bUseMelee: false
+bUseRanged: false
 
-[[Weapon: 21]]
+[[Weapon: 23]]
 name: x
 formatFlags: 0
 symbol: 35
@@ -452,7 +510,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 20]]
+[[BasicMonster: 22]]
 name: soldier
 formatFlags: 16384
 symbol: 64
@@ -468,54 +526,6 @@ mainWeapon: 0
 armor0: 0
 armor1: 0
 armor2: 0
-baseWeapon: @21
-baseAC: 0
-attackSkill: 0
-defenseSkill: 0
-walkingSpeed: 14
-lastTimeRegen: 0
-lastTimeManaRegen: 0
-lastPlayerPos: 0, 0
-seenPlayer: false
-expValue: 600
-#inventory: 0
-#status: 0
-
-[[Weapon: 23]]
-name: x
-formatFlags: 0
-symbol: 35
-color: 255, 0, 127
-amount: 1
-weight: 0
-active: false
-speed: 13
-hitBonus: 40
-baseDamage: 12
-numDice: 2
-diceMax: 8
-enchantment: 0
-hands: 0
-effect: 0
-range: 1
-ammoType: 0
-
-[[Goblin: 22]]
-name: soldier ant
-formatFlags: 32768
-symbol: 97
-position: 0, 0
-color: 0, 0, 255
-health: 25
-maxHealth: 25
-mana: 0
-maxMana: 0
-controlled: false
-quiver: 0
-mainWeapon: 0
-armor0: 0
-armor1: 0
-armor2: 0
 baseWeapon: @23
 baseAC: 0
 attackSkill: 0
@@ -523,11 +533,12 @@ defenseSkill: 0
 walkingSpeed: 14
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-lastPlayerPos: 0, 0
-seenPlayer: false
-expValue: 500
+expValue: 600
 #inventory: 0
 #status: 0
+lastSeenPlayer: -1, -1
+bUseMelee: true
+bUseRanged: true
 
 [[Weapon: 25]]
 name: x
@@ -548,7 +559,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 24]]
+[[BasicMonster: 24]]
 name: spider
 formatFlags: 32768
 symbol: 115
@@ -571,11 +582,12 @@ defenseSkill: 0
 walkingSpeed: 8
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-lastPlayerPos: 0, 0
-seenPlayer: false
 expValue: 150
 #inventory: 0
 #status: 0
+lastSeenPlayer: -1, -1
+bUseMelee: false
+bUseRanged: false
 
 [[Weapon: 27]]
 name: x
@@ -596,7 +608,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Goblin: 26]]
+[[BasicMonster: 26]]
 name: troll
 formatFlags: 16384
 symbol: 84
@@ -619,11 +631,12 @@ defenseSkill: 0
 walkingSpeed: 15
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-lastPlayerPos: 0, 0
-seenPlayer: false
 expValue: 750
 #inventory: 0
 #status: 0
+lastSeenPlayer: -1, -1
+bUseMelee: false
+bUseRanged: false
 
 [[Ammo: 28]]
 name: arrow
@@ -728,7 +741,7 @@ name: gold
 formatFlags: 4
 symbol: 36
 color: 242, 210, 0
-amount: 12
+amount: 1
 weight: 0
 active: false
 
@@ -863,7 +876,17 @@ hindrance: 0
 slot: 2
 enchantment: 1
 
-[[Weapon: 46]]
+[[SpellBook: 46]]
+name: voodoo book named 'Cripple'
+formatFlags: 65536
+symbol: 21
+color: 191, 0, 255
+amount: 1
+weight: 6
+active: false
+spell: 0
+
+[[Weapon: 47]]
 name: slingshot
 formatFlags: 65536
 symbol: 40
@@ -882,7 +905,7 @@ effect: 0
 range: 10
 ammoType: 3
 
-[[Weapon: 47]]
+[[Weapon: 48]]
 name: long sword
 formatFlags: 65536
 symbol: 40
@@ -901,7 +924,7 @@ effect: 0
 range: 1
 ammoType: 0
 
-[[Armor: 48]]
+[[Armor: 49]]
 name: uber armor
 formatFlags: 65552
 symbol: 41
@@ -918,31 +941,31 @@ enchantment: 2
 #creatures: 13
 _spawnName: Smaug
 _creature: @2
-_spawnName: blue baby dragon
+_spawnName: bear
 _creature: @4
-_spawnName: goblin
+_spawnName: blue baby dragon
 _creature: @6
-_spawnName: medic
+_spawnName: goblin
 _creature: @8
-_spawnName: purple baby dragon
+_spawnName: medic
 _creature: @10
-_spawnName: rat
+_spawnName: purple baby dragon
 _creature: @12
-_spawnName: red baby dragon
+_spawnName: rat
 _creature: @14
-_spawnName: sergeant
+_spawnName: red baby dragon
 _creature: @16
-_spawnName: snake
+_spawnName: sergeant
 _creature: @18
-_spawnName: soldier
+_spawnName: snake
 _creature: @20
-_spawnName: soldier ant
+_spawnName: soldier
 _creature: @22
 _spawnName: spider
 _creature: @24
 _spawnName: troll
 _creature: @26
-#items: 21
+#items: 22
 _spawnName: arrows
 _item: @28
 _spawnName: beefsteak
@@ -979,9 +1002,11 @@ _spawnName: pMinorHeal
 _item: @44
 _spawnName: pickelhaube
 _item: @45
-_spawnName: slingshot
+_spawnName: sbCripple
 _item: @46
-_spawnName: sword
+_spawnName: slingshot
 _item: @47
-_spawnName: uber armor
+_spawnName: sword
 _item: @48
+_spawnName: uber armor
+_item: @49

@@ -9,6 +9,7 @@
 #include "items/weapon.hpp"
 #include "items/armor.hpp"
 #include "items/ammo.hpp"
+#include "spell.hpp"
 
 class Level;
 class Player;
@@ -36,6 +37,7 @@ enum Status
   STATUS_CONDEMN,
   STATUS_FIRE,      // damage over time
   STATUS_FREEZE,
+  STATUS_BERSERK,
   STATUS_BRAIN,
   STATUS_DRAIN,
   NUM_STATUS
@@ -86,6 +88,7 @@ protected:
 	int lastTimeRegen;
 	int lastTimeManaRegen;
 	std::vector<StatusInfo> status;
+  bool spells[NUM_SPELL];
 
 	void die(Creature* instigator);
 	Creature(const Creature& copy);
