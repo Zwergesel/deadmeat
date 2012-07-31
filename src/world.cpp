@@ -229,7 +229,7 @@ void World::drawWorld()
 	{
 		drawCursor(player->getCursor(), levelOffset, false);
 	}
-	else if (state == STATE_RANGED_ATTACK)
+	else if (state == STATE_RANGED_ATTACK || state == STATE_CAST_TARGET)
 	{
 		drawCursor(player->getCursor(), levelOffset, true);
 	}

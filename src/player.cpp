@@ -233,19 +233,8 @@ int Player::actionLook(Point pos)
 		}
 		else if (obj == NULL && c != NULL && c == creature)
 		{
-			// Is the player here but nothing else? Look at yourself
-			world.addMessage("You look at yourself...");
-			Armor* a = creature->getArmor(ARMOR_BODY);
-			if (a == NULL)
-			{
-				world.addMessage("You think that you look sexy without any body armor.", true);
-			}
-			else
-			{
-				std::stringstream msg;
-				msg << "You think that you look sexy in " << util::format(FORMAT_YOUR, a) << ".";
-				world.addMessage(msg.str(), true);
-			}
+			// The player is here but nothing else
+			world.addMessage("There is nothing here.");
 		}
 		else if (obj == NULL || !obj->isVisible())
 		{
@@ -547,23 +536,38 @@ int Player::actionUse(Item* item, int direction)
 
 int Player::actionCast(SPELL spell)
 {
-	if (creature->knowsSpell(spell) == false)
+	assert(creature->knowsSpell(spell));
+	if (g_spells[spell].isTargeted())
 	{
-		world.addMessage("You don't know that spell.");
+		state = STATE_CAST_TARGET;
+		selectedSpell = spell;
+		initTargetList();
 		return 0;
 	}
-	Point target;
-
-	creature->addMana(-g_spells[spell].getManaCost());
-	int chance = g_spells[spell].getDifficulty() - 5 * skills[g_spells[spell].getSkill()].value;
-	if (rng->getInt(0, 100) > chance) Spell::cast(spell, creature, target);
 	else
 	{
-		std::stringstream ss;
-		ss << "You failed to cast " << g_spells[spell].getName() << "!";
-		world.addMessage(ss.str());
+		return actionCast(spell, Point(0,0));
+	}
+}
+
+int Player::actionCast(SPELL spell, Point target)
+{
+	assert(creature->knowsSpell(spell));
+	state = STATE_DEFAULT;
+	creature->addMana(-g_spells[spell].getManaCost());
+	int chance = g_spells[spell].getDifficulty() - 5 * skills[g_spells[spell].getSkill()].value;
+	if (rng->getInt(0, 100) > chance)
+	{
+		Spell::cast(spell, creature, target);
+	}
+	else
+	{
+		std::stringstream msg;
+		msg << "You failed to cast " << g_spells[spell].getName() << "!";
+		world.addMessage(msg.str());
 	}
 	return g_spells[spell].getCastTime();
+
 }
 
 int Player::actionRead(Item* item)
@@ -657,7 +661,7 @@ int Player::actionCharInfo(TCOD_key_t key)
 	return 0;
 }
 
-void Player::actionAutoTargetting()
+void Player::actionAutoTargeting()
 {
 	bool advanceTarget = false;
 	for (auto it = targetList.begin(); it != targetList.end(); it++)
@@ -799,6 +803,21 @@ int Player::getDirection(TCOD_key_t key)
 	return -1;
 }
 
+void Player::initTargetList()
+{
+	Level* level = world.levels[world.currentLevel];
+	targetList = level->getVisibleCreatures();
+	if (targetList.size() > 0)
+	{
+		sort(targetList.begin(), targetList.end(), sortCreaturesByDistance);
+		cursor = targetList.front()->getPos();
+	}
+	else
+	{
+		cursor = creature->getPos();
+	}
+}
+
 int Player::action()
 {
 	// health regeneration
@@ -895,26 +914,31 @@ int Player::processAction()
 			return 10;
 		}
 		// cursor movement
-		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK) && direction >= 0)
+		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK || state == STATE_CAST_TARGET) && direction >= 0)
 		{
 			moveCursor(direction);
 			return 0;
 		}
-		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK) && key.vk == TCODK_ESCAPE)
+		else if ((state == STATE_INSPECT || state == STATE_RANGED_ATTACK || state == STATE_CAST_TARGET) && key.vk == TCODK_ESCAPE)
 		{
 			state = STATE_DEFAULT;
 			return 0;
 		}
-		// Auto-targetting with ranged attack cursor
-		else if (state == STATE_RANGED_ATTACK && key.c == 'x')
+		// Auto-targeting with ranged attack cursor
+		else if ((state == STATE_RANGED_ATTACK || state == STATE_CAST_TARGET) && key.c == 'x')
 		{
-			actionAutoTargetting();
+			actionAutoTargeting();
 			return 0;
 		}
 		// fire a ranged weapon
 		else if (state == STATE_RANGED_ATTACK && (key.c == '.' || key.vk == TCODK_ENTER || key.vk == TCODK_SPACE))
 		{
 			return actionRangedAttack(cursor);
+		}
+		// cast a targeted spell
+		else if (state == STATE_CAST_TARGET && (key.c == '.' || key.vk == TCODK_ENTER || key.vk == TCODK_SPACE))
+		{
+			return actionCast(selectedSpell, cursor);
 		}
 		// initiate ranged attacking
 		else if (state == STATE_DEFAULT && key.c == 'f')
@@ -926,16 +950,7 @@ int Player::processAction()
 				return 0;
 			}
 			state = STATE_RANGED_ATTACK;
-			targetList = level->getVisibleCreatures();
-			if (targetList.size() > 0)
-			{
-				sort(targetList.begin(), targetList.end(), sortCreaturesByDistance);
-				cursor = targetList.front()->getPos();
-			}
-			else
-			{
-				cursor = creature->getPos();
-			}
+			initTargetList();
 			return 0;
 		}
 		// look at a different position

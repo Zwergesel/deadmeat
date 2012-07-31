@@ -39,6 +39,7 @@ enum STATE
   STATE_USE_DIRECTION,
   STATE_DRINK,
   STATE_READ,
+  STATE_CAST_TARGET,
   NUM_STATE
 };
 
@@ -73,6 +74,7 @@ private:
 	int skillPoints;
 	std::vector<Creature*> targetList;
 	Item* selectedItem;
+	SPELL selectedSpell;
 
 	static const std::string HELP_TEXT;
 	static int dx[9];
@@ -90,6 +92,7 @@ private:
 	int actionUse(Item*, int direction);
 	int actionRead(Item*);
 	int actionCast(SPELL);
+	int actionCast(SPELL, Point target);
 	int actionDrink(Item*);
 	int actionDrop();
 	int actionDrop(Item*, int num);
@@ -97,11 +100,12 @@ private:
 	int actionRangedAttack(Point p);
 	int actionOpen(int direction);
 	int actionClose(int direction);
-	void actionAutoTargetting();
+	void actionAutoTargeting();
 	int actionCharInfo(TCOD_key_t key);
 	void moveCursor(int direction);
 	void quickLook();
 	int getDirection(TCOD_key_t);
+	void initTargetList();
 
 public:
 	Player();
