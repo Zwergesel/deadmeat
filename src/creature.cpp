@@ -489,20 +489,26 @@ int Creature::attack(Point target)
 	Object* obj = level->objectAt(target);
 	if (obj != NULL && obj->onAttack(this, attack, damage, weapon))
 	{
-		// Note: onAttack should handle everything if it returns true
+		// Note: obj->onAttack should handle all effects if it returns true
 		return speed;
 	}
 	// Hit world
 	else if (world.tileSet->isBlocking(level->getTile(target)))
 	{
+		// TODO: Messages for non-controlled creatures
 		std::stringstream msg;
 		msg << "You bash " << util::format(FORMAT_YOUR, weapon->getName(), weapon->getFormatFlags());
 		msg << " against " << world.tileSet->getDescription(level->getTile(target)) << ".";
 		world.addMessage(msg.str());
+		
+		int broken = rng->getInt(0,999);
+		broken = (broken / 800) + (broken / 950) + (broken / 995);
+		if (weapon->breakWeapon(broken)) world.addMessage("You hear a cracking sound.");
 	}
 	// Hit nothing
 	else
 	{
+		// TODO: Message for non-controlled creatures
 		world.addMessage("You strike at thin air.");
 	}
 

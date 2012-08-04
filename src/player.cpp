@@ -44,7 +44,7 @@ Player::Player(std::string name):
 	attrPoints = 0;
 	skillPoints = 3;
 	creature = new Creature(name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 200, 75,
-	                        Weapon("fists", F_PLURAL, '#', TCODColor::pink, 1, 0, 8, 0, 3, 1, 2, 0, 2, EFFECT_NONE, 1, AMMO_NONE), 0, 10, 0, "");
+	                        Weapon("fists", F_PLURAL, '#', TCODColor::pink, 1, 0, 8, 0, 3, 1, 2, 0, 2, EFFECT_NONE, 1, AMMO_NONE, -1), 0, 10, 0, "");
 	creature->setControlled(true);
 	creature->setAttackSkill(0);
 	creature->setDefenseSkill(0);

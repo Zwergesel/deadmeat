@@ -39,19 +39,20 @@ private:
 	WeaponEffect effect;
 	int range;
 	AmmoType ammoType;
-	int broken;
+	int broken; // -1 = indestructible, 0 = undamaged, 3 = broken
 
+	static std::string BROKEN_NAMES[4];
 	static std::string EFFECT_NAMES[NUM_EFFECT];
 
 public:
 	Weapon();
-	Weapon(std::string name, uint format, symbol sym, TCODColor color, int amount, int weight, int spd, int hit, int dmg, int dice, int dmax, int ench, int hands, WeaponEffect effect, int range, AmmoType ammoType);
+	Weapon(std::string name, uint format, symbol sym, TCODColor color, int amount, int weight, int spd, int hit, int dmg, int dice, int dmax, int ench, int hands, WeaponEffect effect, int range, AmmoType ammoType, int broken);
 	Weapon(int spd, int hit, int dmg, int dice, int dmax, WeaponEffect effect, int range, AmmoType ammoType);
 	~Weapon();
 	Item* clone();
 
 	int rollDamage();
-	void breakWeapon(int levels);
+	bool breakWeapon(int amount);
 	int getMinDamage();
 	int getMaxDamage();
 	int getSpeed();
