@@ -247,12 +247,8 @@ bool Object::onAttack(Creature* guy, int attack, int damage, Weapon* weapon)
 	int hit;
 	std::stringstream msg;
 
-	switch (type)
+	if (type == OBJ_DOOR_CLOSED || type == OBJ_DOOR_LOCKED)
 	{
-	default:
-		return false;
-	case OBJ_DOOR_CLOSED:
-	case OBJ_DOOR_LOCKED:
 		// Roll attack against the door; doors have 50 defense
 		hit = util::clamp(attack + 950, 500, 1500);
 		hit = rngGauss.getInt(700, 1300, hit);
@@ -261,12 +257,22 @@ bool Object::onAttack(Creature* guy, int attack, int damage, Weapon* weapon)
 			*this = Object(OBJ_DOOR_BROKEN);
 			if (guy->isControlled()) world.addMessage("You hit the door really hard and destroy it.");
 		}
-		else if (guy->isControlled())
+		else
 		{
-			msg << "You bash against the door with " << util::format(FORMAT_YOUR, weapon->getName(), weapon->getFormatFlags()) << ".";
-			world.addMessage(msg.str());
+			int broken = 3 - (hit / 740) - (hit / 790) - (hit / 850);
+			bool didBreak = weapon->breakWeapon(broken);
+			if (guy->isControlled())
+			{
+				msg << "You bash against the door with " << util::format(FORMAT_YOUR, weapon->getName(), weapon->getFormatFlags()) << ".";
+				world.addMessage(msg.str());
+				if (didBreak) world.addMessage("You hear a cracking sound.");
+			}
 		}
 		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 
