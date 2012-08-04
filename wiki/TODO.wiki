@@ -13,6 +13,8 @@
 
 == Small improvements ==
   * Implement missing status effects
+  * Rotting corpses should disappear (?)
+  * Caution should make it possible to detect rotten food
 
 == Major improvements ==
   * Cursed Items (?)
