@@ -36,9 +36,22 @@ int Corpse::getEatTime()
 	return eatTime;
 }
 
-int Corpse::getRotTime()
+bool Corpse::isRotten()
 {
-	return rotTime;
+	return world.time > rotTime;
+}
+
+void Corpse::initRotTime()
+{
+	rotTime += world.time;
+}
+
+std::string Corpse::toString()
+{
+	std::string str = "";
+	if (world.time > rotTime + 1000) str.append("rotten ");
+	str.append(name);
+	return str;
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/
