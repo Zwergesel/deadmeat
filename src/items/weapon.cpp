@@ -49,6 +49,12 @@ int Weapon::rollDamage()
 	return dmg;
 }
 
+void Weapon::breakWeapon(int levels)
+{
+	broken += levels;
+	// TODO: do something when damage exceeds a certain level
+}
+
 int Weapon::getMinDamage()
 {
 	return baseDamage;
@@ -129,7 +135,7 @@ unsigned int Weapon::save(Savegame& sg)
 	store ("speed", speed) ("hitBonus", hitBonus) ("baseDamage", baseDamage);
 	store ("numDice", numDice) ("diceMax", diceMax) ("enchantment", enchantment);
 	store ("hands", hands) ("effect", effect) ("range", range);
-	store ("ammoType", ammoType);
+	store ("ammoType", ammoType) ("broken", broken);
 	sg << store;
 	return id;
 }
@@ -142,7 +148,7 @@ void Weapon::load(LoadBlock& load)
 	load ("speed", speed) ("hitBonus", hitBonus) ("baseDamage", baseDamage);
 	load ("numDice", numDice) ("diceMax", diceMax) ("enchantment", enchantment);
 	load ("hands", hands) ("effect", e) ("range", range);
-	load ("ammoType", a);
+	load ("ammoType", a) ("broken", broken);
 	if (a < 0 || a >= NUM_AMMOTYPE) throw SavegameFormatException("Weapon::load _ ammoType out of range");
 	ammoType = static_cast<AmmoType>(a);
 	if (e < 0 || e >= NUM_EFFECT) throw SavegameFormatException("Weapon::load _ effect out of range");
