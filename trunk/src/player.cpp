@@ -494,9 +494,21 @@ int Player::actionEat(Item* item)
 		msg << util::format(FORMAT_DEF, c, true) << " tastes disgusting, but you eat as much of it as you can.";
 		world.addMessage(msg.str());
 
-		addNutrition(c->getNutrition());
+		int nu = c->getNutrition();
+
+		if (c->isRotten())
+		{
+			world.addMessage("Ugh... That meat was tainted.");
+			world.addMessage("You feel terribly sick.");
+			// TODO: better effect
+			creature->addMaxHealth(-25);
+			nu /= 2;
+		}
+
+		addNutrition(nu);
 		int time = c->getEatTime();
 		creature->removeItem(item, 1, true);
+		
 		return time;
 	}
 }

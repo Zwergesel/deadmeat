@@ -22,7 +22,10 @@ public:
 
 	int getNutrition();
 	int getEatTime();
-	int getRotTime();
+	bool isRotten();
+	void initRotTime();
+	
+	std::string toString();
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);

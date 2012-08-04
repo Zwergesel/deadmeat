@@ -7,6 +7,7 @@
 #include "level.hpp"
 #include "world.hpp"
 #include "savegame.hpp"
+#include "items/corpse.hpp"
 
 const double Creature::FACT_ATSKL = 10.0;	// attack skill -> attack bonus
 const double Creature::FACT_DEFSKL = 10.0;	// defense skill -> defense bonus
@@ -279,7 +280,11 @@ void Creature::die(Creature* instigator)
 		// Drop a corpse
 		if (corpseName.length() > 0)
 		{
-			level->addItem(factory.spawnItem(corpseName, true), position);
+			Item* item = factory.spawnItem(corpseName, true);
+			assert(item->getType() == ITEM_CORPSE);
+			Corpse* corpse = static_cast<Corpse*>(item);
+			corpse->initRotTime();
+			level->addItem(corpse, position);
 		}
 		// Remove creature from level
 		level->removeCreature(this, false);
@@ -382,6 +387,10 @@ void Creature::addMaxHealth(int delta)
 	{
 		if (controlled) world.addMessage("You feel your remaining life force getting sucked out of you.");
 		die(NULL);
+	}
+	else if (health > maxHealth)
+	{
+		health = maxHealth;
 	}
 }
 
