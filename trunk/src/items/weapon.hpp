@@ -39,6 +39,7 @@ private:
 	WeaponEffect effect;
 	int range;
 	AmmoType ammoType;
+	int broken;
 
 	static std::string EFFECT_NAMES[NUM_EFFECT];
 
@@ -50,6 +51,7 @@ public:
 	Item* clone();
 
 	int rollDamage();
+	void breakWeapon(int levels);
 	int getMinDamage();
 	int getMaxDamage();
 	int getSpeed();

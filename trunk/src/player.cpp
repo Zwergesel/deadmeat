@@ -489,26 +489,33 @@ int Player::actionEat(Item* item)
 	else
 	{
 		Corpse* c = static_cast<Corpse*>(item);
-
 		std::stringstream msg;
 		msg << util::format(FORMAT_DEF, c, true) << " tastes disgusting, but you eat as much of it as you can.";
-		world.addMessage(msg.str());
-
 		int nu = c->getNutrition();
 
 		if (c->isRotten())
 		{
-			world.addMessage("Ugh... That meat was tainted.");
+			if (rng->getInt(0,15) <= skills[SKILL_TRAPS].value &&
+				world.drawBlockingWindow("You hesitate...", "You smell a faint odor of decay.\nDo you want to continue eating? y/n", "yn", TCODColor::red) != 'y')
+			{
+				// No negative effect, if the player smells it in time
+				return 0;
+			}
+			world.addMessage(msg.str());
+			world.addMessage("Ugh... That meat was tainted.", true);
 			world.addMessage("You feel terribly sick.");
 			// TODO: better effect
 			creature->addMaxHealth(-25);
 			nu /= 2;
 		}
+		else
+		{
+			world.addMessage(msg.str());
+		}
 
 		addNutrition(nu);
 		int time = c->getEatTime();
 		creature->removeItem(item, 1, true);
-		
 		return time;
 	}
 }

@@ -2,7 +2,7 @@
 #include "savegame.hpp"
 #include <cassert>
 
-std::string Item::ACTIVE_STRINGS[NUM_ITEM_TYPE] = { "ERR_GOLD_ACTIVE", "wielded", "in quiver", "worn", "ERR_FOOD_ACTIVE", "active" };
+std::string Item::ACTIVE_STRINGS[NUM_ITEM_TYPE] = { "ERR_GOLD_ACTIVE", "wielded", "in quiver", "worn", "ERR_FOOD_ACTIVE", "ERR_CORPSE_ACTIVE", "active", "ERR_POTION_ACTIVE", "ERR_SPELLBOOK_ACTIVE", "ERR_DEFAULT_ACTIVE" };
 
 Item::Item()
 {
