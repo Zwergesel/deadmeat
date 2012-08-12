@@ -106,6 +106,8 @@ int main()
 		world.player->getCreature()->addItem(factory.spawnItem("sbCripple", false));
 		world.player->getCreature()->addItem(factory.spawnItem("sbFrenzy", false));
 		world.player->getCreature()->addItem(factory.spawnItem("sbFire", false));
+		world.player->getCreature()->addItem(factory.spawnItem("sbInnerDemons", false));
+		world.player->getCreature()->addItem(factory.spawnItem("sbFeast", false));
 	}
 
 	while (!world.requestQuit)

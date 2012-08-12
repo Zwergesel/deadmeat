@@ -500,7 +500,7 @@ int Creature::attack(Point target)
 		msg << "You bash " << util::format(FORMAT_YOUR, weapon->getName(), weapon->getFormatFlags());
 		msg << " against " << world.tileSet->getDescription(level->getTile(target)) << ".";
 		world.addMessage(msg.str());
-		
+
 		int broken = rng->getInt(0,999);
 		broken = (broken / 800) + (broken / 950) + (broken / 995);
 		if (weapon->breakWeapon(broken)) world.addMessage("You hear a cracking sound.");

@@ -116,6 +116,8 @@ void LevelGen::loadLootTable()
 	/* Spellbooks */
 	loot.add("sbCripple", 20);
 	loot.add("sbFrenzy", 15);
+	loot.add("sbInnerDemons", 10);
+	loot.add("sbFeast", 7);
 	loot.add("sbFire", 20);
 }
 

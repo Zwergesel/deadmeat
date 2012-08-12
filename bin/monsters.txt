@@ -1,5 +1,5 @@
 Version: 0.10
-SavedObjects: 51      
+SavedObjects: 54      
 
 [[Weapon: 3]]
 name: x
@@ -19,6 +19,7 @@ hands: 0
 effect: 0
 range: 1
 ammoType: 0
+broken: -1
 
 [[BasicMonster: 2]]
 name: Smaug
@@ -68,6 +69,7 @@ hands: 0
 effect: 4
 range: 1
 ammoType: 0
+broken: -1
 
 [[BasicMonster: 4]]
 name: bear
@@ -117,6 +119,7 @@ hands: 0
 effect: 0
 range: 1
 ammoType: 0
+broken: -1
 
 [[BasicMonster: 6]]
 name: blue baby dragon
@@ -166,6 +169,7 @@ hands: 0
 effect: 0
 range: 1
 ammoType: 0
+broken: -1
 
 [[BasicMonster: 8]]
 name: goblin
@@ -215,6 +219,7 @@ hands: 0
 effect: 0
 range: 1
 ammoType: 0
+broken: -1
 
 [[BasicMonster: 10]]
 name: medic
@@ -264,6 +269,7 @@ hands: 0
 effect: 0
 range: 1
 ammoType: 0
+broken: -1
 
 [[BasicMonster: 12]]
 name: purple baby dragon
@@ -313,6 +319,7 @@ hands: 0
 effect: 0
 range: 1
 ammoType: 0
+broken: -1
 
 [[BasicMonster: 14]]
 name: rat
@@ -362,6 +369,7 @@ hands: 0
 effect: 0
 range: 1
 ammoType: 0
+broken: -1
 
 [[BasicMonster: 16]]
 name: red baby dragon
@@ -411,6 +419,7 @@ hands: 0
 effect: 0
 range: 1
 ammoType: 0
+broken: -1
 
 [[BasicMonster: 18]]
 name: sergeant
@@ -460,6 +469,7 @@ hands: 0
 effect: 1
 range: 1
 ammoType: 0
+broken: -1
 
 [[BasicMonster: 20]]
 name: snake
@@ -509,6 +519,7 @@ hands: 0
 effect: 0
 range: 1
 ammoType: 0
+broken: -1
 
 [[BasicMonster: 22]]
 name: soldier
@@ -558,6 +569,7 @@ hands: 0
 effect: 0
 range: 1
 ammoType: 0
+broken: -1
 
 [[BasicMonster: 24]]
 name: spider
@@ -607,6 +619,7 @@ hands: 0
 effect: 0
 range: 1
 ammoType: 0
+broken: -1
 
 [[BasicMonster: 26]]
 name: troll
@@ -716,6 +729,7 @@ hands: 1
 effect: 0
 range: 20
 ammoType: 2
+broken: 0
 
 [[Weapon: 34]]
 name: dagger
@@ -735,6 +749,7 @@ hands: 1
 effect: 0
 range: 1
 ammoType: 0
+broken: 0
 
 [[Gold: 35]]
 name: gold
@@ -763,6 +778,7 @@ hands: 2
 effect: 0
 range: 1
 ammoType: 0
+broken: 0
 
 [[Weapon: 37]]
 name: lightsaber
@@ -782,6 +798,7 @@ hands: 1
 effect: 0
 range: 1
 ammoType: 0
+broken: -1
 
 [[Tool: 38]]
 name: lockpick
@@ -811,6 +828,7 @@ hands: 1
 effect: 0
 range: 30
 ammoType: 1
+broken: 0
 
 [[Food: 40]]
 name: meat ball
@@ -880,33 +898,53 @@ enchantment: 1
 name: voodoo book named 'Cripple'
 formatFlags: 65536
 symbol: 21
-color: 191, 0, 255
+color: 229, 152, 255
 amount: 1
 weight: 6
 active: false
 spell: 0
 
 [[SpellBook: 47]]
-name: elemental book named 'Fireball'
+name: voodoo book named 'Feast'
 formatFlags: 65536
 symbol: 21
-color: 0, 127, 255
+color: 210, 76, 255
 amount: 1
 weight: 6
 active: false
-spell: 2
+spell: 3
 
 [[SpellBook: 48]]
+name: elemental book named 'Fireball'
+formatFlags: 65536
+symbol: 21
+color: 152, 203, 255
+amount: 1
+weight: 6
+active: false
+spell: 4
+
+[[SpellBook: 49]]
 name: voodoo book named 'Frenzy'
 formatFlags: 65536
 symbol: 21
-color: 191, 0, 255
+color: 223, 127, 255
 amount: 1
 weight: 6
 active: false
 spell: 1
 
-[[Weapon: 49]]
+[[SpellBook: 50]]
+name: voodoo book named 'Inner Demons'
+formatFlags: 65536
+symbol: 21
+color: 216, 101, 255
+amount: 1
+weight: 6
+active: false
+spell: 2
+
+[[Weapon: 51]]
 name: slingshot
 formatFlags: 65536
 symbol: 40
@@ -924,8 +962,21 @@ hands: 1
 effect: 0
 range: 10
 ammoType: 3
+broken: 0
 
-[[Weapon: 50]]
+[[Corpse: 52]]
+name: snake corpse
+formatFlags: 65536
+symbol: 37
+color: 95, 191, 0
+amount: 1
+weight: 15
+active: false
+nutrition: 800
+eatTime: 20
+rotTime: 400
+
+[[Weapon: 53]]
 name: long sword
 formatFlags: 65536
 symbol: 40
@@ -943,8 +994,9 @@ hands: 1
 effect: 0
 range: 1
 ammoType: 0
+broken: 0
 
-[[Armor: 51]]
+[[Armor: 54]]
 name: uber armor
 formatFlags: 65552
 symbol: 41
@@ -985,7 +1037,7 @@ _spawnName: spider
 _creature: @24
 _spawnName: troll
 _creature: @26
-#items: 24
+#items: 27
 _spawnName: arrows
 _item: @28
 _spawnName: beefsteak
@@ -1024,13 +1076,19 @@ _spawnName: pickelhaube
 _item: @45
 _spawnName: sbCripple
 _item: @46
-_spawnName: sbFire
+_spawnName: sbFeast
 _item: @47
-_spawnName: sbFrenzy
+_spawnName: sbFire
 _item: @48
-_spawnName: slingshot
+_spawnName: sbFrenzy
 _item: @49
-_spawnName: sword
+_spawnName: sbInnerDemons
 _item: @50
-_spawnName: uber armor
+_spawnName: slingshot
 _item: @51
+_spawnName: snake corpse
+_item: @52
+_spawnName: sword
+_item: @53
+_spawnName: uber armor
+_item: @54
