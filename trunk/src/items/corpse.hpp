@@ -24,7 +24,7 @@ public:
 	int getEatTime();
 	bool isRotten();
 	void initRotTime();
-	
+
 	std::string toString();
 
 	unsigned int save(Savegame& sg);

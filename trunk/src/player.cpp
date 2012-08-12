@@ -185,6 +185,7 @@ int Player::actionMove(int direction)
 
 			float diagonal = ((newPos - ppos).x != 0 && (newPos - ppos).y != 0)?(std::sqrt(2.f)):(1.f);
 			creature->moveTo(newPos);
+			level = world.levels[world.currentLevel];
 			world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - level->getWidth(), 0);
 			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
 			quickLook();
@@ -496,7 +497,7 @@ int Player::actionEat(Item* item)
 		if (c->isRotten())
 		{
 			if (rng->getInt(0,15) <= skills[SKILL_TRAPS].value &&
-				world.drawBlockingWindow("You hesitate...", "You smell a faint odor of decay.\nDo you want to continue eating? y/n", "yn", TCODColor::red) != 'y')
+			    world.drawBlockingWindow("You hesitate...", "You smell a faint odor of decay.\nDo you want to continue eating? y/n", "yn", TCODColor::red) != 'y')
 			{
 				// No negative effect, if the player smells it in time
 				return 0;

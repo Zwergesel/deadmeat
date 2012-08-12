@@ -2,12 +2,15 @@
 #include "level.hpp"
 #include "world.hpp"
 #include "creature.hpp"
+#include "items/corpse.hpp"
 #include <cassert>
 
 Spell g_spells[NUM_SPELL] =
 {
 	Spell("Cripple", SKILL_VOODOO, 10, 10, 10, true, false),
 	Spell("Frenzy", SKILL_VOODOO, 20, 20, 20, false, false),
+	Spell("Inner Demons", SKILL_VOODOO, 30, 30, 30, true, false),
+	Spell("Feast", SKILL_VOODOO, 40, 40, 40, true, false),
 	Spell("Fire", SKILL_ELEMENTAL, 10, 10, 10, true, true)
 };
 
@@ -65,7 +68,32 @@ bool Spell::cast(SPELL spell, Creature* caster, Point target)
 	else if (spell == SPELL_V_FRENZY)
 	{
 		world.player->getCreature()->affect(STATUS_BERSERK, 0, 900, 5);
+		world.addMessage("Your mind is filled with rage.");
 		return true;
+	}
+	else if (spell == SPELL_V_INNER_DEMONS)
+	{
+		Creature* c = level->creatureAt(target);
+		if (c == NULL) return false;
+		c->affect(STATUS_FEAR, 0, 600, 1);
+		return true;
+	}
+	else if (spell == SPELL_V_FEAST)
+	{
+		auto items = level->itemsAt(target);
+		for (auto it = items.begin(); it<items.end(); it++)
+		{
+			if ((*it)->getType() == ITEM_CORPSE)
+			{
+				Corpse* corpse = static_cast<Corpse*>(*it);
+				world.player->getCreature()->heal(corpse->getNutrition() / 10);
+				world.player->getCreature()->addMana(corpse->getNutrition() / 20);
+				level->removeItem((*it),1,true);
+				world.addMessage("You suck the remaining lifeforce from the corpse.");
+				return true;
+			}
+		}
+		return false;
 	}
 	else if (spell == SPELL_E_FIRE)
 	{

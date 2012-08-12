@@ -52,7 +52,7 @@ void fillFactoryTemplates()
 	factory.setTemplate("purple baby dragon", &purbaby);
 	factory.setTemplate("blue baby dragon", &blubaby);
 	factory.setTemplate("Smaug", &dragon);
-	
+
 	factory.setTemplate("snake corpse", &snake_c);
 
 	Weapon lightsaber("lightsaber", F_NEUTER, '(', TCODColor::red, 1, 1, 8, 30, 1, 10, 20, 30, 1, EFFECT_NONE, 1, AMMO_NONE, -1);
@@ -75,9 +75,11 @@ void fillFactoryTemplates()
 	Potion heal("heal potion", F_NEUTER, '!', TCODColor::red, 1, 3, POTION_HEAL);
 	Potion fullHeal("full heal potion", F_NEUTER, '!', TCODColor::darkRed, 1, 3, POTION_FULLHEAL);
 	Potion haste("haste potion", F_NEUTER, '!', TCODColor::blue, 1, 3, POTION_HASTE);
-	SpellBook v_cripple("voodoo book named 'Cripple'", F_NEUTER, 21, TCODColor::purple, 6, SPELL_V_CRIPPLE);
-	SpellBook v_frenzy("voodoo book named 'Frenzy'", F_NEUTER, 21, TCODColor::purple, 6, SPELL_V_FRENZY);
-	SpellBook e_fire("elemental book named 'Fireball'", F_NEUTER, 21, TCODColor::azure, 6, SPELL_E_FIRE);
+	SpellBook v_cripple("voodoo book named 'Cripple'", F_NEUTER, 21, TCODColor::lerp(TCODColor::white, TCODColor::purple, 0.4f), 6, SPELL_V_CRIPPLE);
+	SpellBook v_frenzy("voodoo book named 'Frenzy'", F_NEUTER, 21, TCODColor::lerp(TCODColor::white, TCODColor::purple, 0.5f), 6, SPELL_V_FRENZY);
+	SpellBook v_innerdemons("voodoo book named 'Inner Demons'", F_NEUTER, 21, TCODColor::lerp(TCODColor::white, TCODColor::purple, 0.6f), 6, SPELL_V_INNER_DEMONS);
+	SpellBook v_feast("voodoo book named 'Feast'", F_NEUTER, 21, TCODColor::lerp(TCODColor::white, TCODColor::purple, 0.7f), 6, SPELL_V_FEAST);
+	SpellBook e_fire("elemental book named 'Fireball'", F_NEUTER, 21, TCODColor::lerp(TCODColor::white, TCODColor::azure, 0.4f), 6, SPELL_E_FIRE);
 	Gold gold(1);
 
 	factory.setTemplate("lightsaber", &lightsaber);
@@ -103,5 +105,7 @@ void fillFactoryTemplates()
 	factory.setTemplate("pHaste", &haste);
 	factory.setTemplate("sbCripple", &v_cripple);
 	factory.setTemplate("sbFrenzy", &v_frenzy);
+	factory.setTemplate("sbInnerDemons", &v_innerdemons);
+	factory.setTemplate("sbFeast", &v_feast);
 	factory.setTemplate("sbFire", &e_fire);
 }

@@ -18,7 +18,7 @@ Weapon::Weapon()
 Weapon::Weapon(std::string n, uint f, symbol s, TCODColor c, int x, int w, int spd, int hit, int dmg, int dice, int dmax, int ench, int h, WeaponEffect e, int r, AmmoType a, int b)
 	:Item(n,f,s,c,x,w), speed(spd), hitBonus(hit), baseDamage(dmg), numDice(dice)
 	,diceMax(dmax), enchantment(ench), hands(h), effect(e), range(r), ammoType(a), broken(b)
-	
+
 {
 	type = ITEM_WEAPON;
 	strType = "weapons";
