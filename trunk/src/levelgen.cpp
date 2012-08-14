@@ -728,16 +728,11 @@ Level* LevelGen::generateForestLevel(int levelId, int width, int height)
 	m->placeItems(loot, width*height/250 + 1);
 
 	std::vector<Point> list = m->getMatchingLocations(WALKABLE | NO_OBJECT);
-	m->addObject(OBJ_TRAP_FIRE, m->chooseRandomPoint(list, true));
-	m->addObject(OBJ_TRAP_FIRE, m->chooseRandomPoint(list, true));
-	m->addObject(OBJ_TRAP_FIRE, m->chooseRandomPoint(list, true));
-	m->addObject(OBJ_TRAP_FIRE, m->chooseRandomPoint(list, true));
-	m->addObject(OBJ_TRAP_FIRE, m->chooseRandomPoint(list, true));
-	m->addObject(OBJ_TRAP_BEAR, m->chooseRandomPoint(list, true));
-	m->addObject(OBJ_TRAP_BEAR, m->chooseRandomPoint(list, true));
-	m->addObject(OBJ_TRAP_BEAR, m->chooseRandomPoint(list, true));
-	m->addObject(OBJ_TRAP_BEAR, m->chooseRandomPoint(list, true));
-	m->addObject(OBJ_TRAP_BEAR, m->chooseRandomPoint(list, true));
+	for (int i=0; i<5; i++)
+	{
+		m->addObject(OBJ_TRAP_FIRE, Level::chooseRandomPoint(list, true));
+		m->addObject(OBJ_TRAP_BEAR, Level::chooseRandomPoint(list, true));
+	}
 
 	return m;
 }
