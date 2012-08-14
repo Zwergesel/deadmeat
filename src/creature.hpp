@@ -184,6 +184,7 @@ protected:
 	virtual void useBestWeapon();
 	virtual int scoreWeapon(Weapon*);
 	virtual bool shouldFlee();
+	virtual int doFlee();
 	virtual bool seePlayer();
 	virtual int doRangedAttack(Weapon*);
 	virtual int doSpecialAttack();

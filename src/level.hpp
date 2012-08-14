@@ -73,7 +73,7 @@ public:
 	bool isWalkable(Point pos);
 	bool isTransparent(Point pos);
 
-	Point chooseRandomPoint(std::vector<Point>& list, bool erase = false);
+	static Point chooseRandomPoint(std::vector<Point>& list, bool erase = false);
 	std::vector<Point> getMatchingLocations(uint flags);
 	Point getRandomLocation(uint flags);
 	void populate(const RandomTable& spawns, int numCreatures);

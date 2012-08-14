@@ -77,8 +77,6 @@ private:
 	SPELL selectedSpell;
 
 	static const std::string HELP_TEXT;
-	static int dx[9];
-	static int dy[9];
 
 	int actionMove(int direction);
 	int actionLook(Point p);
@@ -135,6 +133,9 @@ public:
 	float getArmorHindranceReduction();
 	int getWeight();
 	SPELL getSelectedSpell();
+
+	static int dx[9];
+	static int dy[9];
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);

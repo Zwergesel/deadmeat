@@ -79,6 +79,7 @@ void Creature::copyFrom(Creature* original)
 	expValue = original->expValue;
 	corpseName = original->corpseName;
 	std::copy(original->armor, original->armor+NUM_ARMOR_SLOTS, armor);
+	std::copy(original->spells, original->spells+NUM_SPELL, spells);
 	// Clone inventory
 	for (std::map<symbol,Item*>::iterator it = original->inventory.begin(); it != original->inventory.end(); it++)
 	{
@@ -817,6 +818,16 @@ void Creature::storeAll(Savegame& sg, SaveBlock& store)
 	{
 		store ("_symbol", (int) it->first) .ptr("_item", it->second->save(sg));
 	}
+	int numspells = 0;
+	for (int spell = 0; spell < NUM_SPELL; spell++)
+	{
+		if (spells[spell]) numspells++;
+	}
+	store ("#spells", numspells);
+	for (int spell = 0; spell < NUM_SPELL; spell++)
+	{
+		if (spells[spell]) store ("_spell", spell);
+	}
 	store ("#status", (int) status.size());
 	for (auto it = status.begin(); it != status.end(); it++)
 	{
@@ -861,6 +872,14 @@ void Creature::load(LoadBlock& load)
 		symbol s;
 		load ("_symbol", s);
 		inventory[s] = static_cast<Item*>(load.ptr("_item"));
+	}
+	load ("#spells", n);
+	std::fill(spells, spells+NUM_SPELL, false);
+	while (n-->0)
+	{
+		int index;
+		load ("_spell", index);
+		spells[index] = true;
 	}
 	load ("#status", n);
 	while (n-->0)

@@ -82,13 +82,36 @@ int BasicMonster::scoreWeapon(Weapon* weapon)
 
 bool BasicMonster::shouldFlee()
 {
-	return (100.0f * health / maxHealth < bFleePerc);
+	return (100.0f * health / maxHealth < bFleePerc) || (getStatusStrength(STATUS_FEAR) > 0);
+}
+
+int BasicMonster::doFlee()
+{
+	if (lastSeenPlayer.x < 0) return 0;
+	
+	Point diff = position - lastSeenPlayer;
+	std::vector<Point> locations;
+	for (int i=0; i<9; i++)
+	{
+		Point target = position + Point(Player::dx[i], Player::dy[i]);
+		if (Point::sqlen(target - lastSeenPlayer) > Point::sqlen(diff) && level->isWalkable(target)) locations.push_back(target);
+	}
+	if (locations.size() == 0) return 0;
+	
+	Point step = Level::chooseRandomPoint(locations, false);
+	float diagonal = (step.x - position.x != 0 && step.y - position.y != 0) ? std::sqrt(2.f) : 1.f;
+	moveTo(step);
+	return static_cast<int>(getWalkingSpeed() * diagonal);
 }
 
 bool BasicMonster::seePlayer()
 {
 	// TODO: sight radius
-	if (world.fovMap->isInFov(position.x, position.y)) return true;
+	if (world.fovMap->isInFov(position.x, position.y))
+	{
+		lastSeenPlayer = world.player->getCreature()->getPos();
+		return true;
+	}
 
 	// Trace line
 	Point target = world.player->getCreature()->getPos();
@@ -99,6 +122,8 @@ bool BasicMonster::seePlayer()
 		if (!level->isTransparent(current)) return false;
 	}
 	while (!TCODLine::step(&current.x, &current.y));
+	
+	lastSeenPlayer = world.player->getCreature()->getPos();
 	return true;
 }
 
@@ -121,7 +146,6 @@ int BasicMonster::doMeleeAttack(Weapon* weapon)
 
 int BasicMonster::doChargePlayer()
 {
-	lastSeenPlayer = world.player->getCreature()->getPos();
 	return navigateTo(lastSeenPlayer);
 }
 
@@ -179,14 +203,15 @@ int BasicMonster::action()
 	{
 		useBestWeapon();
 	}
+	int time;
 	if (shouldFlee())
 	{
-		// TODO: Flee and return correct time
-		return 10;
+		seePlayer(); // To get correct value for lastSeenPlayer
+		time = doFlee();
+		if (time > 0) return time;
 	}
-	int time;
 	if (seePlayer())
-	{
+	{		
 		int sqdist = Point::sqlen(world.player->getCreature()->getPos() - position);
 		Weapon* weapon = getMainWeapon();
 		if (weapon == NULL) weapon = &baseWeapon;
