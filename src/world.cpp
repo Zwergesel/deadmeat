@@ -29,11 +29,7 @@ World::World()
 
 World::~World()
 {
-	if (player != NULL)
-	{
-		delete player;
-		player = NULL;
-	}
+	clearWorld();
 	if (tileSet != NULL)
 	{
 		delete tileSet;
@@ -44,11 +40,70 @@ World::~World()
 		delete[] levels;
 		levels = NULL;
 	}
+}
+
+void World::clearWorld()
+{
+	if (player != NULL)
+	{
+		delete player;
+		player = NULL;
+	}
 	if (fovMap != NULL)
 	{
 		delete fovMap;
 		fovMap = NULL;
 	}
+	for (int i=0; i<256; i++)
+	{
+		if (levels[i] != NULL)
+		{
+			delete levels[i];
+			levels[i] = NULL;
+		}
+	}
+	worldNodes.clear();
+	messageLog.clear();
+	cleanGarbage();
+}
+
+void World::newGame()
+{
+	// Clean up old pointers + memory
+	clearWorld();
+	
+	// Reset all other values
+	currentLevel = 0;
+	time = 0;
+	gameover = false;
+	clearMessage = false;
+	deathReason = "";
+	player = new Player("Richard P. Enus");
+	
+	// Generate a new character and world
+	CharGen::generate();
+	LevelGen::generateWorld();
+	levels[0] = LevelGen::generateLevel(0, LEVELTYPE_FOREST);
+	
+	// Add player creature
+	Point newPos = levels[0]->getRandomLocation(WALKABLE);
+	player->getCreature()->setPos(newPos);
+	levels[0]->addCreature(player->getCreature(), 0);
+	levelOffset.x = util::clamp(viewLevel.width/2 - newPos.x, viewLevel.width - levels[0]->getWidth(), 0);
+	levelOffset.y = util::clamp(viewLevel.height/2 - newPos.y, viewLevel.height - levels[0]->getHeight(), 0);
+
+	/* Default inventory */
+	player->getCreature()->addItem(factory.spawnItem("dagger", false));
+	player->getCreature()->addItem(factory.spawnItem("lockpick", false));
+	player->getCreature()->addItem(factory.spawnItem("pMinorHeal", false));
+	player->getCreature()->addItem(factory.spawnItem("pHeal", false));
+	player->getCreature()->addItem(factory.spawnItem("pFullHeal", false));
+	player->getCreature()->addItem(factory.spawnItem("pHaste", false));
+	player->getCreature()->addItem(factory.spawnItem("sbCripple", false));
+	player->getCreature()->addItem(factory.spawnItem("sbFrenzy", false));
+	player->getCreature()->addItem(factory.spawnItem("sbFire", false));
+	player->getCreature()->addItem(factory.spawnItem("sbInnerDemons", false));
+	player->getCreature()->addItem(factory.spawnItem("sbFeast", false));	
 }
 
 /* forceBreak is optional (default: false) */
@@ -560,18 +615,7 @@ unsigned int World::save(Savegame& sg)
 
 void World::load(LoadBlock& load)
 {
-	// Clean
-	messageLog.clear();
-	if (player != NULL)
-	{
-		delete player;
-		player = NULL;
-	}
-	if (fovMap != NULL)
-	{
-		delete fovMap;
-		fovMap = NULL;
-	}
+	clearWorld();
 
 	// Load
 	load ("currentLevel", currentLevel) ("levelOffset", levelOffset) ("time", time);
@@ -580,8 +624,6 @@ void World::load(LoadBlock& load)
 	load ("#levels", n);
 	for (int i=0; i<n; i++)
 	{
-		// Clean
-		if (levels[i] != NULL) delete levels[i];
 		levels[i] = static_cast<Level*>(load.ptr("_level"));
 	}
 	load ("#worldNodes", n);
