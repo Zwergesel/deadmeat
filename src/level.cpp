@@ -1,4 +1,5 @@
 #include <cassert>
+#include <iostream>
 #include "level.hpp"
 #include "creature.hpp"
 #include "player.hpp"
@@ -6,6 +7,7 @@
 #include "savegame.hpp"
 #include "items/weapon.hpp"
 #include "tileset.hpp"
+#include "items/corpse.hpp"
 
 Level::Level()
 {
@@ -337,6 +339,9 @@ void Level::performCreatureTurn()
 	int time;
 	if (creatures.back().actor->isControlled())
 	{
+		// corpse decay for current level and player inventory
+		checkCorpses();
+		world.player->checkCorpses();
 		// player action; returns time the action took
 		time = world.player->action();
 		// TODO: this crashes when changing level!
@@ -356,6 +361,18 @@ void Level::performCreatureTurn()
 		// update heap
 		creatures.back().time += time;
 		push_heap(creatures.begin(), creatures.end());
+	}
+}
+
+void Level::checkCorpses()
+{
+	for (int d=items.size()-1; d >= 0; d--)
+	{
+		if (items[d].second->getType() == ITEM_CORPSE)
+		{
+			Corpse* cr = static_cast<Corpse*>(items[d].second);
+			if (cr->isDecaying()) removeItem(cr, cr->getAmount(), true);
+		}
 	}
 }
 

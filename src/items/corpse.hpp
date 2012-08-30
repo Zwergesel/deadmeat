@@ -23,6 +23,7 @@ public:
 	int getNutrition();
 	int getEatTime();
 	bool isRotten();
+	bool isDecaying();
 	void initRotTime();
 
 	std::string toString();

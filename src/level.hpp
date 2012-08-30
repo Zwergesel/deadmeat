@@ -82,6 +82,7 @@ public:
 	void buildTimeline(int time = -1);
 	bool isPlayerTurn();
 	void performCreatureTurn();
+	void checkCorpses();
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);

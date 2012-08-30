@@ -688,7 +688,7 @@ void Creature::removeItem(Item* item, int num, bool del)
 	}
 }
 
-std::map<symbol, Item*> Creature::getInventory()
+std::map<symbol, Item*>& Creature::getInventory()
 {
 	return inventory;
 }

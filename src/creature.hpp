@@ -116,7 +116,7 @@ public:
 	std::map<symbol,Item*> getArmor();
 	Armor* getArmor(ArmorSlot slot);
 	Ammo* getQuiver();
-	std::map<symbol, Item*> getInventory();
+	std::map<symbol, Item*>& getInventory();
 	std::pair<int,int> getHealth();
 	std::pair<int,int> getMana();
 	int getHindrance();
