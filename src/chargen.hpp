@@ -43,6 +43,20 @@ enum Gender
 
 namespace CharGen
 {
+  static bool ClassRace[NUM_CLASS][NUM_RACE] = {
+                        /* HUM DWA ELF ORC DRA GOL IMP UND */
+    /*Warrior*/       {     1,  1,  1,  1,  1,  1,  0,  1},
+    /*Rogue*/         {     1,  0,  1,  0,  1,  0,  1,  1},
+    /*Hunter*/        {     1,  1,  1,  1,  1,  0,  0,  1},
+    /*Paladin*/       {     1,  1,  0,  0,  1,  1,  0,  0},
+    /*Monk*/          {     1,  1,  1,  0,  0,  1,  1,  0},
+    /*Voodoo-Priest*/ {     1,  1,  0,  1,  0,  1,  1,  1},
+    /*Druid*/         {     1,  1,  1,  1,  0,  0,  0,  0},
+    /*Wizard*/        {     1,  0,  0,  1,  1,  1,  1,  1},
+    /*Musketeer*/     {     1,  1,  0,  0,  1,  1,  1,  1},
+    /*Alchemist*/     {     1,  1,  0,  0,  1,  1,  1,  1},
+    /*Scholar*/       {     1,  1,  1,  0,  0,  0,  1,  1}
+  };
 	static std::string RACE_NAMES[NUM_RACE] = { "Human", "Dwarf", "Elf", "Orc", "Dragonborn", "Golem", "Imp", "Undead" };
 	static std::string CLASS_NAMES[NUM_CLASS] = { "Warrior", "Rogue", "Hunter", "Paladin", "Monk", "Voodoo-Priest",
 	    "Druid", "Sorcerer", "Musketeer", "Alchemist", "Scholar"
