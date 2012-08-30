@@ -1617,6 +1617,24 @@ int Player::getWeight()
 	return weight;
 }
 
+void Player::checkCorpses()
+{
+	auto inv = creature->getInventory();
+	std::vector<Corpse*> decay;
+	for (auto it = inv.begin(); it != inv.end(); it++)
+	{
+		if (it->second->getType() == ITEM_CORPSE)
+		{
+			Corpse* cr = static_cast<Corpse*>(it->second);
+			if (cr->isDecaying()) decay.push_back(cr);
+		}
+	}
+	for (auto it = decay.begin(); it != decay.end(); it++)
+	{
+		creature->removeItem(*it, (*it)->getAmount(), true);
+	}
+}
+
 bool sortCreaturesByDistance(Creature* a, Creature* b)
 {
 	Point ppos = world.player->getCreature()->getPos();

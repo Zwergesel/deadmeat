@@ -41,6 +41,11 @@ bool Corpse::isRotten()
 	return world.time > rotTime;
 }
 
+bool Corpse::isDecaying()
+{
+	return world.time > rotTime + 3000;
+}
+
 void Corpse::initRotTime()
 {
 	rotTime += world.time;

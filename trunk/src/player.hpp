@@ -133,6 +133,7 @@ public:
 	float getArmorHindranceReduction();
 	int getWeight();
 	SPELL getSelectedSpell();
+	void checkCorpses();
 
 	static int dx[9];
 	static int dy[9];
