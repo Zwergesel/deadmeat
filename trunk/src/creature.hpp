@@ -10,6 +10,7 @@
 #include "items/armor.hpp"
 #include "items/ammo.hpp"
 #include "spell.hpp"
+#include "chargen.hpp"
 
 class Level;
 class Player;
@@ -205,6 +206,13 @@ public:
 	virtual void storeAll(Savegame& sg, SaveBlock& store);
 	virtual unsigned int save(Savegame& sg);
 	virtual void load(LoadBlock& load);
+};
+
+class PlayerCreature : public Creature
+{
+public:
+	PlayerCreature();
+	PlayerCreature(PlayerClass c, PlayerRace r, Gender g);
 };
 
 #endif
