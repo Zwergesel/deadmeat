@@ -2,15 +2,15 @@
 
 = Races =
 
-|| *Race* || *STR* || *DEX*  || *CON* || *INT* || *PER* || *Special* ||
-|| _Dragonborn_ || 7 || 5 || 5 || 4 || 5 || breathes fire or ice ||
-|| _Dwarf_ || 6 || 4 || 7 || 5 || 2 || Slow runner, difficult to hit, cannot train swimming ||
-|| _Elf_ || 3 || 8 || 2 || 4 || 7 || ||
-|| _Golem_ || 7 || 2 || 9 || 2 || 4 || Rarely gets hungry ||
-|| _Human_ || 4 || 4 || 4 || 8 || 4 || Jack-of-all-Trades ||
-|| _Imp_ || 3 || 4 || 2 || 9 || 7 || ||
-|| _Orc_ || 8 || 4 || 6 || 3 || 3 || ||
-|| _Undead_ || 4 || 6 || 8 || 3 || 4 || No hunger, big health bonus, no regeneration, eats corpses to regenerate ||
+|| *Race* || *STR* || *DEX*  || *CON* || *INT* || *PER* || *Special* || *Starting Items* ||
+|| _Dragonborn_ || 7 || 5 || 5 || 4 || 5 || breathes fire || ||
+|| _Dwarf_ || 6 || 4 || 7 || 5 || 2 || Slow runner, AC bonus, (cannot train swimming) || mining pick? ||
+|| _Elf_ || 3 || 8 || 2 || 4 || 7 || stealth? || shortbow + arrows ||
+|| _Golem_ || 7 || 2 || 9 || 2 || 4 || no hunger, vunerable lightning || ||
+|| _Human_ || 4 || 4 || 4 || 8 || 4 || starts with +3 skill points to spend || gold ||
+|| _Imp_ || 3 || 4 || 2 || 9 || 7 || fire resistance, || fireball spellbook ||
+|| _Orc_ || 8 || 4 || 6 || 3 || 3 || +damage when low on hp || axt ||
+|| _Undead_ || 4 || 6 || 8 || 3 || 4 || poison resistance, eats corpse without penalties || ||
 
 = Classes =
 
