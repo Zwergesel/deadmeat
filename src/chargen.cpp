@@ -104,10 +104,13 @@ PlayerRace CharGen::choose_race(PlayerClass c)
 		key = world.player->waitForKeypress(true);
 		if (key.c == 'r')
 		{
-			pr = static_cast<PlayerRace>(rng->getInt(0, NUM_RACE - 1));
+			do
+      {
+        pr = static_cast<PlayerRace>(rng->getInt(0, NUM_RACE - 1));
+      }while( !ClassRace[c][pr] );
 			break;
 		}
-		if (key.c >= 'a' && key.c < util::letters[NUM_RACE])
+		if (key.c >= 'a' && key.c < util::letters[NUM_RACE] && ClassRace[c][static_cast<PlayerRace>(util::letterToInt(key.c))])
 		{
 			pr = static_cast<PlayerRace>(util::letterToInt(key.c));
 			break;
@@ -200,6 +203,7 @@ std::string CharGen::choose_name(PlayerClass c, PlayerRace r, Gender g)
 
 	TCODConsole playerName((world.viewLevel.width / 3) * 3, (world.viewLevel.height / 4));
 	TCOD_key_t key;
+  bool first=true;
 	do
 	{
 		playerName.clear();
@@ -214,6 +218,11 @@ std::string CharGen::choose_name(PlayerClass c, PlayerRace r, Gender g)
 		if ( key.vk == TCODK_BACKSPACE && pn.size() > 0) pn.erase(pn.end() - 1);
 		else if (CharGen::isNameChar(key.c))
 		{
+      if(first)
+      {
+        first = false;
+        pn.clear();
+      }
 			if ( pn.size() < 15) pn.append(1, key.c);
 		}
 	}
