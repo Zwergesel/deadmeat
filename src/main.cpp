@@ -87,6 +87,7 @@ int main()
 	}
 	else
 	{
+		CharGen::generate();
 		LevelGen::generateWorld();
 		world.levels[0] = LevelGen::generateLevel(0, LEVELTYPE_FOREST);
 

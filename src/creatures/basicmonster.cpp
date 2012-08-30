@@ -88,7 +88,7 @@ bool BasicMonster::shouldFlee()
 int BasicMonster::doFlee()
 {
 	if (lastSeenPlayer.x < 0) return 0;
-	
+
 	Point diff = position - lastSeenPlayer;
 	std::vector<Point> locations;
 	for (int i=0; i<9; i++)
@@ -97,7 +97,7 @@ int BasicMonster::doFlee()
 		if (Point::sqlen(target - lastSeenPlayer) > Point::sqlen(diff) && level->isWalkable(target)) locations.push_back(target);
 	}
 	if (locations.size() == 0) return 0;
-	
+
 	Point step = Level::chooseRandomPoint(locations, false);
 	float diagonal = (step.x - position.x != 0 && step.y - position.y != 0) ? std::sqrt(2.f) : 1.f;
 	moveTo(step);
@@ -122,7 +122,7 @@ bool BasicMonster::seePlayer()
 		if (!level->isTransparent(current)) return false;
 	}
 	while (!TCODLine::step(&current.x, &current.y));
-	
+
 	lastSeenPlayer = world.player->getCreature()->getPos();
 	return true;
 }
@@ -211,7 +211,7 @@ int BasicMonster::action()
 		if (time > 0) return time;
 	}
 	if (seePlayer())
-	{		
+	{
 		int sqdist = Point::sqlen(world.player->getCreature()->getPos() - position);
 		Weapon* weapon = getMainWeapon();
 		if (weapon == NULL) weapon = &baseWeapon;

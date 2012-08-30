@@ -493,6 +493,7 @@ void World::travel()
 
 			buildFovMap();
 
+			// TODO: redundant?
 			world.levelOffset.x = util::clamp(world.viewLevel.width/2 - player->getCreature()->getPos().x, world.viewLevel.width - world.levels[currentLevel]->getWidth(), 0);
 			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - player->getCreature()->getPos().y, world.viewLevel.height - world.levels[currentLevel]->getHeight(), 0);
 			return;
