@@ -6,18 +6,23 @@ static std::string CLASS_NAMES[NUM_CLASS] = { "Warrior", "Rogue", "Hunter", "Pal
 
 Creature* CharGen::generate()
 {
-	Class c = CharGen::choose_class();
-	Race r = CharGen::choose_race(c);
+	PlayerClass c = CharGen::choose_class();
+	PlayerRace r = CharGen::choose_race(c);
 	Gender g = CharGen::choose_gender();
 	return new PlayerCreature(c,r,g);
 }
 
-Class CharGen::choose_class()
+PlayerClass CharGen::choose_class()
 {
 	return CLASS_WARRIOR;
 }
 
-Race CharGen::choose_race(Class c)
+PlayerRace CharGen::choose_race(PlayerClass c)
 {
 	return RACE_HUMAN;
+}
+
+Gender CharGen::choose_gender()
+{
+	return GENDER_MALE;
 }
