@@ -1,8 +1,5 @@
 #include "chargen.hpp"
-
-static std::string RACE_NAMES[NUM_RACE] = { "Human", "Dwarf", "Elf", "Orc", "Dragonborn", "Golem", "Imp", "Undead" };
-static std::string CLASS_NAMES[NUM_CLASS] = { "Warrior", "Rogue", "Hunter", "Paladin", "Monk", "Voodoo-Priest",
-											"Druid", "Sorcerer", "Musketeer", "Alchemist", "Scholar" };
+#include "creature.hpp"
 
 Creature* CharGen::generate()
 {

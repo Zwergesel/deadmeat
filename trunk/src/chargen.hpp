@@ -2,7 +2,8 @@
 #define _CHARGEN_HPP
 
 #include <string>
-#include "creature.hpp"
+
+class Creature;
 
 enum PlayerRace
 {
@@ -42,8 +43,9 @@ enum Gender
 
 namespace CharGen
 {
-	std::string CLASS_NAMES[NUM_CLASS];
-	std::string RACE_NAMES[NUM_RACE];
+	static std::string RACE_NAMES[NUM_RACE] = { "Human", "Dwarf", "Elf", "Orc", "Dragonborn", "Golem", "Imp", "Undead" };
+	static std::string CLASS_NAMES[NUM_CLASS] = { "Warrior", "Rogue", "Hunter", "Paladin", "Monk", "Voodoo-Priest",
+											"Druid", "Sorcerer", "Musketeer", "Alchemist", "Scholar" };
 	Creature* generate();
 	PlayerClass choose_class();
 	PlayerRace choose_race(PlayerClass c);
