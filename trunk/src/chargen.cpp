@@ -162,7 +162,7 @@ Gender CharGen::choose_gender(PlayerClass c, PlayerRace r)
 			pg = static_cast<Gender>(rng->getInt(0, NUM_GENDER - 1));
 			break;
 		}
-		if (key.c >= 'a' && key.c < util::letters[NUM_RACE])
+		if (key.c >= 'a' && key.c < util::letters[NUM_GENDER])
 		{
 			pg = static_cast<Gender>(util::letterToInt(key.c));
 			break;
