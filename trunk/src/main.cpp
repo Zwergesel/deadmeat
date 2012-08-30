@@ -51,7 +51,7 @@ int main()
 	TCODConsole::initRoot(80,50,"deadmeat",false);
 	TCODSystem::setFps(30);
 
-	// Init hardcoded world
+	// Init views
 	world.viewLevel = Viewport(1, 1, TCODConsole::root->getWidth() - 16, TCODConsole::root->getHeight() - 5);
 	world.viewMsg = Viewport(2, TCODConsole::root->getHeight() - 3, TCODConsole::root->getWidth() - 4, 2);
 	world.viewInfo = Viewport(TCODConsole::root->getWidth() - 14, 3, 13, TCODConsole::root->getHeight() - 7);
@@ -62,6 +62,7 @@ int main()
 	                       world.viewLevel.height - world.viewLevel.height/4
 	                     );
 
+	// Load creatures and items
 	if (Savegame::exists("monsters.txt"))
 	{
 		Savegame save;
@@ -80,6 +81,7 @@ int main()
 		save.endSave();
 	}
 
+	// Load world or start a new one
 	Savegame save;
 	if (Savegame::exists("save.txt"))
 	{
@@ -87,28 +89,7 @@ int main()
 	}
 	else
 	{
-		CharGen::generate();
-		LevelGen::generateWorld();
-		world.levels[0] = LevelGen::generateLevel(0, LEVELTYPE_FOREST);
-
-		// Add player creature
-		Point newPos = world.levels[0]->getRandomLocation(WALKABLE);
-		world.player->getCreature()->setPos(newPos);
-		world.levels[0]->addCreature(world.player->getCreature(), 0);
-		world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - world.levels[0]->getWidth(), 0);
-		world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - world.levels[0]->getHeight(), 0);
-
-		world.player->getCreature()->addItem(factory.spawnItem("dagger", false));
-		world.player->getCreature()->addItem(factory.spawnItem("lockpick", false));
-		world.player->getCreature()->addItem(factory.spawnItem("pMinorHeal", false));
-		world.player->getCreature()->addItem(factory.spawnItem("pHeal", false));
-		world.player->getCreature()->addItem(factory.spawnItem("pFullHeal", false));
-		world.player->getCreature()->addItem(factory.spawnItem("pHaste", false));
-		world.player->getCreature()->addItem(factory.spawnItem("sbCripple", false));
-		world.player->getCreature()->addItem(factory.spawnItem("sbFrenzy", false));
-		world.player->getCreature()->addItem(factory.spawnItem("sbFire", false));
-		world.player->getCreature()->addItem(factory.spawnItem("sbInnerDemons", false));
-		world.player->getCreature()->addItem(factory.spawnItem("sbFeast", false));
+		world.newGame();
 	}
 
 	while (!world.requestQuit)

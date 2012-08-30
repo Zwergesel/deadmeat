@@ -50,6 +50,9 @@ public:
 	World();
 	~World();
 
+	void clearWorld();
+	void newGame();
+
 	void addMessage(std::string m, bool forceBreak=false);
 	int getNumMessages();
 	void popMessage();
