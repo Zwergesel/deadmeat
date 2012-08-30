@@ -67,6 +67,7 @@ namespace CharGen
 	PlayerRace choose_race(PlayerClass c);
 	Gender choose_gender(PlayerClass c, PlayerRace r);
 	std::string choose_name(PlayerClass c, PlayerRace r, Gender g);
+	bool isNameChar(char x);
 }
 
 #endif
