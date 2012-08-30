@@ -43,11 +43,7 @@ Player::Player(std::string name):
 	experience = 0;
 	attrPoints = 0;
 	skillPoints = 3;
-	creature = new Creature(name, F_DEFAULT, (unsigned char)'@', TCODColor::black, 200, 75,
-	                        Weapon("fists", F_PLURAL, '#', TCODColor::pink, 1, 0, 8, 0, 3, 1, 2, 0, 2, EFFECT_NONE, 1, AMMO_NONE, -1), 0, 10, 0, "");
-	creature->setControlled(true);
-	creature->setAttackSkill(0);
-	creature->setDefenseSkill(0);
+	creature = NULL;
 	nutrition = 4000;
 }
 
@@ -58,6 +54,11 @@ Player::~Player()
 Creature* Player::getCreature()
 {
 	return creature;
+}
+
+void Player::setCreature(Creature* c)
+{
+	creature = c;
 }
 
 Point Player::getCursor()
@@ -186,8 +187,8 @@ int Player::actionMove(int direction)
 			float diagonal = ((newPos - ppos).x != 0 && (newPos - ppos).y != 0)?(std::sqrt(2.f)):(1.f);
 			creature->moveTo(newPos);
 			level = world.levels[world.currentLevel];
-			world.levelOffset.x = util::clamp(world.viewLevel.width/2 - newPos.x, world.viewLevel.width - level->getWidth(), 0);
-			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - newPos.y, world.viewLevel.height - level->getHeight(), 0);
+			world.levelOffset.x = util::clamp(world.viewLevel.width/2 - creature->getPos().x, world.viewLevel.width - level->getWidth(), 0);
+			world.levelOffset.y = util::clamp(world.viewLevel.height/2 - creature->getPos().y, world.viewLevel.height - level->getHeight(), 0);
 			quickLook();
 			return static_cast<int>(static_cast<float>(creature->getWalkingSpeed()) * diagonal);
 		}
@@ -1584,6 +1585,11 @@ int Player::getSkillPoints()
 std::string Player::getName()
 {
 	return name;
+}
+
+void Player::setName(std::string n)
+{
+	name = n;
 }
 
 int Player::rollBonusDamage()

@@ -110,7 +110,9 @@ public:
 	Player(std::string name);
 	~Player();
 	std::string getName();
+	void setName(std::string name);
 	Creature* getCreature();
+	void setCreature(Creature* creature);
 	Point getCursor();
 	void addNutrition(int delta);
 	int getNutrition();
