@@ -14,15 +14,21 @@
 
 = Classes =
 
-|| *Class* || *DRA* || *DWA* || *ELF* || *GOL* || *HUM* || *IMP* || *ORC* || *UND* || *Special* ||
-|| _Warrior_ || x || x || x || x || x || || x || x || ||
-|| _Rogue_ || x || || x || || x || x || || x || ||
-|| _Hunter_ || x || x || x || || x || || x || x || ||
-|| _Paladin_ || x || x || || x || x || || || || ||
-|| _Monk_ || || x || x || x || x || x || || || ||
-|| _Voodoo-Priest_ || || x || || x || x || x || x || x || ||
-|| _Druid/Witch_ || || x || x || || x || || x || || ||
-|| _Wizard/Sorcerer_ || x || || || x || x || x || x || x || ||
-|| _Musketeer_ || x || x || || x || x || x || || x || ||
-|| _Engineer/Alchemist_ || x || x || || x || x || x || || x || ||
-|| _Scholar_ || || x || x || || x || x || || x || ||
+|| *Class* || *DRA* || *DWA* || *ELF* || *GOL* || *HUM* || *IMP* || *ORC* || *UND* || *Special* || *Starting items* ||
+|| _Warrior_ || x || x || x || x || x || || x || x || || ||
+|| _Rogue_ || x || || x || || x || x || || x || || ||
+|| _Hunter_ || x || x || x || || x || || x || x || || ||
+|| _Paladin_ || x || x || || x || x || || || || || ||
+|| _Monk_ || || x || x || x || x || x || || || || ||
+|| _Voodoo-Priest_ || || x || || x || x || x || x || x || || ||
+|| _Druid/Witch_ || || x || x || || x || || x || || || ||
+|| _Wizard/Sorcerer_ || x || || || x || x || x || x || x || || ||
+|| _Musketeer_ || x || x || || x || x || x || || x || || ||
+|| _Engineer/Alchemist_ || x || x || || x || x || x || || x || || ||
+|| _Scholar_ || || x || x || || x || x || || x || || ||
+
+= Sex =
+Male / Female
+
+= Name =
+random?
