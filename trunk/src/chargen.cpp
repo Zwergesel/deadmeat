@@ -80,7 +80,7 @@ PlayerRace CharGen::choose_race(PlayerClass c)
 	playerRace.printFrame(0, 0, playerRace.getWidth(), playerRace.getHeight(), true, TCOD_BKGND_DEFAULT, "Race");
 	for (int i=0; i<NUM_RACE; i++)
 	{
-		playerRace.printEx(2, 2 + 2*i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%c - %s", util::letters[i], RACE_NAMES[i].c_str());
+    if(ClassRace[c][i])	playerRace.printEx(2, 2 + 2*i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%c - %s", util::letters[i], RACE_NAMES[i].c_str());
 	}
 	playerRace.printEx(2, playerRace.getHeight() - 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "r - random");
 	TCODConsole::blit(&playerRace, 0, 0, 0, 0, &window, playerClass.getWidth(), 0, 1.f, 1.f);
