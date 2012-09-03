@@ -25,6 +25,13 @@ struct Point
 	static int sqlen(Point p);
 };
 
+struct Viewport
+{
+	int x,y,width,height;
+	Viewport():x(0),y(0),width(1),height(1) {};
+	Viewport(int x, int y, int w, int h):x(x),y(y),width(w),height(h) {};
+};
+
 enum FormatFlags
 {
   F_DEFAULT = 0,

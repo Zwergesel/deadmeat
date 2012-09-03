@@ -16,13 +16,6 @@ class TileSet;
 class Savegame;
 class LoadBlock;
 
-struct Viewport
-{
-	int x,y,width,height;
-	Viewport():x(0),y(0),width(1),height(1) {};
-	Viewport(int x, int y, int w, int h):x(x),y(y),width(w),height(h) {};
-};
-
 class World
 {
 private:

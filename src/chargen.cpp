@@ -9,225 +9,160 @@ void CharGen::generate()
 	PlayerRace r = CharGen::choose_race(c);
 	Gender g = CharGen::choose_gender(c, r);
 	std::string n = CharGen::choose_name(c, r, g);
+	if (world.requestQuit) world.gameover = true;
 	world.player->setName(n);
 	world.player->setCreature(new PlayerCreature(c,r,g));
 }
 
 PlayerClass CharGen::choose_class()
 {
-	PlayerClass pc = CLASS_WARRIOR;
-	TCODConsole window(world.viewLevel.width, world.viewLevel.height);
-
-	TCODConsole playerClass(world.viewLevel.width / 3, (world.viewLevel.height / 4) * 3 );
-	playerClass.printFrame(0, 0, playerClass.getWidth(), playerClass.getHeight(), true, TCOD_BKGND_DEFAULT, "Class");
-	for (int i=0; i<NUM_CLASS; i++)
+	int selected = -1;
+	while (!world.requestQuit && selected < 0)
 	{
-		playerClass.printEx(2, 2 + 2*i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%c - %s", util::letters[i], CLASS_NAMES[i].c_str());
+		CharGen::draw(NUM_CLASS, NUM_RACE, NUM_GENDER, "Nameless");
+		char choice = CharGen::waitForChar();
+		if (choice == 'r') selected = rng->getInt(0, NUM_CLASS - 1);
+		if (choice >= 'a' && choice <= util::letters[NUM_CLASS - 1]) selected = util::letterToInt(choice);
 	}
-	playerClass.printEx(2, playerClass.getHeight() - 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "r - random");
-	TCODConsole::blit(&playerClass, 0, 0, 0, 0, &window, 0, 0, 1.f, 1.f);
-
-	TCODConsole playerRace(world.viewLevel.width / 3, (world.viewLevel.height / 4) * 3 );
-	playerRace.printFrame(0, 0, playerRace.getWidth(), playerRace.getHeight(), true, TCOD_BKGND_DEFAULT, "Race");
-
-	TCODConsole::blit(&playerRace, 0, 0, 0, 0, &window, playerClass.getWidth(), 0, 1.f, 1.f);
-
-	TCODConsole playerGender(world.viewLevel.width / 3, (world.viewLevel.height / 4) * 3 );
-	playerGender.printFrame(0, 0, playerGender.getWidth(), playerGender.getHeight(), true, TCOD_BKGND_DEFAULT, "Gender");
-
-	TCODConsole::blit(&playerGender, 0, 0, 0, 0, &window, playerClass.getWidth() + playerRace.getWidth(), 0, 1.f, 1.f);
-
-	TCODConsole playerName((world.viewLevel.width / 3) * 3, (world.viewLevel.height / 4));
-	playerName.printFrame(0, 0, playerName.getWidth(), playerName.getHeight(), true, TCOD_BKGND_DEFAULT, "Name");
-
-	TCODConsole::blit(&playerName, 0, 0, 0, 0, &window, 0, playerClass.getHeight(), 1.f, 1.f);
-
-	TCODConsole::root->clear();
-	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, world.viewLevel.x, world.viewLevel.y, 1.f, 0.9f);
-	TCODConsole::root->flush();
-	TCOD_key_t key;
-	do
-	{
-		key = world.player->waitForKeypress(true);
-		if (key.c == 'r')
-		{
-			pc = static_cast<PlayerClass>(rng->getInt(0, NUM_CLASS - 1));
-			break;
-		}
-		if (key.c >= 'a' && key.c < util::letters[NUM_CLASS])
-		{
-			pc = static_cast<PlayerClass>(util::letterToInt(key.c));
-			break;
-		}
-	}
-	while (!world.requestQuit);
-	return pc;
+	return selected >= 0 ? static_cast<PlayerClass>(selected) : CLASS_WARRIOR;
 }
 
 PlayerRace CharGen::choose_race(PlayerClass c)
 {
-	PlayerRace pr = RACE_HUMAN;
-	TCODConsole window(world.viewLevel.width, world.viewLevel.height);
-
-	TCODConsole playerClass(world.viewLevel.width / 3, (world.viewLevel.height / 4) * 3 );
-	playerClass.printFrame(0, 0, playerClass.getWidth(), playerClass.getHeight(), true, TCOD_BKGND_DEFAULT, "Class");
-	TCODImage classImage("warrior.png");
-	classImage.blit(&playerClass, playerClass.getWidth() / 2.f, playerClass.getHeight() / 2.f);
-	playerClass.printEx(playerClass.getWidth() / 2, (playerClass.getHeight() / 4) * 3, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", CLASS_NAMES[c].c_str());
-	TCODConsole::blit(&playerClass, 0, 0, 0, 0, &window, 0, 0, 1.f, 1.f);
-
-	TCODConsole playerRace(world.viewLevel.width / 3, (world.viewLevel.height / 4) * 3 );
-	playerRace.printFrame(0, 0, playerRace.getWidth(), playerRace.getHeight(), true, TCOD_BKGND_DEFAULT, "Race");
-	for (int i=0; i<NUM_RACE; i++)
+	int selected = -1;
+	while (!world.requestQuit && selected < 0)
 	{
-		if (ClassRace[c][i])	playerRace.printEx(2, 2 + 2*i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%c - %s", util::letters[i], RACE_NAMES[i].c_str());
-	}
-	playerRace.printEx(2, playerRace.getHeight() - 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "r - random");
-	TCODConsole::blit(&playerRace, 0, 0, 0, 0, &window, playerClass.getWidth(), 0, 1.f, 1.f);
-
-	TCODConsole playerGender(world.viewLevel.width / 3, (world.viewLevel.height / 4) * 3 );
-	playerGender.printFrame(0, 0, playerGender.getWidth(), playerGender.getHeight(), true, TCOD_BKGND_DEFAULT, "Gender");
-
-	TCODConsole::blit(&playerGender, 0, 0, 0, 0, &window, playerClass.getWidth() + playerRace.getWidth(), 0, 1.f, 1.f);
-
-	TCODConsole playerName((world.viewLevel.width / 3) * 3, (world.viewLevel.height / 4));
-	playerName.printFrame(0, 0, playerName.getWidth(), playerName.getHeight(), true, TCOD_BKGND_DEFAULT, "Name");
-
-	TCODConsole::blit(&playerName, 0, 0, 0, 0, &window, 0, playerClass.getHeight(), 1.f, 1.f);
-
-	TCODConsole::root->clear();
-	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, world.viewLevel.x, world.viewLevel.y, 1.f, 0.9f);
-	TCODConsole::root->flush();
-	TCOD_key_t key;
-	do
-	{
-		key = world.player->waitForKeypress(true);
-		if (key.c == 'r')
+		CharGen::draw(c, NUM_RACE, NUM_GENDER, "Nameless");
+		char choice = CharGen::waitForChar();
+		if (choice == 'r')
 		{
-			do
-      {
-        pr = static_cast<PlayerRace>(rng->getInt(0, NUM_RACE - 1));
-      }while( !ClassRace[c][pr] );
-			break;
+			selected = rng->getInt(0, std::count(ClassRace[c], ClassRace[c]+NUM_RACE, true) - 1);
+			for (int i = 0; i <= selected; i++) if (!ClassRace[c][i]) selected++;
 		}
-		if (key.c >= 'a' && key.c < util::letters[NUM_RACE] && ClassRace[c][static_cast<PlayerRace>(util::letterToInt(key.c))])
+		if (choice >= 'a' && choice <= util::letters[NUM_CLASS - 1] && ClassRace[c][util::letterToInt(choice)])
 		{
-			pr = static_cast<PlayerRace>(util::letterToInt(key.c));
-			break;
+			selected = util::letterToInt(choice);
 		}
 	}
-	while (!world.requestQuit);
-	return pr;
+	return selected >= 0 ? static_cast<PlayerRace>(selected) : RACE_HUMAN;
 }
 
 Gender CharGen::choose_gender(PlayerClass c, PlayerRace r)
 {
-	Gender pg = GENDER_MALE;
-	TCODConsole window(world.viewLevel.width, world.viewLevel.height);
-
-	TCODConsole playerClass(world.viewLevel.width / 3, (world.viewLevel.height / 4) * 3 );
-	playerClass.printFrame(0, 0, playerClass.getWidth(), playerClass.getHeight(), true, TCOD_BKGND_DEFAULT, "Class");
-	TCODImage classImage("warrior.png");
-	classImage.blit(&playerClass, playerClass.getWidth() / 2.f, playerClass.getHeight() / 2.f);
-	playerClass.printEx(playerClass.getWidth() / 2, (playerClass.getHeight() / 4) * 3, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", CLASS_NAMES[c].c_str());
-	TCODConsole::blit(&playerClass, 0, 0, 0, 0, &window, 0, 0, 1.f, 1.f);
-
-	TCODConsole playerRace(world.viewLevel.width / 3, (world.viewLevel.height / 4) * 3 );
-	playerRace.printFrame(0, 0, playerRace.getWidth(), playerRace.getHeight(), true, TCOD_BKGND_DEFAULT, "Race");
-	TCODImage raceImage("warrior.png");
-	raceImage.blit(&playerRace, playerRace.getWidth() / 2.f, playerRace.getHeight() / 2.f);
-	playerRace.printEx(playerRace.getWidth() / 2, (playerRace.getHeight() / 4) * 3, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", RACE_NAMES[r].c_str());
-	TCODConsole::blit(&playerRace, 0, 0, 0, 0, &window, playerClass.getWidth(), 0, 1.f, 1.f);
-
-	TCODConsole playerGender(world.viewLevel.width / 3, (world.viewLevel.height / 4) * 3 );
-	playerGender.printFrame(0, 0, playerGender.getWidth(), playerGender.getHeight(), true, TCOD_BKGND_DEFAULT, "Gender");
-	for (int i=0; i<NUM_GENDER; i++)
+	int selected = -1;
+	while (!world.requestQuit && selected < 0)
 	{
-		playerGender.printEx(2, 2 + 2*i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%c - %s", util::letters[i], GENDER_NAMES[i].c_str());
+		CharGen::draw(c, r, NUM_GENDER, "Nameless");
+		char choice = CharGen::waitForChar();
+		if (choice == 'r') selected = rng->getInt(0, NUM_GENDER - 1);
+		if (choice >= 'a' && choice <= util::letters[NUM_GENDER - 1]) selected = util::letterToInt(choice);
 	}
-	playerGender.printEx(2, playerGender.getHeight() - 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "r - random");
-	TCODConsole::blit(&playerGender, 0, 0, 0, 0, &window, playerClass.getWidth() + playerRace.getWidth(), 0, 1.f, 1.f);
-
-	TCODConsole playerName((world.viewLevel.width / 3) * 3, (world.viewLevel.height / 4));
-	playerName.printFrame(0, 0, playerName.getWidth(), playerName.getHeight(), true, TCOD_BKGND_DEFAULT, "Name");
-
-	TCODConsole::blit(&playerName, 0, 0, 0, 0, &window, 0, playerClass.getHeight(), 1.f, 1.f);
-
-	TCODConsole::root->clear();
-	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, world.viewLevel.x, world.viewLevel.y, 1.f, 0.9f);
-	TCODConsole::root->flush();
-	TCOD_key_t key;
-	do
-	{
-		key = world.player->waitForKeypress(true);
-		if (key.c == 'r')
-		{
-			pg = static_cast<Gender>(rng->getInt(0, NUM_GENDER - 1));
-			break;
-		}
-		if (key.c >= 'a' && key.c < util::letters[NUM_GENDER])
-		{
-			pg = static_cast<Gender>(util::letterToInt(key.c));
-			break;
-		}
-	}
-	while (!world.requestQuit);
-	return pg;
+	return selected >= 0 ? static_cast<Gender>(selected) : GENDER_MALE;
 }
 
 std::string CharGen::choose_name(PlayerClass c, PlayerRace r, Gender g)
 {
 	std::string pn = "Nameless";
-	TCODConsole window(world.viewLevel.width, world.viewLevel.height);
-
-	TCODConsole playerClass(world.viewLevel.width / 3, (world.viewLevel.height / 4) * 3 );
-	playerClass.printFrame(0, 0, playerClass.getWidth(), playerClass.getHeight(), true, TCOD_BKGND_DEFAULT, "Class");
-	TCODImage classImage("warrior.png");
-	classImage.blit(&playerClass, playerClass.getWidth() / 2.f, playerClass.getHeight() / 2.f);
-	playerClass.printEx(playerClass.getWidth() / 2, (playerClass.getHeight() / 4) * 3, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", CLASS_NAMES[c].c_str());
-	TCODConsole::blit(&playerClass, 0, 0, 0, 0, &window, 0, 0, 1.f, 1.f);
-
-	TCODConsole playerRace(world.viewLevel.width / 3, (world.viewLevel.height / 4) * 3 );
-	playerRace.printFrame(0, 0, playerRace.getWidth(), playerRace.getHeight(), true, TCOD_BKGND_DEFAULT, "Race");
-	TCODImage raceImage("warrior.png");
-	raceImage.blit(&playerRace, playerRace.getWidth() / 2.f, playerRace.getHeight() / 2.f);
-	playerRace.printEx(playerRace.getWidth() / 2, (playerRace.getHeight() / 4) * 3, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", RACE_NAMES[r].c_str());
-	TCODConsole::blit(&playerRace, 0, 0, 0, 0, &window, playerClass.getWidth(), 0, 1.f, 1.f);
-
-	TCODConsole playerGender(world.viewLevel.width / 3, (world.viewLevel.height / 4) * 3 );
-	playerGender.printFrame(0, 0, playerGender.getWidth(), playerGender.getHeight(), true, TCOD_BKGND_DEFAULT, "Gender");
-	TCODImage genderImage("warrior.png");
-	genderImage.blit(&playerGender, playerGender.getWidth() / 2.f, playerGender.getHeight() / 2.f);
-	playerGender.printEx(playerGender.getWidth() / 2, (playerGender.getHeight() / 4) * 3, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", GENDER_NAMES[g].c_str());
-	TCODConsole::blit(&playerGender, 0, 0, 0, 0, &window, playerClass.getWidth() + playerRace.getWidth(), 0, 1.f, 1.f);
-
-	TCODConsole playerName((world.viewLevel.width / 3) * 3, (world.viewLevel.height / 4));
 	TCOD_key_t key;
-  bool first=true;
-	do
+	bool first = true;
+	while (!world.requestQuit)
 	{
-		playerName.clear();
-		playerName.printFrame(0, 0, playerName.getWidth(), playerName.getHeight(), true, TCOD_BKGND_DEFAULT, "Name");
-		playerName.printEx(20, playerName.getHeight() / 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "NAME: %s", pn.c_str());
-		TCODConsole::blit(&playerName, 0, 0, 0, 0, &window, 0, playerClass.getHeight(), 1.f, 1.f);
-		TCODConsole::root->clear();
-		TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, world.viewLevel.x, world.viewLevel.y, 1.f, 0.9f);
-		TCODConsole::root->flush();
+		CharGen::draw(c, r, g, pn);
 		key = world.player->waitForKeypress(true);
-		if ( key.vk == TCODK_ENTER || key.vk == TCODK_KPENTER) break;
-		if ( key.vk == TCODK_BACKSPACE && pn.size() > 0) pn.erase(pn.end() - 1);
+		if (key.vk == TCODK_ENTER || key.vk == TCODK_KPENTER) break;
+		if (key.vk == TCODK_BACKSPACE && pn.size() > 0)
+		{
+			pn.erase(pn.end() - 1);
+			first = false;
+		}
 		else if (CharGen::isNameChar(key.c))
 		{
-      if(first)
-      {
-        first = false;
-        pn.clear();
-      }
-			if ( pn.size() < 15) pn.append(1, key.c);
+			if (first) pn.clear();
+			first = false;
+			if (pn.size() < 15) pn.append(1, key.c);
 		}
 	}
-	while (!world.requestQuit);
-	return pn;
+	return pn == "" ? "Nameless" : pn;
+}
+
+void CharGen::draw(PlayerClass c, PlayerRace r, Gender g, const std::string& name)
+{
+	const Viewport& view = CharGen::view;
+	TCODConsole window(view.width, view.height);
+
+	TCODConsole playerClass(view.width / 3, view.height * 3 / 4 );
+	playerClass.printFrame(0, 0, playerClass.getWidth(), playerClass.getHeight(), true, TCOD_BKGND_DEFAULT, "Class");
+	if (c == NUM_CLASS)
+	{
+		for (int i=0; i<NUM_CLASS; i++)
+		{
+			playerClass.printEx(2, 2 + 2*i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%c - %s", util::letters[i], CLASS_NAMES[i].c_str());
+		}
+		playerClass.printEx(2, playerClass.getHeight() - 3, TCOD_BKGND_DEFAULT, TCOD_LEFT, "r - random");
+	}
+	else
+	{
+		TCODImage classImage("warrior.png");
+		classImage.blit(&playerClass, playerClass.getWidth() / 2.f, playerClass.getHeight() / 2.f);
+		playerClass.printEx(playerClass.getWidth() / 2, (playerClass.getHeight() / 4) * 3, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", CLASS_NAMES[c].c_str());
+	}
+	TCODConsole::blit(&playerClass, 0, 0, 0, 0, &window, 0, 0, 1.f, 1.f);
+
+	TCODConsole playerRace(view.width / 3, view.height * 3 / 4 );
+	playerRace.printFrame(0, 0, playerRace.getWidth(), playerRace.getHeight(), true, TCOD_BKGND_DEFAULT, "Race");
+	if (c != NUM_CLASS && r == NUM_RACE)
+	{
+		for (int i=0; i<NUM_RACE; i++)
+		{
+			if (ClassRace[c][i])	playerRace.printEx(2, 2 + 2*i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%c - %s", util::letters[i], RACE_NAMES[i].c_str());
+		}
+		playerRace.printEx(2, playerRace.getHeight() - 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "r - random");
+	}
+	else if (r != NUM_RACE)
+	{
+		TCODImage raceImage("warrior.png");
+		raceImage.blit(&playerRace, playerRace.getWidth() / 2.f, playerRace.getHeight() / 2.f);
+		playerRace.printEx(playerRace.getWidth() / 2, (playerRace.getHeight() / 4) * 3, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", RACE_NAMES[r].c_str());	
+	}
+	TCODConsole::blit(&playerRace, 0, 0, 0, 0, &window, playerClass.getWidth(), 0, 1.f, 1.f);
+
+	TCODConsole playerGender(view.width / 3, view.height * 3 / 4 );
+	playerGender.printFrame(0, 0, playerGender.getWidth(), playerGender.getHeight(), true, TCOD_BKGND_DEFAULT, "Gender");
+	if (r != NUM_RACE && g == NUM_GENDER)
+	{
+		for (int i=0; i<NUM_GENDER; i++)
+		{
+			playerGender.printEx(2, 2 + 2*i, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%c - %s", util::letters[i], GENDER_NAMES[i].c_str());
+		}
+		playerGender.printEx(2, playerGender.getHeight() - 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "r - random");
+	}
+	else if (g != NUM_GENDER)
+	{
+		TCODImage genderImage("warrior.png");
+		genderImage.blit(&playerGender, playerGender.getWidth() / 2.f, playerGender.getHeight() / 2.f);
+		playerGender.printEx(playerGender.getWidth() / 2, (playerGender.getHeight() / 4) * 3, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", GENDER_NAMES[g].c_str());
+	}
+	TCODConsole::blit(&playerGender, 0, 0, 0, 0, &window, playerClass.getWidth() + playerRace.getWidth(), 0, 1.f, 1.f);
+
+	TCODConsole playerName(view.width, view.height - view.height * 3 / 4);
+	playerName.printFrame(0, 0, playerName.getWidth(), playerName.getHeight(), true, TCOD_BKGND_DEFAULT, "Name");
+	playerName.printEx(20, playerName.getHeight() / 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Name: %s", name.c_str());
+	TCODConsole::blit(&playerName, 0, 0, 0, 0, &window, 0, playerClass.getHeight(), 1.f, 1.f);
+	
+	TCODConsole::root->clear();
+	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, view.x, view.y, 1.f, 0.9f);
+	TCODConsole::root->flush();
+}
+
+char CharGen::waitForChar()
+{
+	TCOD_key_t key;
+	while (!world.requestQuit)
+	{
+		key = world.player->waitForKeypress(true);
+		if (key.c >= 'a' && key.c <= 'z') return key.c;
+	}
+	return 'a';
 }
 
 bool CharGen::isNameChar(char c)
