@@ -2,6 +2,7 @@
 #define _CHARGEN_HPP
 
 #include <string>
+#include "utility.hpp"
 
 class Creature;
 
@@ -62,11 +63,15 @@ namespace CharGen
 	    "Druid", "Sorcerer", "Musketeer", "Alchemist", "Scholar"
 	                                            };
 	static std::string GENDER_NAMES[NUM_GENDER] = { "male", "female" };
+	static Viewport view(8,2,63,45);
+	
 	void generate();
 	PlayerClass choose_class();
 	PlayerRace choose_race(PlayerClass c);
 	Gender choose_gender(PlayerClass c, PlayerRace r);
 	std::string choose_name(PlayerClass c, PlayerRace r, Gender g);
+	void draw(PlayerClass c, PlayerRace r, Gender g, const std::string& name);
+	char waitForChar();
 	bool isNameChar(char x);
 }
 
