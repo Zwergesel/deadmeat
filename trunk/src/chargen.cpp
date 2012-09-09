@@ -2,6 +2,7 @@
 #include "creature.hpp"
 #include "world.hpp"
 #include "utility.hpp"
+#include <iostream>
 
 void CharGen::generate()
 {
@@ -89,6 +90,7 @@ void CharGen::draw(PlayerClass c, PlayerRace r, Gender g, const std::string& nam
 {
 	const Viewport& view = CharGen::view;
 	TCODConsole window(view.width, view.height);
+	int imgWidth, imgHeight;
 
 	TCODConsole playerClass(view.width / 3, view.height * 3 / 4 );
 	playerClass.printFrame(0, 0, playerClass.getWidth(), playerClass.getHeight(), true, TCOD_BKGND_DEFAULT, "Class");
@@ -103,8 +105,10 @@ void CharGen::draw(PlayerClass c, PlayerRace r, Gender g, const std::string& nam
 	else
 	{
 		TCODImage classImage("warrior.png");
-		classImage.blit(&playerClass, playerClass.getWidth() / 2.f, playerClass.getHeight() / 2.f);
-		playerClass.printEx(playerClass.getWidth() / 2, (playerClass.getHeight() / 4) * 3, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", CLASS_NAMES[c].c_str());
+		classImage.setKeyColor(TCODColor::fuchsia);
+		classImage.getSize(&imgWidth, &imgHeight);
+		classImage.blitRect(&playerClass, playerClass.getWidth() / 2 - imgWidth / 2, 3);
+		playerClass.printEx(playerClass.getWidth() / 2, playerClass.getHeight() - 5, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", CLASS_NAMES[c].c_str());
 	}
 	TCODConsole::blit(&playerClass, 0, 0, 0, 0, &window, 0, 0, 1.f, 1.f);
 
@@ -121,8 +125,10 @@ void CharGen::draw(PlayerClass c, PlayerRace r, Gender g, const std::string& nam
 	else if (r != NUM_RACE)
 	{
 		TCODImage raceImage("warrior.png");
-		raceImage.blit(&playerRace, playerRace.getWidth() / 2.f, playerRace.getHeight() / 2.f);
-		playerRace.printEx(playerRace.getWidth() / 2, (playerRace.getHeight() / 4) * 3, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", RACE_NAMES[r].c_str());	
+		raceImage.setKeyColor(TCODColor::fuchsia);
+		raceImage.getSize(&imgWidth,&imgHeight);
+		raceImage.blitRect(&playerRace, playerRace.getWidth() / 2 - imgWidth / 2, 3);
+		playerRace.printEx(playerRace.getWidth() / 2, playerRace.getHeight() - 5, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", RACE_NAMES[r].c_str());	
 	}
 	TCODConsole::blit(&playerRace, 0, 0, 0, 0, &window, playerClass.getWidth(), 0, 1.f, 1.f);
 
@@ -139,8 +145,10 @@ void CharGen::draw(PlayerClass c, PlayerRace r, Gender g, const std::string& nam
 	else if (g != NUM_GENDER)
 	{
 		TCODImage genderImage("warrior.png");
-		genderImage.blit(&playerGender, playerGender.getWidth() / 2.f, playerGender.getHeight() / 2.f);
-		playerGender.printEx(playerGender.getWidth() / 2, (playerGender.getHeight() / 4) * 3, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", GENDER_NAMES[g].c_str());
+		genderImage.setKeyColor(TCODColor::fuchsia);
+		genderImage.getSize(&imgWidth, &imgHeight);
+		genderImage.blitRect(&playerGender, playerGender.getWidth() / 2 - imgWidth / 2, 3);
+		playerGender.printEx(playerGender.getWidth() / 2, playerGender.getHeight() - 5, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", GENDER_NAMES[g].c_str());
 	}
 	TCODConsole::blit(&playerGender, 0, 0, 0, 0, &window, playerClass.getWidth() + playerRace.getWidth(), 0, 1.f, 1.f);
 

@@ -44,7 +44,7 @@ enum Gender
 
 namespace CharGen
 {
-  static bool ClassRace[NUM_CLASS][NUM_RACE] = {
+  const static bool ClassRace[NUM_CLASS][NUM_RACE] = {
                         /* HUM DWA ELF ORC DRA GOL IMP UND */
     /*Warrior*/       {     1,  1,  1,  1,  1,  1,  0,  1},
     /*Rogue*/         {     1,  0,  1,  0,  1,  0,  1,  1},
