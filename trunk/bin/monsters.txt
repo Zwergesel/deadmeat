@@ -911,7 +911,7 @@ enchantment: 1
 name: voodoo book named 'Cripple'
 formatFlags: 65536
 symbol: 21
-color: 229, 152, 255
+color: 229, 153, 255
 amount: 1
 weight: 6
 active: false
@@ -931,7 +931,7 @@ spell: 3
 name: elemental book named 'Fireball'
 formatFlags: 65536
 symbol: 21
-color: 152, 203, 255
+color: 153, 203, 255
 amount: 1
 weight: 6
 active: false
@@ -951,7 +951,7 @@ spell: 1
 name: voodoo book named 'Inner Demons'
 formatFlags: 65536
 symbol: 21
-color: 216, 101, 255
+color: 216, 102, 255
 amount: 1
 weight: 6
 active: false
