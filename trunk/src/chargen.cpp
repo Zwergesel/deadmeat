@@ -104,7 +104,9 @@ void CharGen::draw(PlayerClass c, PlayerRace r, Gender g, const std::string& nam
 	}
 	else
 	{
-		TCODImage classImage("warrior.png");
+		std::stringstream ss;
+		ss << "assets/chargen/class-" << CLASS_NAMES[c] << ".png";
+		TCODImage classImage(ss.str().c_str());
 		classImage.setKeyColor(TCODColor::fuchsia);
 		classImage.getSize(&imgWidth, &imgHeight);
 		classImage.blitRect(&playerClass, playerClass.getWidth() / 2 - imgWidth / 2, 3);
@@ -124,7 +126,9 @@ void CharGen::draw(PlayerClass c, PlayerRace r, Gender g, const std::string& nam
 	}
 	else if (r != NUM_RACE)
 	{
-		TCODImage raceImage("warrior.png");
+		std::stringstream ss;
+		ss << "assets/chargen/race-" << RACE_NAMES[r] << ".png";
+		TCODImage raceImage(ss.str().c_str());
 		raceImage.setKeyColor(TCODColor::fuchsia);
 		raceImage.getSize(&imgWidth,&imgHeight);
 		raceImage.blitRect(&playerRace, playerRace.getWidth() / 2 - imgWidth / 2, 3);
@@ -144,7 +148,9 @@ void CharGen::draw(PlayerClass c, PlayerRace r, Gender g, const std::string& nam
 	}
 	else if (g != NUM_GENDER)
 	{
-		TCODImage genderImage("warrior.png");
+		std::stringstream ss;
+		ss << "assets/chargen/gender-" << GENDER_NAMES[g] << ".png";
+		TCODImage genderImage(ss.str().c_str());
 		genderImage.setKeyColor(TCODColor::fuchsia);
 		genderImage.getSize(&imgWidth, &imgHeight);
 		genderImage.blitRect(&playerGender, playerGender.getWidth() / 2 - imgWidth / 2, 3);
