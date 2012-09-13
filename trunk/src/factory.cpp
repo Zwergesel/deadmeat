@@ -76,7 +76,7 @@ Factory::Factory()
 {
 }
 
-Creature* Factory::spawnCreature(std::string monsterclass)
+Creature* Factory::spawnCreature(const std::string& monsterclass)
 {
 	auto it = creatures.find(monsterclass);
 	assert(it != creatures.end());
@@ -89,7 +89,7 @@ Creature* Factory::spawnCreature(std::string monsterclass)
 	return spawned;
 }
 
-void Factory::setTemplate(std::string monsterclass, Creature* c, const InventoryTable& inv)
+void Factory::setTemplate(const std::string& monsterclass, Creature* c, const InventoryTable& inv)
 {
 	Creature* nc = c->clone();
 	auto it = creatures.find(monsterclass);
@@ -105,7 +105,7 @@ void Factory::setTemplate(std::string monsterclass, Creature* c, const Inventory
 	}
 }
 
-Item* Factory::spawnItem(std::string itemclass, bool randomize)
+Item* Factory::spawnItem(const std::string& itemclass, bool randomize)
 {
 	auto it = items.find(itemclass);
 	assert(it != items.end());
@@ -114,7 +114,7 @@ Item* Factory::spawnItem(std::string itemclass, bool randomize)
 	return item;
 }
 
-void Factory::setTemplate(std::string itemclass, Item* i)
+void Factory::setTemplate(const std::string& itemclass, Item* i)
 {
 	Item* ni = i->clone();
 	auto it = items.find(itemclass);
@@ -127,6 +127,16 @@ void Factory::setTemplate(std::string itemclass, Item* i)
 	{
 		items.insert(it, std::make_pair(itemclass, ni));
 	}
+}
+
+bool Factory::creatureExists(const std::string& monsterclass)
+{
+	return creatures.find(monsterclass) != creatures.end();
+}
+
+bool Factory::itemExists(const std::string& itemclass)
+{
+	return items.find(itemclass) != items.end();
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/

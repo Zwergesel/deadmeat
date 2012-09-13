@@ -64,11 +64,14 @@ private:
 
 public:
 	Factory();
-	Creature* spawnCreature(std::string monsterclass);
-	Item* spawnItem(std::string itemclass, bool randomize = false);
+	Creature* spawnCreature(const std::string& monsterclass);
+	Item* spawnItem(const std::string& itemclass, bool randomize = false);
 
-	void setTemplate(std::string monsterclass, Creature* c, const InventoryTable& inv = InventoryTable());
-	void setTemplate(std::string itemclass, Item* i);
+	void setTemplate(const std::string& monsterclass, Creature* c, const InventoryTable& inv = InventoryTable());
+	void setTemplate(const std::string& itemclass, Item* i);
+	
+	bool creatureExists(const std::string& monsterclass);
+	bool itemExists(const std::string& itemclass);
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);

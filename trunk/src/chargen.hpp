@@ -2,6 +2,7 @@
 #define _CHARGEN_HPP
 
 #include <string>
+#include <vector>
 #include "utility.hpp"
 
 class Creature;
@@ -73,6 +74,7 @@ namespace CharGen
 	void draw(PlayerClass c, PlayerRace r, Gender g, const std::string& name);
 	char waitForChar();
 	bool isNameChar(char x);
+	std::vector<std::string> generateStartItems(PlayerClass c, PlayerRace r, Gender g);
 }
 
 #endif

@@ -1,18 +1,34 @@
+#include <iostream>
+#include <fstream>
+#include <stdexcept>
 #include "chargen.hpp"
 #include "creature.hpp"
 #include "world.hpp"
 #include "utility.hpp"
-#include <iostream>
+#include "factory.hpp"
 
 void CharGen::generate()
 {
+	// Choose class, race, gender
 	PlayerClass c = CharGen::choose_class();
 	PlayerRace r = CharGen::choose_race(c);
 	Gender g = CharGen::choose_gender(c, r);
 	std::string n = CharGen::choose_name(c, r, g);
+	
+	// If quit was requested during generation make sure the game will not get saved
 	if (world.requestQuit) world.gameover = true;
+	
+	// Create a player creature
 	world.player->setName(n);
-	world.player->setCreature(new PlayerCreature(c,r,g));
+	Creature* pc = new PlayerCreature(c,r,g);
+	
+	// Fill inventory
+	std::vector<std::string> items = CharGen::generateStartItems(c, r, g);
+	for (auto it=items.begin(); it!=items.end(); it++)
+	{
+		pc->addItem(factory.spawnItem(*it, true));
+	}
+	world.player->setCreature(pc);
 }
 
 PlayerClass CharGen::choose_class()
@@ -186,4 +202,36 @@ bool CharGen::isNameChar(char c)
 	if (c == ' ' || c == '.' || c == '-' || c == '\'') return true;
 	if (c >= '0' && c <= '9') return true;
 	return false;
+}
+
+std::vector<std::string> CharGen::generateStartItems(PlayerClass c, PlayerRace r, Gender g)
+{
+	std::vector<std::string> items;
+	std::ifstream itemFile;
+	itemFile.open("data/chargen.cfg");
+	if (!itemFile.is_open()) throw std::runtime_error("Missing file 'data/chargen.cfg'"); // TODO: handle this somehow
+	std::string line;
+	bool discard = true;
+	while (!itemFile.eof())
+	{
+		getline(itemFile,line);
+		if (line.size() == 0) continue;
+		if (line[0] == '#') continue;
+		if (line[0] == '[')
+		{
+			size_t split = line.find_first_of(' ');
+			size_t end = line.find_first_of(']');
+			std::string type = line.substr(1, split-1);
+			std::string compare = line.substr(split+1, end-split-1);
+			if (type == "class" && compare == CharGen::CLASS_NAMES[c]) discard = false;
+			else if (type == "race" && compare == CharGen::RACE_NAMES[r]) discard = false;
+			else discard = true;
+		}
+		else if (!discard && factory.itemExists(line))
+		{
+			items.push_back(line);
+		}
+	}
+	itemFile.close();
+	return items;
 }
