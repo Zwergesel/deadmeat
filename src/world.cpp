@@ -91,19 +91,6 @@ void World::newGame()
 	levels[0]->addCreature(player->getCreature(), 0);
 	levelOffset.x = util::clamp(viewLevel.width/2 - newPos.x, viewLevel.width - levels[0]->getWidth(), 0);
 	levelOffset.y = util::clamp(viewLevel.height/2 - newPos.y, viewLevel.height - levels[0]->getHeight(), 0);
-
-	/* Default inventory */
-	player->getCreature()->addItem(factory.spawnItem("dagger", false));
-	player->getCreature()->addItem(factory.spawnItem("lockpick", false));
-	player->getCreature()->addItem(factory.spawnItem("pMinorHeal", false));
-	player->getCreature()->addItem(factory.spawnItem("pHeal", false));
-	player->getCreature()->addItem(factory.spawnItem("pFullHeal", false));
-	player->getCreature()->addItem(factory.spawnItem("pHaste", false));
-	player->getCreature()->addItem(factory.spawnItem("sbCripple", false));
-	player->getCreature()->addItem(factory.spawnItem("sbFrenzy", false));
-	player->getCreature()->addItem(factory.spawnItem("sbFire", false));
-	player->getCreature()->addItem(factory.spawnItem("sbInnerDemons", false));
-	player->getCreature()->addItem(factory.spawnItem("sbFeast", false));	
 }
 
 /* forceBreak is optional (default: false) */
