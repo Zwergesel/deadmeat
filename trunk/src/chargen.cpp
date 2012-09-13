@@ -209,7 +209,7 @@ std::vector<std::string> CharGen::generateStartItems(PlayerClass c, PlayerRace r
 	std::vector<std::string> items;
 	std::ifstream itemFile;
 	itemFile.open("data/chargen.cfg");
-	if (!itemFile.is_open()) throw std::runtime_error("Missing file 'data/chargen.cfg'"); // TODO: handle this somehow
+	if (!itemFile.is_open()) return items;
 	std::string line;
 	bool discard = true;
 	while (!itemFile.eof())
