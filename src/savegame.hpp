@@ -46,6 +46,7 @@ public:
 	SaveBlock& operator()(const std::string& name, int input);
 	SaveBlock& operator()(const std::string& name, unsigned int input);
 	SaveBlock& operator()(const std::string& name, double input);
+  SaveBlock& operator()(const std::string& name, float input);
 	SaveBlock& operator()(const std::string& name, bool input);
 	SaveBlock& operator()(const std::string& name, const Point& input);
 	SaveBlock& operator()(const std::string& name, const TCODColor& input);
@@ -69,6 +70,7 @@ public:
 	LoadBlock& operator()(const std::string& name, int& output);
 	LoadBlock& operator()(const std::string& name, unsigned int& output);
 	LoadBlock& operator()(const std::string& name, double& output);
+  LoadBlock& operator()(const std::string& name, float& output);
 	LoadBlock& operator()(const std::string& name, bool& output);
 	LoadBlock& operator()(const std::string& name, Point& output);
 	LoadBlock& operator()(const std::string& name, TCODColor& output);

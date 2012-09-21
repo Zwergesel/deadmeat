@@ -137,6 +137,13 @@ SaveBlock& SaveBlock::operator()(const std::string& name, double input)
 	return *this;
 }
 
+SaveBlock& SaveBlock::operator()(const std::string& name, float input)
+{
+	data.precision(32);
+	data << name << ": " << input << std::endl;
+	return *this;
+}
+
 SaveBlock& SaveBlock::operator()(const std::string& name, bool input)
 {
 	data << name << ": " << (input ? "true" : "false") << std::endl;
@@ -439,6 +446,18 @@ LoadBlock& LoadBlock::operator()(const std::string& name, double& output)
 	if ((ss >> result).fail())
 	{
 		throw SavegameFormatException("loadDouble _ conversion: " + ss.str());
+	}
+	output = result;
+	return *this;
+}
+
+LoadBlock& LoadBlock::operator()(const std::string& name, float& output)
+{
+	std::stringstream ss(parseLine(name));
+	float result;
+	if ((ss >> result).fail())
+	{
+		throw SavegameFormatException("loadFloat _ conversion: " + ss.str());
 	}
 	output = result;
 	return *this;

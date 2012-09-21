@@ -20,10 +20,7 @@ BasicMonster::BasicMonster(std::string n, uint f, symbol s, TCODColor c, int h, 
 
 BasicMonster::~BasicMonster()
 {
-	for (std::map<symbol, Item*>::iterator it=inventory.begin(); it!=inventory.end(); it++)
-	{
-		delete it->second;
-	}
+  // inventory gets deleted in ~creature
 }
 
 Creature* BasicMonster::clone()
@@ -38,6 +35,7 @@ void BasicMonster::copyFrom(BasicMonster* original)
 	Creature::copyFrom(original);
 	bUseMelee = original->bUseMelee;
 	bUseRanged = original->bUseRanged;
+  bFleePerc = original->bFleePerc;
 	lastSeenPlayer = original->lastSeenPlayer;
 }
 
@@ -82,7 +80,7 @@ int BasicMonster::scoreWeapon(Weapon* weapon)
 
 bool BasicMonster::shouldFlee()
 {
-	return (100.0f * health / maxHealth < bFleePerc) || (getStatusStrength(STATUS_FEAR) > 0);
+	return (100.0f * health / maxHealth <= bFleePerc) || (getStatusStrength(STATUS_FEAR) > 0);
 }
 
 int BasicMonster::doFlee()
@@ -251,7 +249,7 @@ void BasicMonster::storeAll(Savegame& sg, SaveBlock& store)
 {
 	Creature::storeAll(sg, store);
 	store ("lastSeenPlayer", lastSeenPlayer) ("bUseMelee", bUseMelee);
-	store ("bUseRanged", bUseRanged) ("attitude", (int) attitude);
+	store ("bUseRanged", bUseRanged) ("bFleePerc", bFleePerc) ("attitude", (int) attitude);
 }
 
 unsigned int BasicMonster::save(Savegame& sg)
@@ -269,7 +267,7 @@ void BasicMonster::load(LoadBlock& load)
 	Creature::load(load);
 	int a;
 	load ("lastSeenPlayer", lastSeenPlayer) ("bUseMelee", bUseMelee);
-	load ("bUseRanged", bUseRanged) ("attitude", a);
+	load ("bUseRanged", bUseRanged) ("bFleePerc", bFleePerc) ("attitude", a);
 	if (a < 0 || a >= NUM_ATTITUDE) throw SavegameFormatException("BasicMonster::load _ attitude out of bounds");
 	attitude = static_cast<Attitude>(a);
 }
