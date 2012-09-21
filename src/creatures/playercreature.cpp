@@ -13,7 +13,7 @@ PlayerCreature::PlayerCreature(PlayerClass c, PlayerRace r, Gender g) :
 
 void PlayerCreature::affect(Status type, int start, int duration, int strength)
 {
-	if (pclass == CLASS_UNDEAD)
+	if (race == RACE_UNDEAD)
 	{
 		// Poison immunity
 		if (type == STATUS_POISON) return;
