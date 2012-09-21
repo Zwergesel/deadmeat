@@ -50,6 +50,7 @@ enum DamageType
   DAMAGE_FIRE,
   DAMAGE_DROWN,
   DAMAGE_SPIKES,
+  DAMAGE_LIGHTNING,
   NUM_DAMAGETYPE
 };
 
@@ -222,7 +223,9 @@ public:
 	void copyFrom(PlayerCreature*);
 	
 	void affect(Status type, int start, int duration, int strength);
-	
+	bool hurt(int damage, Creature* instigator, DamageType type);
+  PlayerRace getRace();
+
 	virtual void storeAll(Savegame& sg, SaveBlock& store);
 	virtual unsigned int save(Savegame& sg);
 	virtual void load(LoadBlock& load);

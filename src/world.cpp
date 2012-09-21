@@ -294,7 +294,7 @@ void World::drawCharInfo()
 	TCODConsole charInfo(viewLevel.width / 2, 15);
 	charInfo.printFrame(0, 0, charInfo.getWidth(), charInfo.getHeight(), true, TCOD_BKGND_DEFAULT, "Character Information");
 	charInfo.printEx(2, 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s", player->getName().c_str());
-	charInfo.printEx(2, 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, "PLAYERCLASS");
+  charInfo.printEx(2, 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s", player->getCreature()->getName().c_str());
 	charInfo.printEx(2, 6, TCOD_BKGND_DEFAULT, TCOD_LEFT, "PLAYERRACE");
 	charInfo.printEx(2, 8, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Health: %d", player->getCreature()->getHealth().second);
 	charInfo.printEx(2, 10, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Mana: %d", player->getCreature()->getMana().second);

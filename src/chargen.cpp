@@ -29,6 +29,7 @@ void CharGen::generate()
 		pc->addItem(factory.spawnItem(*it, true));
 	}
 	world.player->setCreature(pc);
+  for(int i=0;i<NUM_ATTR;i++) world.player->setAttribute(static_cast<ATTRIBUTE>(i), startAttr[r][i]);
 }
 
 PlayerClass CharGen::choose_class()
@@ -176,7 +177,7 @@ void CharGen::draw(PlayerClass c, PlayerRace r, Gender g, const std::string& nam
 
 	TCODConsole playerName(view.width, view.height - view.height * 3 / 4);
 	playerName.printFrame(0, 0, playerName.getWidth(), playerName.getHeight(), true, TCOD_BKGND_DEFAULT, "Name");
-	playerName.printEx(20, playerName.getHeight() / 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Name: %s", name.c_str());
+	if (g != NUM_GENDER) playerName.printEx(20, playerName.getHeight() / 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Name: %s", name.c_str());
 	TCODConsole::blit(&playerName, 0, 0, 0, 0, &window, 0, playerClass.getHeight(), 1.f, 1.f);
 	
 	TCODConsole::root->clear();
