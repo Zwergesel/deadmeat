@@ -23,6 +23,7 @@
   * Load level data from save files (possible monsters, possible loot, ...)
   * config file
   * Magic system
+  * reload (crossbow, muskeets)
   * Peaceful creatures
 
 == Vertical Steps ==
