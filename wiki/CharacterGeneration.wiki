@@ -19,7 +19,7 @@
 || _Rogue_ || x || || x || || x || x || || x || || ||
 || _Hunter_ || x || x || x || || x || || x || x || || ||
 || _Paladin_ || x || x || || x || x || || || || || ||
-|| _Monk_ || || x || x || x || x || x || || || || ||
+|| _Monk_ || || x || x || x || x || x || || || better unarmed combat (psi bonus? light armor bonus?) || ||
 || _Voodoo-Priest_ || || x || || x || x || x || x || x || || ||
 || _Druid/Witch_ || || x || x || || x || || x || || || ||
 || _Wizard/Sorcerer_ || x || || || x || x || x || x || x || || ||
