@@ -721,33 +721,40 @@ void Creature::readyQuiver(Ammo* ammo)
 // Usage: Process immunities or strength reductions in overloaded method, then call this method
 void Creature::affect(Status type, int start, int duration, int strength)
 {
+	int memory = 0;
+	if (type == STATUS_POISON)
+	{
+		strength = std::min(strength, maxHealth-1);
+	}
+	
+	// Stack with existing effect
 	for (auto it = status.begin(); it != status.end(); it++)
 	{
 		if (it->type == type)
 		{
-			// Stack effect
 			// TODO: decide via type how stacking works
 			it->strength = std::max(it->strength, strength);
 			it->duration = std::max(it->duration, (duration - start));
 			return;
 		}
 	}
-	status.push_back(StatusInfo(type, start, duration, strength));
+	status.push_back(StatusInfo(type, start, duration, strength, memory));
 }
 
 void Creature::updateStatus(int time)
 {
 	for (int d=status.size() - 1; d >= 0; d--)
 	{
-		if (status[d].start >= time)
+		StatusInfo& stat = status[d];
+		if (stat.start >= time)
 		{
-			status[d].start -= time;
+			stat.start -= time;
 			continue;
 		}
-		time -= status[d].start;
-		status[d].start = 0;
+		time -= stat.start;
+		stat.start = 0;
 		// Effect
-		switch (status[d].type)
+		switch (stat.type)
 		{
 		case STATUS_FIRE:
 			if (controlled)
@@ -755,14 +762,23 @@ void Creature::updateStatus(int time)
 				world.addMessage("You are burning!");
 				world.deathReason = "You burnt to death.";
 			}
-			hurt(static_cast<int>(time*status[d].strength/10.0f), NULL, DAMAGE_FIRE);
+			hurt(static_cast<int>(time*stat.strength/10.0f), NULL, DAMAGE_FIRE);
+			break;
+		case STATUS_POISON:
+			if (stat.memory < stat.strength)
+			{
+				int loss = std::min(stat.strength - stat.memory, static_cast<int>(time/5.f));
+				maxHealth -= loss;
+				stat.memory += loss;
+				std::cerr << "Poison took " << loss << " hp, max " << stat.strength << " current " << stat.memory << std::endl;
+			}
 			break;
 		default:
-			std::cerr << name << " has effect " << status[d].type << " strength " << status[d].strength << " for " << status[d].duration << std::endl;
+			std::cerr << name << " has effect " << stat.type << " strength " << stat.strength << " for " << stat.duration << std::endl;
 		}
 		// Reduce duration
-		status[d].duration -= time;
-		if (status[d].duration <= 0) endStatus(status[d].type);
+		stat.duration -= time;
+		if (stat.duration <= 0) endStatus(stat.type);
 	}
 }
 
@@ -775,6 +791,9 @@ void Creature::endStatus(Status type)
 		{
 		case STATUS_FIRE:
 			if (controlled) world.addMessage("The flames go out.");
+			break;
+		case STATUS_POISON:
+			maxHealth += it->memory;
 			break;
 		default:
 			std::cerr << name << " ends effect " << type << std::endl;
@@ -831,7 +850,8 @@ void Creature::storeAll(Savegame& sg, SaveBlock& store)
 	store ("#status", (int) status.size());
 	for (auto it = status.begin(); it != status.end(); it++)
 	{
-		store ("_type", (int) it->type) ("_start", it->start) ("_duration", it->duration) ("_strength", it->strength);
+		store ("_type", (int) it->type) ("_start", it->start) ("_duration", it->duration);
+		store ("_strength", it->strength) ("_memory", it->memory);
 	}
 }
 
@@ -889,7 +909,7 @@ void Creature::load(LoadBlock& load)
 		if (t < 0 || t >= NUM_STATUS) throw SavegameFormatException("Creature::load _ status out of bounds");
 		StatusInfo stat;
 		stat.type = static_cast<Status>(t);
-		load ("_start", stat.start) ("_duration", stat.duration) ("_strength", stat.strength);
+		load ("_start", stat.start) ("_duration", stat.duration) ("_strength", stat.strength) ("_memory", stat.memory);
 		status.push_back(stat);
 	}
 }

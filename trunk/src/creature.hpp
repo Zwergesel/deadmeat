@@ -59,8 +59,9 @@ struct StatusInfo
 	int start;
 	int duration;
 	int strength;
+	int memory;
 	StatusInfo() {};
-	StatusInfo(Status t, int s, int d, int x):type(t),start(s),duration(d),strength(x) {};
+	StatusInfo(Status t, int s, int d, int x, int m):type(t),start(s),duration(d),strength(x),memory(m) {};
 };
 
 class Creature
@@ -210,15 +211,21 @@ public:
 
 class PlayerCreature : public Creature
 {
-public:
-	PlayerCreature();
-	PlayerCreature(PlayerClass c, PlayerRace r, Gender g);
-	void affect(Status type, int start, int duration, int strength);
-	
 private:
 	PlayerClass pclass;
 	PlayerRace race;
 	Gender gender;
+	
+public:
+	PlayerCreature();
+	PlayerCreature(PlayerClass c, PlayerRace r, Gender g);
+	void copyFrom(PlayerCreature*);
+	
+	void affect(Status type, int start, int duration, int strength);
+	
+	virtual void storeAll(Savegame& sg, SaveBlock& store);
+	virtual unsigned int save(Savegame& sg);
+	virtual void load(LoadBlock& load);
 };
 
 #endif

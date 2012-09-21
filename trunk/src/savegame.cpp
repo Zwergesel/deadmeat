@@ -362,6 +362,12 @@ void Savegame::loadObject()
 		objects[id] = static_cast<void*>(obj);
 		obj->load(load);
 	}
+	else if (objClass == "PlayerCreature")
+	{
+		PlayerCreature* obj = new PlayerCreature();
+		objects[id] = static_cast<void*>(obj);
+		obj->load(load);
+	}
 	else if (objClass == "Object")
 	{
 		Object* obj = new Object();
