@@ -16,6 +16,7 @@
   * Rotting corpses should disappear (?)
   * harmfull corpses(poison)
   * Caution should make it possible to detect rotten food
+  * messages for crits
 
 == Major improvements ==
   * Cursed Items (?)
