@@ -1,5 +1,5 @@
 Version: 0.10
-SavedObjects: 54      
+SavedObjects: 77      
 
 [[Weapon: 3]]
 name: x
@@ -9,28 +9,28 @@ color: 255, 0, 127
 amount: 1
 weight: 0
 active: false
-speed: 15
-hitBonus: 50
-baseDamage: 19
-numDice: 3
-diceMax: 7
+speed: 34
+hitBonus: 0
+baseDamage: 20
+numDice: 2
+diceMax: 13
 enchantment: 0
 hands: 0
-effect: 0
+effect: 4
 range: 1
 ammoType: 0
 broken: -1
 
 [[BasicMonster: 2]]
-name: Smaug
-formatFlags: 16385
-symbol: 68
+name: bear
+formatFlags: 16384
+symbol: 66
 position: 0, 0
-color: 255, 0, 0
-health: 300
-maxHealth: 300
-mana: 100
-maxMana: 100
+color: 100, 70, 40
+health: 66
+maxHealth: 66
+mana: 0
+maxMana: 0
 controlled: false
 quiver: 0
 mainWeapon: 0
@@ -38,19 +38,21 @@ armor0: 0
 armor1: 0
 armor2: 0
 baseWeapon: @3
-baseAC: 75
+baseAC: 40
 attackSkill: 0
 defenseSkill: 0
-walkingSpeed: 16
+walkingSpeed: 37
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-expValue: 2500
+expValue: 850
 #inventory: 0
 #spells: 0
 #status: 0
 lastSeenPlayer: -1, -1
 bUseMelee: false
 bUseRanged: false
+bFleePerc: 0
+attitude: -1163005939
 
 [[Weapon: 5]]
 name: x
@@ -60,26 +62,26 @@ color: 255, 0, 127
 amount: 1
 weight: 0
 active: false
-speed: 13
+speed: 32
 hitBonus: 40
 baseDamage: 12
-numDice: 2
-diceMax: 8
+numDice: 3
+diceMax: 7
 enchantment: 0
 hands: 0
-effect: 4
+effect: 0
 range: 1
 ammoType: 0
 broken: -1
 
 [[BasicMonster: 4]]
-name: bear
+name: boar
 formatFlags: 16384
-symbol: 66
+symbol: 98
 position: 0, 0
-color: 100, 70, 40
-health: 100
-maxHealth: 100
+color: 255, 127, 0
+health: 45
+maxHealth: 45
 mana: 0
 maxMana: 0
 controlled: false
@@ -89,19 +91,21 @@ armor0: 0
 armor1: 0
 armor2: 0
 baseWeapon: @5
-baseAC: 0
+baseAC: 50
 attackSkill: 0
 defenseSkill: 0
-walkingSpeed: 14
+walkingSpeed: 32
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-expValue: 500
+expValue: 550
 #inventory: 0
 #spells: 0
 #status: 0
 lastSeenPlayer: -1, -1
 bUseMelee: false
 bUseRanged: false
+bFleePerc: 0
+attitude: -1163005939
 
 [[Weapon: 7]]
 name: x
@@ -111,11 +115,11 @@ color: 255, 0, 127
 amount: 1
 weight: 0
 active: false
-speed: 16
-hitBonus: 15
-baseDamage: 5
-numDice: 1
-diceMax: 10
+speed: 50
+hitBonus: 0
+baseDamage: 25
+numDice: 4
+diceMax: 9
 enchantment: 0
 hands: 0
 effect: 0
@@ -124,13 +128,13 @@ ammoType: 0
 broken: -1
 
 [[BasicMonster: 6]]
-name: blue baby dragon
+name: carnivorous tree
 formatFlags: 16384
-symbol: 100
+symbol: 6
 position: 0, 0
-color: 0, 0, 255
-health: 55
-maxHealth: 55
+color: 48, 79, 53
+health: 60
+maxHealth: 60
 mana: 0
 maxMana: 0
 controlled: false
@@ -140,19 +144,21 @@ armor0: 0
 armor1: 0
 armor2: 0
 baseWeapon: @7
-baseAC: 20
+baseAC: 0
 attackSkill: 0
 defenseSkill: 0
-walkingSpeed: 13
+walkingSpeed: 500
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-expValue: 600
+expValue: 520
 #inventory: 0
 #spells: 0
 #status: 0
 lastSeenPlayer: -1, -1
 bUseMelee: false
 bUseRanged: false
+bFleePerc: 0
+attitude: -1163005939
 
 [[Weapon: 9]]
 name: x
@@ -162,9 +168,9 @@ color: 255, 0, 127
 amount: 1
 weight: 0
 active: false
-speed: 11
+speed: 20
 hitBonus: 0
-baseDamage: 4
+baseDamage: 2
 numDice: 1
 diceMax: 3
 enchantment: 0
@@ -175,13 +181,13 @@ ammoType: 0
 broken: -1
 
 [[BasicMonster: 8]]
-name: goblin
+name: deer
 formatFlags: 16384
-symbol: 103
+symbol: 100
 position: 0, 0
-color: 0, 255, 0
-health: 35
-maxHealth: 35
+color: 127, 95, 63
+health: 25
+maxHealth: 25
 mana: 0
 maxMana: 0
 controlled: false
@@ -191,19 +197,21 @@ armor0: 0
 armor1: 0
 armor2: 0
 baseWeapon: @9
-baseAC: 15
+baseAC: 0
 attackSkill: 0
 defenseSkill: 0
-walkingSpeed: 10
+walkingSpeed: 13
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-expValue: 300
+expValue: 90
 #inventory: 0
 #spells: 0
 #status: 0
 lastSeenPlayer: -1, -1
-bUseMelee: true
-bUseRanged: true
+bUseMelee: false
+bUseRanged: false
+bFleePerc: 100
+attitude: -1163005939
 
 [[Weapon: 11]]
 name: x
@@ -213,11 +221,11 @@ color: 255, 0, 127
 amount: 1
 weight: 0
 active: false
-speed: 25
-hitBonus: 0
-baseDamage: 0
-numDice: 0
-diceMax: 0
+speed: 21
+hitBonus: 30
+baseDamage: 6
+numDice: 2
+diceMax: 5
 enchantment: 0
 hands: 0
 effect: 0
@@ -226,13 +234,13 @@ ammoType: 0
 broken: -1
 
 [[BasicMonster: 10]]
-name: medic
-formatFlags: 32768
-symbol: 64
+name: goblin
+formatFlags: 16384
+symbol: 103
 position: 0, 0
-color: 255, 0, 127
-health: 180
-maxHealth: 180
+color: 0, 255, 0
+health: 30
+maxHealth: 30
 mana: 0
 maxMana: 0
 controlled: false
@@ -242,19 +250,21 @@ armor0: 0
 armor1: 0
 armor2: 0
 baseWeapon: @11
-baseAC: 0
+baseAC: 15
 attackSkill: 0
 defenseSkill: 0
-walkingSpeed: 12
+walkingSpeed: 20
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-expValue: 10
+expValue: 300
 #inventory: 0
 #spells: 0
 #status: 0
 lastSeenPlayer: -1, -1
 bUseMelee: true
 bUseRanged: true
+bFleePerc: 0
+attitude: -1163005939
 
 [[Weapon: 13]]
 name: x
@@ -264,11 +274,11 @@ color: 255, 0, 127
 amount: 1
 weight: 0
 active: false
-speed: 16
-hitBonus: 15
-baseDamage: 5
+speed: 20
+hitBonus: 0
+baseDamage: 2
 numDice: 1
-diceMax: 10
+diceMax: 3
 enchantment: 0
 hands: 0
 effect: 0
@@ -277,13 +287,13 @@ ammoType: 0
 broken: -1
 
 [[BasicMonster: 12]]
-name: purple baby dragon
+name: kobold
 formatFlags: 16384
-symbol: 100
+symbol: 107
 position: 0, 0
-color: 127, 0, 255
-health: 55
-maxHealth: 55
+color: 255, 63, 207
+health: 21
+maxHealth: 21
 mana: 0
 maxMana: 0
 controlled: false
@@ -293,19 +303,21 @@ armor0: 0
 armor1: 0
 armor2: 0
 baseWeapon: @13
-baseAC: 20
+baseAC: 0
 attackSkill: 0
 defenseSkill: 0
-walkingSpeed: 13
+walkingSpeed: 14
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-expValue: 600
+expValue: 200
 #inventory: 0
 #spells: 0
 #status: 0
 lastSeenPlayer: -1, -1
-bUseMelee: false
-bUseRanged: false
+bUseMelee: true
+bUseRanged: true
+bFleePerc: 25
+attitude: -1163005939
 
 [[Weapon: 15]]
 name: x
@@ -315,14 +327,14 @@ color: 255, 0, 127
 amount: 1
 weight: 0
 active: false
-speed: 10
-hitBonus: 0
-baseDamage: 1
+speed: 14
+hitBonus: 20
+baseDamage: 3
 numDice: 1
-diceMax: 12
+diceMax: 5
 enchantment: 0
 hands: 0
-effect: 0
+effect: 3
 range: 1
 ammoType: 0
 broken: -1
@@ -333,6 +345,165 @@ formatFlags: 32768
 symbol: 114
 position: 0, 0
 color: 191, 191, 0
+health: 13
+maxHealth: 13
+mana: 0
+maxMana: 0
+controlled: false
+quiver: 0
+mainWeapon: 0
+armor0: 0
+armor1: 0
+armor2: 0
+baseWeapon: @15
+baseAC: 30
+attackSkill: 0
+defenseSkill: 0
+walkingSpeed: 10
+lastTimeRegen: 0
+lastTimeManaRegen: 0
+expValue: 180
+#inventory: 0
+#spells: 0
+#status: 0
+lastSeenPlayer: -1, -1
+bUseMelee: false
+bUseRanged: false
+bFleePerc: 15
+attitude: -1163005939
+
+[[Weapon: 17]]
+name: x
+formatFlags: 0
+symbol: 35
+color: 255, 0, 127
+amount: 1
+weight: 0
+active: false
+speed: 30
+hitBonus: 22
+baseDamage: 14
+numDice: 1
+diceMax: 5
+enchantment: 0
+hands: 0
+effect: 1
+range: 1
+ammoType: 0
+broken: -1
+
+[[BasicMonster: 16]]
+name: snake
+formatFlags: 16384
+symbol: 115
+position: 0, 0
+color: 95, 191, 0
+health: 23
+maxHealth: 23
+mana: 0
+maxMana: 0
+controlled: false
+quiver: 0
+mainWeapon: 0
+armor0: 0
+armor1: 0
+armor2: 0
+baseWeapon: @17
+baseAC: 0
+attackSkill: 0
+defenseSkill: 0
+walkingSpeed: 12
+lastTimeRegen: 0
+lastTimeManaRegen: 0
+expValue: 420
+#inventory: 0
+#spells: 0
+#status: 0
+lastSeenPlayer: -1, -1
+bUseMelee: false
+bUseRanged: false
+bFleePerc: 0
+attitude: -1163005939
+
+[[Weapon: 19]]
+name: x
+formatFlags: 0
+symbol: 35
+color: 255, 0, 127
+amount: 1
+weight: 0
+active: false
+speed: 42
+hitBonus: 50
+baseDamage: 2
+numDice: 3
+diceMax: 4
+enchantment: 0
+hands: 0
+effect: 0
+range: 6
+ammoType: 0
+broken: -1
+
+[[BasicMonster: 18]]
+name: wisp
+formatFlags: 65536
+symbol: 87
+position: 0, 0
+color: 255, 255, 63
+health: 25
+maxHealth: 25
+mana: 100
+maxMana: 100
+controlled: false
+quiver: 0
+mainWeapon: 0
+armor0: 0
+armor1: 0
+armor2: 0
+baseWeapon: @19
+baseAC: 25
+attackSkill: 0
+defenseSkill: 0
+walkingSpeed: 13
+lastTimeRegen: 0
+lastTimeManaRegen: 0
+expValue: 330
+#inventory: 0
+#spells: 0
+#status: 0
+lastSeenPlayer: -1, -1
+bUseMelee: false
+bUseRanged: false
+bFleePerc: 0
+attitude: -1163005939
+
+[[Weapon: 21]]
+name: x
+formatFlags: 0
+symbol: 35
+color: 255, 0, 127
+amount: 1
+weight: 0
+active: false
+speed: 20
+hitBonus: 22
+baseDamage: 9
+numDice: 2
+diceMax: 7
+enchantment: 0
+hands: 0
+effect: 0
+range: 1
+ammoType: 0
+broken: -1
+
+[[BasicMonster: 20]]
+name: wolf
+formatFlags: 16384
+symbol: 119
+position: 0, 0
+color: 127, 63, 0
 health: 40
 maxHealth: 40
 mana: 0
@@ -343,328 +514,35 @@ mainWeapon: 0
 armor0: 0
 armor1: 0
 armor2: 0
-baseWeapon: @15
-baseAC: 20
-attackSkill: 0
-defenseSkill: 0
-walkingSpeed: 11
-lastTimeRegen: 0
-lastTimeManaRegen: 0
-expValue: 250
-#inventory: 0
-#spells: 0
-#status: 0
-lastSeenPlayer: -1, -1
-bUseMelee: false
-bUseRanged: false
-
-[[Weapon: 17]]
-name: x
-formatFlags: 0
-symbol: 35
-color: 255, 0, 127
-amount: 1
-weight: 0
-active: false
-speed: 16
-hitBonus: 15
-baseDamage: 5
-numDice: 1
-diceMax: 10
-enchantment: 0
-hands: 0
-effect: 0
-range: 1
-ammoType: 0
-broken: -1
-
-[[BasicMonster: 16]]
-name: red baby dragon
-formatFlags: 16384
-symbol: 100
-position: 0, 0
-color: 255, 0, 0
-health: 55
-maxHealth: 55
-mana: 0
-maxMana: 0
-controlled: false
-quiver: 0
-mainWeapon: 0
-armor0: 0
-armor1: 0
-armor2: 0
-baseWeapon: @17
-baseAC: 20
-attackSkill: 0
-defenseSkill: 0
-walkingSpeed: 13
-lastTimeRegen: 0
-lastTimeManaRegen: 0
-expValue: 600
-#inventory: 0
-#spells: 0
-#status: 0
-lastSeenPlayer: -1, -1
-bUseMelee: false
-bUseRanged: false
-
-[[Weapon: 19]]
-name: x
-formatFlags: 0
-symbol: 35
-color: 255, 0, 127
-amount: 1
-weight: 0
-active: false
-speed: 13
-hitBonus: 0
-baseDamage: 3
-numDice: 1
-diceMax: 2
-enchantment: 0
-hands: 0
-effect: 0
-range: 1
-ammoType: 0
-broken: -1
-
-[[BasicMonster: 18]]
-name: sergeant
-formatFlags: 16384
-symbol: 64
-position: 0, 0
-color: 255, 0, 0
-health: 180
-maxHealth: 180
-mana: 0
-maxMana: 0
-controlled: false
-quiver: 0
-mainWeapon: 0
-armor0: 0
-armor1: 0
-armor2: 0
-baseWeapon: @19
-baseAC: 40
-attackSkill: 0
-defenseSkill: 0
-walkingSpeed: 14
-lastTimeRegen: 0
-lastTimeManaRegen: 0
-expValue: 1000
-#inventory: 0
-#spells: 0
-#status: 0
-lastSeenPlayer: -1, -1
-bUseMelee: true
-bUseRanged: true
-
-[[Weapon: 21]]
-name: x
-formatFlags: 0
-symbol: 35
-color: 255, 0, 127
-amount: 1
-weight: 0
-active: false
-speed: 12
-hitBonus: 0
-baseDamage: 6
-numDice: 1
-diceMax: 4
-enchantment: 0
-hands: 0
-effect: 1
-range: 1
-ammoType: 0
-broken: -1
-
-[[BasicMonster: 20]]
-name: snake
-formatFlags: 16384
-symbol: 115
-position: 0, 0
-color: 95, 191, 0
-health: 20
-maxHealth: 20
-mana: 0
-maxMana: 0
-controlled: false
-quiver: 0
-mainWeapon: 0
-armor0: 0
-armor1: 0
-armor2: 0
 baseWeapon: @21
-baseAC: 0
+baseAC: 25
 attackSkill: 0
 defenseSkill: 0
-walkingSpeed: 5
+walkingSpeed: 18
 lastTimeRegen: 0
 lastTimeManaRegen: 0
-expValue: 300
+expValue: 590
 #inventory: 0
 #spells: 0
 #status: 0
 lastSeenPlayer: -1, -1
 bUseMelee: false
 bUseRanged: false
+bFleePerc: 20
+attitude: -1163005939
 
-[[Weapon: 23]]
-name: x
-formatFlags: 0
-symbol: 35
-color: 255, 0, 127
+[[Food: 22]]
+name: apple
+formatFlags: 65536
+symbol: 37
+color: 0, 255, 0
 amount: 1
-weight: 0
+weight: 1
 active: false
-speed: 16
-hitBonus: 0
-baseDamage: 3
-numDice: 1
-diceMax: 2
-enchantment: 0
-hands: 0
-effect: 0
-range: 1
-ammoType: 0
-broken: -1
+nutrition: 1000
+eatTime: 15
 
-[[BasicMonster: 22]]
-name: soldier
-formatFlags: 16384
-symbol: 64
-position: 0, 0
-color: 0, 0, 255
-health: 120
-maxHealth: 120
-mana: 0
-maxMana: 0
-controlled: false
-quiver: 0
-mainWeapon: 0
-armor0: 0
-armor1: 0
-armor2: 0
-baseWeapon: @23
-baseAC: 0
-attackSkill: 0
-defenseSkill: 0
-walkingSpeed: 14
-lastTimeRegen: 0
-lastTimeManaRegen: 0
-expValue: 600
-#inventory: 0
-#spells: 0
-#status: 0
-lastSeenPlayer: -1, -1
-bUseMelee: true
-bUseRanged: true
-
-[[Weapon: 25]]
-name: x
-formatFlags: 0
-symbol: 35
-color: 255, 0, 127
-amount: 1
-weight: 0
-active: false
-speed: 14
-hitBonus: 0
-baseDamage: 3
-numDice: 2
-diceMax: 3
-enchantment: 0
-hands: 0
-effect: 0
-range: 1
-ammoType: 0
-broken: -1
-
-[[BasicMonster: 24]]
-name: spider
-formatFlags: 32768
-symbol: 115
-position: 0, 0
-color: 255, 0, 127
-health: 15
-maxHealth: 15
-mana: 0
-maxMana: 0
-controlled: false
-quiver: 0
-mainWeapon: 0
-armor0: 0
-armor1: 0
-armor2: 0
-baseWeapon: @25
-baseAC: 60
-attackSkill: 0
-defenseSkill: 0
-walkingSpeed: 8
-lastTimeRegen: 0
-lastTimeManaRegen: 0
-expValue: 150
-#inventory: 0
-#spells: 0
-#status: 0
-lastSeenPlayer: -1, -1
-bUseMelee: false
-bUseRanged: false
-
-[[Weapon: 27]]
-name: x
-formatFlags: 0
-symbol: 35
-color: 255, 0, 127
-amount: 1
-weight: 0
-active: false
-speed: 18
-hitBonus: 20
-baseDamage: 14
-numDice: 1
-diceMax: 5
-enchantment: 0
-hands: 0
-effect: 0
-range: 1
-ammoType: 0
-broken: -1
-
-[[BasicMonster: 26]]
-name: troll
-formatFlags: 16384
-symbol: 84
-position: 0, 0
-color: 0, 0, 191
-health: 80
-maxHealth: 80
-mana: 0
-maxMana: 0
-controlled: false
-quiver: 0
-mainWeapon: 0
-armor0: 0
-armor1: 0
-armor2: 0
-baseWeapon: @27
-baseAC: 40
-attackSkill: 0
-defenseSkill: 0
-walkingSpeed: 15
-lastTimeRegen: 0
-lastTimeManaRegen: 0
-expValue: 750
-#inventory: 0
-#spells: 0
-#status: 0
-lastSeenPlayer: -1, -1
-bUseMelee: false
-bUseRanged: false
-
-[[Ammo: 28]]
+[[Ammo: 23]]
 name: arrow
 formatFlags: 65536
 symbol: 47
@@ -676,18 +554,75 @@ enchantment: 0
 effect: 0
 ammoType: 1
 
-[[Food: 29]]
-name: beefsteak
+[[Weapon: 24]]
+name: axe
+formatFlags: 65536
+symbol: 40
+color: 127, 127, 127
+amount: 1
+weight: 60
+active: false
+speed: 20
+hitBonus: 18
+baseDamage: 18
+numDice: 2
+diceMax: 10
+enchantment: 0
+hands: 2
+effect: 0
+range: 1
+ammoType: 0
+broken: 0
+
+[[Armor: 25]]
+name: bandana
+formatFlags: 65536
+symbol: 41
+color: 255, 0, 0
+amount: 1
+weight: 4
+active: false
+defense: 1
+hindrance: 0
+slot: 2
+enchantment: 1
+
+[[Corpse: 26]]
+name: bear corpse
 formatFlags: 65536
 symbol: 37
-color: 191, 95, 0
+color: 100, 70, 40
 amount: 1
-weight: 3
+weight: 250
 active: false
-nutrition: 2500
-eatTime: 100
+nutrition: 2400
+eatTime: 110
+rotTime: 2000
 
-[[Ammo: 30]]
+[[Food: 27]]
+name: berries
+formatFlags: 65536
+symbol: 37
+color: 143, 0, 191
+amount: 1
+weight: 1
+active: false
+nutrition: 1000
+eatTime: 15
+
+[[Corpse: 28]]
+name: boar corpse
+formatFlags: 65536
+symbol: 37
+color: 255, 127, 0
+amount: 1
+weight: 175
+active: false
+nutrition: 2200
+eatTime: 100
+rotTime: 2000
+
+[[Ammo: 29]]
 name: bolt
 formatFlags: 65536
 symbol: 47
@@ -698,6 +633,17 @@ active: false
 enchantment: 0
 effect: 0
 ammoType: 2
+
+[[Food: 30]]
+name: bread
+formatFlags: 65536
+symbol: 37
+color: 127, 95, 63
+amount: 1
+weight: 6
+active: false
+nutrition: 2000
+eatTime: 70
 
 [[Ammo: 31]]
 name: bullet
@@ -712,48 +658,81 @@ effect: 0
 ammoType: 3
 
 [[Armor: 32]]
-name: clown shoes
-formatFlags: 65544
+name: chainmail
+formatFlags: 65536
 symbol: 41
-color: 0, 0, 0
+color: 159, 159, 159
 amount: 1
-weight: 5
+weight: 40
 active: false
-defense: -30
-hindrance: 12
-slot: 1
-enchantment: -1
+defense: 15
+hindrance: 3
+slot: 0
+enchantment: 0
 
 [[Weapon: 33]]
+name: club
+formatFlags: 65536
+symbol: 40
+color: 127, 95, 63
+amount: 1
+weight: 40
+active: false
+speed: 20
+hitBonus: 15
+baseDamage: 10
+numDice: 1
+diceMax: 10
+enchantment: 0
+hands: 2
+effect: 0
+range: 1
+ammoType: 0
+broken: 0
+
+[[Armor: 34]]
+name: cooking pot
+formatFlags: 65536
+symbol: 41
+color: 127, 127, 127
+amount: 1
+weight: 30
+active: false
+defense: 2
+hindrance: 5
+slot: 2
+enchantment: 0
+
+[[Weapon: 35]]
 name: crossbow
 formatFlags: 65536
 symbol: 40
 color: 0, 0, 255
 amount: 1
-weight: 15
+weight: 40
 active: false
-speed: 35
+speed: 30
 hitBonus: 25
-baseDamage: 40
-numDice: 3
-diceMax: 10
+baseDamage: 15
+numDice: 2
+diceMax: 8
 enchantment: 0
-hands: 1
+hands: 2
 effect: 0
 range: 20
 ammoType: 2
 broken: 0
 
-[[Weapon: 34]]
+[[Weapon: 36]]
 name: dagger
 formatFlags: 65536
 symbol: 40
-color: 255, 0, 0
+color: 255, 63, 63
 amount: 1
-weight: 2
+weight: 4
 active: false
-speed: 7
-hitBonus: 10
+speed: 10
+hitBonus: 25
 baseDamage: 8
 numDice: 1
 diceMax: 4
@@ -764,7 +743,64 @@ range: 1
 ammoType: 0
 broken: 0
 
-[[Gold: 35]]
+[[Corpse: 37]]
+name: deer corpse
+formatFlags: 65536
+symbol: 37
+color: 127, 95, 63
+amount: 1
+weight: 100
+active: false
+nutrition: 2800
+eatTime: 100
+rotTime: 2000
+
+[[Armor: 38]]
+name: elven sandals
+formatFlags: 65544
+symbol: 41
+color: 127, 255, 0
+amount: 1
+weight: 10
+active: false
+defense: 10
+hindrance: 0
+slot: 1
+enchantment: 0
+
+[[Weapon: 39]]
+name: foresters axe
+formatFlags: 65536
+symbol: 40
+color: 203, 203, 203
+amount: 1
+weight: 40
+active: false
+speed: 15
+hitBonus: 15
+baseDamage: 12
+numDice: 2
+diceMax: 4
+enchantment: 0
+hands: 2
+effect: 0
+range: 1
+ammoType: 0
+broken: 0
+
+[[Corpse: 40]]
+name: goblin corpse
+formatFlags: 65536
+symbol: 37
+color: 0, 255, 0
+amount: 1
+weight: 50
+active: false
+nutrition: 900
+eatTime: 30
+rotTime: 2000
+
+[[Gold: 41]]
 name: gold
 formatFlags: 4
 symbol: 36
@@ -773,17 +809,17 @@ amount: 1
 weight: 0
 active: false
 
-[[Weapon: 36]]
+[[Weapon: 42]]
 name: halberd
 formatFlags: 65536
 symbol: 40
-color: 255, 0, 0
+color: 255, 255, 0
 amount: 1
-weight: 20
+weight: 80
 active: false
-speed: 22
+speed: 30
 hitBonus: 40
-baseDamage: 15
+baseDamage: 20
 numDice: 2
 diceMax: 10
 enchantment: 0
@@ -793,7 +829,104 @@ range: 1
 ammoType: 0
 broken: 0
 
-[[Weapon: 37]]
+[[Weapon: 43]]
+name: hammer
+formatFlags: 65536
+symbol: 40
+color: 255, 127, 0
+amount: 1
+weight: 40
+active: false
+speed: 15
+hitBonus: 15
+baseDamage: 12
+numDice: 1
+diceMax: 4
+enchantment: 0
+hands: 2
+effect: 0
+range: 1
+ammoType: 0
+broken: 0
+
+[[Armor: 44]]
+name: iron boots
+formatFlags: 65544
+symbol: 41
+color: 203, 203, 203
+amount: 1
+weight: 30
+active: false
+defense: 15
+hindrance: 5
+slot: 1
+enchantment: 0
+
+[[Armor: 45]]
+name: iron helmet
+formatFlags: 65536
+symbol: 41
+color: 203, 203, 203
+amount: 1
+weight: 30
+active: false
+defense: 5
+hindrance: 2
+slot: 2
+enchantment: 1
+
+[[Corpse: 46]]
+name: kobold corpse
+formatFlags: 65536
+symbol: 37
+color: 255, 63, 207
+amount: 1
+weight: 40
+active: false
+nutrition: 800
+eatTime: 30
+rotTime: 3200
+
+[[Armor: 47]]
+name: leather armor
+formatFlags: 65536
+symbol: 41
+color: 127, 95, 63
+amount: 1
+weight: 30
+active: false
+defense: 10
+hindrance: 1
+slot: 0
+enchantment: 0
+
+[[Armor: 48]]
+name: leather boots
+formatFlags: 65544
+symbol: 41
+color: 127, 95, 63
+amount: 1
+weight: 20
+active: false
+defense: 10
+hindrance: 2
+slot: 1
+enchantment: 0
+
+[[Armor: 49]]
+name: leather cap
+formatFlags: 65536
+symbol: 41
+color: 127, 95, 63
+amount: 1
+weight: 20
+active: false
+defense: 3
+hindrance: 1
+slot: 2
+enchantment: 1
+
+[[Weapon: 50]]
 name: lightsaber
 formatFlags: 65536
 symbol: 40
@@ -813,193 +946,47 @@ range: 1
 ammoType: 0
 broken: -1
 
-[[Tool: 38]]
+[[Tool: 51]]
 name: lockpick
 formatFlags: 65536
 symbol: 91
-color: 255, 0, 0
-amount: 1
-weight: 1
-active: false
-tool: 0
-
-[[Weapon: 39]]
-name: longbow
-formatFlags: 65536
-symbol: 40
-color: 0, 255, 255
+color: 0, 0, 0
 amount: 1
 weight: 10
 active: false
-speed: 25
+tool: 0
+
+[[Weapon: 52]]
+name: longbow
+formatFlags: 65536
+symbol: 40
+color: 0, 191, 191
+amount: 1
+weight: 30
+active: false
+speed: 20
 hitBonus: 25
-baseDamage: 30
+baseDamage: 10
 numDice: 2
-diceMax: 10
+diceMax: 6
 enchantment: 0
-hands: 1
+hands: 2
 effect: 0
 range: 30
 ammoType: 1
 broken: 0
 
-[[Food: 40]]
-name: meat ball
+[[Weapon: 53]]
+name: longsword
 formatFlags: 65536
-symbol: 37
-color: 255, 127, 0
-amount: 1
-weight: 1
-active: false
-nutrition: 1000
-eatTime: 15
-
-[[Potion: 41]]
-name: full heal potion
-formatFlags: 65536
-symbol: 33
+symbol: 40
 color: 191, 0, 0
 amount: 1
-weight: 3
+weight: 30
 active: false
-potion: 2
-
-[[Potion: 42]]
-name: haste potion
-formatFlags: 65536
-symbol: 33
-color: 0, 0, 255
-amount: 1
-weight: 3
-active: false
-potion: 3
-
-[[Potion: 43]]
-name: heal potion
-formatFlags: 65536
-symbol: 33
-color: 255, 0, 0
-amount: 1
-weight: 3
-active: false
-potion: 1
-
-[[Potion: 44]]
-name: minor heal potion
-formatFlags: 65536
-symbol: 33
-color: 255, 63, 63
-amount: 1
-weight: 3
-active: false
-potion: 0
-
-[[Armor: 45]]
-name: prussian pickelhaube
-formatFlags: 65536
-symbol: 41
-color: 0, 0, 0
-amount: 1
-weight: 5
-active: false
-defense: 50
-hindrance: 0
-slot: 2
-enchantment: 1
-
-[[SpellBook: 46]]
-name: voodoo book named 'Cripple'
-formatFlags: 65536
-symbol: 21
-color: 229, 152, 255
-amount: 1
-weight: 6
-active: false
-spell: 0
-
-[[SpellBook: 47]]
-name: voodoo book named 'Feast'
-formatFlags: 65536
-symbol: 21
-color: 210, 76, 255
-amount: 1
-weight: 6
-active: false
-spell: 3
-
-[[SpellBook: 48]]
-name: elemental book named 'Fireball'
-formatFlags: 65536
-symbol: 21
-color: 152, 203, 255
-amount: 1
-weight: 6
-active: false
-spell: 4
-
-[[SpellBook: 49]]
-name: voodoo book named 'Frenzy'
-formatFlags: 65536
-symbol: 21
-color: 223, 127, 255
-amount: 1
-weight: 6
-active: false
-spell: 1
-
-[[SpellBook: 50]]
-name: voodoo book named 'Inner Demons'
-formatFlags: 65536
-symbol: 21
-color: 216, 101, 255
-amount: 1
-weight: 6
-active: false
-spell: 2
-
-[[Weapon: 51]]
-name: slingshot
-formatFlags: 65536
-symbol: 40
-color: 63, 63, 255
-amount: 1
-weight: 1
-active: false
-speed: 15
-hitBonus: 35
-baseDamage: 10
-numDice: 1
-diceMax: 10
-enchantment: 0
-hands: 1
-effect: 0
-range: 10
-ammoType: 3
-broken: 0
-
-[[Corpse: 52]]
-name: snake corpse
-formatFlags: 65536
-symbol: 37
-color: 95, 191, 0
-amount: 1
-weight: 15
-active: false
-nutrition: 800
-eatTime: 20
-rotTime: 400
-
-[[Weapon: 53]]
-name: long sword
-formatFlags: 65536
-symbol: 40
-color: 255, 0, 0
-amount: 1
-weight: 10
-active: false
-speed: 15
+speed: 20
 hitBonus: 20
-baseDamage: 12
+baseDamage: 18
 numDice: 2
 diceMax: 8
 enchantment: 0
@@ -1009,99 +996,451 @@ range: 1
 ammoType: 0
 broken: 0
 
-[[Armor: 54]]
-name: uber armor
-formatFlags: 65552
+[[Food: 54]]
+name: meat (raw)
+formatFlags: 65536
+symbol: 37
+color: 255, 63, 63
+amount: 1
+weight: 6
+active: false
+nutrition: 500
+eatTime: 100
+
+[[Potion: 55]]
+name: full heal potion
+formatFlags: 65536
+symbol: 33
+color: 191, 0, 0
+amount: 1
+weight: 3
+active: false
+potion: 2
+
+[[Potion: 56]]
+name: haste potion
+formatFlags: 65536
+symbol: 33
+color: 0, 0, 255
+amount: 1
+weight: 3
+active: false
+potion: 3
+
+[[Potion: 57]]
+name: heal potion
+formatFlags: 65536
+symbol: 33
+color: 255, 0, 0
+amount: 1
+weight: 3
+active: false
+potion: 1
+
+[[Potion: 58]]
+name: minor heal potion
+formatFlags: 65536
+symbol: 33
+color: 255, 63, 63
+amount: 1
+weight: 3
+active: false
+potion: 0
+
+[[Armor: 59]]
+name: platemail
+formatFlags: 65536
 symbol: 41
+color: 95, 95, 95
+amount: 1
+weight: 60
+active: false
+defense: 25
+hindrance: 7
+slot: 0
+enchantment: 0
+
+[[Corpse: 60]]
+name: rat corpse
+formatFlags: 65536
+symbol: 37
+color: 191, 191, 0
+amount: 1
+weight: 10
+active: false
+nutrition: 500
+eatTime: 20
+rotTime: 3200
+
+[[Food: 61]]
+name: sandwich
+formatFlags: 65536
+symbol: 37
+color: 255, 127, 0
+amount: 1
+weight: 6
+active: false
+nutrition: 2500
+eatTime: 100
+
+[[SpellBook: 62]]
+name: voodoo book named 'Cripple'
+formatFlags: 65536
+symbol: 21
+color: 229, 152, 255
+amount: 1
+weight: 40
+active: false
+spell: 0
+
+[[SpellBook: 63]]
+name: voodoo book named 'Feast'
+formatFlags: 65536
+symbol: 21
+color: 210, 76, 255
+amount: 1
+weight: 40
+active: false
+spell: 3
+
+[[SpellBook: 64]]
+name: elemental book named 'Fireball'
+formatFlags: 65536
+symbol: 21
+color: 152, 203, 255
+amount: 1
+weight: 40
+active: false
+spell: 7
+
+[[SpellBook: 65]]
+name: voodoo book named 'Frenzy'
+formatFlags: 65536
+symbol: 21
+color: 223, 127, 255
+amount: 1
+weight: 40
+active: false
+spell: 1
+
+[[SpellBook: 66]]
+name: voodoo book named 'Inner Demons'
+formatFlags: 65536
+symbol: 21
+color: 216, 101, 255
+amount: 1
+weight: 40
+active: false
+spell: 2
+
+[[Armor: 67]]
+name: scalemail
+formatFlags: 65536
+symbol: 41
+color: 127, 127, 127
+amount: 1
+weight: 50
+active: false
+defense: 20
+hindrance: 5
+slot: 0
+enchantment: 0
+
+[[Weapon: 68]]
+name: shortbow
+formatFlags: 65536
+symbol: 40
+color: 63, 255, 255
+amount: 1
+weight: 20
+active: false
+speed: 15
+hitBonus: 25
+baseDamage: 8
+numDice: 2
+diceMax: 4
+enchantment: 0
+hands: 2
+effect: 0
+range: 30
+ammoType: 1
+broken: 0
+
+[[Weapon: 69]]
+name: shortsword
+formatFlags: 65536
+symbol: 40
+color: 255, 0, 0
+amount: 1
+weight: 20
+active: false
+speed: 15
+hitBonus: 23
+baseDamage: 12
+numDice: 1
+diceMax: 8
+enchantment: 0
+hands: 1
+effect: 0
+range: 1
+ammoType: 0
+broken: 0
+
+[[Weapon: 70]]
+name: slingshot
+formatFlags: 65536
+symbol: 40
+color: 63, 63, 255
+amount: 1
+weight: 4
+active: false
+speed: 10
+hitBonus: 30
+baseDamage: 6
+numDice: 2
+diceMax: 4
+enchantment: 0
+hands: 2
+effect: 0
+range: 10
+ammoType: 3
+broken: 0
+
+[[Corpse: 71]]
+name: snake corpse
+formatFlags: 65536
+symbol: 37
+color: 95, 191, 0
+amount: 1
+weight: 10
+active: false
+nutrition: 400
+eatTime: 20
+rotTime: 2000
+
+[[Weapon: 72]]
+name: staff
+formatFlags: 65536
+symbol: 40
 color: 0, 0, 0
 amount: 1
-weight: 30
+weight: 40
 active: false
-defense: 100
-hindrance: 10
+speed: 20
+hitBonus: 40
+baseDamage: 10
+numDice: 2
+diceMax: 8
+enchantment: 0
+hands: 2
+effect: 0
+range: 1
+ammoType: 0
+broken: 0
+
+[[Armor: 73]]
+name: voodoo mask
+formatFlags: 65536
+symbol: 41
+color: 0, 255, 0
+amount: 1
+weight: 20
+active: false
+defense: 4
+hindrance: 2
+slot: 2
+enchantment: 0
+
+[[Weapon: 74]]
+name: warhammer
+formatFlags: 65536
+symbol: 40
+color: 191, 95, 0
+amount: 1
+weight: 60
+active: false
+speed: 20
+hitBonus: 15
+baseDamage: 10
+numDice: 3
+diceMax: 10
+enchantment: 0
+hands: 2
+effect: 0
+range: 1
+ammoType: 0
+broken: 0
+
+[[Armor: 75]]
+name: wizard hat
+formatFlags: 65536
+symbol: 41
+color: 191, 0, 255
+amount: 1
+weight: 10
+active: false
+defense: 1
+hindrance: 0
+slot: 2
+enchantment: 0
+
+[[Armor: 76]]
+name: wizard robe
+formatFlags: 65536
+symbol: 41
+color: 191, 0, 255
+amount: 1
+weight: 20
+active: false
+defense: 10
+hindrance: 2
 slot: 0
-enchantment: 2
+enchantment: 0
+
+[[Corpse: 77]]
+name: wolf corpse
+formatFlags: 65536
+symbol: 37
+color: 127, 63, 0
+amount: 1
+weight: 100
+active: false
+nutrition: 1400
+eatTime: 80
+rotTime: 2000
 
 [[Factory: 1]]
-#creatures: 13
-_spawnName: Smaug
-_creature: @2
+#creatures: 10
 _spawnName: bear
+_creature: @2
+_spawnName: boar
 _creature: @4
-_spawnName: blue baby dragon
+_spawnName: carnitree
 _creature: @6
-_spawnName: goblin
+_spawnName: deer
 _creature: @8
-_spawnName: medic
+_spawnName: goblin
 _creature: @10
-_spawnName: purple baby dragon
+_spawnName: kobold
 _creature: @12
 _spawnName: rat
 _creature: @14
-_spawnName: red baby dragon
-_creature: @16
-_spawnName: sergeant
-_creature: @18
 _spawnName: snake
+_creature: @16
+_spawnName: wisp
+_creature: @18
+_spawnName: wolf
 _creature: @20
-_spawnName: soldier
-_creature: @22
-_spawnName: spider
-_creature: @24
-_spawnName: troll
-_creature: @26
-#items: 27
+#items: 56
+_spawnName: apple
+_item: @22
 _spawnName: arrows
+_item: @23
+_spawnName: axe
+_item: @24
+_spawnName: bandana
+_item: @25
+_spawnName: bear corpse
+_item: @26
+_spawnName: berries
+_item: @27
+_spawnName: boar corpse
 _item: @28
-_spawnName: beefsteak
-_item: @29
 _spawnName: bolts
+_item: @29
+_spawnName: bread
 _item: @30
 _spawnName: bullets
 _item: @31
-_spawnName: clown shoes
+_spawnName: chainmail
 _item: @32
-_spawnName: crossbow
+_spawnName: club
 _item: @33
-_spawnName: dagger
+_spawnName: cooking pot
 _item: @34
-_spawnName: gold
+_spawnName: crossbow
 _item: @35
-_spawnName: halberd
+_spawnName: dagger
 _item: @36
-_spawnName: lightsaber
+_spawnName: deer corpse
 _item: @37
-_spawnName: lockpick
+_spawnName: elvensandals
 _item: @38
-_spawnName: longbow
+_spawnName: foresters axe
 _item: @39
-_spawnName: meatball
+_spawnName: goblin corpse
 _item: @40
-_spawnName: pFullHeal
+_spawnName: gold
 _item: @41
-_spawnName: pHaste
+_spawnName: halberd
 _item: @42
-_spawnName: pHeal
+_spawnName: hammer
 _item: @43
-_spawnName: pMinorHeal
+_spawnName: ironboots
 _item: @44
-_spawnName: pickelhaube
+_spawnName: ironhelmet
 _item: @45
-_spawnName: sbCripple
+_spawnName: kobold corpse
 _item: @46
-_spawnName: sbFeast
+_spawnName: leatherarmor
 _item: @47
-_spawnName: sbFire
+_spawnName: leatherboots
 _item: @48
-_spawnName: sbFrenzy
+_spawnName: leathercap
 _item: @49
-_spawnName: sbInnerDemons
+_spawnName: lightsaber
 _item: @50
-_spawnName: slingshot
+_spawnName: lockpick
 _item: @51
-_spawnName: snake corpse
+_spawnName: longbow
 _item: @52
-_spawnName: sword
+_spawnName: longsword
 _item: @53
-_spawnName: uber armor
+_spawnName: meat
 _item: @54
+_spawnName: pFullHeal
+_item: @55
+_spawnName: pHaste
+_item: @56
+_spawnName: pHeal
+_item: @57
+_spawnName: pMinorHeal
+_item: @58
+_spawnName: platemail
+_item: @59
+_spawnName: rat corpse
+_item: @60
+_spawnName: sandwich
+_item: @61
+_spawnName: sbCripple
+_item: @62
+_spawnName: sbFeast
+_item: @63
+_spawnName: sbFire
+_item: @64
+_spawnName: sbFrenzy
+_item: @65
+_spawnName: sbInnerDemons
+_item: @66
+_spawnName: scalemail
+_item: @67
+_spawnName: shortbow
+_item: @68
+_spawnName: shortsword
+_item: @69
+_spawnName: slingshot
+_item: @70
+_spawnName: snake corpse
+_item: @71
+_spawnName: staff
+_item: @72
+_spawnName: voodoomask
+_item: @73
+_spawnName: warhammer
+_item: @74
+_spawnName: wizardhat
+_item: @75
+_spawnName: wizardrobe
+_item: @76
+_spawnName: wolf corpse
+_item: @77
