@@ -25,6 +25,8 @@ World::World()
 	time = 0;
 	clearMessage = false;
 	deathReason = "";
+  debug_fov = 0;
+  debug_god = 0;
 }
 
 World::~World()
@@ -257,8 +259,15 @@ void World::drawWorld()
 	// fov
 	buildFovMap();
 	fovMap->computeFov(player->getCreature()->getPos().x, player->getCreature()->getPos().y, 0, true, FOV_BASIC);
-
-	TCODConsole::root->clear();
+  
+  if(debug_fov)
+  {
+    for(int y=0;y<fovMap->getHeight();y++)
+      for(int x=0;x<fovMap->getWidth();x++) 
+        fovMap->setInFov(x,y,true);
+  }
+	
+  TCODConsole::root->clear();
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);
 	STATE state = player->getState();
 	if (state == STATE_INVENTORY || state == STATE_PICKUP || state == STATE_WIELD || state == STATE_WEAR
@@ -563,6 +572,12 @@ void World::cleanGarbage()
 		garbage.pop_front();
 		if (current != NULL) delete current;
 	}
+}
+
+void World::debugInput(std::string in)
+{
+  if(in.compare("fov") == 0) debug_fov = (debug_fov+1)%2;
+  if(in.compare("god") == 0) debug_god = (debug_god+1)%2;
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/

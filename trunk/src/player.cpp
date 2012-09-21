@@ -130,6 +130,12 @@ TCOD_key_t Player::waitForKeypress(bool clBuf)
 		{
 			TCODSystem::saveScreenshot(NULL);
 		}
+    else if (key.pressed && key.vk == TCODK_F6)
+    {
+      std::string in;
+      std::cin >> in;
+      world.debugInput(in);
+    }
 		else if (key.pressed)
 		{
 			if (world.getNumMessages() > 0) world.clearMessage = true;
