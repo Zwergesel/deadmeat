@@ -213,6 +213,12 @@ class PlayerCreature : public Creature
 public:
 	PlayerCreature();
 	PlayerCreature(PlayerClass c, PlayerRace r, Gender g);
+	void affect(Status type, int start, int duration, int strength);
+	
+private:
+	PlayerClass pclass;
+	PlayerRace race;
+	Gender gender;
 };
 
 #endif
