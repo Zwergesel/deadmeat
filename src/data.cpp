@@ -137,7 +137,7 @@ void fillFactoryTemplates()
   factory.setTemplate("shortbow", &shortbow);
 	factory.setTemplate("crossbow", &crossbow);
 	factory.setTemplate("slingshot", &slingshot);
-	factory.setTemplate("pot", &pot);
+	factory.setTemplate("cooking pot", &pot);
   factory.setTemplate("wizardhat", &wizardhat);
   factory.setTemplate("voodoomask", &voodoomask);
   factory.setTemplate("bandana", &bandana);
