@@ -14,7 +14,7 @@ BasicMonster::BasicMonster()
 BasicMonster::BasicMonster(std::string n, uint f, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws, int exp, const std::string& cn, bool wm, bool wr, float fl):
 	Creature(n,f,s,c,h,m,w,a,ws,exp,cn),
 	bUseMelee(wm), bUseRanged(wr), bFleePerc(fl),
-	lastSeenPlayer(Point(-1,-1))
+	lastSeenPlayer(Point(-1,-1)), attitude(ATTITUDE_HOSTILE)
 {
 }
 
@@ -251,7 +251,7 @@ void BasicMonster::storeAll(Savegame& sg, SaveBlock& store)
 {
 	Creature::storeAll(sg, store);
 	store ("lastSeenPlayer", lastSeenPlayer) ("bUseMelee", bUseMelee);
-	store ("bUseRanged", bUseRanged);
+	store ("bUseRanged", bUseRanged) ("attitude", (int) attitude);
 }
 
 unsigned int BasicMonster::save(Savegame& sg)
@@ -267,6 +267,9 @@ unsigned int BasicMonster::save(Savegame& sg)
 void BasicMonster::load(LoadBlock& load)
 {
 	Creature::load(load);
+	int a;
 	load ("lastSeenPlayer", lastSeenPlayer) ("bUseMelee", bUseMelee);
-	load ("bUseRanged", bUseRanged);
+	load ("bUseRanged", bUseRanged) ("attitude", a);
+	if (a < 0 || a >= NUM_ATTITUDE) throw SavegameFormatException("BasicMonster::load _ attitude out of bounds");
+	attitude = static_cast<Attitude>(a);
 }
