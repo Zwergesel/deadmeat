@@ -11,7 +11,17 @@ Spell g_spells[NUM_SPELL] =
 	Spell("Frenzy", SKILL_VOODOO, 20, 20, 20, false, false),
 	Spell("Inner Demons", SKILL_VOODOO, 30, 30, 30, true, false),
 	Spell("Feast", SKILL_VOODOO, 40, 40, 40, true, false),
-	Spell("Fire", SKILL_ELEMENTAL, 10, 10, 10, true, true)
+	Spell("Raise Undead", SKILL_VOODOO, 50, 50, 50, true, false),
+	Spell("Trance", SKILL_VOODOO, 60, 60, 60, false, false),
+	Spell("Soul Switch", SKILL_VOODOO, 100, 40, 80, true, false),
+	Spell("Fire", SKILL_ELEMENTAL, 10, 10, 10, true, true),
+	Spell("Force Field", SKILL_PSIONIC, 10, 10, 10, true, false),
+	Spell("Guardian Shield", SKILL_PSIONIC, 20, 10, 20, false, false),
+	Spell("Blink", SKILL_PSIONIC, 30, 10, 30, true, false),
+	Spell("Force Cage", SKILL_PSIONIC, 40, 20, 40, true, false),
+	Spell("Chrono Boost", SKILL_PSIONIC, 50, 10, 50, false, false),
+	Spell("Recall", SKILL_PSIONIC, 70, 20, 70, false, false),
+	Spell("Invisibility", SKILL_PSIONIC, 90, 10, 80, false, false)
 };
 
 
