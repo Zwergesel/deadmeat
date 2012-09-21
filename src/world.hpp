@@ -40,6 +40,10 @@ public:
 	std::deque<Creature*> garbage;
 	std::string deathReason;
 
+  /* debug parameters / cheat codes */
+  int debug_fov;
+  int debug_god;
+
 	World();
 	~World();
 
@@ -68,6 +72,8 @@ public:
 	void travel();
 
 	void cleanGarbage();
+
+  void debugInput(std::string);
 
 	unsigned int save(Savegame& sg);
 	void load(LoadBlock& load);
