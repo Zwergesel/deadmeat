@@ -11,4 +11,10 @@
 || Goblin || 3 || Normal || Normal || Low || None || Can use weapons ||
 || Snake || 5 || Fast || Slow || High || None || Bite is poisonous ||
 || Kobold || 6 || Fast || Slow || Low || None || Use ranged weapons (slings, rocks) and keep their distance ||
+|| Bär || 7 || Slow || Normal || Very High || Heavy || Knockback ||
+|| Wolf || 5 || Fast || Normal || Medium || Medium || Spawn in packs ||
+|| Wildschwein || 4 || Slow || Slow || Very High || Medium || Charge ||
+|| Reh || 1 || Fast || Normal || Very low || Weak || Flees always, lots of tasty meat ||
+|| Wisp || 3 || Fast || Very slow || Low || None || Walks through trees, ranged attack ||
+|| Carnivorous tree || 6 || Immobile || Very slow || Extreme || High || disguised as normal tree, holds player ||
 || Troll || 14 || Slow || Very Slow || High || Medium || Immune to many effects, high regeneration rate ||
