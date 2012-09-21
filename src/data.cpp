@@ -15,12 +15,9 @@
 void fillFactoryTemplates()
 {
 	// Add/edit/remove creature templates here
-	BasicMonster goblin("goblin", F_MALE, 'g', TCODColor::green, 35, 0, Weapon(11, 0, 4, 1, 3, EFFECT_NONE, 1, AMMO_NONE), 15, 10, 300, "", true, true, 20.0);
-	BasicMonster snake("snake", F_MALE , 's', TCODColor::darkChartreuse, 20, 0, Weapon(12, 0, 6, 1, 4, EFFECT_POISON, 1, AMMO_NONE), 0, 5, 300, "snake corpse", false, false, 0);
+	/*
 	BasicMonster troll("troll", F_MALE, 'T', TCODColor::darkBlue, 80, 0, Weapon(18, 20, 14, 1, 5, EFFECT_NONE, 1, AMMO_NONE), 40, 15, 750, "", false, false, 0);
 	BasicMonster spider("spider", F_FEMALE, 's', TCODColor::pink, 15, 0, Weapon(14, 0, 3, 2, 3, EFFECT_NONE, 1, AMMO_NONE), 60, 8, 150, "", false, false, 0);
-	BasicMonster rat("rat", F_FEMALE, 'r', TCODColor::darkYellow, 40, 0, Weapon(10, 0, 1, 1, 12, EFFECT_NONE, 1, AMMO_NONE), 20, 11, 250, "", false, false, 0);
-	BasicMonster bear("bear", F_MALE, 'B', TCODColor(100, 70, 40), 100, 0, Weapon(13, 40, 12, 2, 8, EFFECT_KNOCKBACK, 1, AMMO_NONE), 0, 14, 500, "", false, false, 0);
 	BasicMonster soldier("soldier", F_MALE, '@', TCODColor::blue, 120, 0, Weapon(16, 0, 3, 1, 2, EFFECT_NONE, 1, AMMO_NONE), 0, 14, 600, "", true, true, 0.25);
 	BasicMonster sergeant("sergeant", F_MALE, '@', TCODColor::red, 180, 0, Weapon(13, 0, 3, 1, 2, EFFECT_NONE, 1, AMMO_NONE), 40, 14, 1000, "", true, true, 0.25);
 	BasicMonster medic("medic", F_FEMALE, '@', TCODColor::pink, 180, 0, Weapon(25, 0, 0, 0, 0, EFFECT_NONE, 1, AMMO_NONE), 0, 12, 10, "", true, true, 0.5);
@@ -28,32 +25,52 @@ void fillFactoryTemplates()
 	BasicMonster purbaby("purple baby dragon", F_MALE, 'd', TCODColor::violet, 55, 0, Weapon(16, 15, 5, 1, 10, EFFECT_NONE, 1, AMMO_NONE), 20, 13, 600, "", false, false, 0);
 	BasicMonster blubaby("blue baby dragon", F_MALE, 'd', TCODColor::blue, 55, 0, Weapon(16, 15, 5, 1, 10, EFFECT_NONE, 1, AMMO_NONE), 20, 13, 600, "", false, false, 0);
 	BasicMonster dragon("Smaug", F_PROPER | F_MALE, 'D', TCODColor::red, 300, 100, Weapon(15, 50, 19, 3, 7, EFFECT_NONE, 1, AMMO_NONE), 75, 16, 2500, "", false, false, 0);
+	*/
+	
+	BasicMonster deer("deer", F_MALE, 'd', TCODColor::desaturatedOrange, 25, 0, Weapon(20, 0, 2, 1, 3, EFFECT_NONE, 1, AMMO_NONE), 0, 13, 90, "deer corpse", false, false, 100.f);
+	BasicMonster rat("rat", F_FEMALE, 'r', TCODColor::darkYellow, 13, 0, Weapon(14, 20, 3, 1, 5, EFFECT_DISEASE, 1, AMMO_NONE), 30, 10, 180, "rat corpse", false, false, 15.f);
+	BasicMonster kobold("kobold", F_MALE, 'k', TCODColor::lightMagenta, 21, 0, Weapon(20, 0, 2, 1, 3, EFFECT_NONE, 1, AMMO_NONE), 0, 14, 200, "kobold corpse", true, true, 25.f);
+	BasicMonster goblin("goblin", F_MALE, 'g', TCODColor::green, 30, 0, Weapon(21, 30, 6, 2, 5, EFFECT_NONE, 1, AMMO_NONE), 15, 20, 300, "goblin corpse", true, true, 0.f);
+	BasicMonster wisp("wisp", F_NEUTER, 'W', TCODColor::lightYellow, 25, 100, Weapon(42, 50, 2, 3, 4, EFFECT_NONE, 6, AMMO_NONE), 25, 13, 330, "", false, false, 0.f);
+	BasicMonster boar("boar", F_MALE, 'B', TCODColor::orange, 45, 0, Weapon(32, 40, 12, 3, 7, EFFECT_NONE, 1, AMMO_NONE), 50, 32, 550, "boar corpse", false, false, 0.f);
+	BasicMonster snake("snake", F_MALE, 's', TCODColor::darkChartreuse, 23, 0, Weapon(30, 22, 14, 1, 5, EFFECT_POISON, 1, AMMO_NONE), 0, 12, 420, "snake corpse", false, false, 0.f);
+	BasicMonster wolf("wolf", F_MALE, 'W', TCODColor::darkerOrange, 40, 0, Weapon(20, 22, 9, 2, 7, EFFECT_NONE, 1, AMMO_NONE), 25, 18, 590, "wolf corpse", false, false, 20.f);
+	BasicMonster carnitree("carnivorous tree", F_MALE, 6, TCODColor(48, 79, 53), 60, 0, Weapon(50, 0, 25, 4, 9, EFFECT_NONE, 1, AMMO_NONE), 0, 500, 520, "", false, false, 0.f);
+	BasicMonster bear("bear", F_MALE, 6, TCODColor(100, 70, 40), 66, 0, Weapon(34, 0, 20, 2, 13, EFFECT_KNOCKBACK, 1, AMMO_NONE), 40, 37, 850, "bear corpse", false, false, 0.f);
+	// name, flags, symbol, color, health, mana, weapon(spd, hit, dmg, dice, dmax, effect, range, ammo), armor, walkspeed, experience, corpse, meele wep, ranged wep, fleeperc (0-100)
 
-	Corpse snake_c("snake corpse", F_NEUTER, '%', TCODColor::darkChartreuse, 15, 800, 20, 400);
+	Corpse deer_c("deer corpse", F_NEUTER, '%', TCODColor::desaturatedOrange, 100, 2800, 100, 2000);
+	Corpse rat_c("rat corpse", F_NEUTER, '%', TCODColor::darkYellow, 10, 500, 20, 3200);
+	Corpse kobold_c("kobold corpse", F_NEUTER, '%', TCODColor::lightMagenta, 40, 800, 30, 3200);
+	Corpse goblin_c("goblin corpse", F_NEUTER, '%', TCODColor::green, 50, 900, 30, 2000);
+	Corpse boar_c("boar corpse", F_NEUTER, '%', TCODColor::orange, 175, 2200, 100, 2000);
+	Corpse snake_c("snake corpse", F_NEUTER, '%', TCODColor::darkChartreuse, 10, 400, 20, 2000);
+	Corpse wolf_c("wolf corpse", F_NEUTER, '%', TCODColor::darkerOrange, 100, 1400, 80, 2000);
+	Corpse bear_c("bear corpse", F_NEUTER, '%', TCODColor(100, 70, 40), 250, 2400, 110, 2000);
 
-	InventoryTable fighter_weapons;
-	std::vector<std::string> wpns;
-	wpns.push_back("halberd");
-	wpns.push_back("sword");
-	wpns.push_back("dagger");
-	fighter_weapons.add(wpns, 850, 1, 1);
-	fighter_weapons.add("longbow", 200);
+	InventoryTable inv_kobold;
+	inv_kobold.add("slingshot", 1000);
+	inv_kobold.add("bullets", 1000);
 
-	factory.setTemplate("goblin", &goblin);
-	factory.setTemplate("snake", &snake);
-	factory.setTemplate("troll", &troll);
-	factory.setTemplate("spider", &spider);
+	factory.setTemplate("deer", &deer);
 	factory.setTemplate("rat", &rat);
+	factory.setTemplate("kobold", &kobold, inv_kobold);
+	factory.setTemplate("goblin", &goblin);
+	factory.setTemplate("wisp", &wisp);
+	factory.setTemplate("boar", &boar);
+	factory.setTemplate("snake", &snake);
+	factory.setTemplate("wolf", &wolf);
+	factory.setTemplate("carnitree", &carnitree);
 	factory.setTemplate("bear", &bear);
-	factory.setTemplate("soldier", &soldier, fighter_weapons);
-	factory.setTemplate("sergeant", &sergeant, fighter_weapons);
-	factory.setTemplate("medic", &medic);
-	factory.setTemplate("red baby dragon", &redbaby);
-	factory.setTemplate("purple baby dragon", &purbaby);
-	factory.setTemplate("blue baby dragon", &blubaby);
-	factory.setTemplate("Smaug", &dragon);
 
+	factory.setTemplate("deer corpse", &deer_c);
+	factory.setTemplate("rat corpse", &rat_c);
+	factory.setTemplate("kobold corpse", &kobold_c);
+	factory.setTemplate("goblin corpse", &goblin_c);
+	factory.setTemplate("boar corpse", &boar_c);
 	factory.setTemplate("snake corpse", &snake_c);
+	factory.setTemplate("wolf corpse", &wolf_c);
+	factory.setTemplate("bear corpse", &bear_c);
 
 	Weapon lightsaber("lightsaber", F_NEUTER, '(', TCODColor::red, 1, 1, 8, 30, 1, 10, 20, 30, 1, EFFECT_NONE, 1, AMMO_NONE, -1);
 	Weapon sword("long sword", F_NEUTER, '(', TCODColor::red, 1, 10, 15, 20, 12, 2, 8, 0, 1, EFFECT_NONE, 1, AMMO_NONE, 0);
