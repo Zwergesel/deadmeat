@@ -77,24 +77,44 @@ void LevelGen::generateWorld()
 void LevelGen::loadLootTable()
 {
 	/* Melee Weapons */
-	loot.add("sword", 45);
-	loot.add("dagger", 90);
-	loot.add("halberd", 30);
-	loot.add("lightsaber", 5);
+	loot.add("dagger", 60);
+  loot.add("shortsword", 55);
+  loot.add("longsword", 30);	
+	loot.add("halberd", 20);
+  loot.add("staff", 30);
+  loot.add("axe", 30);
+  loot.add("foresters axe", 70);
+  loot.add("hammer", 70);
+  loot.add("warhammer", 20);
+  loot.add("club", 70);
 
 	/* Ranged Weapons */
-	loot.add("longbow", 30);
-	loot.add("crossbow", 30);
-	loot.add("slingshot", 80);
+  loot.add("shortbow", 30);
+	loot.add("longbow", 20);
+	loot.add("crossbow", 10);
+	loot.add("slingshot", 40);
 
 	/* Armor */
-	loot.add("uber armor", 30);
-	loot.add("pickelhaube", 70);
-	loot.add("clown shoes", 50);
+	loot.add("cooking pot", 50);
+	loot.add("wizardhat", 10);
+	loot.add("voodoomask", 10);
+  loot.add("bandana", 40);
+  loot.add("leathercap", 30);
+  loot.add("ironhelmet", 20);
+  loot.add("leatherboots", 40);
+  loot.add("ironboots", 10);
+  loot.add("elvensandals", 5);
+  loot.add("leatherarmor", 20);
+  loot.add("chainmail", 15);
+  loot.add("scalemail", 10);
+  loot.add("platemail", 5);
+  loot.add("wizardrobe", 5);
 
-	/* Food */
-	loot.add("beefsteak", 150);
-	loot.add("meatball", 300);
+	/* Food */	
+	loot.add("sandwich", 200);
+  loot.add("bread", 300);
+  loot.add("apple", 400);
+  loot.add("berries", 500);
 
 	/* Ammo */
 	loot.add("arrows", 100);
@@ -108,10 +128,10 @@ void LevelGen::loadLootTable()
 	loot.add("gold", 350);
 
 	/* Potions */
-	loot.add("pMinorHeal", 300);
-	loot.add("pHeal", 200);
-	loot.add("pFullHeal", 100);
-	loot.add("pHaste", 50);
+	loot.add("pMinorHeal", 200);
+	loot.add("pHeal", 100);
+	loot.add("pFullHeal", 50);
+	loot.add("pHaste", 10);
 
 	/* Spellbooks */
 	loot.add("sbCripple", 20);
