@@ -7,3 +7,7 @@
   * *armor class*: 0 (minimum) bis 50 (Endspiel)
   * *armor hindrance*: 1:1 mit turn time
   * *skills*: 0 - 100
+  * *normal walk speed*: 20 (= 2 Sek.)
+  * *player hit points*: 50 (start)
+  * *fists weapon speed*: 20 (= 2 Sek.)
+  * *weight unit*: 1 = 100g
