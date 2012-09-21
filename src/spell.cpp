@@ -89,7 +89,7 @@ bool Spell::cast(SPELL spell, Creature* caster, Point target)
 				world.player->getCreature()->heal(corpse->getNutrition() / 10);
 				world.player->getCreature()->addMana(corpse->getNutrition() / 20);
 				level->removeItem((*it),1,true);
-				world.addMessage("You suck the remaining lifeforce from the corpse.");
+				world.addMessage("You suck the remaining life from the corpse.");
 				return true;
 			}
 		}

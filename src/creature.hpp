@@ -54,6 +54,14 @@ enum DamageType
   NUM_DAMAGETYPE
 };
 
+enum Attitude
+{
+	ATTITUDE_FRIEND,
+	ATTITUDE_PEACEFUL,
+	ATTITUDE_HOSTILE,
+	NUM_ATTITUDE
+};
+
 struct StatusInfo
 {
 	Status type;
@@ -181,6 +189,7 @@ protected:
 	bool bUseRanged;
 	float bFleePerc;
 	Point lastSeenPlayer;
+	Attitude attitude;
 
 	virtual bool usesMeleeWeapons();
 	virtual bool usesRangedWeapons();
@@ -212,7 +221,7 @@ public:
 
 class PlayerCreature : public Creature
 {
-private:
+protected:
 	PlayerClass pclass;
 	PlayerRace race;
 	Gender gender;

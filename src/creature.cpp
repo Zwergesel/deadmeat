@@ -769,6 +769,7 @@ void Creature::updateStatus(int time)
 			{
 				int loss = std::min(stat.strength - stat.memory, static_cast<int>(time/5.f));
 				maxHealth -= loss;
+				health = std::min(health, maxHealth);
 				stat.memory += loss;
 				std::cerr << "Poison took " << loss << " hp, max " << stat.strength << " current " << stat.memory << std::endl;
 			}
