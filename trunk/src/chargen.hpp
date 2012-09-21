@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "utility.hpp"
+#include "skill.hpp"
 
 class Creature;
 
@@ -59,6 +60,19 @@ namespace CharGen
     /*Alchemist*/     {     1,  1,  0,  0,  1,  1,  1,  1},
     /*Scholar*/       {     1,  1,  1,  0,  0,  0,  1,  1}
   };
+  const static int startAttr[NUM_RACE][NUM_ATTR] = {
+                      /* STR DEX CON INT */
+    /*Human*/       {     4,  4,  4,  8},
+    /*Dwarf*/       {     6,  4,  7,  5},
+    /*Elf*/         {     3,  8,  2,  4},
+    /*Orc*/         {     8,  4,  6,  3},
+    /*Dragonborn*/  {     7,  5,  5,  4},
+    /*Golem*/       {     7,  2,  9,  2},
+    /*Imp*/         {     3,  4,  2,  9},
+    /*Undead*/      {     4,  6,  8,  3}
+  };
+
+
 	static std::string RACE_NAMES[NUM_RACE] = { "Human", "Dwarf", "Elf", "Orc", "Dragonborn", "Golem", "Imp", "Undead" };
 	static std::string CLASS_NAMES[NUM_CLASS] = { "Warrior", "Rogue", "Hunter", "Paladin", "Monk", "Voodoo-Priest",
 	    "Druid", "Sorcerer", "Musketeer", "Alchemist", "Scholar"

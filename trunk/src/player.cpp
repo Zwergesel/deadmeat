@@ -58,7 +58,7 @@ Creature* Player::getCreature()
 
 void Player::setCreature(Creature* c)
 {
-	creature = c;
+	creature = static_cast<PlayerCreature*>(c);
 }
 
 Point Player::getCursor()
@@ -873,7 +873,7 @@ int Player::action()
 
 	// hunger, roll for thougness to see if player gets more hungry
 	// TODO: is this a good method?
-	if ( rng->getInt(0, 40) <= 40 - skills[SKILL_NEG_EFFECT].value ) addNutrition(-time);
+	if ( creature->getRace() != RACE_GOLEM && rng->getInt(0, 40) <= 40 - skills[SKILL_NEG_EFFECT].value ) addNutrition(-time);
 
 	return time;
 }
@@ -1482,6 +1482,11 @@ int Player::getAttribute(ATTRIBUTE attr)
 	return attributes[attr];
 }
 
+void Player::setAttribute(ATTRIBUTE attr, int value)
+{
+  attributes[attr] = value;
+}
+
 Skill Player::getSkill(SKILLS skill)
 {
 	return skills[skill];
@@ -1706,7 +1711,7 @@ unsigned int Player::save(Savegame& sg)
 void Player::load(LoadBlock& load)
 {
 	load ("name", name);
-	creature = static_cast<Creature*>(load.ptr("creature"));
+	creature = static_cast<PlayerCreature*>(load.ptr("creature"));
 	int s;
 	load ("state", s) ("nutrition", nutrition);
 	if (s < 0 || s >= NUM_STATE) throw SavegameFormatException("Player::load _ illegal state");
