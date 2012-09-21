@@ -212,7 +212,7 @@ Level* LevelGen::generateCaveLevel(int levelId, int width, int height, float den
 
 	// Cave monsters
 	RandomTable cave;
-	cave.add("goblin", 180).add("spider", 400).add("rat", 250).add("troll", 80);
+	cave.add("goblin", 180).add("kobold", 400).add("rat", 250).add("bear", 80);
 	m->populate(cave, width*height/250);
 	m->placeItems(loot, width*height/350);
 
@@ -478,7 +478,7 @@ Level* LevelGen::generateRoomLevel(int levelId, int width, int height, float roo
 
 	// RoomLevel monsters
 	RandomTable room;
-	room.add("goblin", 300).add("troll", 120).add("rat", 400).add("bear", 220).add("soldier", 100);
+	room.add("kobold", 300).add("goblin", 220).add("rat", 400).add("bear", 50).add("wolf", 180);
 	m->populate(room, width*height/250);
 	m->placeItems(loot, width*height/350);
 
@@ -538,7 +538,7 @@ Level* LevelGen::generateBSPLevel(int levelId, int width, int height, int numSpl
 
 	// BSP monsters
 	RandomTable bspm;
-	bspm.add("soldier", 500).add("sergeant", 80).add("medic", 200);
+	bspm.add("rat", 500).add("goblin", 80).add("kobold", 200);
 	m->populate(bspm, width*height/150);
 	m->placeItems(loot, width*height/350);
 
@@ -600,7 +600,7 @@ Level* LevelGen::generatePlainLevel(int levelId, int width, int height)
 
 	// Meadow monsters
 	RandomTable meadow;
-	meadow.add("goblin", 50).add("snake", 400).add("bear", 200);
+	meadow.add("kobold", 80).add("goblin", 80).add("snake", 100);
 	m->populate(meadow, width*height/800 + 2);
 	m->placeItems(loot, width*height/800 + 1);
 
@@ -723,7 +723,8 @@ Level* LevelGen::generateForestLevel(int levelId, int width, int height)
 
 	// Meadow monsters
 	RandomTable forest;
-	forest.add("goblin", 50).add("snake", 400).add("bear", 200);
+	forest.add("deer", 60).add("rat", 20).add("kobold", 80).add("goblin", 80).add("wisp", 40);
+	forest.add("boar", 60).add("snake", 50).add("wolf", 80).add("carnitree", 10).add("bear", 30);
 	m->populate(forest, width*height/250 + 1);
 	m->placeItems(loot, width*height/250 + 1);
 
