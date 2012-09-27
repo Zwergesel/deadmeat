@@ -104,9 +104,9 @@ void fillFactoryTemplates()
   Armor wizardrobe("wizard robe", F_NEUTER, ')', TCODColor::purple, 1, 20, 10, 0, 2, ARMOR_BODY);
 	Food meat("meat (raw)", F_NEUTER, '%', TCODColor::lightRed, 1, 6, 500, 100);
   Food sandwich("sandwich", F_NEUTER, '%', TCODColor::orange, 1, 6, 2500, 100);
-  Food bread("bread", F_NEUTER, '%', TCODColor::desaturatedOrange, 1, 6, 2000, 70);
-	Food apple("apple", F_NEUTER, '%', TCODColor::green, 1, 1, 1000, 15);
-  Food berries("berries", F_NEUTER, '%', TCODColor::darkPurple, 1, 1, 1000, 15);
+  Food bread("loaf of bread", F_NEUTER, '%', TCODColor::desaturatedOrange, 1, 6, 2000, 70);
+	Food apple("apple", F_NEUTER | F_AN, '%', TCODColor::green, 1, 1, 1000, 15);
+  Food berries("berry", F_NEUTER, '%', TCODColor::darkPurple, 1, 1, 1000, 15);
 	Ammo arrow("arrow", F_NEUTER, '/', TCODColor::cyan, 5, 1, 0, EFFECT_NONE, AMMO_ARROW);
 	Ammo bolt("bolt", F_NEUTER, '/', TCODColor::blue, 5, 1, 0, EFFECT_NONE, AMMO_BOLT);
 	Ammo bullet("bullet", F_NEUTER, '/', TCODColor::lightBlue, 5, 1, 0, EFFECT_NONE, AMMO_BULLET);
@@ -119,7 +119,7 @@ void fillFactoryTemplates()
 	SpellBook v_frenzy("voodoo book named 'Frenzy'", F_NEUTER, 21, TCODColor::lerp(TCODColor::white, TCODColor::purple, 0.5f), 40, SPELL_V_FRENZY);
 	SpellBook v_innerdemons("voodoo book named 'Inner Demons'", F_NEUTER, 21, TCODColor::lerp(TCODColor::white, TCODColor::purple, 0.6f), 40, SPELL_V_INNER_DEMONS);
 	SpellBook v_feast("voodoo book named 'Feast'", F_NEUTER, 21, TCODColor::lerp(TCODColor::white, TCODColor::purple, 0.7f), 40, SPELL_V_FEAST);
-	SpellBook e_fire("elemental book named 'Fireball'", F_NEUTER, 21, TCODColor::lerp(TCODColor::white, TCODColor::azure, 0.4f), 40, SPELL_E_FIRE);
+	SpellBook e_fire("elemental book named 'Fireball'", F_NEUTER | F_AN, 21, TCODColor::lerp(TCODColor::white, TCODColor::azure, 0.4f), 40, SPELL_E_FIRE);
 	Gold gold(1);
 
 	factory.setTemplate("lightsaber", &lightsaber);	
