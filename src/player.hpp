@@ -54,8 +54,8 @@ enum HungerLevel
 
 enum BurdenLevel
 {
-  BURDEN_NORMAL = 100,
-  BURDEN_BURDENED = 150
+  BURDEN_NORMAL = 200,
+  BURDEN_BURDENED = 400
 };
 
 class Player

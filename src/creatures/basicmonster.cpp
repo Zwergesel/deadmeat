@@ -35,8 +35,9 @@ void BasicMonster::copyFrom(BasicMonster* original)
 	Creature::copyFrom(original);
 	bUseMelee = original->bUseMelee;
 	bUseRanged = original->bUseRanged;
-  bFleePerc = original->bFleePerc;
+	bFleePerc = original->bFleePerc;
 	lastSeenPlayer = original->lastSeenPlayer;
+	attitude = original->attitude;
 }
 
 bool BasicMonster::usesMeleeWeapons()
