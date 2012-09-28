@@ -46,39 +46,42 @@ enum Gender
 
 namespace CharGen
 {
-  const static bool ClassRace[NUM_CLASS][NUM_RACE] = {
-                        /* HUM DWA ELF ORC DRA GOL IMP UND */
-    /*Warrior*/       {     1,  1,  1,  1,  1,  1,  0,  1},
-    /*Rogue*/         {     1,  0,  1,  0,  1,  0,  1,  1},
-    /*Hunter*/        {     1,  1,  1,  1,  1,  0,  0,  1},
-    /*Paladin*/       {     1,  1,  0,  0,  1,  1,  0,  0},
-    /*Monk*/          {     1,  1,  1,  0,  0,  1,  1,  0},
-    /*Voodoo-Priest*/ {     1,  1,  0,  1,  0,  1,  1,  1},
-    /*Druid*/         {     1,  1,  1,  1,  0,  0,  0,  0},
-    /*Wizard*/        {     1,  0,  0,  1,  1,  1,  1,  1},
-    /*Musketeer*/     {     1,  1,  0,  0,  1,  1,  1,  1},
-    /*Alchemist*/     {     1,  1,  0,  0,  1,  1,  1,  1},
-    /*Scholar*/       {     1,  1,  1,  0,  0,  0,  1,  1}
-  };
-  const static int startAttr[NUM_RACE][NUM_ATTR] = {
-                      /* STR DEX CON INT */
-    /*Human*/       {     4,  4,  4,  8 },
-    /*Dwarf*/       {     6,  4,  7,  5 },
-    /*Elf*/         {     3,  8,  2,  4 },
-    /*Orc*/         {     8,  4,  6,  3 },
-    /*Dragonborn*/  {     7,  5,  5,  4 },
-    /*Golem*/       {     7,  2,  9,  2 },
-    /*Imp*/         {     3,  4,  2,  9 },
-    /*Undead*/      {     4,  6,  8,  3 }
-  };
+	const static bool ClassRace[NUM_CLASS][NUM_RACE] =
+	{
+		/* HUM DWA ELF ORC DRA GOL IMP UND */
+		/*Warrior*/       {     1,  1,  1,  1,  1,  1,  0,  1},
+		/*Rogue*/         {     1,  0,  1,  0,  1,  0,  1,  1},
+		/*Hunter*/        {     1,  1,  1,  1,  1,  0,  0,  1},
+		/*Paladin*/       {     1,  1,  0,  0,  1,  1,  0,  0},
+		/*Monk*/          {     1,  1,  1,  0,  0,  1,  1,  0},
+		/*Voodoo-Priest*/ {     1,  1,  0,  1,  0,  1,  1,  1},
+		/*Druid*/         {     1,  1,  1,  1,  0,  0,  0,  0},
+		/*Wizard*/        {     1,  0,  0,  1,  1,  1,  1,  1},
+		/*Musketeer*/     {     1,  1,  0,  0,  1,  1,  1,  1},
+		/*Alchemist*/     {     1,  1,  0,  0,  1,  1,  1,  1},
+		/*Scholar*/       {     1,  1,  1,  0,  0,  0,  1,  1}
+	};
+	const static int startAttr[NUM_RACE][NUM_ATTR] =
+	{
+		/* STR DEX CON INT */
+		/*Human*/       {     4,  4,  4,  8 },
+		/*Dwarf*/       {     6,  4,  7,  5 },
+		/*Elf*/         {     3,  8,  2,  4 },
+		/*Orc*/         {     8,  4,  6,  3 },
+		/*Dragonborn*/  {     7,  5,  5,  4 },
+		/*Golem*/       {     7,  2,  9,  2 },
+		/*Imp*/         {     3,  4,  2,  9 },
+		/*Undead*/      {     4,  6,  8,  3 }
+	};
 
 
 	static std::string RACE_NAMES[NUM_RACE] = { "Human", "Dwarf", "Elf", "Orc", "Dragonborn", "Golem", "Imp", "Undead" };
 	static std::string CLASS_NAMES[NUM_CLASS] = { "Warrior", "Rogue", "Hunter", "Paladin", "Monk", "Voodoo-Priest",
-	    "Druid", "Sorcerer", "Musketeer", "Alchemist", "Scholar" };
+	    "Druid", "Sorcerer", "Musketeer", "Alchemist", "Scholar"
+	                                            };
 	static std::string GENDER_NAMES[NUM_GENDER] = { "male", "female" };
 	static Viewport view(8,2,63,45);
-	
+
 	void generate();
 	PlayerClass choose_class();
 	PlayerRace choose_race(PlayerClass c);

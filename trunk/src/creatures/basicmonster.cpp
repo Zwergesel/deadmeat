@@ -20,7 +20,7 @@ BasicMonster::BasicMonster(std::string n, uint f, symbol s, TCODColor c, int h, 
 
 BasicMonster::~BasicMonster()
 {
-  // inventory gets deleted in ~creature
+	// inventory gets deleted in ~creature
 }
 
 Creature* BasicMonster::clone()
