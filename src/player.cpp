@@ -130,12 +130,12 @@ TCOD_key_t Player::waitForKeypress(bool clBuf)
 		{
 			TCODSystem::saveScreenshot(NULL);
 		}
-    else if (key.pressed && key.vk == TCODK_F6)
-    {
-      std::string in;
-      std::cin >> in;
-      world.debugInput(in);
-    }
+		else if (key.pressed && key.vk == TCODK_F6)
+		{
+			std::string in;
+			std::cin >> in;
+			world.debugInput(in);
+		}
 		else if (key.pressed)
 		{
 			if (world.getNumMessages() > 0) world.clearMessage = true;
@@ -1490,7 +1490,7 @@ int Player::getAttribute(ATTRIBUTE attr)
 
 void Player::setAttribute(ATTRIBUTE attr, int value)
 {
-  attributes[attr] = value;
+	attributes[attr] = value;
 }
 
 Skill Player::getSkill(SKILLS skill)

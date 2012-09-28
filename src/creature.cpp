@@ -726,7 +726,7 @@ void Creature::affect(Status type, int start, int duration, int strength)
 	{
 		strength = std::min(strength, maxHealth-1);
 	}
-	
+
 	// Stack with existing effect
 	for (auto it = status.begin(); it != status.end(); it++)
 	{

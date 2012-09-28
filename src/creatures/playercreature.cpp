@@ -8,15 +8,15 @@ PlayerCreature::PlayerCreature()
 	// for savegames
 }
 
-PlayerCreature::PlayerCreature(PlayerClass c, PlayerRace r, Gender g) : 
-  Creature(CharGen::RACE_NAMES[r], F_DEFAULT, (unsigned char)'@', TCODColor::black, 50, 75, 
-    Weapon("fists", F_PLURAL, '#', TCODColor::pink, 1, 0, 8, 0, 3, 1, 2, 0, 2, EFFECT_NONE, 1, AMMO_NONE, -1), 0, 20, 0, ""),
+PlayerCreature::PlayerCreature(PlayerClass c, PlayerRace r, Gender g) :
+	Creature(CharGen::RACE_NAMES[r], F_DEFAULT, (unsigned char)'@', TCODColor::black, 50, 75,
+	         Weapon("fists", F_PLURAL, '#', TCODColor::pink, 1, 0, 8, 0, 3, 1, 2, 0, 2, EFFECT_NONE, 1, AMMO_NONE, -1), 0, 20, 0, ""),
 	pclass(c), race(r), gender(g)
-{	
+{
 	setControlled(true);
 	setAttackSkill(0);
 	setDefenseSkill(0);
-  if (c == CLASS_MONK) baseWeapon = Weapon("Fists of Fury", F_DEFINITE, '#', TCODColor::pink, 1, 0, 3, 10, 10, 3, 4, 0, 2, EFFECT_NONE, 1, AMMO_NONE, -1);
+	if (c == CLASS_MONK) baseWeapon = Weapon("Fists of Fury", F_DEFINITE, '#', TCODColor::pink, 1, 0, 3, 10, 10, 3, 4, 0, 2, EFFECT_NONE, 1, AMMO_NONE, -1);
 }
 
 void PlayerCreature::copyFrom(PlayerCreature* original)
@@ -39,18 +39,28 @@ void PlayerCreature::affect(Status type, int start, int duration, int strength)
 
 bool PlayerCreature::hurt(int damage, Creature* instigator, DamageType type)
 {
-  if(world.debug_god) return false;
-  if (race == RACE_GOLEM)
-  {
-    // Lightning vulnerable
-    if (type == DAMAGE_LIGHTNING) damage *= 2;
-  }
+	if (world.debug_god) return false;
+	if (race == RACE_GOLEM)
+	{
+		// Lightning vulnerable
+		if (type == DAMAGE_LIGHTNING) damage *= 2;
+	}
 	return Creature::hurt(damage, instigator, type);
 }
 
 PlayerRace PlayerCreature::getRace()
 {
-  return race;
+	return race;
+}
+
+PlayerClass PlayerCreature::getClass()
+{
+	return pclass;
+}
+
+Gender PlayerCreature::getGender()
+{
+	return gender;
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/

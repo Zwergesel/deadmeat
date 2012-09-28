@@ -10,6 +10,7 @@
 #include "items/weapon.hpp"
 #include "itemselection.hpp"
 #include "savegame.hpp"
+#include "chargen.hpp"
 
 World::World()
 {
@@ -25,8 +26,8 @@ World::World()
 	time = 0;
 	clearMessage = false;
 	deathReason = "";
-  debug_fov = 0;
-  debug_god = 0;
+	debug_fov = 0;
+	debug_god = 0;
 }
 
 World::~World()
@@ -73,7 +74,7 @@ void World::newGame()
 {
 	// Clean up old pointers + memory
 	clearWorld();
-	
+
 	// Reset all other values
 	currentLevel = 0;
 	time = 0;
@@ -81,12 +82,12 @@ void World::newGame()
 	clearMessage = false;
 	deathReason = "";
 	player = new Player("Richard P. Enus");
-	
+
 	// Generate a new character and world
 	CharGen::generate();
 	LevelGen::generateWorld();
 	levels[0] = LevelGen::generateLevel(0, LEVELTYPE_FOREST);
-	
+
 	// Add player creature
 	Point newPos = levels[0]->getRandomLocation(WALKABLE);
 	player->getCreature()->setPos(newPos);
@@ -259,15 +260,15 @@ void World::drawWorld()
 	// fov
 	buildFovMap();
 	fovMap->computeFov(player->getCreature()->getPos().x, player->getCreature()->getPos().y, 0, true, FOV_BASIC);
-  
-  if(debug_fov)
-  {
-    for(int y=0;y<fovMap->getHeight();y++)
-      for(int x=0;x<fovMap->getWidth();x++) 
-        fovMap->setInFov(x,y,true);
-  }
-	
-  TCODConsole::root->clear();
+
+	if (debug_fov)
+	{
+		for (int y=0; y<fovMap->getHeight(); y++)
+			for (int x=0; x<fovMap->getWidth(); x++)
+				fovMap->setInFov(x,y,true);
+	}
+
+	TCODConsole::root->clear();
 	drawLevel(levels[currentLevel], levelOffset, viewLevel);
 	STATE state = player->getState();
 	if (state == STATE_INVENTORY || state == STATE_PICKUP || state == STATE_WIELD || state == STATE_WEAR
@@ -298,15 +299,16 @@ void World::drawWorld()
 
 void World::drawCharInfo()
 {
+	PlayerCreature* creature = static_cast<PlayerCreature*>(player->getCreature());
+
 	TCODConsole frame(viewLevel.width, viewLevel.height);
 
 	TCODConsole charInfo(viewLevel.width / 2, 15);
 	charInfo.printFrame(0, 0, charInfo.getWidth(), charInfo.getHeight(), true, TCOD_BKGND_DEFAULT, "Character Information");
-	charInfo.printEx(2, 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s", player->getName().c_str());
-  charInfo.printEx(2, 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, "%s", player->getCreature()->getName().c_str());
-	charInfo.printEx(2, 6, TCOD_BKGND_DEFAULT, TCOD_LEFT, "PLAYERRACE");
-	charInfo.printEx(2, 8, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Health: %d", player->getCreature()->getHealth().second);
-	charInfo.printEx(2, 10, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Mana: %d", player->getCreature()->getMana().second);
+	charInfo.printEx(2, 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Name:   %s", player->getName().c_str());
+	charInfo.printEx(2, 4, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Race:   %s", CharGen::RACE_NAMES[creature->getRace()].c_str());
+	charInfo.printEx(2, 6, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Class:  %s", CharGen::CLASS_NAMES[creature->getClass()].c_str());
+	charInfo.printEx(2, 8, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Gender: %s", CharGen::GENDER_NAMES[creature->getGender()].c_str());
 	TCODConsole::blit(&charInfo, 0, 0, 0, 0, &frame, 0, 0, 1.f, 1.f);
 
 	TCODConsole attributeInfo((viewLevel.width + 3) / 2, 15);
@@ -576,8 +578,8 @@ void World::cleanGarbage()
 
 void World::debugInput(std::string in)
 {
-  if(in.compare("fov") == 0) debug_fov = (debug_fov+1)%2;
-  if(in.compare("god") == 0) debug_god = (debug_god+1)%2;
+	if (in.compare("fov") == 0) debug_fov = (debug_fov+1)%2;
+	if (in.compare("god") == 0) debug_god = (debug_god+1)%2;
 }
 
 /*--------------------- SAVING AND LOADING ---------------------*/

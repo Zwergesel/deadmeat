@@ -69,7 +69,7 @@ public:
 
 	void setTemplate(const std::string& monsterclass, Creature* c, const InventoryTable& inv = InventoryTable());
 	void setTemplate(const std::string& itemclass, Item* i);
-	
+
 	bool creatureExists(const std::string& monsterclass);
 	bool itemExists(const std::string& itemclass);
 

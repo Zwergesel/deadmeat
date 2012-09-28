@@ -56,10 +56,10 @@ enum DamageType
 
 enum Attitude
 {
-	ATTITUDE_FRIEND,
-	ATTITUDE_PEACEFUL,
-	ATTITUDE_HOSTILE,
-	NUM_ATTITUDE
+  ATTITUDE_FRIEND,
+  ATTITUDE_PEACEFUL,
+  ATTITUDE_HOSTILE,
+  NUM_ATTITUDE
 };
 
 struct StatusInfo
@@ -225,15 +225,17 @@ protected:
 	PlayerClass pclass;
 	PlayerRace race;
 	Gender gender;
-	
+
 public:
 	PlayerCreature();
 	PlayerCreature(PlayerClass c, PlayerRace r, Gender g);
 	void copyFrom(PlayerCreature*);
-	
+
 	void affect(Status type, int start, int duration, int strength);
 	bool hurt(int damage, Creature* instigator, DamageType type);
-  PlayerRace getRace();
+	PlayerRace getRace();
+	PlayerClass getClass();
+	Gender getGender();
 
 	virtual void storeAll(Savegame& sg, SaveBlock& store);
 	virtual unsigned int save(Savegame& sg);

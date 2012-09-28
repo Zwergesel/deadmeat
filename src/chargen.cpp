@@ -14,14 +14,14 @@ void CharGen::generate()
 	PlayerRace r = CharGen::choose_race(c);
 	Gender g = CharGen::choose_gender(c, r);
 	std::string n = CharGen::choose_name(c, r, g);
-	
+
 	// If quit was requested during generation make sure the game will not get saved
 	if (world.requestQuit) world.gameover = true;
-	
+
 	// Create a player creature
 	world.player->setName(n);
 	Creature* pc = new PlayerCreature(c,r,g);
-	
+
 	// Fill inventory
 	std::vector<std::string> items = CharGen::generateStartItems(c, r, g);
 	for (auto it=items.begin(); it!=items.end(); it++)
@@ -29,7 +29,7 @@ void CharGen::generate()
 		pc->addItem(factory.spawnItem(*it, true));
 	}
 	world.player->setCreature(pc);
-  for(int i=0;i<NUM_ATTR;i++) world.player->setAttribute(static_cast<ATTRIBUTE>(i), startAttr[r][i]);
+	for (int i=0; i<NUM_ATTR; i++) world.player->setAttribute(static_cast<ATTRIBUTE>(i), startAttr[r][i]);
 }
 
 PlayerClass CharGen::choose_class()
@@ -149,7 +149,7 @@ void CharGen::draw(PlayerClass c, PlayerRace r, Gender g, const std::string& nam
 		raceImage.setKeyColor(TCODColor::fuchsia);
 		raceImage.getSize(&imgWidth,&imgHeight);
 		raceImage.blitRect(&playerRace, playerRace.getWidth() / 2 - imgWidth / 2, 3);
-		playerRace.printEx(playerRace.getWidth() / 2, playerRace.getHeight() - 5, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", RACE_NAMES[r].c_str());	
+		playerRace.printEx(playerRace.getWidth() / 2, playerRace.getHeight() - 5, TCOD_BKGND_DEFAULT, TCOD_CENTER, "%s", RACE_NAMES[r].c_str());
 	}
 	TCODConsole::blit(&playerRace, 0, 0, 0, 0, &window, playerClass.getWidth(), 0, 1.f, 1.f);
 
@@ -179,7 +179,7 @@ void CharGen::draw(PlayerClass c, PlayerRace r, Gender g, const std::string& nam
 	playerName.printFrame(0, 0, playerName.getWidth(), playerName.getHeight(), true, TCOD_BKGND_DEFAULT, "Name");
 	if (g != NUM_GENDER) playerName.printEx(20, playerName.getHeight() / 2, TCOD_BKGND_DEFAULT, TCOD_LEFT, "Name: %s", name.c_str());
 	TCODConsole::blit(&playerName, 0, 0, 0, 0, &window, 0, playerClass.getHeight(), 1.f, 1.f);
-	
+
 	TCODConsole::root->clear();
 	TCODConsole::blit(&window, 0, 0, 0, 0, TCODConsole::root, view.x, view.y, 1.f, 0.9f);
 	TCODConsole::root->flush();

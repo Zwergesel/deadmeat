@@ -62,7 +62,7 @@ class Player
 {
 private:
 	std::string name;
-  PlayerCreature* creature;
+	PlayerCreature* creature;
 	Skill skills[NUM_SKILL];
 	int attributes[NUM_ATTR];
 	STATE state;
@@ -120,7 +120,7 @@ public:
 	int processAction();
 	TCOD_key_t waitForKeypress(bool clBuf);
 	STATE getState();
-  void setAttribute(ATTRIBUTE attr, int value);
+	void setAttribute(ATTRIBUTE attr, int value);
 	int getAttribute(ATTRIBUTE attr);
 	Skill getSkill(SKILLS skill);
 	void incExperience(int exp);
