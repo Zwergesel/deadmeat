@@ -28,15 +28,15 @@ void fillFactoryTemplates()
 	*/
 
 	BasicMonster deer("deer", F_MALE, 'd', TCODColor::desaturatedOrange, 25, 0, Weapon(20, 0, 2, 1, 3, EFFECT_NONE, 1, AMMO_NONE), 0, 13, 90, "deer corpse", false, false, 100.f);
-	BasicMonster rat("rat", F_FEMALE, 'r', TCODColor::darkYellow, 13, 0, Weapon(14, 20, 3, 1, 5, EFFECT_DISEASE, 1, AMMO_NONE), 30, 10, 180, "rat corpse", false, false, 15.f);
-	BasicMonster kobold("kobold", F_MALE, 'k', TCODColor::lightMagenta, 21, 0, Weapon(20, 0, 2, 1, 3, EFFECT_NONE, 1, AMMO_NONE), 0, 14, 200, "kobold corpse", true, true, 25.f);
-	BasicMonster goblin("goblin", F_MALE, 'g', TCODColor::green, 30, 0, Weapon(21, 30, 6, 2, 5, EFFECT_NONE, 1, AMMO_NONE), 15, 20, 300, "goblin corpse", true, true, 0.f);
-	BasicMonster wisp("wisp", F_NEUTER, 'W', TCODColor::lightYellow, 25, 100, Weapon(42, 50, 2, 3, 4, EFFECT_NONE, 6, AMMO_NONE), 25, 13, 330, "", false, false, 0.f);
-	BasicMonster boar("boar", F_MALE, 'b', TCODColor::orange, 45, 0, Weapon(32, 40, 12, 3, 7, EFFECT_NONE, 1, AMMO_NONE), 50, 32, 550, "boar corpse", false, false, 0.f);
-	BasicMonster snake("snake", F_MALE, 's', TCODColor::darkChartreuse, 23, 0, Weapon(30, 22, 14, 1, 5, EFFECT_POISON, 1, AMMO_NONE), 0, 12, 420, "snake corpse", false, false, 0.f);
-	BasicMonster wolf("wolf", F_MALE, 'w', TCODColor::darkerOrange, 40, 0, Weapon(20, 22, 9, 2, 7, EFFECT_NONE, 1, AMMO_NONE), 25, 18, 590, "wolf corpse", false, false, 20.f);
-	BasicMonster carnitree("carnivorous tree", F_MALE, 6, TCODColor(48, 79, 53), 60, 0, Weapon(50, 0, 25, 4, 9, EFFECT_NONE, 1, AMMO_NONE), 0, 500, 520, "", false, false, 0.f);
-	BasicMonster bear("bear", F_MALE, 'B', TCODColor(100, 70, 40), 66, 0, Weapon(34, 0, 20, 2, 13, EFFECT_KNOCKBACK, 1, AMMO_NONE), 40, 37, 850, "bear corpse", false, false, 0.f);
+	BasicMonster rat("rat", F_FEMALE, 'r', TCODColor::darkYellow, 13, 0, Weapon(14, 0, 4, 1, 3, EFFECT_DISEASE, 1, AMMO_NONE), 30, 10, 180, "rat corpse", false, false, 15.f);
+	BasicMonster kobold("kobold", F_MALE, 'k', TCODColor::lightMagenta, 21, 0, Weapon(20, 0, 3, 1, 2, EFFECT_NONE, 1, AMMO_NONE), 0, 14, 200, "kobold corpse", true, true, 25.f);
+	BasicMonster goblin("goblin", F_MALE, 'g', TCODColor::green, 30, 0, Weapon(21, 0, 7, 1, 3, EFFECT_NONE, 1, AMMO_NONE), 15, 20, 300, "goblin corpse", true, true, 0.f);
+	BasicMonster wisp("wisp", F_NEUTER, 'W', TCODColor::lightYellow, 25, 100, Weapon(42, 0, 5, 2, 4, EFFECT_NONE, 6, AMMO_NONE), 25, 13, 330, "", false, false, 0.f);
+	BasicMonster boar("boar", F_MALE, 'b', TCODColor::orange, 45, 0, Weapon(32, 15, 12, 2, 5, EFFECT_NONE, 1, AMMO_NONE), 50, 32, 550, "boar corpse", false, false, 0.f);
+	BasicMonster snake("snake", F_MALE, 's', TCODColor::darkChartreuse, 23, 0, Weapon(30, 0, 6, 1, 4, EFFECT_POISON, 1, AMMO_NONE), 0, 12, 420, "snake corpse", false, false, 0.f);
+	BasicMonster wolf("wolf", F_MALE, 'w', TCODColor::darkerOrange, 40, 0, Weapon(20, 10, 8, 2, 5, EFFECT_NONE, 1, AMMO_NONE), 25, 18, 590, "wolf corpse", false, false, 20.f);
+	BasicMonster carnitree("carnivorous tree", F_MALE, 6, TCODColor(48, 79, 53), 60, 0, Weapon(50, 20, 25, 4, 5, EFFECT_NONE, 1, AMMO_NONE), 0, 500, 520, "", false, false, 0.f);
+	BasicMonster bear("bear", F_MALE, 'B', TCODColor(100, 70, 40), 66, 0, Weapon(34, 25, 20, 1, 10, EFFECT_KNOCKBACK, 1, AMMO_NONE), 40, 37, 850, "bear corpse", false, false, 0.f);
 	// name, flags, symbol, color, health, mana, weapon(spd, hit, dmg, dice, dmax, effect, range, ammo), armor, walkspeed, experience, corpse, meele wep, ranged wep, fleeperc (0-100)
 
 	Corpse deer_c("deer corpse", F_NEUTER, '%', TCODColor::desaturatedOrange, 100, 2800, 100, 2000);

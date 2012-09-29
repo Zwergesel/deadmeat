@@ -455,7 +455,7 @@ int Creature::attack(Point target)
 			// Apply post weapon effects
 			if (effect == EFFECT_POISON)
 			{
-				victim->affect(STATUS_POISON, 0, 200, 3);
+				victim->affect(STATUS_POISON, 0, 200, 10);
 			}
 			else if (effect == EFFECT_FIRE)
 			{
