@@ -832,7 +832,7 @@ void Creature::storeAll(Savegame& sg, SaveBlock& store)
 	store ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	store ("walkingSpeed", walkingSpeed);
 	store ("lastTimeRegen", lastTimeRegen) ("lastTimeManaRegen", lastTimeManaRegen);
-	store ("expValue", expValue);
+	store ("expValue", expValue) ("corpseName", corpseName);
 	store ("#inventory", (int) inventory.size());
 	for (std::map<symbol, Item*>::iterator it = inventory.begin(); it != inventory.end(); it++)
 	{
@@ -885,7 +885,7 @@ void Creature::load(LoadBlock& load)
 	load ("baseAC", baseAC) ("attackSkill", attackSkill) ("defenseSkill", defenseSkill);
 	load ("walkingSpeed", walkingSpeed);
 	load ("lastTimeRegen", lastTimeRegen) ("lastTimeManaRegen", lastTimeManaRegen);
-	load ("expValue", expValue);
+	load ("expValue", expValue) ("corpseName", corpseName);
 	int n;
 	load ("#inventory", n);
 	while (n-->0)

@@ -161,7 +161,7 @@ public:
 	int rangedAttack(Point position, Weapon* weapon);
 	void moveTo(Point pos); // moveTo performs object events at the target square
 
-	bool hurt(int damage, Creature* instigator, DamageType type);
+	virtual bool hurt(int damage, Creature* instigator, DamageType type);
 	void heal(int amount);
 	void kill();
 	void addMana(int amount);
@@ -212,6 +212,8 @@ public:
 	virtual Creature* clone();
 	void copyFrom(BasicMonster*);
 
+	void changeAttitude(Attitude att);
+	virtual bool hurt(int damage, Creature* instigator, DamageType type);
 	virtual int action();
 
 	virtual void storeAll(Savegame& sg, SaveBlock& store);

@@ -250,11 +250,21 @@ bool Level::isTransparent(Point pos)
 	return world.tileSet->isTransparent(map[coord(pos)]);
 }
 
-std::vector<Point> Level::getMatchingLocations(uint flags)
+std::vector<Point> Level::getMatchingLocations(uint flags, Point center, float radius)
 {
 	std::vector<Point> list;
-	for (int y=0; y<height; y++) for (int x=0; x<width; x++)
+	int lox(0), hix(width-1), loy(0), hiy(height-1);
+	if (radius > 0)
+	{
+		lox = std::max(lox, static_cast<int>(center.x - radius));
+		hix = std::min(hix, static_cast<int>(center.x + radius));
+		loy = std::max(loy, static_cast<int>(center.y - radius));
+		hiy = std::min(hiy, static_cast<int>(center.y + radius));
+	}
+	radius *= radius;
+	for (int y=loy; y<=hiy; y++) for (int x=lox; x<=hix; x++)
 		{
+			if (radius > 0 && Point::sqlen(Point(x-center.x,y-center.y)) > radius) continue;
 			if ((flags & WALKABLE) && !isWalkable(Point(x,y))) continue;
 			else if ((flags & NO_CREATURE) && creatureAt(Point(x,y)) != NULL) continue;
 			else if (flags & NO_ITEM)
@@ -290,9 +300,10 @@ Point Level::chooseRandomPoint(std::vector<Point>& list, bool erase)
 	return list[index];
 }
 
-Point Level::getRandomLocation(uint flags)
+Point Level::getRandomLocation(uint flags, Point center, float radius)
 {
-	auto list = getMatchingLocations(flags);
+	auto list = getMatchingLocations(flags, center, radius);
+	if (list.size() == 0) return center;
 	return chooseRandomPoint(list);
 }
 

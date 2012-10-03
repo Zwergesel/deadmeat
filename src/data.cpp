@@ -28,6 +28,7 @@ void fillFactoryTemplates()
 	*/
 
 	BasicMonster deer("deer", F_MALE, 'd', TCODColor::desaturatedOrange, 25, 0, Weapon(20, 0, 2, 1, 3, EFFECT_NONE, 1, AMMO_NONE), 0, 13, 90, "deer corpse", false, false, 100.f);
+	deer.changeAttitude(ATTITUDE_PEACEFUL);
 	BasicMonster rat("rat", F_FEMALE, 'r', TCODColor::darkYellow, 13, 0, Weapon(14, 0, 4, 1, 3, EFFECT_DISEASE, 1, AMMO_NONE), 30, 10, 180, "rat corpse", false, false, 15.f);
 	BasicMonster kobold("kobold", F_MALE, 'k', TCODColor::lightMagenta, 21, 0, Weapon(20, 0, 3, 1, 2, EFFECT_NONE, 1, AMMO_NONE), 0, 14, 200, "kobold corpse", true, true, 25.f);
 	BasicMonster goblin("goblin", F_MALE, 'g', TCODColor::green, 30, 0, Weapon(21, 0, 7, 1, 3, EFFECT_NONE, 1, AMMO_NONE), 15, 20, 300, "goblin corpse", true, true, 0.f);

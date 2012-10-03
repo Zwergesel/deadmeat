@@ -74,8 +74,8 @@ public:
 	bool isTransparent(Point pos);
 
 	static Point chooseRandomPoint(std::vector<Point>& list, bool erase = false);
-	std::vector<Point> getMatchingLocations(uint flags);
-	Point getRandomLocation(uint flags);
+	std::vector<Point> getMatchingLocations(uint flags, Point center = Point(-1,-1), float radius = 0.f);
+	Point getRandomLocation(uint flags, Point center = Point(-1,-1), float radius = 0.f);
 	void populate(const RandomTable& spawns, int numCreatures);
 	void placeItems(const RandomTable& items, int numItems);
 
