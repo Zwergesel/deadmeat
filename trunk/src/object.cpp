@@ -195,7 +195,7 @@ int Object::onStep(Creature* guy)
 			world.addMessage(msg.str());
 			visible = true;
 		}
-		guy->affect(STATUS_FIRE, 0, 100, 5);
+		guy->affect(STATUS_FIRE, 0, 100, 3);
 		return 0;
 	}
 }

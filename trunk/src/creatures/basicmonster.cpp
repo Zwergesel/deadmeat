@@ -5,6 +5,7 @@
 #include "../savegame.hpp"
 #include "../level.hpp"
 #include "../pathfinding.hpp"
+#include <iostream>
 
 BasicMonster::BasicMonster()
 {
@@ -38,6 +39,11 @@ void BasicMonster::copyFrom(BasicMonster* original)
 	bFleePerc = original->bFleePerc;
 	lastSeenPlayer = original->lastSeenPlayer;
 	attitude = original->attitude;
+}
+
+void BasicMonster::changeAttitude(Attitude att)
+{
+	attitude = att;
 }
 
 bool BasicMonster::usesMeleeWeapons()
@@ -151,14 +157,16 @@ int BasicMonster::doChargePlayer()
 int BasicMonster::doWander()
 {
 	if (position == lastSeenPlayer) lastSeenPlayer = Point(-1,-1);
-	if (lastSeenPlayer.x >= 0)
+	if (attitude == ATTITUDE_HOSTILE && lastSeenPlayer.x >= 0)
 	{
 		return navigateTo(lastSeenPlayer);
 	}
 	else
 	{
-		// TODO: random walk here
-		return 10;
+		Point step = level->getRandomLocation(WALKABLE | NO_CREATURE, position, 1.5f);
+		float diagonal = (step.x - position.x != 0 && step.y - position.y != 0) ? std::sqrt(2.f) : 1.f;
+		moveTo(step);
+		return static_cast<int>(getWalkingSpeed() * diagonal);
 	}
 }
 
@@ -196,6 +204,15 @@ int BasicMonster::navigateTo(Point target)
 	}
 }
 
+bool BasicMonster::hurt(int damage, Creature* instigator, DamageType type)
+{
+	if (attitude == ATTITUDE_PEACEFUL && instigator != NULL && instigator->isControlled())
+	{
+		attitude = ATTITUDE_HOSTILE;
+	}
+	return Creature::hurt(damage, instigator, type);
+}
+
 int BasicMonster::action()
 {
 	if ((usesMeleeWeapons() || usesRangedWeapons()) && inventory.size() > 0)
@@ -203,13 +220,13 @@ int BasicMonster::action()
 		useBestWeapon();
 	}
 	int time;
+	bool seen = seePlayer();
 	if (shouldFlee())
 	{
-		seePlayer(); // To get correct value for lastSeenPlayer
 		time = doFlee();
 		if (time > 0) return time;
 	}
-	if (seePlayer())
+	if (attitude == ATTITUDE_HOSTILE && seen)
 	{
 		int sqdist = Point::sqlen(world.player->getCreature()->getPos() - position);
 		Weapon* weapon = getMainWeapon();
