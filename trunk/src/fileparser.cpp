@@ -31,6 +31,38 @@ void FileParser::loadDestructionTable()
 	file.close();
 }
 
+std::vector<std::string> FileParser::loadStartItems(PlayerClass c, PlayerRace r, Gender g)
+{
+	std::vector<std::string> items;
+	std::ifstream itemFile;
+	itemFile.open("data/chargen.cfg");
+	if (!itemFile.is_open()) return items;
+	std::string line;
+	bool discard = true;
+	while (!itemFile.eof())
+	{
+		getline(itemFile,line);
+		if (line.size() == 0) continue;
+		if (line[0] == '#') continue;
+		if (line[0] == '[')
+		{
+			size_t split = line.find_first_of(' ');
+			size_t end = line.find_first_of(']');
+			std::string type = line.substr(1, split-1);
+			std::string compare = line.substr(split+1, end-split-1);
+			if (type == "class" && compare == CharGen::CLASS_NAMES[c]) discard = false;
+			else if (type == "race" && compare == CharGen::RACE_NAMES[r]) discard = false;
+			else discard = true;
+		}
+		else if (!discard)
+		{
+			items.push_back(line);
+		}
+	}
+	itemFile.close();
+	return items;
+}
+
 Item* FileParser::getItemFromString(const std::string& info)
 {
 	size_t pos = 0;
@@ -38,6 +70,7 @@ Item* FileParser::getItemFromString(const std::string& info)
 	int number(0), dice(0), total(0), sign(1);
 	bool expectDice(false), expectString(true);
 	
+	// This understands syntax like "5d4-1d6+12 arrow"
 	while (pos < info.length())
 	{
 		if (info[pos] == ' ') {

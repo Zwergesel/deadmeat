@@ -6,6 +6,7 @@
 #include "world.hpp"
 #include "utility.hpp"
 #include "factory.hpp"
+#include "fileparser.hpp"
 
 void CharGen::generate()
 {
@@ -22,14 +23,12 @@ void CharGen::generate()
 	world.player->setName(n);
 	Creature* pc = new PlayerCreature(c,r,g);
 
-	// Fill inventory
-	std::vector<std::string> items = CharGen::generateStartItems(c, r, g);
-	for (auto it=items.begin(); it!=items.end(); it++)
-	{
-		pc->addItem(factory.spawnItem(*it, true));
-	}
+	// Start items and attributes
+	CharGen::generateStartItems(pc, c, r, g);
+	for (int i=0; i<NUM_ATTR; i++) world.player->setAttribute(static_cast<ATTRIBUTE>(i), startAttr[r][i]);	
+
+	// Set creature
 	world.player->setCreature(pc);
-	for (int i=0; i<NUM_ATTR; i++) world.player->setAttribute(static_cast<ATTRIBUTE>(i), startAttr[r][i]);
 }
 
 PlayerClass CharGen::choose_class()
@@ -205,34 +204,12 @@ bool CharGen::isNameChar(char c)
 	return false;
 }
 
-std::vector<std::string> CharGen::generateStartItems(PlayerClass c, PlayerRace r, Gender g)
+void CharGen::generateStartItems(Creature* pc, PlayerClass c, PlayerRace r, Gender g)
 {
-	std::vector<std::string> items;
-	std::ifstream itemFile;
-	itemFile.open("data/chargen.cfg");
-	if (!itemFile.is_open()) return items;
-	std::string line;
-	bool discard = true;
-	while (!itemFile.eof())
+	auto list = FileParser::loadStartItems(c, r, g);
+	for (auto it=list.begin(); it != list.end(); it++)
 	{
-		getline(itemFile,line);
-		if (line.size() == 0) continue;
-		if (line[0] == '#') continue;
-		if (line[0] == '[')
-		{
-			size_t split = line.find_first_of(' ');
-			size_t end = line.find_first_of(']');
-			std::string type = line.substr(1, split-1);
-			std::string compare = line.substr(split+1, end-split-1);
-			if (type == "class" && compare == CharGen::CLASS_NAMES[c]) discard = false;
-			else if (type == "race" && compare == CharGen::RACE_NAMES[r]) discard = false;
-			else discard = true;
-		}
-		else if (!discard && factory.itemExists(line))
-		{
-			items.push_back(line);
-		}
+		Item* item = FileParser::getItemFromString(*it);
+		if (item != NULL) pc->addItem(item);
 	}
-	itemFile.close();
-	return items;
 }
