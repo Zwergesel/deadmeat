@@ -16,6 +16,7 @@
 #include "items/food.hpp"
 #include "items/ammo.hpp"
 #include "factory.hpp"
+#include "fileparser.hpp"
 
 TCODRandom* rng = TCODRandom::getInstance();
 World world;
@@ -70,6 +71,7 @@ int main()
 	}
 
 	LevelGen::loadLootTable(); // TODO: temporarily here
+	FileParser::loadDestructionTable();
 
 	if (true)
 	{

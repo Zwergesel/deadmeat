@@ -16,6 +16,7 @@
 #include "items/spellbook.hpp"
 #include "items/corpse.hpp"
 #include "savegame.hpp"
+#include "fileparser.hpp"
 
 int Player::dx[] = {-1, 0, 1,-1, 0, 1,-1, 0, 1};
 int Player::dy[] = { 1, 1, 1, 0, 0, 0,-1,-1,-1};
@@ -357,7 +358,7 @@ int Player::actionDrop(Item* item, int num)
 	assert(item != NULL);
 	Level* level = world.levels[world.currentLevel];
 	std::stringstream msg;
-	if (item->getType() == ITEM_ARMOR && creature->getArmor(static_cast<Armor*>(item)->getSlot()) == item)
+	if (item->getType() == ITEM_ARMOR && item->isActive())
 	{
 		msg << "You have to take off your armor first.";
 		world.addMessage(msg.str());
@@ -526,6 +527,49 @@ int Player::actionEat(Item* item)
 		creature->removeItem(item, 1, true);
 		return time;
 	}
+}
+
+int Player::actionDestroy(Item* item)
+{
+	// Find the list of pieces if it exists
+	std::vector<std::string> list;
+	if (Item::DestructionTable.find(item->getName()) != Item::DestructionTable.end())
+	{
+		list = Item::DestructionTable[item->getName()];
+	}
+	
+	// Unwield weapons. Display warning if armor is worn
+	if (creature->getMainWeapon() == item)
+	{
+		creature->wieldMainWeapon(NULL);
+		creature->setAttackSkill(skills[SKILL_ATTACK].value);
+	}
+	else if (item->getType() == ITEM_ARMOR && item->isActive())
+	{
+		std::stringstream msg;
+		msg << "You cannot destroy " << util::format(FORMAT_YOUR, item) << " while wearing it.";
+		world.addMessage(msg.str());
+	}
+	
+	// Destroy the item
+	creature->removeItem(item, item->getAmount(), true);
+	
+	// Spawn new items; throw on ground if no inventory room
+	for (auto it = list.begin(); it != list.end(); it++)
+	{
+		Item* piece = FileParser::getItemFromString(*it);
+		if (piece == NULL) continue;
+		symbol s = creature->expectedInventoryLetter(piece);
+		if (s != 0)
+		{
+			creature->addItem(piece);
+		}
+		else
+		{
+			world.levels[world.currentLevel]->addItem(piece, creature->getPos());
+		}
+	}
+	return 50; // TODO: something reasonable?
 }
 
 int Player::actionDrink(Item* item)
@@ -1421,6 +1465,7 @@ int Player::processAction()
 					options.append("W");
 					request.append("\n\nW - wear");
 				}
+				options.append("X");
 				request.append("\n\nX - destroy");
 				char reply = world.drawBlockingWindow("What do you want to do?", request, options);
 				if (reply == 'd')
@@ -1467,6 +1512,11 @@ int Player::processAction()
 				{
 					state = STATE_DEFAULT;
 					return actionRead(item);
+				}
+				else if (reply == 'X')
+				{
+					state = STATE_DEFAULT;
+					return actionDestroy(item);
 				}
 			}
 			return 0;

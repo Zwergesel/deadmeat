@@ -5,6 +5,7 @@
 #include "utility.hpp"
 #include <string>
 #include <sstream>
+#include <map>
 
 class Savegame;
 class LoadBlock;
@@ -39,6 +40,7 @@ protected:
 
 public:
 	static std::string ACTIVE_STRINGS[NUM_ITEM_TYPE];
+	static std::map<std::string, std::vector<std::string>> DestructionTable;
 
 	Item();
 	Item(std::string name, uint format, symbol sym, TCODColor color, int amount, int weight);
