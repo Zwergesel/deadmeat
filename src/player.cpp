@@ -552,7 +552,7 @@ int Player::actionDestroy(Item* item)
 	}
 	
 	// Destroy the item
-	creature->removeItem(item, item->getAmount(), true);
+	creature->removeItem(item, 1, true);
 	
 	// Spawn new items; throw on ground if no inventory room
 	for (auto it = list.begin(); it != list.end(); it++)
