@@ -33,11 +33,11 @@ void fillFactoryTemplates()
 	BasicMonster kobold("kobold", F_MALE, 'k', TCODColor::lightMagenta, 21, 0, Weapon(20, 0, 3, 1, 2, EFFECT_NONE, 1, AMMO_NONE), 0, 14, 200, "kobold corpse", true, true, 25.f);
 	BasicMonster goblin("goblin", F_MALE, 'g', TCODColor::green, 30, 0, Weapon(21, 0, 7, 1, 3, EFFECT_NONE, 1, AMMO_NONE), 15, 20, 300, "goblin corpse", true, true, 0.f);
 	BasicMonster wisp("wisp", F_NEUTER, 'W', TCODColor::lightYellow, 25, 100, Weapon(42, 0, 5, 2, 4, EFFECT_NONE, 6, AMMO_NONE), 25, 13, 330, "", false, false, 0.f);
-	BasicMonster boar("boar", F_MALE, 'b', TCODColor::orange, 45, 0, Weapon(32, 15, 12, 2, 5, EFFECT_NONE, 1, AMMO_NONE), 50, 32, 550, "boar corpse", false, false, 0.f);
+	BasicMonster boar("boar", F_MALE, 'b', TCODColor::darkOrange, 45, 0, Weapon(32, 15, 12, 2, 5, EFFECT_NONE, 1, AMMO_NONE), 50, 32, 550, "boar corpse", false, false, 0.f);
 	BasicMonster snake("snake", F_MALE, 's', TCODColor::darkChartreuse, 23, 0, Weapon(30, 0, 6, 1, 4, EFFECT_POISON, 1, AMMO_NONE), 0, 12, 420, "snake corpse", false, false, 0.f);
 	BasicMonster wolf("wolf", F_MALE, 'w', TCODColor::darkerOrange, 40, 0, Weapon(20, 10, 8, 2, 5, EFFECT_NONE, 1, AMMO_NONE), 25, 18, 590, "wolf corpse", false, false, 20.f);
 	BasicMonster carnitree("carnivorous tree", F_MALE, 6, TCODColor(48, 79, 53), 60, 0, Weapon(50, 20, 25, 4, 5, EFFECT_NONE, 1, AMMO_NONE), 0, 500, 520, "", false, false, 0.f);
-	BasicMonster bear("bear", F_MALE, 'B', TCODColor(100, 70, 40), 66, 0, Weapon(34, 25, 20, 1, 10, EFFECT_KNOCKBACK, 1, AMMO_NONE), 40, 37, 850, "bear corpse", false, false, 0.f);
+	BasicMonster bear("bear", F_MALE, 'B', TCODColor::darkSepia, 66, 0, Weapon(34, 25, 20, 1, 10, EFFECT_KNOCKBACK, 1, AMMO_NONE), 40, 37, 850, "bear corpse", false, false, 0.f);
 	// name, flags, symbol, color, health, mana, weapon(spd, hit, dmg, dice, dmax, effect, range, ammo), armor, walkspeed, experience, corpse, meele wep, ranged wep, fleeperc (0-100)
 
 	Corpse deer_c("deer corpse", F_NEUTER, '%', TCODColor::desaturatedOrange, 100, 2800, 100, 2000);
@@ -111,7 +111,8 @@ void fillFactoryTemplates()
 	Ammo arrow("arrow", F_NEUTER, '/', TCODColor::cyan, 5, 1, 0, EFFECT_NONE, AMMO_ARROW);
 	Ammo bolt("bolt", F_NEUTER, '/', TCODColor::blue, 5, 1, 0, EFFECT_NONE, AMMO_BOLT);
 	Ammo bullet("bullet", F_NEUTER, '/', TCODColor::lightBlue, 5, 1, 0, EFFECT_NONE, AMMO_BULLET);
-	Tool lockpick("lockpick", F_NEUTER, '[', TCODColor::black, 1, 10, TOOL_LOCKPICK);
+	Tool lockpick("lockpick", F_NEUTER, '[', TCODColor::black, 1, 5, TOOL_LOCKPICK);
+	Tool metalscrap("metal scrap", F_NEUTER, '[', TCODColor::darkerGrey, 1, 5, TOOL_METAL);
 	Potion minorHeal("minor heal potion", F_NEUTER, '!', TCODColor::lightRed, 1, 3, POTION_MINORHEAL);
 	Potion heal("heal potion", F_NEUTER, '!', TCODColor::red, 1, 3, POTION_HEAL);
 	Potion fullHeal("full heal potion", F_NEUTER, '!', TCODColor::darkRed, 1, 3, POTION_FULLHEAL);
@@ -162,6 +163,7 @@ void fillFactoryTemplates()
 	factory.setTemplate("bullets", &bullet);
 	factory.setTemplate("gold", &gold);
 	factory.setTemplate("lockpick", &lockpick);
+	factory.setTemplate("metalscrap", &metalscrap);
 
 	factory.setTemplate("pMinorHeal", &minorHeal);
 	factory.setTemplate("pHeal", &heal);

@@ -771,7 +771,6 @@ void Creature::updateStatus(int time)
 				maxHealth -= loss;
 				health = std::min(health, maxHealth);
 				stat.memory += loss;
-				std::cerr << "Poison took " << loss << " hp, max " << stat.strength << " current " << stat.memory << std::endl;
 			}
 			break;
 		default:

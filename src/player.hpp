@@ -88,6 +88,7 @@ private:
 	int actionEat(Item*);
 	int actionUse(Item*);
 	int actionUse(Item*, int direction);
+	int actionDestroy(Item*);
 	int actionRead(Item*);
 	int actionCast(SPELL);
 	int actionCast(SPELL, Point target);

@@ -83,11 +83,11 @@ namespace CharGen
 	};
 	const static int startManaRace[NUM_RACE] =
 	{ /* HUM DWA ELF ORC DRA GOL IMP UND */
-		   5,  0,  8,  2,  6, 3,  12,  5
+		  10,  0, 20,  5, 10,  5, 25, 10
 	};
 	const static int startManaClass[NUM_CLASS] =
 	{ /* WAR ROG HUN PAL MON VOO DRU WIZ MUS ALC SCO */
-		   0, 10,  6, 16, 20, 20, 16, 25,  4, 15, 10 
+		   0, 10,  5, 25, 40, 40, 30, 50,  5, 25, 15 
 	};
 
 	static std::string RACE_NAMES[NUM_RACE] = { "Human", "Dwarf", "Elf", "Orc", "Dragonborn", "Golem", "Imp", "Undead" };

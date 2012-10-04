@@ -11,6 +11,7 @@ class Level;
 enum ToolType
 {
   TOOL_LOCKPICK,
+  TOOL_METAL,
   NUM_TOOLTYPE
 };
 

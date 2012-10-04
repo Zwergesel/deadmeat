@@ -449,6 +449,11 @@ void World::drawInfo()
 	{
 		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cBurning%c", TCOD_COLCTRL_4, TCOD_COLCTRL_STOP);
 	}
+	if (world.player->getCreature()->getStatusStrength(STATUS_POISON) > 0)
+	{
+		TCODConsole::root->setColorControl(TCOD_COLCTRL_1, TCODColor::darkGreen, TCODColor::black);
+		TCODConsole::root->printEx(viewInfo.x + 2, row++, TCOD_BKGND_NONE, TCOD_LEFT, "%cPoisoned%c", TCOD_COLCTRL_1, TCOD_COLCTRL_STOP);
+	}
 }
 
 void World::drawCursor(Point target, Point levelOffset, bool traceLine)
