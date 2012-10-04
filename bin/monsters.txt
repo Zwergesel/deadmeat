@@ -1,5 +1,5 @@
 Version: 0.10
-SavedObjects: 77      
+SavedObjects: 78      
 
 [[Weapon: 3]]
 name: x
@@ -10,10 +10,10 @@ amount: 1
 weight: 0
 active: false
 speed: 34
-hitBonus: 0
+hitBonus: 25
 baseDamage: 20
-numDice: 2
-diceMax: 13
+numDice: 1
+diceMax: 10
 enchantment: 0
 hands: 0
 effect: 4
@@ -26,7 +26,7 @@ name: bear
 formatFlags: 16384
 symbol: 66
 position: 0, 0
-color: 100, 70, 40
+color: 94, 75, 47
 health: 66
 maxHealth: 66
 mana: 0
@@ -45,6 +45,7 @@ walkingSpeed: 37
 lastTimeRegen: 0
 lastTimeManaRegen: 0
 expValue: 850
+corpseName: bear corpse
 #inventory: 0
 #spells: 0
 #status: 0
@@ -52,7 +53,7 @@ lastSeenPlayer: -1, -1
 bUseMelee: false
 bUseRanged: false
 bFleePerc: 0
-attitude: -1163005939
+attitude: 2
 
 [[Weapon: 5]]
 name: x
@@ -63,10 +64,10 @@ amount: 1
 weight: 0
 active: false
 speed: 32
-hitBonus: 40
+hitBonus: 15
 baseDamage: 12
-numDice: 3
-diceMax: 7
+numDice: 2
+diceMax: 5
 enchantment: 0
 hands: 0
 effect: 0
@@ -79,7 +80,7 @@ name: boar
 formatFlags: 16384
 symbol: 98
 position: 0, 0
-color: 255, 127, 0
+color: 191, 95, 0
 health: 45
 maxHealth: 45
 mana: 0
@@ -98,6 +99,7 @@ walkingSpeed: 32
 lastTimeRegen: 0
 lastTimeManaRegen: 0
 expValue: 550
+corpseName: boar corpse
 #inventory: 0
 #spells: 0
 #status: 0
@@ -105,7 +107,7 @@ lastSeenPlayer: -1, -1
 bUseMelee: false
 bUseRanged: false
 bFleePerc: 0
-attitude: -1163005939
+attitude: 2
 
 [[Weapon: 7]]
 name: x
@@ -116,10 +118,10 @@ amount: 1
 weight: 0
 active: false
 speed: 50
-hitBonus: 0
+hitBonus: 20
 baseDamage: 25
 numDice: 4
-diceMax: 9
+diceMax: 5
 enchantment: 0
 hands: 0
 effect: 0
@@ -151,6 +153,7 @@ walkingSpeed: 500
 lastTimeRegen: 0
 lastTimeManaRegen: 0
 expValue: 520
+corpseName: 
 #inventory: 0
 #spells: 0
 #status: 0
@@ -158,7 +161,7 @@ lastSeenPlayer: -1, -1
 bUseMelee: false
 bUseRanged: false
 bFleePerc: 0
-attitude: -1163005939
+attitude: 2
 
 [[Weapon: 9]]
 name: x
@@ -204,6 +207,7 @@ walkingSpeed: 13
 lastTimeRegen: 0
 lastTimeManaRegen: 0
 expValue: 90
+corpseName: deer corpse
 #inventory: 0
 #spells: 0
 #status: 0
@@ -211,7 +215,7 @@ lastSeenPlayer: -1, -1
 bUseMelee: false
 bUseRanged: false
 bFleePerc: 100
-attitude: -1163005939
+attitude: 1
 
 [[Weapon: 11]]
 name: x
@@ -222,10 +226,10 @@ amount: 1
 weight: 0
 active: false
 speed: 21
-hitBonus: 30
-baseDamage: 6
-numDice: 2
-diceMax: 5
+hitBonus: 0
+baseDamage: 7
+numDice: 1
+diceMax: 3
 enchantment: 0
 hands: 0
 effect: 0
@@ -257,6 +261,7 @@ walkingSpeed: 20
 lastTimeRegen: 0
 lastTimeManaRegen: 0
 expValue: 300
+corpseName: goblin corpse
 #inventory: 0
 #spells: 0
 #status: 0
@@ -264,7 +269,7 @@ lastSeenPlayer: -1, -1
 bUseMelee: true
 bUseRanged: true
 bFleePerc: 0
-attitude: -1163005939
+attitude: 2
 
 [[Weapon: 13]]
 name: x
@@ -276,9 +281,9 @@ weight: 0
 active: false
 speed: 20
 hitBonus: 0
-baseDamage: 2
+baseDamage: 3
 numDice: 1
-diceMax: 3
+diceMax: 2
 enchantment: 0
 hands: 0
 effect: 0
@@ -310,6 +315,7 @@ walkingSpeed: 14
 lastTimeRegen: 0
 lastTimeManaRegen: 0
 expValue: 200
+corpseName: kobold corpse
 #inventory: 0
 #spells: 0
 #status: 0
@@ -317,7 +323,7 @@ lastSeenPlayer: -1, -1
 bUseMelee: true
 bUseRanged: true
 bFleePerc: 25
-attitude: -1163005939
+attitude: 2
 
 [[Weapon: 15]]
 name: x
@@ -328,10 +334,10 @@ amount: 1
 weight: 0
 active: false
 speed: 14
-hitBonus: 20
-baseDamage: 3
+hitBonus: 0
+baseDamage: 4
 numDice: 1
-diceMax: 5
+diceMax: 3
 enchantment: 0
 hands: 0
 effect: 3
@@ -363,6 +369,7 @@ walkingSpeed: 10
 lastTimeRegen: 0
 lastTimeManaRegen: 0
 expValue: 180
+corpseName: rat corpse
 #inventory: 0
 #spells: 0
 #status: 0
@@ -370,7 +377,7 @@ lastSeenPlayer: -1, -1
 bUseMelee: false
 bUseRanged: false
 bFleePerc: 15
-attitude: -1163005939
+attitude: 2
 
 [[Weapon: 17]]
 name: x
@@ -381,10 +388,10 @@ amount: 1
 weight: 0
 active: false
 speed: 30
-hitBonus: 22
-baseDamage: 14
+hitBonus: 0
+baseDamage: 6
 numDice: 1
-diceMax: 5
+diceMax: 4
 enchantment: 0
 hands: 0
 effect: 1
@@ -416,6 +423,7 @@ walkingSpeed: 12
 lastTimeRegen: 0
 lastTimeManaRegen: 0
 expValue: 420
+corpseName: snake corpse
 #inventory: 0
 #spells: 0
 #status: 0
@@ -423,7 +431,7 @@ lastSeenPlayer: -1, -1
 bUseMelee: false
 bUseRanged: false
 bFleePerc: 0
-attitude: -1163005939
+attitude: 2
 
 [[Weapon: 19]]
 name: x
@@ -434,9 +442,9 @@ amount: 1
 weight: 0
 active: false
 speed: 42
-hitBonus: 50
-baseDamage: 2
-numDice: 3
+hitBonus: 0
+baseDamage: 5
+numDice: 2
 diceMax: 4
 enchantment: 0
 hands: 0
@@ -469,6 +477,7 @@ walkingSpeed: 13
 lastTimeRegen: 0
 lastTimeManaRegen: 0
 expValue: 330
+corpseName: 
 #inventory: 0
 #spells: 0
 #status: 0
@@ -476,7 +485,7 @@ lastSeenPlayer: -1, -1
 bUseMelee: false
 bUseRanged: false
 bFleePerc: 0
-attitude: -1163005939
+attitude: 2
 
 [[Weapon: 21]]
 name: x
@@ -487,10 +496,10 @@ amount: 1
 weight: 0
 active: false
 speed: 20
-hitBonus: 22
-baseDamage: 9
+hitBonus: 10
+baseDamage: 8
 numDice: 2
-diceMax: 7
+diceMax: 5
 enchantment: 0
 hands: 0
 effect: 0
@@ -522,6 +531,7 @@ walkingSpeed: 18
 lastTimeRegen: 0
 lastTimeManaRegen: 0
 expValue: 590
+corpseName: wolf corpse
 #inventory: 0
 #spells: 0
 #status: 0
@@ -529,11 +539,11 @@ lastSeenPlayer: -1, -1
 bUseMelee: false
 bUseRanged: false
 bFleePerc: 20
-attitude: -1163005939
+attitude: 2
 
 [[Food: 22]]
 name: apple
-formatFlags: 65536
+formatFlags: 65552
 symbol: 37
 color: 0, 255, 0
 amount: 1
@@ -600,7 +610,7 @@ eatTime: 110
 rotTime: 2000
 
 [[Food: 27]]
-name: berries
+name: berry
 formatFlags: 65536
 symbol: 37
 color: 143, 0, 191
@@ -635,7 +645,7 @@ effect: 0
 ammoType: 2
 
 [[Food: 30]]
-name: bread
+name: loaf of bread
 formatFlags: 65536
 symbol: 37
 color: 127, 95, 63
@@ -952,7 +962,7 @@ formatFlags: 65536
 symbol: 91
 color: 0, 0, 0
 amount: 1
-weight: 10
+weight: 5
 active: false
 tool: 0
 
@@ -1007,7 +1017,17 @@ active: false
 nutrition: 500
 eatTime: 100
 
-[[Potion: 55]]
+[[Tool: 55]]
+name: metal scrap
+formatFlags: 65536
+symbol: 91
+color: 63, 63, 63
+amount: 1
+weight: 5
+active: false
+tool: 1
+
+[[Potion: 56]]
 name: full heal potion
 formatFlags: 65536
 symbol: 33
@@ -1017,7 +1037,7 @@ weight: 3
 active: false
 potion: 2
 
-[[Potion: 56]]
+[[Potion: 57]]
 name: haste potion
 formatFlags: 65536
 symbol: 33
@@ -1027,7 +1047,7 @@ weight: 3
 active: false
 potion: 3
 
-[[Potion: 57]]
+[[Potion: 58]]
 name: heal potion
 formatFlags: 65536
 symbol: 33
@@ -1037,7 +1057,7 @@ weight: 3
 active: false
 potion: 1
 
-[[Potion: 58]]
+[[Potion: 59]]
 name: minor heal potion
 formatFlags: 65536
 symbol: 33
@@ -1047,7 +1067,7 @@ weight: 3
 active: false
 potion: 0
 
-[[Armor: 59]]
+[[Armor: 60]]
 name: platemail
 formatFlags: 65536
 symbol: 41
@@ -1060,7 +1080,7 @@ hindrance: 7
 slot: 0
 enchantment: 0
 
-[[Corpse: 60]]
+[[Corpse: 61]]
 name: rat corpse
 formatFlags: 65536
 symbol: 37
@@ -1072,7 +1092,7 @@ nutrition: 500
 eatTime: 20
 rotTime: 3200
 
-[[Food: 61]]
+[[Food: 62]]
 name: sandwich
 formatFlags: 65536
 symbol: 37
@@ -1083,17 +1103,17 @@ active: false
 nutrition: 2500
 eatTime: 100
 
-[[SpellBook: 62]]
+[[SpellBook: 63]]
 name: voodoo book named 'Cripple'
 formatFlags: 65536
 symbol: 21
-color: 229, 152, 255
+color: 229, 153, 255
 amount: 1
 weight: 40
 active: false
 spell: 0
 
-[[SpellBook: 63]]
+[[SpellBook: 64]]
 name: voodoo book named 'Feast'
 formatFlags: 65536
 symbol: 21
@@ -1103,17 +1123,17 @@ weight: 40
 active: false
 spell: 3
 
-[[SpellBook: 64]]
+[[SpellBook: 65]]
 name: elemental book named 'Fireball'
-formatFlags: 65536
+formatFlags: 65552
 symbol: 21
-color: 152, 203, 255
+color: 153, 203, 255
 amount: 1
 weight: 40
 active: false
 spell: 7
 
-[[SpellBook: 65]]
+[[SpellBook: 66]]
 name: voodoo book named 'Frenzy'
 formatFlags: 65536
 symbol: 21
@@ -1123,17 +1143,17 @@ weight: 40
 active: false
 spell: 1
 
-[[SpellBook: 66]]
+[[SpellBook: 67]]
 name: voodoo book named 'Inner Demons'
 formatFlags: 65536
 symbol: 21
-color: 216, 101, 255
+color: 216, 102, 255
 amount: 1
 weight: 40
 active: false
 spell: 2
 
-[[Armor: 67]]
+[[Armor: 68]]
 name: scalemail
 formatFlags: 65536
 symbol: 41
@@ -1146,7 +1166,7 @@ hindrance: 5
 slot: 0
 enchantment: 0
 
-[[Weapon: 68]]
+[[Weapon: 69]]
 name: shortbow
 formatFlags: 65536
 symbol: 40
@@ -1166,7 +1186,7 @@ range: 30
 ammoType: 1
 broken: 0
 
-[[Weapon: 69]]
+[[Weapon: 70]]
 name: shortsword
 formatFlags: 65536
 symbol: 40
@@ -1186,7 +1206,7 @@ range: 1
 ammoType: 0
 broken: 0
 
-[[Weapon: 70]]
+[[Weapon: 71]]
 name: slingshot
 formatFlags: 65536
 symbol: 40
@@ -1206,7 +1226,7 @@ range: 10
 ammoType: 3
 broken: 0
 
-[[Corpse: 71]]
+[[Corpse: 72]]
 name: snake corpse
 formatFlags: 65536
 symbol: 37
@@ -1218,7 +1238,7 @@ nutrition: 400
 eatTime: 20
 rotTime: 2000
 
-[[Weapon: 72]]
+[[Weapon: 73]]
 name: staff
 formatFlags: 65536
 symbol: 40
@@ -1238,7 +1258,7 @@ range: 1
 ammoType: 0
 broken: 0
 
-[[Armor: 73]]
+[[Armor: 74]]
 name: voodoo mask
 formatFlags: 65536
 symbol: 41
@@ -1251,7 +1271,7 @@ hindrance: 2
 slot: 2
 enchantment: 0
 
-[[Weapon: 74]]
+[[Weapon: 75]]
 name: warhammer
 formatFlags: 65536
 symbol: 40
@@ -1271,7 +1291,7 @@ range: 1
 ammoType: 0
 broken: 0
 
-[[Armor: 75]]
+[[Armor: 76]]
 name: wizard hat
 formatFlags: 65536
 symbol: 41
@@ -1284,7 +1304,7 @@ hindrance: 0
 slot: 2
 enchantment: 0
 
-[[Armor: 76]]
+[[Armor: 77]]
 name: wizard robe
 formatFlags: 65536
 symbol: 41
@@ -1297,7 +1317,7 @@ hindrance: 2
 slot: 0
 enchantment: 0
 
-[[Corpse: 77]]
+[[Corpse: 78]]
 name: wolf corpse
 formatFlags: 65536
 symbol: 37
@@ -1331,7 +1351,7 @@ _spawnName: wisp
 _creature: @18
 _spawnName: wolf
 _creature: @20
-#items: 56
+#items: 57
 _spawnName: apple
 _item: @22
 _spawnName: arrows
@@ -1398,49 +1418,51 @@ _spawnName: longsword
 _item: @53
 _spawnName: meat
 _item: @54
-_spawnName: pFullHeal
+_spawnName: metalscrap
 _item: @55
-_spawnName: pHaste
+_spawnName: pFullHeal
 _item: @56
-_spawnName: pHeal
+_spawnName: pHaste
 _item: @57
-_spawnName: pMinorHeal
+_spawnName: pHeal
 _item: @58
-_spawnName: platemail
+_spawnName: pMinorHeal
 _item: @59
-_spawnName: rat corpse
+_spawnName: platemail
 _item: @60
-_spawnName: sandwich
+_spawnName: rat corpse
 _item: @61
-_spawnName: sbCripple
+_spawnName: sandwich
 _item: @62
-_spawnName: sbFeast
+_spawnName: sbCripple
 _item: @63
-_spawnName: sbFire
+_spawnName: sbFeast
 _item: @64
-_spawnName: sbFrenzy
+_spawnName: sbFire
 _item: @65
-_spawnName: sbInnerDemons
+_spawnName: sbFrenzy
 _item: @66
-_spawnName: scalemail
+_spawnName: sbInnerDemons
 _item: @67
-_spawnName: shortbow
+_spawnName: scalemail
 _item: @68
-_spawnName: shortsword
+_spawnName: shortbow
 _item: @69
-_spawnName: slingshot
+_spawnName: shortsword
 _item: @70
-_spawnName: snake corpse
+_spawnName: slingshot
 _item: @71
-_spawnName: staff
+_spawnName: snake corpse
 _item: @72
-_spawnName: voodoomask
+_spawnName: staff
 _item: @73
-_spawnName: warhammer
+_spawnName: voodoomask
 _item: @74
-_spawnName: wizardhat
+_spawnName: warhammer
 _item: @75
-_spawnName: wizardrobe
+_spawnName: wizardhat
 _item: @76
-_spawnName: wolf corpse
+_spawnName: wizardrobe
 _item: @77
+_spawnName: wolf corpse
+_item: @78
