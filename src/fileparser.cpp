@@ -1,10 +1,9 @@
 #include "fileparser.hpp"
 #include "factory.hpp"
 #include "item.hpp"
-#include <vector>
 #include <fstream>
 
-void FileParser::loadDestructionTable()
+void FileParser::loadDestructionTable(std::map<std::string, std::vector<std::string>>& table)
 {
 	std::ifstream file;
 	file.open("data/destroy.cfg");
@@ -21,11 +20,8 @@ void FileParser::loadDestructionTable()
 		}
 		else
 		{
-			if (Item::DestructionTable.find(itemClass) == Item::DestructionTable.end())
-			{
-				Item::DestructionTable[itemClass] = std::vector<std::string>();
-			}
-			Item::DestructionTable[itemClass].push_back(line);
+			if (table.find(itemClass) == table.end()) table[itemClass] = std::vector<std::string>();
+			table[itemClass].push_back(line);
 		}
 	}
 	file.close();

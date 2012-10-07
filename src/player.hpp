@@ -105,6 +105,7 @@ private:
 	void quickLook();
 	int getDirection(TCOD_key_t);
 	void initTargetList();
+	int processAction();
 
 public:
 	Player();
@@ -118,7 +119,6 @@ public:
 	void addNutrition(int delta);
 	int getNutrition();
 	int action();
-	int processAction();
 	TCOD_key_t waitForKeypress(bool clBuf);
 	STATE getState();
 	void setAttribute(ATTRIBUTE attr, int value);
@@ -138,6 +138,7 @@ public:
 	int getWeight();
 	SPELL getSelectedSpell();
 	void checkCorpses();
+	bool isPositionVisible(Point pos);
 
 	static int dx[9];
 	static int dy[9];

@@ -8,6 +8,7 @@
 #include "world.hpp"
 #include "savegame.hpp"
 #include "items/corpse.hpp"
+#include "message.hpp"
 
 const double Creature::FACT_ATSKL = 10.0;	// attack skill -> attack bonus
 const double Creature::FACT_DEFSKL = 10.0;	// defense skill -> defense bonus
@@ -241,6 +242,7 @@ void Creature::die(Creature* instigator)
 {
 	if (controlled)
 	{
+		// Player death, GAME OVER
 		if (instigator != NULL)
 		{
 			std::stringstream msg;
@@ -248,36 +250,25 @@ void Creature::die(Creature* instigator)
 			world.deathReason = msg.str();
 		}
 		world.addMessage("You die...", true);
-		// This message will not be visible, but forces confirmation by the player
+		// This message will not be visible, but forces confirmation by the player TODO: handle this better
 		world.addMessage("", true);
 		world.gameover = true;
 	}
-	else if (instigator != NULL)
-	{
-		std::stringstream msg;
-		instigator->isControlled() ?
-		(msg << "You kill ") :
-		(msg << util::format(FORMAT_DEF, instigator, true) << " kills");
-		msg << util::format(FORMAT_DEF, this) << ".";
-		world.addMessage(msg.str());
-		// Experience for player
-		if (instigator->isControlled()) world.player->incExperience(expValue);
-	}
 	else
 	{
-		std::stringstream msg;
-		msg << util::format(FORMAT_DEF, this, true) << " dies.";
-		world.addMessage(msg.str());
-	}
+		// Message if player can see this happen
+		Message::kill(instigator, this);
+		
+		// Experience for player
+		if (instigator != NULL && instigator->isControlled()) world.player->incExperience(expValue);
 
-	if (!controlled)
-	{
 		// Drop all items
 		for (auto it=inventory.begin(); it!=inventory.end(); it++)
 		{
 			level->addItem(it->second, position);
 		}
 		inventory.clear();
+		
 		// Drop a corpse
 		if (corpseName.length() > 0)
 		{
@@ -287,7 +278,8 @@ void Creature::die(Creature* instigator)
 			corpse->initRotTime();
 			level->addItem(corpse, position);
 		}
-		// Remove creature from level
+		
+		// Remove creature from level and add it to garbage collection
 		level->removeCreature(this, false);
 		world.garbage.push_back(this);
 	}
@@ -436,22 +428,16 @@ int Creature::attack(Point target)
 			if (hit <= 1000) damage /= 2;
 			if (hit > 1175) damage *= 2;
 
-			// Message about hit
-			std::stringstream msg;
-			controlled ? (msg << "You hit ") :
-			(msg << util::format(FORMAT_DEF, this, true) << " hits ");
-			victim->isControlled() ? (msg << "you for ") :
-			(msg << util::format(FORMAT_DEF, victim) << " for ");
-			msg << damage << " damage.";
-			world.addMessage(msg.str());
-
 			// Apply pre weapon effects
 			WeaponEffect effect = weapon->getEffect();
 			DamageType dmgtype = DAMAGE_WEAPON;
+			
+			// Message about hit
+			Message::attack(this, victim, damage, dmgtype);
 
 			// Hurt the target
 			victim->hurt(damage, this, dmgtype);
-
+			
 			// Apply post weapon effects
 			if (effect == EFFECT_POISON)
 			{

@@ -206,7 +206,7 @@ int Player::actionMove(int direction)
 int Player::actionLook(Point pos)
 {
 	Level* level = world.levels[world.currentLevel];
-	if (world.fovMap->isInFov(pos.x, pos.y))
+	if (isPositionVisible(pos))
 	{
 		// If square is visible...
 		Creature* c = level->creatureAt(pos);
@@ -793,7 +793,7 @@ int Player::actionRangedAttack(Point pos)
 	}
 	// Check for valid target
 	Creature* target = level->creatureAt(pos);
-	if (target == NULL || !world.fovMap->isInFov(pos.x, pos.y))
+	if (target == NULL || !isPositionVisible(pos))
 	{
 		world.addMessage("You see nothing to shoot at here.");
 		return 0;
@@ -1682,6 +1682,11 @@ int Player::getWeight()
 		weight += (*it).second->getAmount() * (*it).second->getWeight();
 	}
 	return weight;
+}
+
+bool Player::isPositionVisible(Point pos)
+{
+	return world.fovMap->isInFov(pos.x, pos.y);
 }
 
 void Player::checkCorpses()
