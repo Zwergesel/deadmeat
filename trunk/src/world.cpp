@@ -191,7 +191,7 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 				inf.color = obj->getColor();
 				inf.sym = obj->getSymbol();
 			}
-			if (fovMap->isInFov(x,y))
+			if (player->isPositionVisible(Point(x,y)))
 			{
 				level->setSeen(Point(x,y), true);
 				TCODConsole::root->putCharEx(
@@ -202,7 +202,7 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 				  inf.background
 				);
 			}
-			else if (!fovMap->isInFov(x,y) && level->isSeen(Point(x,y)))
+			else if (level->isSeen(Point(x,y)))
 			{
 				TCODColor seenColor = inf.color;
 				TCODColor seenBackground = inf.background;
@@ -234,7 +234,7 @@ void World::drawLevel(Level* level, Point offset, Viewport view)
 
 void World::drawItem(Item* i, Point pos, Point offset, Viewport view)
 {
-	if (!fovMap->isInFov(pos.x, pos.y)) return;
+	if (!player->isPositionVisible(pos)) return;
 	pos += offset;
 	if (pos.x >= 0 && pos.x < view.width && pos.y >= 0 && pos.y < view.height)
 	{
@@ -246,7 +246,7 @@ void World::drawItem(Item* i, Point pos, Point offset, Viewport view)
 void World::drawCreature(Creature* c, Point offset, Viewport view)
 {
 	Point pos = c->getPos();
-	if (!fovMap->isInFov(pos.x, pos.y)) return;
+	if (!player->isPositionVisible(pos)) return;
 	pos += offset;
 	if (pos.x >= 0 && pos.x < view.width && pos.y >= 0 && pos.y < view.height)
 	{

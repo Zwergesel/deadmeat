@@ -173,7 +173,7 @@ int Object::onStep(Creature* guy)
 			world.deathReason = "You were crushed by a bear trap.";
 			visible = true;
 		}
-		else if (world.fovMap->isInFov(pos.x, pos.y))
+		else if (world.player->isPositionVisible(pos))
 		{
 			msg << util::format(FORMAT_DEF, guy, true) << " gets caught in a bear trap.";
 			world.addMessage(msg.str());
@@ -189,7 +189,7 @@ int Object::onStep(Creature* guy)
 			world.addMessage("Flames erupt from the ground and you catch on fire!", true);
 			visible = true;
 		}
-		else if (world.fovMap->isInFov(pos.x, pos.y))
+		else if (world.player->isPositionVisible(pos))
 		{
 			msg << util::format(FORMAT_DEF, guy, true) << " gets roasted in a fire trap.";
 			world.addMessage(msg.str());

@@ -71,7 +71,7 @@ int main()
 	}
 
 	LevelGen::loadLootTable(); // TODO: temporarily here
-	FileParser::loadDestructionTable();
+	FileParser::loadDestructionTable(Item::DestructionTable);
 
 	if (true)
 	{
