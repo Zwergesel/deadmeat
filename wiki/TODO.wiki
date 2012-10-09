@@ -5,18 +5,18 @@
 == Test ==
   * Changing levels
   * item weight, burdened status etc.
-  * checks for closing doors
+  * Closing doors (with items/monsters in the way)
   * Potions
+  * Rotting corpses should disappear
+  * Caution should make it possible to detect rotten food
 
 == Bugs / Issues ==
   * InventoryTable does not get saved in factory
 
 == Small improvements ==
   * Implement missing status effects
-  * Rotting corpses should disappear (?)
-  * harmfull corpses(poison)
-  * Caution should make it possible to detect rotten food
-  * messages for crits
+  * Harmful corpses (poison)
+  * Messages for critical hits (?)
 
 == Major improvements ==
   * Cursed Items (?)
