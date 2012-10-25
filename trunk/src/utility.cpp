@@ -90,20 +90,6 @@ std::string util::capitalize(std::string str)
 	return str;
 }
 
-std::string util::plural(std::string str)
-{
-	if (str.compare("armor") == 0 || str.compare("Armor") == 0) return str;
-	if (str.compare("food") == 0 || str.compare("Food") == 0) return str;
-	if (str.compare("ammunition") == 0 || str.compare("Ammunition") == 0) return str;
-	if (str.compare("gold") == 0 || str.compare("Gold") == 0) return str;
-	std::string ret = str;
-	if (str.size() >= 1 && str[str.size()-1] == 's') ret.append("es");
-	else if (str.size() >= 2 && str[str.size()-2] == 's' && str[str.size()-1] == 'h') ret.append("es");
-	else if (str.size() >= 1 && str[str.size()-1] == 'y') ret.replace(str.size()-1, 1, "ies");
-	else ret.append("s");
-	return ret;
-}
-
 int util::letterToInt(char c)
 {
 	if (isupper(c)) return (c + 26 - 'A');
