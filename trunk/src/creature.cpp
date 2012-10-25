@@ -24,8 +24,8 @@ Creature::Creature()
 	// for savegames, initializes nothing
 }
 
-Creature::Creature(std::string n, uint f, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws, int exp, const std::string& corp):
-	name(n),		formatFlags(f),		sym(s),
+Creature::Creature(Name n, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws, int exp, const std::string& corp):
+	name(n),		sym(s),
 	color(c),		health(h),			maxHealth(h),
 	mana(m),		maxMana(m),			controlled(false),
 	mainWeapon(0), quiver(0),	baseWeapon(w),		baseAC(a),
@@ -56,7 +56,6 @@ Creature* Creature::clone()
 void Creature::copyFrom(Creature* original)
 {
 	name = original->name;
-	formatFlags = original->formatFlags;
 	sym = original->sym;
 	color = original->color;
 	maxHealth = original->maxHealth;
@@ -88,14 +87,9 @@ void Creature::copyFrom(Creature* original)
 	}
 }
 
-std::string Creature::getName()
+Name Creature::getName()
 {
 	return name;
-}
-
-uint Creature::getFormatFlags()
-{
-	return formatFlags;
 }
 
 Point Creature::getPos()
@@ -484,7 +478,8 @@ int Creature::attack(Point target)
 	{
 		// TODO: Messages for non-controlled creatures
 		std::stringstream msg;
-		msg << "You bash " << util::format(FORMAT_YOUR, weapon->getName(), weapon->getFormatFlags());
+		Name wpnName = weapon->getName();
+		msg << "You bash " << util::format(FORMAT_YOUR, wpnName.name, wpnName.flags);
 		msg << " against " << world.tileSet->getDescription(level->getTile(target)) << ".";
 		world.addMessage(msg.str());
 
@@ -536,7 +531,8 @@ int Creature::rangedAttack(Point position, Weapon* w)
 		{
 			std::stringstream msg;
 			Object* obj = level->objectAt(current);
-			msg << util::format(FORMAT_YOUR, ammo->getName(), ammo->getFormatFlags(), true) << " hits ";
+			Name ammoName = ammo->getName();
+			msg << util::format(FORMAT_YOUR, ammoName.name, ammoName.flags, true) << " hits ";
 			msg << (obj != NULL ? util::format(FORMAT_INDEF, obj) : world.tileSet->getDescription(level->getTile(current))) << ".";
 			world.addMessage(msg.str());
 			return speed;
@@ -760,7 +756,7 @@ void Creature::updateStatus(int time)
 			}
 			break;
 		default:
-			std::cerr << name << " has effect " << stat.type << " strength " << stat.strength << " for " << stat.duration << std::endl;
+			std::cerr << name.name << " has effect " << stat.type << " strength " << stat.strength << " for " << stat.duration << std::endl;
 		}
 		// Reduce duration
 		stat.duration -= time;
@@ -782,7 +778,7 @@ void Creature::endStatus(Status type)
 			maxHealth += it->memory;
 			break;
 		default:
-			std::cerr << name << " ends effect " << type << std::endl;
+			std::cerr << name.name << " ends effect " << type << std::endl;
 		}
 		status.erase(it);
 		break;
@@ -802,7 +798,7 @@ int Creature::getStatusStrength(Status type)
 
 void Creature::storeAll(Savegame& sg, SaveBlock& store)
 {
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("position", position);
+	store ("name", name) ("symbol", sym) ("position", position);
 	store ("color", color) ("health", health) ("maxHealth", maxHealth);
 	store ("mana", mana) ("maxMana", maxMana) ("controlled", controlled);
 	store ("quiver", (int) quiver);
@@ -853,7 +849,7 @@ unsigned int Creature::save(Savegame& sg)
 
 void Creature::load(LoadBlock& load)
 {
-	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym) ("position", position);
+	load ("name", name) ("symbol", sym) ("position", position);
 	load ("color", color) ("health", health) ("maxHealth", maxHealth);
 	load ("mana", mana) ("maxMana", maxMana) ("controlled", controlled);
 	load ("quiver", quiver);

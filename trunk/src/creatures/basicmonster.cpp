@@ -12,8 +12,8 @@ BasicMonster::BasicMonster()
 	// for savegames, initializes nothing
 }
 
-BasicMonster::BasicMonster(std::string n, uint f, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws, int exp, const std::string& cn, bool wm, bool wr, float fl):
-	Creature(n,f,s,c,h,m,w,a,ws,exp,cn),
+BasicMonster::BasicMonster(Name n, symbol s, TCODColor c, int h, int m, Weapon w, int a, int ws, int exp, const std::string& cn, bool wm, bool wr, float fl):
+	Creature(n,s,c,h,m,w,a,ws,exp,cn),
 	bUseMelee(wm), bUseRanged(wr), bFleePerc(fl),
 	lastSeenPlayer(Point(-1,-1)), attitude(ATTITUDE_HOSTILE)
 {

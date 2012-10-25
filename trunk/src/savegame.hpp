@@ -50,6 +50,7 @@ public:
 	SaveBlock& operator()(const std::string& name, bool input);
 	SaveBlock& operator()(const std::string& name, const Point& input);
 	SaveBlock& operator()(const std::string& name, const TCODColor& input);
+	SaveBlock& operator()(const std::string& name, const Name& input);
 	SaveBlock& operator()(const std::string& name, symbol input);
 	SaveBlock& operator()(const std::string& name, Tile* map, int width, int height, bool* seen);
 	SaveBlock& operator()(const std::string& name, int a, int b, int c);
@@ -74,6 +75,7 @@ public:
 	LoadBlock& operator()(const std::string& name, bool& output);
 	LoadBlock& operator()(const std::string& name, Point& output);
 	LoadBlock& operator()(const std::string& name, TCODColor& output);
+	LoadBlock& operator()(const std::string& name, Name& output);
 	LoadBlock& operator()(const std::string& name, symbol& output);
 	LoadBlock& operator()(const std::string& name, Tile* map, int width, int height, bool* seen);
 	LoadBlock& operator()(const std::string& name, int& a, int& b, int& c);

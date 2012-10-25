@@ -11,8 +11,8 @@ Tool::Tool()
 	strType = "tools";
 }
 
-Tool::Tool(std::string n, uint f, symbol s, TCODColor c, int a, int w, ToolType t):
-	Item(n,f,s,c,a,w), tool(t)
+Tool::Tool(Name n, symbol s, TCODColor c, int a, int w, ToolType t):
+	Item(n,s,c,a,w), tool(t)
 {
 	type = ITEM_TOOL;
 	strType = "tools";
@@ -22,7 +22,7 @@ Tool::~Tool() {}
 
 Item* Tool::clone()
 {
-	Tool* copy = new Tool(name, formatFlags, sym, color, amount, weight, tool);
+	Tool* copy = new Tool(name, sym, color, amount, weight, tool);
 	copy->active = active;
 	return copy;
 }
@@ -73,8 +73,8 @@ unsigned int Tool::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Tool", id);
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	store ("color", color) ("amount", amount) ("weight", weight) ("active", active);
+	store ("name", name) ("symbol", sym) ("color", color);
+	store ("amount", amount) ("weight", weight) ("active", active);
 	store ("tool", tool);
 	sg << store;
 	return id;
@@ -83,8 +83,8 @@ unsigned int Tool::save(Savegame& sg)
 void Tool::load(LoadBlock& load)
 {
 	int t;
-	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	load ("color", color) ("amount", amount) ("weight", weight) ("active", active);
+	load ("name", name) ("symbol", sym) ("color", color);
+	load ("amount", amount) ("weight", weight) ("active", active);
 	load ("tool", t);
 	if (t < 0 || t >= NUM_TOOLTYPE) throw SavegameFormatException("Tool::load _ tool out of bounds");
 	tool = static_cast<ToolType>(t);

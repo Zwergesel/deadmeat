@@ -28,8 +28,7 @@ enum ITEM_TYPE
 class Item
 {
 protected:
-	std::string name;
-	uint formatFlags;
+	Name name;
 	symbol sym;
 	TCODColor color;
 	int amount;
@@ -43,15 +42,14 @@ public:
 	static std::map<std::string, std::vector<std::string>> DestructionTable;
 
 	Item();
-	Item(std::string name, uint format, symbol sym, TCODColor color, int amount, int weight);
+	Item(Name name, symbol sym, TCODColor color, int amount, int weight);
 	virtual ~Item();
 	virtual Item* clone();
 
 	ITEM_TYPE getType();
 	symbol getSymbol();
 	TCODColor getColor();
-	std::string getName();
-	uint getFormatFlags();
+	Name getName();
 	virtual std::string toString();
 	std::string typeString();
 	int getAmount();

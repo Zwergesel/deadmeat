@@ -22,7 +22,7 @@ private:
 
 public:
 	Tool();
-	Tool(std::string name, uint format, symbol sym, TCODColor color, int amount, int weight, ToolType tool);
+	Tool(Name name, symbol sym, TCODColor color, int amount, int weight, ToolType tool);
 	~Tool();
 	Item* clone();
 

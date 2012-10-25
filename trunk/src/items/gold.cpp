@@ -3,7 +3,7 @@
 #include "../world.hpp"
 
 Gold::Gold():
-	Item("gold", F_PLURAL, '$', TCODColor(242, 210, 0), 1, 0)
+	Item(Name("gold","gold"), '$', TCODColor(242, 210, 0), 1, 0)
 {
 	// constructor for savegames
 	type = ITEM_GOLD;
@@ -11,7 +11,7 @@ Gold::Gold():
 }
 
 Gold::Gold(int x):
-	Item("gold", F_PLURAL, '$', TCODColor(242, 210, 0), x, 0)
+	Item(Name("gold","gold"), '$', TCODColor(242, 210, 0), x, 0)
 {
 	type = ITEM_GOLD;
 	strType = "gold";
@@ -39,14 +39,14 @@ unsigned int Gold::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Gold", id);
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	store ("color", color) ("amount", amount) ("weight", weight) ("active", active);
+	store ("name", name) ("symbol", sym) ("color", color);
+	store ("amount", amount) ("weight", weight) ("active", active);
 	sg << store;
 	return id;
 }
 
 void Gold::load(LoadBlock& load)
 {
-	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	load ("color", color) ("amount", amount) ("weight", weight) ("active", active);
+	load ("name", name) ("symbol", sym) ("color", color);
+	load ("amount", amount) ("weight", weight) ("active", active);
 }

@@ -9,8 +9,8 @@ PlayerCreature::PlayerCreature()
 }
 
 PlayerCreature::PlayerCreature(PlayerClass c, PlayerRace r, Gender g) :
-	Creature(CharGen::RACE_NAMES[r], F_DEFAULT, (unsigned char)'@', TCODColor::black, 1, 0,
-	         Weapon("fists", F_PLURAL, '#', TCODColor::pink, 1, 0, 8, 0, 3, 1, 2, 0, 2, EFFECT_NONE, 1, AMMO_NONE, -1), 0, 20, 0, ""),
+	Creature(Name(CharGen::RACE_NAMES[r]), (unsigned char)'@', TCODColor::black, 1, 0,
+	         Weapon(Name("fists","",F_PLURAL), '#', TCODColor::pink, 1, 0, 8, 0, 3, 1, 2, 0, 2, EFFECT_NONE, 1, AMMO_NONE, -1), 0, 20, 0, ""),
 	pclass(c), race(r), gender(g)
 {
 	health = maxHealth = CharGen::startHealthRace[r] + CharGen::startHealthClass[c];
@@ -18,7 +18,7 @@ PlayerCreature::PlayerCreature(PlayerClass c, PlayerRace r, Gender g) :
 	setControlled(true);
 	setAttackSkill(0);
 	setDefenseSkill(0);
-	if (c == CLASS_MONK) baseWeapon = Weapon("Fists of Fury", F_DEFINITE, '#', TCODColor::pink, 1, 0, 3, 10, 10, 3, 4, 0, 2, EFFECT_NONE, 1, AMMO_NONE, -1);
+	if (c == CLASS_MONK) baseWeapon = Weapon(Name("Fists of Fury","",F_DEFINITE|F_PLURAL), '#', TCODColor::pink, 1, 0, 3, 10, 10, 3, 4, 0, 2, EFFECT_NONE, 1, AMMO_NONE, -1);
 }
 
 void PlayerCreature::copyFrom(PlayerCreature* original)

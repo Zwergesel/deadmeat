@@ -54,6 +54,16 @@ enum FormatRequest
   FORMAT_HIS
 };
 
+struct Name
+{
+	std::string name;
+	std::string plural;
+	int flags;
+	Name():name("unknown"),plural(""),flags(0){};
+	Name(const std::string& n, const std::string& p="", int f=0):name(n),plural(p),flags(f){};
+	std::string getPlural();
+};
+
 namespace util
 {
 	int sign(int x);

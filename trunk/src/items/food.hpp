@@ -15,7 +15,7 @@ private:
 
 public:
 	Food();
-	Food(std::string name, uint format, symbol sym, TCODColor color, int amount, int weight, int nutrition, int eatTime);
+	Food(Name name, symbol sym, TCODColor color, int amount, int weight, int nutrition, int eatTime);
 	~Food();
 	Item* clone();
 

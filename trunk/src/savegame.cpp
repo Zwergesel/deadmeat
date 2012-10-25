@@ -23,7 +23,7 @@
 #include "items/corpse.hpp"
 #include "factory.hpp"
 
-std::string Savegame::version = "0.10";
+std::string Savegame::version = "0.20";
 
 Savegame::Savegame()
 {
@@ -160,6 +160,12 @@ SaveBlock& SaveBlock::operator()(const std::string& name, const TCODColor& input
 {
 	data << name << ": " << static_cast<int>(input.r) << ", ";
 	data << static_cast<int>(input.g) << ", " << static_cast<int>(input.b) << std::endl;
+	return *this;
+}
+
+SaveBlock& SaveBlock::operator()(const std::string& name, const Name& input)
+{
+	data << name << ": " << input.name << " // " << input.plural << " // " << input.flags << std::endl;
 	return *this;
 }
 
@@ -503,6 +509,21 @@ LoadBlock& LoadBlock::operator()(const std::string& name, TCODColor& output)
 		throw SavegameFormatException("loadColor _ conversion: " + ss.str());
 	}
 	output = TCODColor(r,g,b);
+	return *this;
+}
+
+LoadBlock& LoadBlock::operator()(const std::string& name, Name& output)
+{
+	std::string data = parseLine(name);
+	size_t pos1 = data.find(" // ");
+	size_t pos2 = data.rfind(" // ");
+	if (pos1 == pos2 || pos1 == std::string::npos || pos2 == std::string::npos) throw SavegameFormatException("loadName _ split: missing //");
+	std::string outname = data.substr(0, pos1);
+	std::string plural = data.substr(pos1+4, pos2-pos1-4);
+	std::stringstream ss(data.substr(pos2+4));
+	int flags;
+	if ((ss >> flags).fail()) throw SavegameFormatException("loadName _ conversion: " + ss.str());
+	output = Name(outname, plural, flags);
 	return *this;
 }
 

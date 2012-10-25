@@ -10,8 +10,8 @@ Potion::Potion()
 
 Potion::~Potion() {}
 
-Potion::Potion(std::string n, uint f, symbol s, TCODColor c, int a, int w, PotionType t) :
-	Item(n,f,s,c,a,w), potion(t)
+Potion::Potion(Name n, symbol s, TCODColor c, int a, int w, PotionType t) :
+	Item(n,s,c,a,w), potion(t)
 {
 	type = ITEM_POTION;
 	strType = "potions";
@@ -19,7 +19,7 @@ Potion::Potion(std::string n, uint f, symbol s, TCODColor c, int a, int w, Potio
 
 Item* Potion::clone()
 {
-	Potion* copy = new Potion(name, formatFlags, sym, color, amount, weight, potion);
+	Potion* copy = new Potion(name, sym, color, amount, weight, potion);
 	copy->active = active;
 	return copy;
 }
@@ -53,8 +53,8 @@ unsigned int Potion::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Potion", id);
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	store ("color", color) ("amount", amount) ("weight", weight) ("active", active);
+	store ("name", name) ("symbol", sym) ("color", color);
+	store ("amount", amount) ("weight", weight) ("active", active);
 	store ("potion", potion);
 	sg << store;
 	return id;
@@ -63,8 +63,8 @@ unsigned int Potion::save(Savegame& sg)
 void Potion::load(LoadBlock& load)
 {
 	int p;
-	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	load ("color", color) ("amount", amount) ("weight", weight) ("active", active);
+	load ("name", name) ("symbol", sym) ("color", color);
+	load ("amount", amount) ("weight", weight) ("active", active);
 	load ("potion", p);
 	if (p < 0 || p >= NUM_POTIONTYPE) throw SavegameFormatException("Tool::load _ potion out of bounds");
 	potion = static_cast<PotionType>(p);

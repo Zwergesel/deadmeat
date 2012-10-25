@@ -9,8 +9,8 @@ Ammo::Ammo()
 	strType = "ammunition";
 }
 
-Ammo::Ammo(std::string n, uint f, symbol s, TCODColor c, int x, int w, int ench, WeaponEffect e, AmmoType a):
-	Item(n,f,s,c,x,w),enchantment(ench),effect(e),ammoType(a)
+Ammo::Ammo(Name n, symbol s, TCODColor c, int x, int w, int ench, WeaponEffect e, AmmoType a):
+	Item(n,s,c,x,w),enchantment(ench),effect(e),ammoType(a)
 {
 	type = ITEM_AMMO;
 	strType = "ammunition";
@@ -22,7 +22,7 @@ Ammo::~Ammo()
 
 Item* Ammo::clone()
 {
-	Ammo* copy = new Ammo(name, formatFlags, sym, color, amount, weight, enchantment, effect, ammoType);
+	Ammo* copy = new Ammo(name, sym, color, amount, weight, enchantment, effect, ammoType);
 	copy->active = active;
 	return copy;
 }
@@ -45,7 +45,7 @@ AmmoType Ammo::getAmmoType()
 std::string Ammo::toString()
 {
 	std::stringstream ss;
-	ss << (enchantment < 0 ? "" : "+") << enchantment << " " << name;
+	ss << (enchantment < 0 ? "" : "+") << enchantment << " " << name.name;
 	return ss.str();
 }
 
@@ -63,8 +63,8 @@ unsigned int Ammo::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Ammo", id);
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	store ("color", color) ("amount", amount) ("weight", weight) ("active", active);
+	store ("name", name) ("symbol", sym) ("color", color);
+	store ("amount", amount) ("weight", weight) ("active", active);
 	store ("enchantment", enchantment) ("effect", effect);
 	store ("ammoType", ammoType);
 	sg << store;
@@ -74,8 +74,8 @@ unsigned int Ammo::save(Savegame& sg)
 void Ammo::load(LoadBlock& load)
 {
 	int e,a;
-	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	load ("color", color) ("amount", amount) ("weight", weight) ("active", active);
+	load ("name", name) ("symbol", sym) ("color", color);
+	load ("amount", amount) ("weight", weight) ("active", active);
 	load ("enchantment", enchantment) ("effect", e);
 	load ("ammoType", a);
 	if (a < 0 || a >= NUM_AMMOTYPE) throw SavegameFormatException("Ammo::load _ ammoType out of range");
