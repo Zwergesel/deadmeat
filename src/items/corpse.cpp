@@ -9,8 +9,8 @@ Corpse::Corpse()
 	strType = "corpses";
 }
 
-Corpse::Corpse(std::string n, uint f, symbol s, TCODColor c, int w, int u, int e, int r):
-	Item(n,f,s,c,1,w), nutrition(u), eatTime(e), rotTime(r)
+Corpse::Corpse(Name n, symbol s, TCODColor c, int w, int u, int e, int r):
+	Item(n,s,c,1,w), nutrition(u), eatTime(e), rotTime(r)
 {
 	type = ITEM_CORPSE;
 	strType = "corpses";
@@ -20,7 +20,7 @@ Corpse::~Corpse() {}
 
 Item* Corpse::clone()
 {
-	Corpse* copy = new Corpse(name, formatFlags, sym, color, weight, nutrition, eatTime, rotTime);
+	Corpse* copy = new Corpse(name, sym, color, weight, nutrition, eatTime, rotTime);
 	copy->amount = amount;
 	copy->active = active;
 	return copy;
@@ -55,7 +55,7 @@ std::string Corpse::toString()
 {
 	std::string str = "";
 	if (world.time > rotTime + 1000) str.append("rotten ");
-	str.append(name);
+	str.append(name.name);
 	return str;
 }
 
@@ -66,8 +66,8 @@ unsigned int Corpse::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Corpse", id);
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	store ("color", color) ("amount", amount) ("weight", weight) ("active", active);
+	store ("name", name) ("symbol", sym) ("color", color);
+	store ("amount", amount) ("weight", weight) ("active", active);
 	store ("nutrition", nutrition) ("eatTime", eatTime) ("rotTime", rotTime);
 	sg << store;
 	return id;
@@ -75,7 +75,7 @@ unsigned int Corpse::save(Savegame& sg)
 
 void Corpse::load(LoadBlock& load)
 {
-	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	load ("color", color) ("amount", amount) ("weight", weight) ("active", active);
+	load ("name", name) ("symbol", sym) ("color", color);
+	load ("amount", amount) ("weight", weight) ("active", active);
 	load ("nutrition", nutrition) ("eatTime", eatTime) ("rotTime", rotTime);
 }

@@ -9,8 +9,8 @@ Armor::Armor()
 	strType = "armor";
 }
 
-Armor::Armor(std::string n, uint f, symbol s, TCODColor c, int x, int w, int d, int e, int h, ArmorSlot as):
-	Item(n,f,s,c,x,w), defense(d), enchantment(e), hindrance(h), slot(as)
+Armor::Armor(Name n, symbol s, TCODColor c, int x, int w, int d, int e, int h, ArmorSlot as):
+	Item(n,s,c,x,w), defense(d), enchantment(e), hindrance(h), slot(as)
 {
 	type = ITEM_ARMOR;
 	strType = "armor";
@@ -20,7 +20,7 @@ Armor::~Armor() {}
 
 Item* Armor::clone()
 {
-	Armor* copy = new Armor(name, formatFlags, sym, color, amount, weight, defense, enchantment, hindrance, slot);
+	Armor* copy = new Armor(name, sym, color, amount, weight, defense, enchantment, hindrance, slot);
 	copy->active = active;
 	return copy;
 }
@@ -48,7 +48,7 @@ ArmorSlot Armor::getSlot()
 std::string Armor::toString()
 {
 	std::stringstream ss;
-	ss << (enchantment < 0 ? "" : "+") << enchantment << " " << name;
+	ss << (enchantment < 0 ? "" : "+") << enchantment << " " << name.name;
 	return ss.str();
 }
 
@@ -65,8 +65,8 @@ unsigned int Armor::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Armor", id);
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	store ("color", color) ("amount", amount) ("weight", weight) ("active", active);
+	store ("name", name) ("symbol", sym) ("color", color);
+	store ("amount", amount) ("weight", weight) ("active", active);
 	store ("defense", defense) ("hindrance", hindrance) ("slot", (int)slot);
 	store ("enchantment", enchantment);
 	sg << store;
@@ -76,8 +76,8 @@ unsigned int Armor::save(Savegame& sg)
 void Armor::load(LoadBlock& load)
 {
 	int s;
-	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	load ("color", color) ("amount", amount) ("weight", weight) ("active", active);
+	load ("name", name) ("symbol", sym) ("color", color);
+	load ("amount", amount) ("weight", weight) ("active", active);
 	load ("defense", defense) ("hindrance", hindrance) ("slot", s);
 	load ("enchantment", enchantment);
 	if (s < 0 || s >= NUM_ARMOR_SLOTS) throw SavegameFormatException("Armor::load _ slot out of range");

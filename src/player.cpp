@@ -275,7 +275,8 @@ void Player::quickLook()
 	if (items.size() == 1)
 	{
 		std::stringstream msg;
-		msg << "There " << ((items.front()->getFormatFlags() & F_PLURAL) || (items.front()->getAmount() > 1) ? "are " : "is ");
+		Name iName = items.front()->getName();
+		msg << "There " << ((iName.flags & F_PLURAL) || (items.front()->getAmount() > 1) ? "are " : "is ");
 		msg << util::format(FORMAT_INDEF, items.front()) << " here.";
 		world.addMessage(msg.str());
 	}
@@ -487,7 +488,8 @@ int Player::actionEat(Item* item)
 		Food* f = static_cast<Food*>(item);
 
 		std::stringstream msg;
-		msg << "You eat " << util::format(FORMAT_INDEF, f->toString(), f->getFormatFlags()) << ".";
+		Name foodName = f->getName();
+		msg << "You eat " << util::format(FORMAT_INDEF, f->toString(), foodName.flags) << ".";
 		world.addMessage(msg.str());
 
 		addNutrition(f->getNutrition());
@@ -533,9 +535,9 @@ int Player::actionDestroy(Item* item)
 {
 	// Find the list of pieces if it exists
 	std::vector<std::string> list;
-	if (Item::DestructionTable.find(item->getName()) != Item::DestructionTable.end())
+	if (Item::DestructionTable.find(item->getName().name) != Item::DestructionTable.end())
 	{
-		list = Item::DestructionTable[item->getName()];
+		list = Item::DestructionTable[item->getName().name];
 	}
 	
 	// Unwield weapons. Display warning if armor is worn
@@ -579,7 +581,7 @@ int Player::actionDrink(Item* item)
 	Potion* potion = static_cast<Potion*>(item);
 
 	std::stringstream msg;
-	msg << "You drink " << util::format(FORMAT_INDEF, potion->toString(), potion->getFormatFlags()) << ".";
+	msg << "You drink " << util::format(FORMAT_INDEF, potion->toString(), potion->getName().flags) << ".";
 	world.addMessage(msg.str());
 
 	potion->effect(creature);
@@ -686,7 +688,7 @@ int Player::actionQuiver(Item* item)
 	{
 		current->setActive(false);
 		msg << util::format(FORMAT_DEF, current, true);
-		msg << ((current->getFormatFlags() & F_PLURAL) || current->getAmount() > 1 ? " are " : " is ");
+		msg << ((current->getName().flags & F_PLURAL) || current->getAmount() > 1 ? " are " : " is ");
 		msg << "already in your quiver";
 		world.addMessage(msg.str());
 		current->setActive(true);

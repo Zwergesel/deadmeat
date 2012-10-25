@@ -263,7 +263,8 @@ bool Object::onAttack(Creature* guy, int attack, int damage, Weapon* weapon)
 			bool didBreak = weapon->breakWeapon(broken);
 			if (guy->isControlled())
 			{
-				msg << "You bash against the door with " << util::format(FORMAT_YOUR, weapon->getName(), weapon->getFormatFlags()) << ".";
+				Name wpnName = weapon->getName();
+				msg << "You bash against the door with " << util::format(FORMAT_YOUR, wpnName.name, wpnName.flags) << ".";
 				world.addMessage(msg.str());
 				if (didBreak) world.addMessage("You hear a cracking sound.");
 			}

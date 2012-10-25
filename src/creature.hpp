@@ -77,8 +77,7 @@ class Creature
 {
 protected:
 
-	std::string name;
-	uint formatFlags; // combination of FormatFlag
+	Name name;
 	symbol sym;
 	TCODColor color;
 	int health, maxHealth;
@@ -108,13 +107,12 @@ protected:
 public:
 
 	Creature(); // for savegames
-	Creature(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed, int expValue, const std::string& corpseName);
+	Creature(Name name, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed, int expValue, const std::string& corpseName);
 	virtual ~Creature();
 	virtual Creature* clone();
 	void copyFrom(Creature*);
 
-	std::string getName();
-	uint getFormatFlags();
+	Name getName();
 	Point getPos();
 	void setPos(Point p);
 	symbol getSymbol();
@@ -207,7 +205,7 @@ protected:
 
 public:
 	BasicMonster();
-	BasicMonster(std::string name, uint format, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed, int expValue, const std::string& corpseName, bool useMelee, bool useRanged, float fleePerc);
+	BasicMonster(Name name, symbol sym, TCODColor clr, int maxHealth, int maxMana, Weapon baseWeapon, int baseAC, int walkingSpeed, int expValue, const std::string& corpseName, bool useMelee, bool useRanged, float fleePerc);
 	virtual ~BasicMonster();
 	virtual Creature* clone();
 	void copyFrom(BasicMonster*);

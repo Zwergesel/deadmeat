@@ -16,7 +16,7 @@ private:
 
 public:
 	Corpse();
-	Corpse(std::string name, uint format, symbol sym, TCODColor color, int weight, int nutrition, int eatTime, int rotTime);
+	Corpse(Name name, symbol sym, TCODColor color, int weight, int nutrition, int eatTime, int rotTime);
 	~Corpse();
 	Item* clone();
 

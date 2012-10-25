@@ -21,7 +21,7 @@ private:
 public:
 	Potion();
 	~Potion();
-	Potion(std::string name, uint format, symbol sym, TCODColor color, int amount, int weight, PotionType type);
+	Potion(Name name, symbol sym, TCODColor color, int amount, int weight, PotionType type);
 	Item* clone();
 
 	void effect(Creature* c);

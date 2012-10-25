@@ -4,6 +4,16 @@
 #include "object.hpp"
 #include <cctype>
 
+std::string Name::getPlural()
+{
+	if (plural.size() > 0) return plural;
+	std::string ret = name;
+	if (ret[ret.size()-1] == 's') ret.append("es");
+	else if (ret[ret.size()-1] == 'y') ret.replace(ret.size()-1, 1, "ies");
+	else ret.append("s");
+	return ret;
+}
+
 int util::sign(int x)
 {
 	return (x > 0) - (x < 0);
@@ -44,17 +54,19 @@ std::string util::format(FormatRequest req, const std::string& name, uint flags,
 
 std::string util::format(FormatRequest req, Creature* c, bool cap)
 {
-	return format(req, c->getName(), c->getFormatFlags(), cap);
+	Name info = c->getName();
+	return format(req, info.name, info.flags, cap);
 }
 
 std::string util::format(FormatRequest req, Item* i, bool cap)
 {
-	uint flags = i->getFormatFlags();
-	if (i->getAmount() > 1 || (flags & F_PLURAL))
+	Name name = i->getName();
+	if (i->getAmount() > 1 || (name.flags & F_PLURAL))
 	{
+		int flags = name.flags;
 		flags |= F_PLURAL;
 		std::stringstream ss;
-		ss << i->getAmount() << " " << plural(i->toString());
+		ss << i->getAmount() << " " << name.getPlural();
 		if (i->isActive()) ss << " (" << Item::ACTIVE_STRINGS[i->getType()] << ")";
 		return format(req, ss.str(), flags, cap);
 	}
@@ -63,7 +75,7 @@ std::string util::format(FormatRequest req, Item* i, bool cap)
 		std::stringstream ss;
 		ss << i->toString();
 		if (i->isActive()) ss << " (" << Item::ACTIVE_STRINGS[i->getType()] << ")";
-		return format(req, ss.str(), i->getFormatFlags(), cap);
+		return format(req, ss.str(), name.flags, cap);
 	}
 }
 

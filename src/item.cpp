@@ -13,8 +13,8 @@ Item::Item()
 	strType = "other options";
 }
 
-Item::Item(std::string n, uint f, symbol s, TCODColor c, int x, int w):
-	name(n), formatFlags(f), sym(s), color(c), amount(x), active(false), weight(w)
+Item::Item(Name n, symbol s, TCODColor c, int x, int w):
+	name(n), sym(s), color(c), amount(x), active(false), weight(w)
 {
 	type = ITEM_DEFAULT;
 	strType = "other options";
@@ -24,7 +24,7 @@ Item::~Item() {}
 
 Item* Item::clone()
 {
-	Item* copy = new Item(name, formatFlags, sym, color, amount, weight);
+	Item* copy = new Item(name, sym, color, amount, weight);
 	copy->active = active;
 	return copy;
 }
@@ -44,19 +44,14 @@ TCODColor Item::getColor()
 	return color;
 }
 
-std::string Item::getName()
+Name Item::getName()
 {
 	return name;
-}
-
-uint Item::getFormatFlags()
-{
-	return formatFlags;
 }
 
 std::string Item::toString()
 {
-	return name;
+	return name.name;
 }
 
 std::string Item::typeString()
@@ -100,7 +95,7 @@ bool Item::canStackWith(Item* compare)
 {
 	if (compare->getType() != type) return false;
 	if (type == ITEM_WEAPON || type == ITEM_ARMOR || type == ITEM_CORPSE) return false;
-	if (compare->getName() != name) return false;
+	if (compare->getName().name != name.name) return false;
 	// TODO: subclass compare function call (or override?)
 	return true;
 }
@@ -109,7 +104,7 @@ void Item::randomize(int level)
 {
 }
 
-Item PSEUDOITEM_NOTHING = Item("nothing", F_PROPER, '#', TCODColor::pink, 1, 0);
+Item PSEUDOITEM_NOTHING = Item(Name("nothing"), '#', TCODColor::pink, 1, 0);
 
 /*--------------------- SAVING AND LOADING ---------------------*/
 
@@ -118,14 +113,14 @@ unsigned int Item::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Item", id);
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	store ("color", color) ("amount", amount) ("weight", weight) ("active", active);
+	store ("name", name) ("symbol", sym) ("color", color);
+	store ("amount", amount) ("weight", weight) ("active", active);
 	sg << store;
 	return id;
 }
 
 void Item::load(LoadBlock& load)
 {
-	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	load ("color", color) ("amount", amount) ("weight", weight) ("active", active);
+	load ("name", name) ("symbol", sym) ("color", color);
+	load ("amount", amount) ("weight", weight) ("active", active);
 }

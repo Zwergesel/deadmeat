@@ -15,8 +15,8 @@ Weapon::Weapon()
 	strType = "weapons";
 }
 
-Weapon::Weapon(std::string n, uint f, symbol s, TCODColor c, int x, int w, int spd, int hit, int dmg, int dice, int dmax, int ench, int h, WeaponEffect e, int r, AmmoType a, int b)
-	:Item(n,f,s,c,x,w), speed(spd), hitBonus(hit), baseDamage(dmg), numDice(dice)
+Weapon::Weapon(Name n, symbol s, TCODColor c, int x, int w, int spd, int hit, int dmg, int dice, int dmax, int ench, int h, WeaponEffect e, int r, AmmoType a, int b)
+	:Item(n,s,c,x,w), speed(spd), hitBonus(hit), baseDamage(dmg), numDice(dice)
 	,diceMax(dmax), enchantment(ench), hands(h), effect(e), range(r), ammoType(a), broken(b)
 
 {
@@ -25,7 +25,7 @@ Weapon::Weapon(std::string n, uint f, symbol s, TCODColor c, int x, int w, int s
 }
 
 Weapon::Weapon(int spd, int hit, int dmg, int dice, int dmax, WeaponEffect e, int r, AmmoType a):
-	Item("x", F_DEFAULT, '#', TCODColor::pink, 1, 0), speed(spd), hitBonus(hit), baseDamage(dmg),
+	Item(Name("x"), '#', TCODColor::pink, 1, 0), speed(spd), hitBonus(hit), baseDamage(dmg),
 	numDice(dice), diceMax(dmax), enchantment(0), hands(0), effect(e), range(r), ammoType(a), broken(-1)
 {
 	type = ITEM_WEAPON;
@@ -36,7 +36,7 @@ Weapon::~Weapon() {}
 
 Item* Weapon::clone()
 {
-	Weapon* copy = new Weapon(name, formatFlags, sym, color, amount, weight, speed, hitBonus, baseDamage, numDice, diceMax, enchantment, hands, effect, range, ammoType, broken);
+	Weapon* copy = new Weapon(name, sym, color, amount, weight, speed, hitBonus, baseDamage, numDice, diceMax, enchantment, hands, effect, range, ammoType, broken);
 	copy->active = active;
 	return copy;
 }
@@ -120,7 +120,7 @@ std::string Weapon::toString()
 	if (broken > 0) ss << BROKEN_NAMES[broken] << " ";
 	if (EFFECT_NAMES[effect].length() > 0) ss << EFFECT_NAMES[effect] << " ";
 	ss << (enchantment < 0 ? "" : "+") << enchantment << " ";
-	ss << name;
+	ss << name.name;
 	return ss.str();
 }
 
@@ -140,8 +140,8 @@ unsigned int Weapon::save(Savegame& sg)
 	unsigned int id;
 	if (sg.saved(this,&id)) return id;
 	SaveBlock store("Weapon", id);
-	store ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	store ("color", color) ("amount", amount) ("weight", weight) ("active", active);
+	store ("name", name) ("symbol", sym) ("color", color);
+	store ("amount", amount) ("weight", weight) ("active", active);
 	store ("speed", speed) ("hitBonus", hitBonus) ("baseDamage", baseDamage);
 	store ("numDice", numDice) ("diceMax", diceMax) ("enchantment", enchantment);
 	store ("hands", hands) ("effect", effect) ("range", range);
@@ -153,8 +153,8 @@ unsigned int Weapon::save(Savegame& sg)
 void Weapon::load(LoadBlock& load)
 {
 	int e,a;
-	load ("name", name) ("formatFlags", formatFlags) ("symbol", sym);
-	load ("color", color) ("amount", amount) ("weight", weight) ("active", active);
+	load ("name", name) ("symbol", sym) ("color", color);
+	load ("amount", amount) ("weight", weight) ("active", active);
 	load ("speed", speed) ("hitBonus", hitBonus) ("baseDamage", baseDamage);
 	load ("numDice", numDice) ("diceMax", diceMax) ("enchantment", enchantment);
 	load ("hands", hands) ("effect", e) ("range", range);
