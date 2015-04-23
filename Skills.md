@@ -1,0 +1,111 @@
+proposal #1
+# Player skills #
+  * health
+  * stealth
+  * appraise skill
+  * traps
+  * endurance
+  * identification
+## Magic Skills ##
+  * fire
+  * ice
+  * illusion
+  * .. each magic 'school' gets a skill
+## Armor Skills ##
+  * unarmored
+  * leather
+  * scale
+  * ring
+  * cloth
+  * plate
+## Weapon Skills ##
+### Melee Weapon Skills ###
+  * unarmed
+  * axe
+  * sword
+  * mace & flail
+  * staff
+  * dagger
+  * whip
+  * pike
+### Rangend Weapon Skills ###
+  * bow
+  * crossbow
+  * sling
+## Crafting Skills ##
+  * alchemy
+  * cooking
+
+
+
+alt
+# Player skills #
+  * melee combat
+  * ranged combat
+  * health
+  * stealth ?
+  * perception ?
+  * movement speed ?
+  * appraise skill ?
+  * swim ?
+  * trap ?
+  * danger sense ?
+  * non-magic heal ?
+  * endurance ?
+## Crafting Skills ##
+  * alchemy ?
+  * cooking ?
+## Magic Skills ##
+  * ?
+## Armor Skills ##
+  * unarmored
+  * leather
+  * scale
+  * ring
+  * cloth
+  * plate
+## Weapon Skills ##
+### Melee Weapon Skills ###
+  * unarmed
+  * axe
+  * sword
+  * mace & flail
+  * staff
+  * dagger
+  * whip
+  * pike
+### Rangend Weapon Skills ###
+  * bow
+  * crossbow
+  * sling
+
+# Monster skills #
+  * melee combat
+  * ranged combat
+  * known armor
+  * unknown armor
+  * known weapon
+  * unknown weapon
+
+
+
+proposal #3
+
+  * Swiftness (DEX) (Increases attack speed)
+  * Accuracy (DEX) (Increases hit bonus)
+  * Power (STR) (Increases weapon and unarmed damage)
+  * Evasion (DEX) (Increases defense bonus)
+  * Armor (STR) (Decreases armor hindrance)
+  * Running (CON) (Increases movement speed)
+  * Aiming (INT) (Increases ranged attack bonus)
+  * Endurance (CON) (Increases max. health)
+  * Arcana (STR) (Increases max. mana)
+  * Channeling (INT) (Increases mana regeneration)
+  * Toughness (CON) (Reduces effect of hunger/weakness/burdened)
+  * Stealth (DEX)
+  * Identification (INT)
+  * Alchemy (INT)
+  * Cooking (DEX)
+  * Blacksmithing (STR)
+  * Caution (INT) (Better chance to detect/disable traps)
+  * ...

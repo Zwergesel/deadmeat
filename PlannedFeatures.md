@@ -1,0 +1,10 @@
+#planned features
+
+# Features #
+
+## Ideas ##
+
+  * Mark origin of sounds heard by the player with color.
+  * ...
+
+## Confirmed Features ##

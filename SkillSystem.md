@@ -1,0 +1,7 @@
+player get skill points at level up.
+these points are spent freely on skills.
+punkte können durch(potions oder ähnlichem) frei umverteilt werden.
+skills deren derzeitiger wert unter dem maximal wert liegt steigern sich durch erfahrung wieder zu ihrem maximalwert.
+skills deren derzeitiger wert niedriger ist als der maximal wert springen sofort auf den maximal wert.
+
+attribute geben nicht umverteilbare punkte auf zugehörige skills.

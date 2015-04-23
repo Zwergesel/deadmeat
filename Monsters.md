@@ -1,0 +1,19 @@
+# Monsters #
+
+  * Speed: Immobile, Very slow, Slow, Normal, Fast, Very Fast
+  * Damage: Very low, Low, Medium, High, Very High, Extreme
+  * Armor: None, Weak, Medium, Heavy, Extreme
+
+| **Name** | **Level** | **Speed** | **Attackspeed** | **Damage** | **Armor** | **Special** |
+|:---------|:----------|:----------|:----------------|:-----------|:----------|:------------|
+| Reh | 1 | Fast | Normal | Very low | Weak | Flees always, lots of tasty meat |
+| Rat | 1 | Fast | Fast | Very low | None | Spreads diseases |
+| Kobold | 2 | Fast | Slow | Low | None | Use ranged weapons (slings, rocks) and keep their distance |
+| Goblin | 3 | Normal | Normal | Low | None | Can use weapons |
+| Wisp | 3 | Fast | Very slow | Low | None | Walks through trees, ranged attack |
+| Wildschwein | 4 | Slow | Slow | Very High | Medium | Charge |
+| Snake | 5 | Fast | Slow | High | None | Bite is poisonous |
+| Wolf | 5 | Fast | Normal | Medium | Medium | Spawn in packs |
+| Carnivorous tree | 6 | Immobile | Very slow | Extreme | High | disguised as normal tree, holds player |
+| Bär | 7 | Slow | Normal | Very High | Heavy | Knockback |
+| Troll | 10 | Slow | Very Slow | High | Medium | Immune to many effects, high regeneration rate |

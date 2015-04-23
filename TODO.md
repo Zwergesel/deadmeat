@@ -1,0 +1,35 @@
+# TODO-List #
+
+## Test ##
+  * Changing levels
+  * item weight, burdened status etc.
+  * Closing doors (with items/monsters in the way)
+  * Potions
+  * Rotting corpses should disappear
+  * Caution should make it possible to detect rotten food
+
+## Bugs / Issues ##
+  * InventoryTable does not get saved in factory
+
+## Small improvements ##
+  * Implement missing status effects
+  * Harmful corpses (poison)
+  * Messages for critical hits (?)
+
+## Major improvements ##
+  * Cursed Items (?)
+  * Fully support all skills
+  * Item identification
+  * Load level data from save files (possible monsters, possible loot, ...)
+  * config file
+  * Magic system
+  * reload (crossbow, muskeets)
+  * Peaceful creatures
+
+## Vertical Steps ##
+  * Character creation (race, class, name)
+  * Random level generation
+  * Display unseen items where the player has last seen them even if a monster picked them up (?)
+  * Quests
+  * Story
+  * Crafting
